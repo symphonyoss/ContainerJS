@@ -1,0 +1,20 @@
+{
+  "name": "ssf-desktop-api-electron-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "postinstall": "copyfiles -f node_modules/ssf-desktop-api-specification/src/** src"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "electron": "^1.4.15",
+    "ssf-desktop-api-specification": "0.0.1",
+    "ssf-desktop-api-electron": "0.0.1"
+  },
+  "devDependencies": {
+    "copyfiles": "^1.2.0"
+  }
+}
