@@ -1,4 +1,15 @@
 {
+  "name": "ssf-desktop-wrapper",
+  "version": "0.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "lerna bootstrap"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ScottLogic/ssf-desktop-wrapper.git"
+  },
+  "homepage": "https://github.com/ScottLogic/ssf-desktop-wrapper#readme",
   "devDependencies": {
     "lerna": "2.0.0-beta.38"
   }
