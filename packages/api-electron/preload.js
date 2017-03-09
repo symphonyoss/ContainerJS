@@ -1,8 +1,8 @@
-ipc = require('electron').ipcRenderer;
+const ipc = require('electron').ipcRenderer;
 
-Notification = function (title, options) {
+window.Notification = function(title, options) {
   ipc.send('ssf-notification', {
-		title,
-		options
-	});
+    title,
+    options
+  });
 };

@@ -1,4 +1,4 @@
-var button  = document.getElementById('notification-test')
+var button = document.getElementById('notification-test');
 
 // if the environment this code is running in requires that teh user grants permission
 // before raising a notification, then do so!
@@ -21,7 +21,7 @@ function withNotificationPermission() {
     } else {
       resolve(true);
     }
-  })
+  });
 }
 
 button.onclick = function() {
@@ -39,8 +39,9 @@ button.onclick = function() {
 
       var title = document.getElementById('title').value;
       var body = document.getElementById('body').value;
+      // eslint-disable-next-line no-new
       new Notification(title, {
         body: body
       });
     });
-}
+};
