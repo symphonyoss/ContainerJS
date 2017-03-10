@@ -61,6 +61,7 @@ typings/
 npm
 
 /packages/api-electron-demo/src/
+/packages/api-openfin-demo/src/
 
 # Visual Studio Code
 .vscode

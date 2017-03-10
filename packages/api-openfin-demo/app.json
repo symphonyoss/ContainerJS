@@ -1,0 +1,19 @@
+{
+    "devtools_port": 5050,
+    "startup_app": {
+        "name": "ssf-desktop-api-openfin-demo",
+        "description": "SSF Desktop Openfin API Demo",
+        "url": "http://localhost:5000/src",
+        "uuid": "ssf-desktop-api-openfin-demo",
+        "autoShow": true
+    },
+    "runtime": {
+        "arguments": "",
+        "version": "stable"
+    },
+    "shortcut": {
+        "company": "",
+        "description": "",
+        "name": "SSF API Demo Openfin"
+    }
+}
