@@ -1,6 +1,6 @@
-# Symphony API for Openfin Demo
+# Symphony API for OpenFin Demo
 
-This project provides a demonstration of the Symphony Desktop Wrapper API within Openfin.
+This project provides a demonstration of the Symphony Desktop Wrapper API within OpenFin.
 
 ## Usage
 

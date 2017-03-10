@@ -1,8 +1,6 @@
-/* globals fin  */
 window.Notification = function(title, options) {
   const message = {
-    title: title,
-    options: options
+    title: title
   };
 
   // eslint-disable-next-line no-new

@@ -1,1 +1,1 @@
-// Intentionally blank, overridden by openfin to access API
+// Intentionally blank, overridden by OpenFin to access API

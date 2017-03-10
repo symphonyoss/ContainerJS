@@ -1,11 +1,23 @@
-<h5 id="message">Message</h5>
-<script>
-  function onNotificationMessage(message) {
-    document.getElementById('message').innerText = message.title;
-  }
-</script>
-<style>
-  html {
-    border: solid 2px black;
-  }
-</style>
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    html {
+      border: solid 2px black;
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+    }
+  </style>
+</head>
+<body>
+  <h5 id="message"></h5>
+  <script>
+    function onNotificationMessage(message) {
+      document.getElementById('message').innerText = message.title;
+    }
+  </script>
+</body>
