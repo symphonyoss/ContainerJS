@@ -1,0 +1,67 @@
+<!doctype html>
+<meta charset=utf-8>
+
+<title>Symphony Desktop Wrapper API Specification</title>
+<link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'></link>
+
+<body class='container'>
+
+<header class="page-header">
+  <nav>
+    <ul class="nav nav-pills pull-right">
+      <li><a href="index.html">Index</a></li>
+    </ul>
+  </nav>
+  <h1>Symphony Desktop Wrapper API Demo</h1>
+</header>
+
+<h2>New Window API</h2>
+
+<h3>Try me</h3>
+
+<form class="form-inline">
+  <div class="form-group">
+    <label>URL</label>
+    <input type="text" class="form-control" placeholder="url" id="url">
+  </div>
+  <button type="button" id='new-window-test' class="btn btn-default">Open Window</button>
+</form>
+
+<h3>Overview</h3>
+
+<p>The window API is used to create a new browser window. <a href='https://developer.mozilla.org/en-US/docs/Web/API/Window/open'>HTML5 Window API</a></p>
+
+<h3>Method Signature</h3>
+
+<pre>
+window.open(url, name, features)
+</pre>
+
+<p>Creates a new window.</p>
+
+<h4>Syntax</h4>
+
+<pre>
+var newWindow = window.open(url, name, features);
+</pre>
+
+<h4>Parameters</h4>
+
+<dl>
+  <dt>url</dt>
+  <dd>URL to open in the window. Must be prefixed with the protocol (i.e. http://)</dd>
+  <dt>name</dt>
+  <dd>Name of the new window. Should not contain whitespace</dd>
+  <dt>features (optional)</dt>
+  <dd>DOMString to set features of the new window</dd>
+</dl>
+
+<h4>Return Value</h4>
+
+<dl>
+  <dt>window</dt>
+  <dd>A reference to the new browser window.</dd>
+</dl>
+
+<script src="new-window-api-demo.js"></script>
+</body>
