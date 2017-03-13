@@ -1,6 +1,11 @@
 window.Notification = function(title, options) {
+  if (!options) {
+    options = {};
+  }
+
   const message = {
-    title: title
+    title: title,
+    text: options.body
   };
 
   // eslint-disable-next-line no-new

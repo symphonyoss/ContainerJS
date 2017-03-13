@@ -4,6 +4,13 @@ module.exports = () => {
   const eNotify = require('electron-notify');
 
   ipc.on('ssf-notification', (e, msg) => {
-    eNotify.notify({ title: msg.title });
+    if (!msg.options) {
+      msg.options = {};
+    }
+
+    eNotify.notify({
+      title: msg.title,
+      text: msg.options.body
+    });
   });
 };

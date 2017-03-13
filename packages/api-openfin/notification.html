@@ -11,13 +11,21 @@
       right: 0px;
       bottom: 0px;
     }
+
+    h4,
+    p {
+      padding: 0;
+      margin: 0;
+    }
   </style>
 </head>
 <body>
-  <h5 id="message"></h5>
+  <h4 id="message"></h4>
+  <p id="body"></p>
   <script>
     function onNotificationMessage(message) {
       document.getElementById('message').innerText = message.title;
+      document.getElementById('body').innerText = message.text;
     }
   </script>
 </body>
