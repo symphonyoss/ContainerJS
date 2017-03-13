@@ -1,4 +1,8 @@
 window.Notification = function(title, options) {
+  if (!options) {
+    options = {};
+  }
+
   const message = {
     title: title,
     text: options.body
