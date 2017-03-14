@@ -1,7 +1,9 @@
-const ipc = require('electron').ipcMain;
-const { BrowserWindow } = require('electron');
+const {
+  BrowserWindow,
+  ipcMain: ipc
+} = require('electron');
 
-let windows = [];
+const windows = [];
 
 module.exports = () => {
   const eNotify = require('electron-notify');
@@ -18,9 +20,15 @@ module.exports = () => {
   });
 
   ipc.on('ssf-new-window', (e, msg) => {
-    const newWin = new BrowserWindow();
-    newWin.loadURL(msg.url);
-    windows.push(newWin);
-    e.returnValue = newWin;
+    const newWindow = new BrowserWindow();
+    newWindow.loadURL(msg.url);
+    windows.push(newWindow);
+    newWindow.on('close', () => {
+      const index = windows.indexOf(newWindow);
+      if (index >= 0) {
+        windows.splice(index, 1);
+      }
+    });
+    e.returnValue = newWindow;
   });
 };
