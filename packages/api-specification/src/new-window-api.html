@@ -42,6 +42,7 @@ window.open(url, name, features)
 </pre>
 
 <p>Creates a new window. If a window with the same name already exists, that window will be reused.</p>
+<p>Note: Window resuse is platform dependant. The API is <a href='https://developer.mozilla.org/en-US/docs/Web/API/Window/open'>inconsistent between browsers</a> and Electron only allows this for windows created via the built in <code>window.open()</code> method (child windows), not <code>new BrowserWindow()</code> that is used to implement this API.</p>
 
 <h4>Syntax</h4>
 
