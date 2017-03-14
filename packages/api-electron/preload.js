@@ -6,3 +6,12 @@ window.Notification = function(title, options) {
     options
   });
 };
+
+window.open = function(url, name, features) {
+  // Need to sendSync so we can return the window object, matching the HTML5 API
+  return ipc.sendSync('ssf-new-window', {
+    url,
+    name,
+    features
+  });
+};
