@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "postinstall": "copyfiles -f node_modules/ssf-desktop-api-specification/src/** src"
+    "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src"
   },
   "author": "",
   "license": "Apache-2.0",
@@ -15,6 +15,7 @@
     "ssf-desktop-api-electron": "0.0.1"
   },
   "devDependencies": {
-    "copyfiles": "^1.2.0"
+    "copyfiles": "^1.2.0",
+    "rimraf": "^2.6.1"
   }
 }
