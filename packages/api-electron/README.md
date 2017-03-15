@@ -14,7 +14,7 @@ You need to integrate this code into both your main process and your renderer pr
 
 ### Main process integration
 
-This module needs to register IPC handlers once teh app `ready` event has fired. This can be done as follows:
+This module needs to register IPC handlers once the app `ready` event has fired. This can be done as follows:
 
 ```
 const ssfElectron = require('ssf-desktop-api-electron');

@@ -1,6 +1,6 @@
 var button = document.getElementById('notification-test');
 
-// if the environment this code is running in requires that teh user grants permission
+// if the environment this code is running in requires that the user grants permission
 // before raising a notification, then do so!
 function withNotificationPermission() {
   return new Promise(function(resolve, reject) {
