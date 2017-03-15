@@ -60,6 +60,7 @@ typings/
 # nvm-windows npm directory
 npm
 
+/packages/api-browser-demo/src/
 /packages/api-electron-demo/src/
 /packages/api-openfin-demo/src/
 
