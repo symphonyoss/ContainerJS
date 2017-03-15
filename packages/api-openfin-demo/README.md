@@ -6,6 +6,5 @@ This project provides a demonstration of the Symphony Desktop Wrapper API within
 
 ```
 npm install
-npm run serve
-npm run launch
+npm start
 ```
