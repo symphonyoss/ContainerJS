@@ -4,8 +4,9 @@
   "description": "",
   "main": "",
   "scripts": {
-    "serve": "live-server --port=5000 --no-browser",
+    "serve": "live-server --port=5000 --no-browser src/",
     "launch": "openfin --launch --config app.json",
+    "start": "npm-run-all --parallel serve launch",
     "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src && copyfiles -f node_modules/ssf-desktop-api-openfin/** src"
   },
   "author": "",
@@ -18,6 +19,7 @@
   "devDependencies": {
     "copyfiles": "^1.2.0",
     "live-server": "^1.2.0",
+    "npm-run-all": "^4.0.2",
     "rimraf": "^2.6.1"
   }
 }
