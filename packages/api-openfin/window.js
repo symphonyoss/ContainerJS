@@ -17,14 +17,17 @@ window.ssf.Window = function(url, name, features) {
       url
     }, () => newWindow.show(), handleError);
   } else {
-    newWindow = new fin.desktop.Application({
+    const app = new fin.desktop.Application({
       name,
       url,
       uuid: name,
       mainWindowOptions: {
         autoShow: true
       }
-    }, () => newWindow.run(), handleError).getWindow();
+    }, () => {
+      app.run();
+    }, handleError);
+    newWindow = app.getWindow();
   }
 
   return newWindow;
