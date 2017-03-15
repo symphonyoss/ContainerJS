@@ -2,4 +2,4 @@ if (!window.ssf) {
   window.ssf = {};
 }
 
-window.ssf.Window = (url, name, features) => window.open(url, name, features);
+window.ssf.Window = (...args) => window.open(...args);

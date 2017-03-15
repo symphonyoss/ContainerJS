@@ -4,14 +4,12 @@
   "description": "",
   "main": "",
   "scripts": {
-    "serve": "live-server --port=5000 src/",
-    "start": "npm run serve",
+    "start": "live-server --port=5000 src/",
     "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src && copyfiles -f node_modules/ssf-desktop-api-browser/** src"
   },
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "openfin-cli": "^1.1.5",
     "ssf-desktop-api-specification": "0.0.1",
     "ssf-desktop-api-browser": "0.0.1"
   },
