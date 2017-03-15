@@ -20,7 +20,13 @@ module.exports = () => {
   });
 
   ipc.on('ssf-new-window', (e, msg) => {
-    const newWindow = new BrowserWindow();
+    let options = null;
+    const features = msg.features.split(',');
+    if (features.includes('child=yes')) {
+      options = { parent: BrowserWindow.fromWebContents(e.sender) };
+    }
+
+    const newWindow = new BrowserWindow(options);
     newWindow.loadURL(msg.url);
     windows.push(newWindow);
     newWindow.on('close', () => {
