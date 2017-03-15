@@ -1,5 +1,9 @@
 const ipc = require('electron').ipcRenderer;
 
+if (!window.ssf) {
+  window.ssf = {};
+}
+
 window.Notification = function(title, options) {
   ipc.send('ssf-notification', {
     title,
@@ -7,7 +11,7 @@ window.Notification = function(title, options) {
   });
 };
 
-window.open = function(url, name, features) {
+window.ssf.window = function(url, name, features) {
   // Need to sendSync so we can return the window object, matching the HTML5 API
   return ipc.sendSync('ssf-new-window', {
     url,

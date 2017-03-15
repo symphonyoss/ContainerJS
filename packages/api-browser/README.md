@@ -1,0 +1,13 @@
+# Symphony API for Browsers
+
+This project provides an implementation of the Symphony Desktop Wrapper API Specification for Browsers
+
+## Usage
+
+Add this package to your project:
+
+```
+npm install ssf-desktop-api-browser --save
+```
+
+You need to include this code into the project by loading the JavaScript file directly.
