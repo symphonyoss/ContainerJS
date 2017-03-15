@@ -2,4 +2,4 @@ if (!window.ssf) {
   window.ssf = {};
 }
 
-window.ssf.Window = (...args) => window.open(...args);
+window.ssf.window = (...args) => window.open(...args);
