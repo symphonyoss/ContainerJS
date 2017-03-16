@@ -64,7 +64,12 @@
     <dt>name</dt>
     <dd>Name of the new window. Should not contain whitespace</dd>
     <dt>features (optional)</dt>
-    <dd>DOMString to set features of the new window</dd>
+    <dd>
+      <p>DOMString to set features of the new window. Should be a comma separated list of options.</p>
+      <ul>
+        <li><code>child=yes|no|1|0</code> - make the new window a child of the current window (non browsers only).</li>
+      </ul>
+    </dd>
   </dl>
 
   <h4>Return Value</h4>
