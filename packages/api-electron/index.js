@@ -20,7 +20,7 @@ module.exports = () => {
   });
 
   ipc.on('ssf-new-window', (e, msg) => {
-    let options = {};
+    const options = {};
     const featureObject = parseFeaturesString(msg.features);
     if (featureObject.child) {
       options.parent = BrowserWindow.fromWebContents(e.sender);
@@ -43,11 +43,15 @@ module.exports = () => {
 const parseFeaturesString = (features) => {
   const featureObject = {};
 
-  features.split(/,\s*/).forEach((feature) => {
-    let [key, value] = feature.split(/\s*=/);
+  features.split(',').forEach((feature) => {
+    let [key, value] = feature.split('=');
 
     // interpret the value as a boolean, if possible
-    value = (value === 'yes' || value === '1') ? true : (value === 'no' || value === '0') ? false : value;
+    if (value === 'yes' || value === '1') {
+      value = true;
+    } else if (value === 'no' || value === '0') {
+      value = false;
+    }
 
     featureObject[key] = value;
   });
