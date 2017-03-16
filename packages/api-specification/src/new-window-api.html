@@ -1,72 +1,75 @@
 <!doctype html>
-<meta charset=utf-8>
+<meta charset="utf-8">
 
 <title>Symphony Desktop Wrapper API Specification</title>
-<link rel="stylesheet" type="text/css" href="bootstrap.min.css"></link>
+<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
 
-<body class='container'>
+<body>
 
-<header class="page-header">
-  <nav>
-    <ul class="nav nav-pills pull-right">
-      <li><a href="index.html">Index</a></li>
-    </ul>
-  </nav>
-  <h1>Symphony Desktop Wrapper API Demo</h1>
-</header>
-
-<h2>New Window API</h2>
-
-<h3>Try me</h3>
-
-<form class="form-inline">
-  <div class="form-group">
-    <label>URL</label>
-    <input type="text" class="form-control" placeholder="url" id="url">
+<nav class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="index.html">Symphony Desktop Wrapper API Demo</a>
+    </div>
   </div>
-  <div class="form-group">
-    <label>Name</label>
-    <input type="text" class="form-control" placeholder="name" id="name">
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h1>New Window API</h1>
   </div>
-  <button type="button" id='new-window-test' class="btn btn-default">Open Window</button>
-</form>
 
-<h3>Overview</h3>
+  <h3>Try me</h3>
 
-<p>The window API is used to create a new browser window. <a href='https://developer.mozilla.org/en-US/docs/Web/API/Window/open'>HTML5 Window API</a></p>
+  <form class="form-inline">
+    <div class="form-group">
+      <label>URL</label>
+      <input type="text" class="form-control" placeholder="url" id="url">
+    </div>
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" class="form-control" placeholder="name" id="name">
+    </div>
+    <button type="button" id="new-window-test" class="btn btn-default">Open Window</button>
+  </form>
 
-<h3>Method Signature</h3>
+  <h3>Overview</h3>
 
-<pre>
-ssf.window(url, name, features)
-</pre>
+  <p>The window API is used to create a new browser window. <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/open">HTML5 Window API</a></p>
 
-<p>Creates a new window. If a window with the same name already exists, that window will be reused.</p>
-<p>Note: Window resuse is platform dependant. The API is <a href='https://developer.mozilla.org/en-US/docs/Web/API/Window/open'>inconsistent between browsers</a> and Electron only allows this for windows created via the built in <code>window.open()</code> method (child windows), not <code>new BrowserWindow()</code> that is used to implement this API.</p>
+  <h3>Method Signature</h3>
 
-<h4>Syntax</h4>
+  <pre>
+  ssf.window(url, name, features)
+  </pre>
 
-<pre>
-var newWindow = ssf.window(url, name, features);
-</pre>
+  <p>Creates a new window. If a window with the same name already exists, that window will be reused.</p>
+  <p>Note: Window resuse is platform dependant. The API is <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/open">inconsistent between browsers</a> and Electron only allows this for windows created via the built in <code>window.open()</code> method (child windows), not <code>new BrowserWindow()</code> that is used to implement this API.</p>
 
-<h4>Parameters</h4>
+  <h4>Syntax</h4>
 
-<dl>
-  <dt>url</dt>
-  <dd>URL to open in the window. Must be prefixed with the protocol (i.e. http://)</dd>
-  <dt>name</dt>
-  <dd>Name of the new window. Should not contain whitespace</dd>
-  <dt>features (optional)</dt>
-  <dd>DOMString to set features of the new window</dd>
-</dl>
+  <pre>
+  var newWindow = ssf.window(url, name, features);
+  </pre>
 
-<h4>Return Value</h4>
+  <h4>Parameters</h4>
 
-<dl>
-  <dt>window</dt>
-  <dd>A reference to the new window.</dd>
-</dl>
+  <dl>
+    <dt>url</dt>
+    <dd>URL to open in the window. Must be prefixed with the protocol (i.e. http://)</dd>
+    <dt>name</dt>
+    <dd>Name of the new window. Should not contain whitespace</dd>
+    <dt>features (optional)</dt>
+    <dd>DOMString to set features of the new window</dd>
+  </dl>
+
+  <h4>Return Value</h4>
+
+  <dl>
+    <dt>window</dt>
+    <dd>A reference to the new window.</dd>
+  </dl>
+</div>
 
 <script src="window.js"></script>
 <script src="new-window-api-demo.js"></script>
