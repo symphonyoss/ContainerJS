@@ -20,21 +20,37 @@ module.exports = () => {
   });
 
   ipc.on('ssf-new-window', (e, msg) => {
-    let options = null;
-    const features = msg.features.split(',');
-    if (features.includes('child=yes')) {
-      options = { parent: BrowserWindow.fromWebContents(e.sender) };
+    let options = {};
+    const featureObject = parseFeaturesString(msg.features);
+    if (featureObject.child) {
+      options.parent = BrowserWindow.fromWebContents(e.sender);
     }
 
     const newWindow = new BrowserWindow(options);
     newWindow.loadURL(msg.url);
-    windows.push(newWindow);
     newWindow.on('close', () => {
       const index = windows.indexOf(newWindow);
       if (index >= 0) {
         windows.splice(index, 1);
       }
     });
+
     e.returnValue = newWindow;
+    windows.push(newWindow);
   });
+};
+
+const parseFeaturesString = (features) => {
+  const featureObject = {};
+
+  features.split(/,\s*/).forEach((feature) => {
+    let [key, value] = feature.split(/\s*=/);
+
+    // interpret the value as a boolean, if possible
+    value = (value === 'yes' || value === '1') ? true : (value === 'no' || value === '0') ? false : value;
+
+    featureObject[key] = value;
+  });
+
+  return featureObject;
 };
