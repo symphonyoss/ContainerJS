@@ -5,11 +5,17 @@
   "main": "index.js",
   "scripts": {
     "start": "live-server src/",
+    "postinstall": "rimraf src/bootstrap.min.css && copyfiles -f node_modules/bootstrap/dist/css/bootstrap.min.css src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
-    "live-server": "^1.2.0"
+    "copyfiles": "^1.2.0",
+    "live-server": "^1.2.0",
+    "rimraf": "^2.6.1"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.7"
   }
 }
