@@ -31,4 +31,4 @@ where `url` is the URL to load in the hidden window.
 
 ### Renderer process integration
 
-The call to ssfElectron will create a browser window that will not be shown, and will load the URL passed into `ssfElectron()`. From here, use `ssf.window()` to create windows.
+The call to ssfElectron will create a browser window that will not be shown, and will load the URL passed into `ssfElectron()`. From here, use `new ssf.Window()` to create windows.
