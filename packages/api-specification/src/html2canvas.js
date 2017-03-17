@@ -1,1 +1,1 @@
-// Intentionally blank, overridden to in platform demos
+// Intentionally blank, overridden in platform demos
