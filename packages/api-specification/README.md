@@ -4,6 +4,10 @@ This project both documents and demonstrates the Symphony Desktop Wrapper API sp
 
 ## Getting started
 
-To see the APIs in action within your browser, run `npm start`.
+To view the documentation within your browser, run `npm start`. **N.B. The demos may not work as expected - to view the demos, please refer to the following packages:**
 
-This same code is used within the Electron and OpenFin API demonstration projects.
+- api-browser-demo
+- api-electron-demo
+- api-openfin-demo
+
+This same code is used within the browser, Electron and OpenFin API demonstration projects.
