@@ -2,10 +2,12 @@ const {
   BrowserWindow,
   ipcMain: ipc
 } = require('electron');
+const path = require('path');
 
+let win;
 const windows = [];
 
-module.exports = () => {
+module.exports = (url) => {
   const eNotify = require('electron-notify');
 
   ipc.on('ssf-notification', (e, msg) => {
@@ -20,7 +22,12 @@ module.exports = () => {
   });
 
   ipc.on('ssf-new-window', (e, msg) => {
-    const options = {};
+    const options = {
+      webPreferences: {
+        sandbox: true,
+        preload: path.join(__dirname, 'preload.js')
+      }
+    };
     const featureObject = parseFeaturesString(msg.features);
     if (featureObject.child) {
       options.parent = BrowserWindow.fromWebContents(e.sender);
@@ -37,6 +44,29 @@ module.exports = () => {
 
     e.returnValue = newWindow;
     windows.push(newWindow);
+  });
+
+  createInitialHiddenWindow(url);
+};
+
+const createInitialHiddenWindow = (url) => {
+  // Create an invisible window to run the load script
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    show: false,
+    webPreferences: {
+      sandbox: true,
+      preload: path.join(__dirname, 'preload.js')
+    }
+  });
+
+  // and load the page used for the hidden window
+  win.loadURL(url);
+
+  // Emitted when the window is closed.
+  win.on('closed', () => {
+    win = null;
   });
 };
 
