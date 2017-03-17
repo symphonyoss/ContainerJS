@@ -20,23 +20,15 @@ This module needs to register IPC handlers once the app `ready` event has fired.
 const ssfElectron = require('ssf-desktop-api-electron');
 
 function createWindow () {
-  ssfElectron();
+  ssfElectron(url);
   // ... other stuff!
 }
 
 app.on('ready', createWindow)
 ```
 
+where `url` is the URL to load in the hidden window.
+
 ### Renderer process integration
 
-Add the following pre-load script to any browser window that needs to use this API:
-
-```
-win = new BrowserWindow({
-  // ...
-  webPreferences: {
-    // ...
-    preload: path.join(__dirname, 'node_modules/ssf-desktop-api-electron/preload.js')
-  }
-})
-```
+The call to ssfElectron will create a browser window that will not be shown, and will load the URL passed into `ssfElectron()`. From here, use `ssf.window()` to create windows.
