@@ -9,7 +9,7 @@ let win;
 
 function createWindow() {
   ssfElectron(url.format({
-    pathname: path.join(__dirname, 'src/preload.html'),
+    pathname: path.join(__dirname, 'src/hiddenWindow.html'),
     protocol: 'file:',
     slashes: true
   }));

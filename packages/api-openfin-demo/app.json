@@ -3,9 +3,9 @@
     "startup_app": {
         "name": "ssf-desktop-api-openfin-demo",
         "description": "SSF Desktop Openfin API Demo",
-        "url": "http://localhost:5000/index.html",
+        "url": "http://localhost:5000/hiddenWindow.html",
         "uuid": "ssf-desktop-api-openfin-demo",
-        "autoShow": true
+        "autoShow": false
     },
     "runtime": {
         "arguments": "",
