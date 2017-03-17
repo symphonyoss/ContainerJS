@@ -1,5 +1,5 @@
+/* globals html2canvas */
 const ipc = require('electron').ipcRenderer;
-const html2canvas = require('html2canvas');
 
 if (!window.ssf) {
   window.ssf = {};
