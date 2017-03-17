@@ -1,9 +1,9 @@
-/* globals html2canvas */
-
 class ScreenSnippet {
   capture() {
-    return html2canvas(document.body)
-      .then((canvas) => createImageBitmap(canvas));
+    return new Promise((resolve, reject) => {
+      fin.desktop.Window.getCurrent()
+        .getSnapshot((snapshot) => { resolve('data:image/png;base64,' + snapshot); }, reject);
+    });
   }
 }
 

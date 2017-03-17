@@ -7,3 +7,7 @@ body {
   margin: 20px auto;
   box-shadow: 0px 0px 36px 5px rgba(0, 0, 0, 0.4);
 }
+
+#screen-snippet-test-error {
+  font-style: italic;
+}

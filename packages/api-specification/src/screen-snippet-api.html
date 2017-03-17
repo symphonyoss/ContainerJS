@@ -26,9 +26,10 @@
 <div>
   <button type="button" id="screen-snippet-test" class="btn btn-default">Capture</button>
   <span id="screen-snippet-test-status"></span>
+  <span id="screen-snippet-test-error"></span>
 </div>
 
-<canvas id="screen-snippet-test-preview" class="text-center"></canvas>
+<img id="screen-snippet-test-preview" class="img-responsive text-center"></img>
 
 <h3>Overview</h3>
 
@@ -66,7 +67,7 @@ capture()
 
 <pre>
 var mySnippet = new ScreenSnippet();
-mySnippet.capture().then(function(imageBitmap) { ... });
+mySnippet.capture().then(function(dataUri) { ... });
 </pre>
 
 <h4>Parameters</h4>
@@ -75,7 +76,7 @@ mySnippet.capture().then(function(imageBitmap) { ... });
 
 <h4>Returns</h4>
 
-<p>A Promise that resolves to an ImageBitmap object with contains the captured image.</p>
+<p>A Promise that resolves to a base64-encoded PNG [Data URI](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) string with contains the captured image.</p>
 </div>
 
 <script src="html2canvas.js"></script>
