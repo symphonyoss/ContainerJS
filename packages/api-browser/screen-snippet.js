@@ -3,7 +3,7 @@
 class ScreenSnippet {
   capture() {
     return html2canvas(document.body)
-      .then((canvas) => createImageBitmap(canvas));
+      .then((canvas) => canvas.toDataURL());
   }
 }
 

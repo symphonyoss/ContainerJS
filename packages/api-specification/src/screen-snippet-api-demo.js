@@ -1,33 +1,30 @@
-var MAX_CANVAS_WIDTH = 800;
-
 var button = document.getElementById('screen-snippet-test');
-var canvas = document.getElementById('screen-snippet-test-preview');
-var canvasCtx = canvas.getContext('2d');
-canvas.width = 0;
-canvas.height = 0;
+var preview = document.getElementById('screen-snippet-test-preview');
 
 function updateStatusText(text) {
   document.getElementById('screen-snippet-test-status').textContent = text;
 }
 
+function updateErrorText(text) {
+  document.getElementById('screen-snippet-test-error').textContent = text;
+}
+
 var mySnippet = new ssf.ScreenSnippet();
 
 button.onclick = function() {
-  canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-  canvas.width = 0;
-  canvas.height = 0;
-  canvas.style.display = 'none';
+  preview.src = '';
+  preview.style.display = 'none';
 
   updateStatusText('Capturing screen snippet...');
+  updateErrorText('');
   mySnippet.capture()
-    .then((imageBitmap) => {
+    .then((dataUri) => {
       updateStatusText('Screen snippet captured!');
-      canvas.width = Math.min(imageBitmap.width, MAX_CANVAS_WIDTH);
-      canvas.height = canvas.width * imageBitmap.height / imageBitmap.width;
-      canvasCtx.drawImage(imageBitmap, 0, 0, canvas.width, canvas.height);
-      canvas.style.display = 'block';
+      preview.src = dataUri;
+      preview.style.display = 'block';
     })
-    .catch(() => {
+    .catch((error) => {
       updateStatusText('Screen snippet error!');
+      updateErrorText(error.message || '');
     });
 };

@@ -4,8 +4,5 @@
   "rules": {
     "semi": ["error", "always"],
     "space-before-function-paren": ["error", "never"]
-  },
-  "globals": {
-    "createImageBitmap": true
   }
 }
