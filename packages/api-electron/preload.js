@@ -1,4 +1,5 @@
 const ipc = require('electron').ipcRenderer;
+const html2canvas = require('html2canvas');
 
 if (!window.ssf) {
   window.ssf = {};
@@ -19,3 +20,12 @@ window.ssf.window = function(url, name, features) {
     features
   });
 };
+
+class ScreenSnippet {
+  capture() {
+    return html2canvas(document.body)
+      .then((canvas) => createImageBitmap(canvas));
+  }
+}
+
+window.ssf.ScreenSnippet = ScreenSnippet;

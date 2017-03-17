@@ -1,0 +1,84 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<title>Symphony Desktop Wrapper API Specification</title>
+<link rel="stylesheet" type="text/css" href="bootstrap.min.css"></link>
+<link rel="stylesheet" type="text/css" href="style.css"></link>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="index.html">Symphony Desktop Wrapper API Demo</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="page-header">
+    <h1>ScreenSnippet API</h1>
+  </div>
+
+<h3>Try me</h3>
+
+<div>
+  <button type="button" id="screen-snippet-test" class="btn btn-default">Capture</button>
+  <span id="screen-snippet-test-status"></span>
+</div>
+
+<canvas id="screen-snippet-test-preview" class="text-center"></canvas>
+
+<h3>Overview</h3>
+
+<p>The ScreenSnippet API is used to capture a snippet of their desktop (unconstrained by the host application window) and highlight portions of this snippet so it can then be consumed by the host application.</p>
+
+<div class="alert alert-warning" role="alert">Currently, the ScreenSnippet API will only capture the <code>body</code> element of the current page.</div>
+
+<h3>Constructor</h3>
+
+<pre>
+ScreenSnippet()
+</pre>
+
+<p>Creates a new instance of the ScreenSnippet class.</p>
+
+<h4>Syntax</h4>
+
+<pre>
+var mySnippet = new ScreenSnippet();
+</pre>
+
+<h4>Parameters</h4>
+
+<p>None</p>
+
+<h3>Methods</h3>
+
+<pre>
+capture()
+</pre>
+
+<p>Captures a screen snippet.</p>
+
+<h4>Syntax</h4>
+
+<pre>
+var mySnippet = new ScreenSnippet();
+mySnippet.capture().then(function(imageBitmap) { ... });
+</pre>
+
+<h4>Parameters</h4>
+
+<p>None</p>
+
+<h4>Returns</h4>
+
+<p>A Promise that resolves to an ImageBitmap object with contains the captured image.</p>
+</div>
+
+<script src="html2canvas.js"></script>
+<script src="screen-snippet.js"></script>
+<script src="screen-snippet-api-demo.js"></script>
+</body>
