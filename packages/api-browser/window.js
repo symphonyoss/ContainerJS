@@ -2,4 +2,10 @@ if (!window.ssf) {
   window.ssf = {};
 }
 
-window.ssf.window = (...args) => window.open(...args);
+class Window {
+  constructor(...args) {
+    window.open(...args);
+  }
+}
+
+window.ssf.Window = Window;

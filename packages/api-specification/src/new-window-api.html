@@ -42,10 +42,10 @@
 
   <p>The window API is used to create a new browser window. <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/open">HTML5 Window API</a></p>
 
-  <h3>Method Signature</h3>
+  <h3>Constructor</h3>
 
   <pre>
-  ssf.window(url, name, features)
+  new ssf.Window(url, name, features)
   </pre>
 
   <p>Creates a new window. If a window with the same name already exists, that window will be reused.</p>
@@ -54,7 +54,7 @@
   <h4>Syntax</h4>
 
   <pre>
-  var newWindow = ssf.window(url, name, features);
+  var newWindow = new ssf.Window(url, name, features);
   </pre>
 
   <h4>Parameters</h4>
