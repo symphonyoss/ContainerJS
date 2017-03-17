@@ -1,4 +1,4 @@
-/* globals createImageBitmap, html2canvas */
+/* globals html2canvas */
 
 class ScreenSnippet {
   capture() {
