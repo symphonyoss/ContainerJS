@@ -27,8 +27,8 @@ function createWindow () {
 app.on('ready', createWindow)
 ```
 
-where `url` is the url to load in the hidden window.
+where `url` is the URL to load in the hidden window.
 
 ### Renderer process integration
 
-The call to ssfElectron will create a BrowserWindow that will not be shown, and will load the url passed into `ssfElectron()`. From here, use `ssf.window()` to create windows.
+The call to ssfElectron will create a browser window that will not be shown, and will load the URL passed into `ssfElectron()`. From here, use `ssf.window()` to create windows.
