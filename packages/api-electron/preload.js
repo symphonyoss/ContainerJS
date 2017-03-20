@@ -1,4 +1,3 @@
-/* globals html2canvas */
 const ipc = require('electron').ipcRenderer;
 
 if (!window.ssf) {
@@ -26,8 +25,12 @@ window.ssf.Window = Window;
 
 class ScreenSnippet {
   capture() {
-    return html2canvas(document.body)
-      .then((canvas) => canvas.toDataURL());
+    return new Promise((resolve) => {
+      ipc.once('ssf-screen-snippet-captured', (imageDataUri) => {
+        resolve(imageDataUri);
+      });
+      ipc.send('ssf-capture-screen-snippet');
+    });
   }
 }
 

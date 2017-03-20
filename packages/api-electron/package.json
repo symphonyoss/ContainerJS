@@ -9,7 +9,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "electron-notify": "^0.1.0",
-    "html2canvas": "^0.5.0-beta4"
+    "electron-notify": "^0.1.0"
   }
 }
