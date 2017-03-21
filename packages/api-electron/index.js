@@ -55,6 +55,28 @@ module.exports = (url) => {
     });
   });
 
+  ipc.on('message-service', (e, msg) => {
+    const windowId = parseInt(msg.windowId, 10);
+
+    if (isNaN(windowId)) {
+      return;
+    }
+
+    const destinationWindow = BrowserWindow.fromId(windowId);
+
+    if (!destinationWindow) {
+      return;
+    }
+
+    // Need to send to topic and * in case the user has subscribed to the wildcard
+    destinationWindow.webContents.send(`message-service-${msg.topic}`, msg.message, msg.fromId);
+    destinationWindow.webContents.send(`message-service-*`, msg.message, msg.fromId);
+  });
+
+  ipc.on('get-window-id', (e) => {
+    e.returnValue = e.sender.id;
+  });
+
   createInitialHiddenWindow(url);
 };
 
