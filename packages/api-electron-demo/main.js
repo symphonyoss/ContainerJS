@@ -15,7 +15,7 @@ function createWindow() {
   }));
 }
 
-app.on('ready', createWindow);
+ssfElectron.app.ready(createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
