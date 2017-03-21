@@ -46,6 +46,13 @@ module.exports = (url) => {
     windows.push(newWindow);
   });
 
+  ipc.on('ssf-capture-screen-snippet', (e) => {
+    e.sender.capturePage((image) => {
+      const dataUri = 'data:image/png;base64,' + image.toPng().toString('base64');
+      e.sender.send('ssf-screen-snippet-captured', dataUri);
+    });
+  });
+
   createInitialHiddenWindow(url);
 };
 
