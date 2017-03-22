@@ -21,8 +21,6 @@ class MessageService {
       fin.desktop.InterApplicationBus.subscribe(splitId[0], splitId[1], topic, listener);
     } else if (splitId.length > 0) {
       fin.desktop.InterApplicationBus.subscribe(splitId[0], topic, listener);
-    } else {
-      fin.desktop.InterApplicationBus.subscribe('*', topic, listener);
     }
   }
 }

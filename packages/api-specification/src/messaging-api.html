@@ -17,15 +17,18 @@
 
 <div class="container">
   <div class="page-header">
-    <h1>Message Bus API</h1>
+    <h1>Messaging API</h1>
   </div>
 
   <h3>Try me</h3>
+
+  <hr/>
 
   <h5>Window Id:</h5>
   <p id="window-uuid"></p>
 
   <hr/>
+
   <h4>Create a window to send messages to:</h4>
   <form class="form-inline">
     <div class="form-group">
@@ -63,10 +66,16 @@
 
   <h3>Overview</h3>
 
-  <p>The Messge Bus API is used to communicate between windows</p>
+  <p>The Messaging API is used to communicate between windows</p>
 
   <h4>Methods</h4>
+  <p>The <code>MessageService</code> object exposes the following static methods:</p>
+  <pre>
+    send(windowId, topic, message)
+    subscribe(windowId, topic, listener)
+  </pre>
 
+  <h4>Syntax</h4>
   <dl>
     <dt>send</dt>
     <pre>
