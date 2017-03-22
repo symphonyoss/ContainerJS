@@ -4,6 +4,10 @@ if (!window.ssf) {
   window.ssf = {};
 }
 
+if (!window.ssf.app) {
+  window.ssf.app = {};
+}
+
 window.Notification = function(title, options) {
   ipc.send('ssf-notification', {
     title,
@@ -35,3 +39,5 @@ class ScreenSnippet {
 }
 
 window.ssf.ScreenSnippet = ScreenSnippet;
+
+window.ssf.app.ready = () => Promise.resolve();

@@ -1,4 +1,6 @@
+'use strict';
 const {
+  app,
   BrowserWindow,
   ipcMain: ipc
 } = require('electron');
@@ -94,4 +96,12 @@ const parseFeaturesString = (features) => {
   });
 
   return featureObject;
+};
+
+const ready = (cb) => {
+  app.on('ready', cb);
+};
+
+module.exports.app = {
+  ready
 };
