@@ -55,7 +55,7 @@ module.exports = (url) => {
     });
   });
 
-  ipc.on('message-service', (e, msg) => {
+  ipc.on('ssf-send-message', (e, msg) => {
     const windowId = parseInt(msg.windowId, 10);
 
     if (isNaN(windowId)) {
@@ -68,12 +68,14 @@ module.exports = (url) => {
       return;
     }
 
+    const senderId = e.sender.id;
+
     // Need to send to topic and * in case the user has subscribed to the wildcard
-    destinationWindow.webContents.send(`message-service-${msg.topic}`, msg.message, msg.fromId);
-    destinationWindow.webContents.send(`message-service-*`, msg.message, msg.fromId);
+    destinationWindow.webContents.send(`ssf-send-message-${msg.topic}`, msg.message, senderId);
+    destinationWindow.webContents.send(`ssf-send-message-*`, msg.message, senderId);
   });
 
-  ipc.on('get-window-id', (e) => {
+  ipc.on('ssf-get-window-id', (e) => {
     e.returnValue = e.sender.id;
   });
 

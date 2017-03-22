@@ -25,7 +25,7 @@ class Window {
   }
 
   static getCurrentWindowId() {
-    return ipc.sendSync('get-window-id');
+    return ipc.sendSync('ssf-get-window-id');
   }
 }
 
@@ -48,17 +48,15 @@ window.ssf.app.ready = () => Promise.resolve();
 
 class MessageService {
   static send(windowId, topic, message) {
-    const fromId = window.ssf.Window.getCurrentWindowId();
-    ipc.send('message-service', {
+    ipc.send('ssf-send-message', {
       windowId,
       topic,
-      message,
-      fromId
+      message
     });
   }
 
   static subscribe(windowId, topic, listener) {
-    ipc.on(`message-service-${topic}`, (message, sender) => {
+    ipc.on(`ssf-send-message-${topic}`, (message, sender) => {
       // Check this was from the correct window
       if (windowId === sender || windowId === '*') {
         listener(message, sender);
