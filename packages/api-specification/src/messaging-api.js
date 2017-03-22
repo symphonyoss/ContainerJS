@@ -2,6 +2,8 @@ const messageBox = document.getElementById('message-box');
 const sendButton = document.getElementById('send-message');
 const newWindowButton = document.getElementById('new-window');
 
+const appReady = ssf.app.ready();
+
 const windowDetailsId = document.getElementById('window-uuid');
 windowDetailsId.innerText = ssf.Window.getCurrentWindowId();
 
@@ -11,11 +13,13 @@ newWindowButton.onclick = () => {
 
   const isChild = document.getElementById('child').checked ? 'yes' : 'no';
 
-  // eslint-disable-next-line no-new
-  new ssf.Window('http://localhost:5000/messaging-api-test-window.html', id, 'child=' + isChild);
+  appReady.then(() => {
+    // eslint-disable-next-line no-new
+    new ssf.Window('http://localhost:5000/messaging-api-test-window.html', id, 'child=' + isChild);
 
-  ssf.MessageService.subscribe('*', 'test', (message, senderId) => {
-    messageBox.innerText = '\'' + message + '\' from ' + senderId;
+    ssf.MessageService.subscribe('*', 'test', (message, senderId) => {
+      messageBox.innerText = '\'' + message + '\' from ' + senderId;
+    });
   });
 };
 
