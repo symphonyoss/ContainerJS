@@ -33,6 +33,11 @@ class Window {
 
     return newWindow;
   }
+
+  static getCurrentWindowId() {
+    const currentWin = fin.desktop.Window.getCurrent();
+    return `${currentWin.uuid}:${currentWin.name}`;
+  }
 }
 
 window.ssf.Window = Window;

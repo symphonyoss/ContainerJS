@@ -55,6 +55,30 @@ module.exports = (url) => {
     });
   });
 
+  ipc.on('ssf-send-message', (e, msg) => {
+    const windowId = parseInt(msg.windowId, 10);
+
+    if (isNaN(windowId)) {
+      return;
+    }
+
+    const destinationWindow = BrowserWindow.fromId(windowId);
+
+    if (!destinationWindow) {
+      return;
+    }
+
+    const senderId = e.sender.id;
+
+    // Need to send to topic and * in case the user has subscribed to the wildcard
+    destinationWindow.webContents.send(`ssf-send-message-${msg.topic}`, msg.message, senderId);
+    destinationWindow.webContents.send(`ssf-send-message-*`, msg.message, senderId);
+  });
+
+  ipc.on('ssf-get-window-id', (e) => {
+    e.returnValue = e.sender.id;
+  });
+
   createInitialHiddenWindow(url);
 };
 
