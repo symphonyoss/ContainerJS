@@ -58,7 +58,12 @@ class MessageService {
   }
 
   static subscribe(windowId, topic, listener) {
-    ipc.on(`message-service-${topic}`, listener);
+    ipc.on(`message-service-${topic}`, (message, sender) => {
+      // Check this was from the correct window
+      if (windowId === sender || windowId === '*') {
+        listener(message, sender);
+      }
+    });
   }
 }
 
