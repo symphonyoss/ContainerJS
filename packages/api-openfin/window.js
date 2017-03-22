@@ -36,7 +36,7 @@ class Window {
 
   static getCurrentWindowId() {
     const currentWin = fin.desktop.Window.getCurrent();
-    return currentWin.uuid + ':' + currentWin.name;
+    return `${currentWin.uuid}:${currentWin.name}`;
   }
 }
 
