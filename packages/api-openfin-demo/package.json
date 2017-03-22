@@ -7,7 +7,7 @@
     "serve": "live-server --port=5000 --no-browser src/",
     "launch": "openfin --launch --config app.json",
     "start": "npm-run-all --parallel serve launch",
-    "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src && copyfiles -f node_modules/ssf-desktop-api-openfin/** src"
+    "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src && copyfiles -f node_modules/ssf-desktop-api-openfin/** src && copyfiles -f hiddenMainWindow.html src"
   },
   "author": "",
   "license": "Apache-2.0",
