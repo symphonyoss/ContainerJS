@@ -30,8 +30,8 @@ module.exports = (url) => {
         preload: path.join(__dirname, 'preload.js')
       }
     };
-    const featureObject = parseFeaturesString(msg.features);
-    if (featureObject.child) {
+
+    if (msg.features.child) {
       options.parent = BrowserWindow.fromWebContents(e.sender);
     }
 
@@ -101,25 +101,6 @@ const createInitialHiddenWindow = (url) => {
   win.on('closed', () => {
     win = null;
   });
-};
-
-const parseFeaturesString = (features) => {
-  const featureObject = {};
-
-  features.split(',').forEach((feature) => {
-    let [key, value] = feature.split('=');
-
-    // interpret the value as a boolean, if possible
-    if (value === 'yes' || value === '1') {
-      value = true;
-    } else if (value === 'no' || value === '0') {
-      value = false;
-    }
-
-    featureObject[key] = value;
-  });
-
-  return featureObject;
 };
 
 const ready = (cb) => {
