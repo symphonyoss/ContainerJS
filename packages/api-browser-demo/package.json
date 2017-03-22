@@ -4,7 +4,7 @@
   "description": "",
   "main": "",
   "scripts": {
-    "start": "live-server --port=5000 src/",
+    "start": "live-server --port=5002 src/",
     "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src && copyfiles -f node_modules/ssf-desktop-api-browser/** src"
   },
   "author": "",
