@@ -7,7 +7,7 @@
     "serve": "live-server --port=5001 --no-browser src/",
     "launch": "electron .",
     "start": "npm-run-all --parallel launch serve",
-    "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src && copyfiles -f hiddenMainWindow.html src"
+    "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src"
   },
   "author": "",
   "license": "Apache-2.0",
