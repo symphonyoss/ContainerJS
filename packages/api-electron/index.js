@@ -31,7 +31,7 @@ module.exports = (url) => {
       }
     };
 
-    if (msg.features.child) {
+    if (msg.features && msg.features.child) {
       options.parent = BrowserWindow.fromWebContents(e.sender);
     }
 

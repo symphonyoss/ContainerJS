@@ -7,7 +7,7 @@ class Window {
     let newWindow;
     const handleError = (error) => console.error('Error creating window: ' + error);
 
-    if (features.child) {
+    if (features && features.child) {
       newWindow = new fin.desktop.Window({
         name,
         url
