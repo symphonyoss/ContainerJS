@@ -9,20 +9,18 @@ class Window {
 }
 
 const objectToFeaturesString = (features) => {
-  let featuresString = '';
+  return Object.keys(features).map((key) => {
+    let value = features[key];
 
-  Object.keys(features).forEach((key, index) => {
     // Need to convert booleans to yes/no
-    if (features[key] === true) {
-      features[key] = 'yes';
-    } else if (features[key] === false) {
-      features[key] = 'no';
+    if (value === true) {
+      value = 'yes';
+    } else if (value === false) {
+      value = 'no';
     }
 
-    featuresString += `${key}=${features[key]},`;
-  });
-
-  return featuresString;
+    return `${key}=${value}`;
+  }).join(',');
 };
 
 window.ssf.Window = Window;
