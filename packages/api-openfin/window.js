@@ -5,10 +5,9 @@ if (!window.ssf) {
 class Window {
   constructor(url, name, features) {
     let newWindow;
-    const featureObject = parseFeaturesString(features);
     const handleError = (error) => console.error('Error creating window: ' + error);
 
-    if (featureObject.child) {
+    if (features && features.child) {
       newWindow = new fin.desktop.Window({
         name,
         url
@@ -41,22 +40,3 @@ class Window {
 }
 
 window.ssf.Window = Window;
-
-const parseFeaturesString = (features) => {
-  const featureObject = {};
-
-  features.split(',').forEach((feature) => {
-    let [key, value] = feature.split('=');
-
-    // interpret the value as a boolean, if possible
-    if (value === 'yes' || value === '1') {
-      value = true;
-    } else if (value === 'no' || value === '0') {
-      value = false;
-    }
-
-    featureObject[key] = value;
-  });
-
-  return featureObject;
-};

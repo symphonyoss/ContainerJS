@@ -5,9 +5,11 @@ const appReady = ssf.app.ready();
 newWindowButton.onclick = function() {
   var url = document.getElementById('url').value;
   var windowName = document.getElementById('name').value;
-  var isChild = document.getElementById('child').checked ? 'yes' : 'no';
+  var isChild = document.getElementById('child').checked;
   appReady.then(() => {
     // eslint-disable-next-line no-new
-    new ssf.Window(url, windowName, 'child=' + isChild);
+    new ssf.Window(url, windowName, {
+      child: isChild
+    });
   });
 };
