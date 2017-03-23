@@ -15,7 +15,7 @@ newWindowButton.onclick = () => {
 
   appReady.then(() => {
     // eslint-disable-next-line no-new
-    new ssf.Window('http://localhost:5000/messaging-api-test-window.html', id, 'child=' + isChild);
+    new ssf.Window(`http://localhost:${location.port}/messaging-api-test-window.html`, id, 'child=' + isChild);
 
     ssf.MessageService.subscribe('*', 'test', (message, senderId) => {
       messageBox.innerText = '\'' + message + '\' from ' + senderId;

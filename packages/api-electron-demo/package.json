@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "serve": "live-server --port=5000 --no-browser src/",
+    "serve": "live-server --port=5001 --no-browser src/",
     "launch": "electron .",
     "start": "npm-run-all --parallel launch serve",
     "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src"
