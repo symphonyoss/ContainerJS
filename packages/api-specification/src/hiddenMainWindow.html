@@ -2,7 +2,8 @@
 <body>
   <script src="window.js"></script>
   <script>
-    new ssf.Window(`http://localhost:${location.port}/index.html`, 'mainWindow', {
+    const port = location.port || 5001;
+    new ssf.Window(`http://localhost:${port}/index.html`, 'mainWindow', {
       child: true
     });
   </script>
