@@ -4,8 +4,17 @@ if (!window.ssf) {
 
 class Window {
   constructor(url, name, features) {
-    window.open(url, name, objectToFeaturesString(features));
+    const win = window.open(url, name, objectToFeaturesString(features));
+    win.onclose = () => {
+      window.accessibleWindows[win.name] = null;
+    };
+
+    window.accessibleWindows[name] = win;
   }
+
+  static getCurrentWindowId() {
+    return window.name;
+  };
 }
 
 const objectToFeaturesString = (features) => {
