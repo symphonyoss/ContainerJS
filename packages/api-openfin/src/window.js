@@ -26,7 +26,19 @@ class Window {
       newWindow = app.getWindow();
     }
 
-    return newWindow;
+    this.innerWindow = newWindow;
+  }
+
+  close() {
+    this.innerWindow.close();
+  }
+
+  hide() {
+    this.innerWindow.hide();
+  }
+
+  show() {
+    this.innerWindow.show();
   }
 
   static getCurrentWindowId() {
