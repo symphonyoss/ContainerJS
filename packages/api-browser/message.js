@@ -4,7 +4,7 @@ if (!window.ssf) {
 
 class MessageService {
   static send(windowId, topic, message) {
-    const win = window.accessableWindows.find((w) => w.id.toString() === windowId);
+    const win = window.accessibleWindows[windowId];
     const senderId = window.ssf.Window.getCurrentWindowId();
     if (win) {
       win.window.postMessage({
