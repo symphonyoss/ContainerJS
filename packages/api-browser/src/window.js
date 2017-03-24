@@ -11,6 +11,26 @@ class Window {
     };
 
     addAccessibleWindow(name, win);
+    this.innerWindow = window.open(url, name, objectToFeaturesString(features));
+    this.innerWindow.onclose = () => {
+      window.accessibleWindows[this.innerWindow.name] = null;
+    };
+
+    window.accessibleWindows[name] = this.innerWindow;
+  }
+
+  close() {
+    if (this.innerWindow) {
+      this.innerWindow.close();
+    }
+  }
+
+  show() {
+    // Unable to 'show' browser window
+  }
+
+  hide() {
+    // Unable to 'hide' browser window
   }
 
   static getCurrentWindowId() {
