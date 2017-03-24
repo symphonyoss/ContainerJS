@@ -2,11 +2,23 @@ const ipc = require('electron').ipcRenderer;
 
 class Window {
   constructor(url, name, features) {
-    return ipc.sendSync('ssf-new-window', {
+    this.id = ipc.sendSync('ssf-new-window', {
       url,
       name,
       features
-    });
+    }).id;
+  }
+
+  close() {
+    ipc.send('ssf-close-window', this.id);
+  }
+
+  show() {
+    ipc.send('ssf-show-window', this.id);
+  }
+
+  hide() {
+    ipc.send('ssf-hide-window', this.id);
   }
 
   static getCurrentWindowId() {

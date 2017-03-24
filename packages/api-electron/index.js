@@ -45,7 +45,10 @@ module.exports = (url) => {
       }
     });
 
-    e.returnValue = newWindow;
+    e.returnValue = {
+      id: newWindow.id
+    };
+
     windows.push(newWindow);
   });
 
@@ -78,6 +81,28 @@ module.exports = (url) => {
 
   ipc.on('ssf-get-window-id', (e) => {
     e.returnValue = e.sender.id;
+  });
+
+  ipc.on('ssf-close-window', (e, id) => {
+    const win = BrowserWindow.fromId(id);
+    // Don't need to remove the window from the windows array, the onclose event does that for us
+    if (win) {
+      win.close();
+    }
+  });
+
+  ipc.on('ssf-show-window', (e, id) => {
+    const win = BrowserWindow.fromId(id);
+    if (win) {
+      win.show();
+    }
+  });
+
+  ipc.on('ssf-hide-window', (e, id) => {
+    const win = BrowserWindow.fromId(id);
+    if (win) {
+      win.hide();
+    }
   });
 
   createInitialHiddenWindow(url);
