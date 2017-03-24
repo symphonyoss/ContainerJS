@@ -7,8 +7,4 @@ class ScreenSnippet {
   }
 }
 
-if (!window.ssf) {
-  window.ssf = {};
-}
-
-window.ssf.ScreenSnippet = ScreenSnippet;
+export default ScreenSnippet;

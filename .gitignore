@@ -64,6 +64,7 @@ npm
 /packages/api-electron-demo/src/
 /packages/api-openfin-demo/src/
 /packages/api-specification/src/bootstrap.min.css
+dist/
 
 # Visual Studio Code
 .vscode

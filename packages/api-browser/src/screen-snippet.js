@@ -1,4 +1,5 @@
 /* globals html2canvas */
+import 'html2canvas';
 
 class ScreenSnippet {
   capture() {
@@ -7,8 +8,4 @@ class ScreenSnippet {
   }
 }
 
-if (!window.ssf) {
-  window.ssf = {};
-}
-
-window.ssf.ScreenSnippet = ScreenSnippet;
+export default ScreenSnippet;

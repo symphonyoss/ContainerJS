@@ -5,7 +5,8 @@
   "main": "",
   "scripts": {
     "start": "live-server --port=5002 src/",
-    "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src && copyfiles -f node_modules/ssf-desktop-api-browser/** src"
+    "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src && copyfiles -f node_modules/ssf-desktop-api-browser/dist/** src",
+    "test": "echo \"No test specified\" && exit 0"
   },
   "author": "",
   "license": "Apache-2.0",

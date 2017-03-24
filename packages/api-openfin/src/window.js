@@ -1,7 +1,3 @@
-if (!window.ssf) {
-  window.ssf = {};
-}
-
 class Window {
   constructor(url, name, features) {
     let newWindow;
@@ -39,4 +35,4 @@ class Window {
   }
 }
 
-window.ssf.Window = Window;
+export default Window;
