@@ -2,10 +2,20 @@ if (!window.ssf) {
   window.ssf = {};
 }
 
+window.accessableWindows = [];
+
 class Window {
   constructor(url, name, features) {
-    window.open(url, name, objectToFeaturesString(features));
+    const win = window.open(url, name, objectToFeaturesString(features));
+    window.accessableWindows.push({
+      id: name,
+      window: win
+    });
   }
+
+  static getCurrentWindowId() {
+    return window.name;
+  };
 }
 
 const objectToFeaturesString = (features) => {
@@ -22,5 +32,15 @@ const objectToFeaturesString = (features) => {
     return `${key}=${value}`;
   }).join(',');
 };
+
+// if we have an opener, we are not the parent so we need to add it as a window
+if (window.opener) {
+  window.accessableWindows.push({
+    id: 'parent',
+    window: window.opener
+  });
+} else {
+  window.name = 'parent';
+}
 
 window.ssf.Window = Window;
