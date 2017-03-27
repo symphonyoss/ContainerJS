@@ -52,7 +52,7 @@ class Window {
   }
 
   static getCurrentWindow() {
-    return new window.ssf.Window();
+    return new Window();
   }
 }
 
