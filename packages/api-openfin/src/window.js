@@ -46,6 +46,14 @@ class Window {
     this.innerWindow.show();
   }
 
+  focus() {
+    this.innerWindow.focus();
+  }
+
+  blur() {
+    this.innerWindow.blur();
+  }
+
   static getCurrentWindowId() {
     const currentWin = fin.desktop.Window.getCurrent();
     return `${currentWin.uuid}:${currentWin.name}`;
