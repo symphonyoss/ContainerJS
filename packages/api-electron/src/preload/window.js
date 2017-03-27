@@ -29,6 +29,14 @@ class Window {
     ipc.send('ssf-hide-window', this.innerWindow.id);
   }
 
+  focus() {
+    ipc.send('ssf-focus-window', this.innerWindow.id);
+  }
+
+  blur() {
+    ipc.send('ssf-blur-window', this.innerWindow.id);
+  }
+
   static getCurrentWindowId() {
     return ipc.sendSync('ssf-get-window-id');
   }

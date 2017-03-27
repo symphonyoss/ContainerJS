@@ -16,17 +16,31 @@ newWindowButton.onclick = function() {
 };
 
 var closeWindow = document.getElementById('close-window');
-var hideWindow = document.getElementById('hide-window');
-var showWindow = document.getElementById('show-window');
 
-closeWindow.onclick = function() {
+closeWindow.onclick = () => {
   win.close();
 };
 
-hideWindow.onclick = function() {
+var hideWindow = document.getElementById('hide-window');
+
+hideWindow.onclick = () => {
   win.hide();
 };
 
-showWindow.onclick = function() {
+var showWindow = document.getElementById('show-window');
+
+showWindow.onclick = () => {
   win.show();
+};
+
+var focusWindow = document.getElementById('focus-window');
+
+focusWindow.onclick = () => {
+  win.focus();
+};
+
+var blurWindow = document.getElementById('blur-window');
+
+blurWindow.onclick = () => {
+  win.blur();
 };

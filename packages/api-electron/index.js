@@ -79,32 +79,6 @@ module.exports = (url) => {
     destinationWindow.webContents.send(`ssf-send-message-*`, msg.message, senderId);
   });
 
-  ipc.on('ssf-get-window-id', (e) => {
-    e.returnValue = e.sender.id;
-  });
-
-  ipc.on('ssf-close-window', (e, id) => {
-    const win = BrowserWindow.fromId(id);
-    // Don't need to remove the window from the windows array, the onclose event does that for us
-    if (win) {
-      win.close();
-    }
-  });
-
-  ipc.on('ssf-show-window', (e, id) => {
-    const win = BrowserWindow.fromId(id);
-    if (win) {
-      win.show();
-    }
-  });
-
-  ipc.on('ssf-hide-window', (e, id) => {
-    const win = BrowserWindow.fromId(id);
-    if (win) {
-      win.hide();
-    }
-  });
-
   createInitialHiddenWindow(url);
 };
 
@@ -132,6 +106,46 @@ const createInitialHiddenWindow = (url) => {
 const ready = (cb) => {
   app.on('ready', cb);
 };
+
+ipc.on('ssf-get-window-id', (e) => {
+  e.returnValue = BrowserWindow.fromWebContents(e.sender);
+});
+
+ipc.on('ssf-close-window', (e, id) => {
+  const win = BrowserWindow.fromId(id);
+  // Don't need to remove the window from the windows array, the onclose event does that for us
+  if (win) {
+    win.close();
+  }
+});
+
+ipc.on('ssf-show-window', (e, id) => {
+  const win = BrowserWindow.fromId(id);
+  if (win) {
+    win.show();
+  }
+});
+
+ipc.on('ssf-hide-window', (e, id) => {
+  const win = BrowserWindow.fromId(id);
+  if (win) {
+    win.hide();
+  }
+});
+
+ipc.on('ssf-focus-window', (e, id) => {
+  const win = BrowserWindow.fromId(id);
+  if (win) {
+    win.focus();
+  }
+});
+
+ipc.on('ssf-blur-window', (e, id) => {
+  const win = BrowserWindow.fromId(id);
+  if (win) {
+    win.blur();
+  }
+});
 
 module.exports.app = {
   ready
