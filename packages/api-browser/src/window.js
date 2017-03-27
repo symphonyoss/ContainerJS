@@ -34,6 +34,18 @@ class Window {
     // Unable to 'hide' browser window
   }
 
+  focus() {
+    if (this.innerWindow) {
+      this.innerWindow.focus();
+    }
+  }
+
+  blur() {
+    if (this.innerWindow) {
+      this.innerWindow.blur();
+    }
+  }
+
   static getCurrentWindowId() {
     return window.name;
   };
