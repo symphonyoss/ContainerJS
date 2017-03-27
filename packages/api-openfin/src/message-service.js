@@ -1,7 +1,3 @@
-if (!window.ssf) {
-  window.ssf = {};
-}
-
 class MessageService {
   // Window ID should be in the form 'application-uuid:window-name'
   static send(windowId, topic, message) {
@@ -25,4 +21,4 @@ class MessageService {
   }
 }
 
-window.ssf.MessageService = MessageService;
+export default MessageService;

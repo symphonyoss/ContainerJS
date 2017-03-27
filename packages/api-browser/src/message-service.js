@@ -1,13 +1,11 @@
-if (!window.ssf) {
-  window.ssf = {};
-}
+import { getAccessibleWindow } from './accessible-windows';
 
 class MessageService {
   static send(windowId, topic, message) {
-    const win = window.accessibleWindows[windowId];
+    const win = getAccessibleWindow(windowId);
     const senderId = window.ssf.Window.getCurrentWindowId();
     if (win) {
-      win.window.postMessage({
+      win.postMessage({
         senderId,
         topic,
         message
@@ -26,4 +24,4 @@ class MessageService {
   }
 }
 
-window.ssf.MessageService = MessageService;
+export default MessageService;

@@ -1,15 +1,16 @@
-if (!window.ssf) {
-  window.ssf = {};
-}
+import {
+  addAccessibleWindow,
+  removeAccessibleWindow
+} from './accessible-windows';
 
 class Window {
   constructor(url, name, features) {
     const win = window.open(url, name, objectToFeaturesString(features));
     win.onclose = () => {
-      window.accessibleWindows[win.name] = null;
+      removeAccessibleWindow(win.name);
     };
 
-    window.accessibleWindows[name] = win;
+    addAccessibleWindow(name, win);
   }
 
   static getCurrentWindowId() {
@@ -32,4 +33,4 @@ const objectToFeaturesString = (features) => {
   }).join(',');
 };
 
-window.ssf.Window = Window;
+export default Window;

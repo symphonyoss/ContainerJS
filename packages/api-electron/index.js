@@ -8,6 +8,7 @@ const path = require('path');
 
 let win;
 const windows = [];
+const preloadPath = path.join(__dirname, 'dist', 'ssf-desktop-api.js');
 
 module.exports = (url) => {
   const eNotify = require('electron-notify');
@@ -27,7 +28,7 @@ module.exports = (url) => {
     const options = {
       webPreferences: {
         sandbox: true,
-        preload: path.join(__dirname, 'preload.js')
+        preload: preloadPath
       }
     };
 
@@ -90,7 +91,7 @@ const createInitialHiddenWindow = (url) => {
     show: false,
     webPreferences: {
       sandbox: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: preloadPath
     }
   });
 
