@@ -4,22 +4,23 @@ import {
 } from './accessible-windows';
 
 class Window {
-  constructor(url, name, features) {
-    const win = window.open(url, name, objectToFeaturesString(features));
-    win.onclose = () => {
-      removeAccessibleWindow(win.name);
-    };
+  constructor(...args) {
+    if (args.length === 0) {
+      this.innerWindow = window;
+    } else {
+      const [url, name, features] = args;
 
-    addAccessibleWindow(name, win);
-    this.innerWindow = window.open(url, name, objectToFeaturesString(features));
-    this.innerWindow.onclose = () => {
-      window.accessibleWindows[this.innerWindow.name] = null;
-    };
+      this.innerWindow = window.open(url, name, objectToFeaturesString(features));
+      this.innerWindow.onclose = () => {
+        removeAccessibleWindow(this.innerWindow.name);
+      };
 
-    window.accessibleWindows[name] = this.innerWindow;
+      addAccessibleWindow(name, this.innerWindow);
+    }
   }
 
   close() {
+    // Close only works on windows that were opened by the current window
     if (this.innerWindow) {
       this.innerWindow.close();
     }
@@ -36,6 +37,10 @@ class Window {
   static getCurrentWindowId() {
     return window.name;
   };
+
+  static getCurrentWindow() {
+    return new window.ssf.Window();
+  }
 }
 
 const objectToFeaturesString = (features) => {

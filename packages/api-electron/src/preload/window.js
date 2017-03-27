@@ -1,12 +1,20 @@
 const ipc = require('electron').ipcRenderer;
 
 class Window {
-  constructor(url, name, features) {
-    this.innerWindow = ipc.sendSync('ssf-new-window', {
-      url,
-      name,
-      features
-    });
+  constructor(...args) {
+    if (args.length === 0) {
+      this.innerWindow = {
+        id: window.ssf.Window.getCurrentWindowId()
+      };
+    } else {
+      const [url, name, features] = args;
+
+      this.innerWindow = ipc.sendSync('ssf-new-window', {
+        url,
+        name,
+        features
+      });
+    }
   }
 
   close() {
@@ -23,6 +31,10 @@ class Window {
 
   static getCurrentWindowId() {
     return ipc.sendSync('ssf-get-window-id');
+  }
+
+  static getCurrentWindow() {
+    return new window.ssf.Window();
   }
 }
 
