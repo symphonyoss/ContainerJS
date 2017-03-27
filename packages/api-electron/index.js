@@ -108,7 +108,7 @@ const ready = (cb) => {
 };
 
 ipc.on('ssf-get-window-id', (e) => {
-  e.returnValue = BrowserWindow.fromWebContents(e.sender);
+  e.returnValue = BrowserWindow.fromWebContents(e.sender).id;
 });
 
 ipc.on('ssf-close-window', (e, id) => {

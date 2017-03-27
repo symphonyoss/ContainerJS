@@ -18,23 +18,27 @@ class Window {
   }
 
   close() {
-    ipc.send('ssf-close-window', this.innerWindow.id);
+    this.sendWindowAction('ssf-close-window');
   }
 
   show() {
-    ipc.send('ssf-show-window', this.innerWindow.id);
+    this.sendWindowAction('ssf-show-window');
   }
 
   hide() {
-    ipc.send('ssf-hide-window', this.innerWindow.id);
+    this.sendWindowAction('ssf-hide-window');
   }
 
   focus() {
-    ipc.send('ssf-focus-window', this.innerWindow.id);
+    this.sendWindowAction('ssf-focus-window');
   }
 
   blur() {
-    ipc.send('ssf-blur-window', this.innerWindow.id);
+    this.sendWindowAction('ssf-blur-window');
+  }
+
+  sendWindowAction(action) {
+    ipc.send(action, this.innerWindow.id);
   }
 
   static getCurrentWindowId() {
