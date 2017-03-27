@@ -101,6 +101,18 @@
         <li><code>listener</code> - callback that is invoked when a message is received with 2 paramaters: message and senderid.</li>
       </ul>
     </dd>
+    <dt>unsubscribe</dt>
+    <pre>
+      ssf.MessageService.unsubscribe(windowId, topic, listener);
+    </pre>
+    <dd>
+      <p>Unsubscribes from messages from a particular window and topic that has already been subscribed to</p>
+      <ul>
+        <li><code>windowId</code> - id of the sending window.</li>
+        <li><code>topic</code> - the topic to listen for.</li>
+        <li><code>listener</code> - the listener that was passed to subscribe.</li>
+      </ul>
+    </dd>
   </dl>
 </div>
 
