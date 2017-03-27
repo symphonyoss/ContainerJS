@@ -56,6 +56,12 @@
   <h3>Constructor</h3>
 
   <pre>
+  new ssf.Window()
+  </pre>
+
+  <p>Creates a new window object for the current window.</p>
+
+  <pre>
   new ssf.Window(url, name, features)
   </pre>
 
@@ -91,14 +97,16 @@
     <dd>A reference to the new window.</dd>
   </dl>
 
-  <h3>Methods</h3>
-  <h5>Static</h5>
+  <h5>Static Methods</h5>
   <ul>
-    <li><code>getCurrentWindowId()</code> (static) - Get the current window id as a string</li>
+    <li><code>getCurrentWindow()</code> - Get the current window object</li>
+    <li><code>getCurrentWindowId()</code> - Get the current window id as a string</li>
   </ul>
-  <h5>Instance</h5>
+  <h5>Class Methods</h5>
   <ul>
+    <li><code>blur()</code> - Remove focus from the window</li>
     <li><code>close()</code> - Close the window</li>
+    <li><code>focus()</code> - Give the window focus</li>
     <li><code>hide()</code> - Hide a visible window (Non browser only)</li>
     <li><code>show()</code> - Show a hidden window (Non browser only)</li>
   </ul>
