@@ -54,6 +54,15 @@
 
   <hr/>
 
+  <h5>Subscribe and unsubscribe from the channel, default is unsubscribed</h5>
+
+  <form class="inline-form">
+    <button type="button" class="btn btn-default" id="subscribe-button">Subscribe</button>
+    <button type="button" class="btn btn-default" id="unsubscribe-button">Unsubscribe</button>
+  </form>
+
+  <hr/>
+
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">Latest Message</h3>
@@ -109,7 +118,7 @@
       <p>Unsubscribes from messages from a particular window and topic that has already been subscribed to</p>
       <ul>
         <li><code>windowId</code> - id of the sending window.</li>
-        <li><code>topic</code> - the topic to listen for.</li>
+        <li><code>topic</code> - the topic that was subscribed to.</li>
         <li><code>listener</code> - the listener that was passed to subscribe.</li>
       </ul>
     </dd>
