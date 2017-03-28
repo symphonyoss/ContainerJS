@@ -1,3 +1,5 @@
+let currentWindow = null;
+
 class Window {
   constructor(...args) {
     if (args.length === 0) {
@@ -60,7 +62,12 @@ class Window {
   }
 
   static getCurrentWindow() {
-    return new Window();
+    if (currentWindow) {
+      return currentWindow;
+    }
+
+    currentWindow = new Window();
+    return currentWindow;
   }
 }
 
