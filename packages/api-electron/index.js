@@ -45,7 +45,10 @@ module.exports = (url) => {
       }
     });
 
-    e.returnValue = newWindow;
+    e.returnValue = {
+      id: newWindow.id
+    };
+
     windows.push(newWindow);
   });
 
@@ -76,10 +79,6 @@ module.exports = (url) => {
     destinationWindow.webContents.send(`ssf-send-message-*`, msg.message, senderId);
   });
 
-  ipc.on('ssf-get-window-id', (e) => {
-    e.returnValue = e.sender.id;
-  });
-
   createInitialHiddenWindow(url);
 };
 
@@ -106,6 +105,37 @@ const createInitialHiddenWindow = (url) => {
 
 const ready = (cb) => {
   app.on('ready', cb);
+};
+
+ipc.on('ssf-get-window-id', (e) => {
+  e.returnValue = BrowserWindow.fromWebContents(e.sender).id;
+});
+
+ipc.on('ssf-close-window', (e, id) => {
+  getWindowFromId(id, (win) => win.close());
+});
+
+ipc.on('ssf-show-window', (e, id) => {
+  getWindowFromId(id, (win) => win.show());
+});
+
+ipc.on('ssf-hide-window', (e, id) => {
+  getWindowFromId(id, (win) => win.hide());
+});
+
+ipc.on('ssf-focus-window', (e, id) => {
+  getWindowFromId(id, (win) => win.focus());
+});
+
+ipc.on('ssf-blur-window', (e, id) => {
+  getWindowFromId(id, (win) => win.blur());
+});
+
+const getWindowFromId = (id, cb) => {
+  const win = BrowserWindow.fromId(id);
+  if (win) {
+    cb(win);
+  }
 };
 
 module.exports.app = {

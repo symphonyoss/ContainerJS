@@ -3,19 +3,63 @@ import {
   removeAccessibleWindow
 } from './accessible-windows';
 
-class Window {
-  constructor(url, name, features) {
-    const win = window.open(url, name, objectToFeaturesString(features));
-    win.onclose = () => {
-      removeAccessibleWindow(win.name);
-    };
+let currentWindow = null;
 
-    addAccessibleWindow(name, win);
+class Window {
+  constructor(...args) {
+    if (args.length === 0) {
+      this.innerWindow = window;
+    } else {
+      const [url, name, features] = args;
+
+      this.innerWindow = window.open(url, name, objectToFeaturesString(features));
+      this.innerWindow.onclose = () => {
+        removeAccessibleWindow(this.innerWindow.name);
+      };
+
+      addAccessibleWindow(name, this.innerWindow);
+    }
+  }
+
+  close() {
+    // Close only works on windows that were opened by the current window
+    if (this.innerWindow) {
+      this.innerWindow.close();
+    }
+  }
+
+  show() {
+    // Unable to 'show' browser window
+  }
+
+  hide() {
+    // Unable to 'hide' browser window
+  }
+
+  focus() {
+    if (this.innerWindow) {
+      this.innerWindow.focus();
+    }
+  }
+
+  blur() {
+    if (this.innerWindow) {
+      this.innerWindow.blur();
+    }
   }
 
   static getCurrentWindowId() {
     return window.name;
   };
+
+  static getCurrentWindow() {
+    if (currentWindow) {
+      return currentWindow;
+    }
+
+    currentWindow = new Window();
+    return currentWindow;
+  }
 }
 
 const objectToFeaturesString = (features) => {

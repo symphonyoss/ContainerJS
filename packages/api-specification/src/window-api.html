@@ -38,6 +38,17 @@
     <button type="button" id="new-window-test" class="btn btn-default">Open Window</button>
   </form>
 
+  <hr/>
+
+  <h4>New window controls</h4>
+  <form class="form-inline">
+    <button id="close-window" type="button" class="btn btn-default">Close</button>
+    <button id="show-window" type="button" class="btn btn-default">Show</button>
+    <button id="hide-window" type="button" class="btn btn-default">Hide</button>
+    <button id="focus-window" type="button" class="btn btn-default">Focus</button>
+    <button id="blur-window" type="button" class="btn btn-default">Blur</button>
+  </form>
+
   <h3>Overview</h3>
 
   <p>The Window API is used to create a new browser window.</p>
@@ -50,6 +61,11 @@
 
   <p>Creates a new window. If a window with the same name already exists, that window will be reused.</p>
   <p><i>Note:</i> Window resuse is platform dependant. The API is <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/open">inconsistent between browsers</a> and Electron only allows this for windows created via the built in <code>window.open()</code> method (child windows), not <code>new BrowserWindow()</code> that is used to implement this API.</p>
+
+  <p><b>To get the current window object, use:</b></p>
+  <pre>
+  ssf.Window.getCurrentWindow()
+  </pre>
 
   <h4>Syntax</h4>
 
@@ -80,9 +96,18 @@
     <dd>A reference to the new window.</dd>
   </dl>
 
-  <h3>Methods</h3>
+  <h5>Static Methods</h5>
   <ul>
-    <li><code>getCurrentWindowId()</code> (static) - Get the current window id as a string</li>
+    <li><code>getCurrentWindow()</code> - Get the current window object</li>
+    <li><code>getCurrentWindowId()</code> - Get the current window id as a string</li>
+  </ul>
+  <h5>Class Methods</h5>
+  <ul>
+    <li><code>blur()</code> - Remove focus from the window</li>
+    <li><code>close()</code> - Close the window</li>
+    <li><code>focus()</code> - Give the window focus</li>
+    <li><code>hide()</code> - Hide a visible window (Non browser only)</li>
+    <li><code>show()</code> - Show a hidden window (Non browser only)</li>
   </ul>
 </div>
 
