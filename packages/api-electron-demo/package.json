@@ -4,16 +4,15 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "serve": "live-server --port=5001 --no-browser src/",
-    "launch": "electron .",
+    "serve": "live-server --port=5000 --no-browser src/",
+    "launch": "ssf-electron ./src/app.json",
     "start": "npm-run-all --parallel launch serve",
-    "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src && copyfiles -f hiddenMainWindow.html src",
+    "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src",
     "test": "echo \"No test specified\" && exit 0"
   },
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "electron": "^1.4.15",
     "ssf-desktop-api-specification": "0.0.1",
     "ssf-desktop-api-electron": "0.0.1"
   },

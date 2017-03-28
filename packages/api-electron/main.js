@@ -1,18 +1,18 @@
 const { app } = require('electron');
-const ssfElectron = require('ssf-desktop-api-electron');
-const path = require('path');
-const url = require('url');
+const ssfElectron = require('./index.js');
+const fs = require('fs');
+const process = require('process');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
 function createWindow() {
-  ssfElectron(url.format({
-    pathname: path.join(__dirname, 'src/hiddenMainWindow.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
+  // the appJson location is passed to the ssf-electron bin script
+  const appJsonPath = process.cwd() + '/' + process.argv[4];
+  const appJson = JSON.parse(fs.readFileSync(appJsonPath, 'utf8'));
+
+  ssfElectron(appJson);
 }
 
 ssfElectron.app.ready(createWindow);
