@@ -112,40 +112,31 @@ ipc.on('ssf-get-window-id', (e) => {
 });
 
 ipc.on('ssf-close-window', (e, id) => {
-  const win = BrowserWindow.fromId(id);
-  // Don't need to remove the window from the windows array, the onclose event does that for us
-  if (win) {
-    win.close();
-  }
+  getWindowFromId(id, (win) => win.close());
 });
 
 ipc.on('ssf-show-window', (e, id) => {
-  const win = BrowserWindow.fromId(id);
-  if (win) {
-    win.show();
-  }
+  getWindowFromId(id, (win) => win.show());
 });
 
 ipc.on('ssf-hide-window', (e, id) => {
-  const win = BrowserWindow.fromId(id);
-  if (win) {
-    win.hide();
-  }
+  getWindowFromId(id, (win) => win.hide());
 });
 
 ipc.on('ssf-focus-window', (e, id) => {
-  const win = BrowserWindow.fromId(id);
-  if (win) {
-    win.focus();
-  }
+  getWindowFromId(id, (win) => win.focus());
 });
 
 ipc.on('ssf-blur-window', (e, id) => {
+  getWindowFromId(id, (win) => win.blur());
+});
+
+const getWindowFromId = (id, cb) => {
   const win = BrowserWindow.fromId(id);
   if (win) {
-    win.blur();
+    cb(win);
   }
-});
+};
 
 module.exports.app = {
   ready
