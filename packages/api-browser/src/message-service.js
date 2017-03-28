@@ -35,7 +35,7 @@ class MessageService {
   static unsubscribe(windowId, topic, listener) {
     let deleteKey = null;
 
-    // We cant use listenerMap.has() here becuase reconsrtucting the key from the arguments is a different object
+    // We cant use listenerMap.has() here because reconstructing the key from the arguments is a different object
     // i.e. {} !== {}
     listenerMap.forEach((value, key) => {
       if (key.windowId === windowId && key.topic === topic && key.listener === listener) {
