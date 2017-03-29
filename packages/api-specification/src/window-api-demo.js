@@ -1,4 +1,5 @@
 var newWindowButton = document.getElementById('new-window-test');
+var eventLogList = document.getElementById('event-log');
 
 const appReady = ssf.app.ready();
 
@@ -11,6 +12,46 @@ appReady.then(() => {
     var isChild = document.getElementById('child').checked;
     win = new ssf.Window(url, windowName, {
       child: isChild
+    });
+
+    win.addListener('hide', () => {
+      const newElem = document.createElement('li');
+      newElem.innerText = 'hide';
+      newElem.className = 'list-group-item';
+      eventLogList.appendChild(newElem);
+      eventLogList.scrollTop = eventLogList.scrollHeight;
+    });
+
+    win.addListener('show', () => {
+      const newElem = document.createElement('li');
+      newElem.innerText = 'show';
+      newElem.className = 'list-group-item';
+      eventLogList.appendChild(newElem);
+      eventLogList.scrollTop = eventLogList.scrollHeight;
+    });
+
+    win.addListener('blur', () => {
+      const newElem = document.createElement('li');
+      newElem.innerText = 'blur';
+      newElem.className = 'list-group-item';
+      eventLogList.appendChild(newElem);
+      eventLogList.scrollTop = eventLogList.scrollHeight;
+    });
+
+    win.addListener('focus', () => {
+      const newElem = document.createElement('li');
+      newElem.innerText = 'focus';
+      newElem.className = 'list-group-item';
+      eventLogList.appendChild(newElem);
+      eventLogList.scrollTop = eventLogList.scrollHeight;
+    });
+
+    win.addListener('close', () => {
+      const newElem = document.createElement('li');
+      newElem.innerText = 'close';
+      newElem.className = 'list-group-item';
+      eventLogList.appendChild(newElem);
+      eventLogList.scrollTop = eventLogList.scrollHeight;
     });
   };
 

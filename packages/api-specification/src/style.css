@@ -11,3 +11,8 @@ body {
 #screen-snippet-test-error {
   font-style: italic;
 }
+
+#event-log {
+  height: 300px;
+  overflow: auto;
+}
