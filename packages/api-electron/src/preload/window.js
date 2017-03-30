@@ -66,8 +66,8 @@ class Window {
 
   removeListener(event, listener) {
     if (this.eventListeners.has(event)) {
-      const listeners = this.eventListeners.get(event);
-      listeners.splice(listeners.indexOf(listener), 1);
+      let listeners = this.eventListeners.get(event);
+      listeners = listeners.splice(listeners.indexOf(listener), 1);
       this.eventListeners.set(event, listeners);
     }
   }
