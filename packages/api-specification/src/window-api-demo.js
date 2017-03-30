@@ -59,6 +59,8 @@ appReady.then(() => {
 
   closeWindow.onclick = () => {
     win.close();
+    win.removeAllListeners();
+    win = null;
   };
 
   var hideWindow = document.getElementById('hide-window');

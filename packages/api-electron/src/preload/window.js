@@ -19,13 +19,13 @@ class Window {
     }
 
     ipc.send('ssf-window-subscribe-events', this.innerWindow.id);
-    this.listeners = new Map();
+    this.eventListeners = new Map();
 
     ipc.on('ssf-window-event', (windowId, e) => {
       // Need to check if the event is for this window in case the
       // current native window has subscribed to more than 1 window's events
-      if (windowId === this.innerWindow.id && this.listeners.has(e)) {
-        this.listeners.get(e).forEach((listener) => listener());
+      if (windowId === this.innerWindow.id && this.eventListeners.has(e)) {
+        this.eventListeners.get(e).forEach((listener) => listener());
       }
     });
   }
@@ -55,21 +55,25 @@ class Window {
   }
 
   addListener(event, listener) {
-    if (this.listeners.has(event)) {
-      const listeners = this.listeners.get(event);
+    if (this.eventListeners.has(event)) {
+      const listeners = this.eventListeners.get(event);
       listeners.push(listener);
-      this.listeners.set(event, listeners);
+      this.eventListeners.set(event, listeners);
     } else {
-      this.listeners.set(event, [listener]);
+      this.eventListeners.set(event, [listener]);
     }
   }
 
   removeListener(event, listener) {
-    if (this.listeners.has(event)) {
-      const listeners = this.listeners.get(event);
+    if (this.eventListeners.has(event)) {
+      const listeners = this.eventListeners.get(event);
       listeners.splice(listeners.indexOf(listener), 1);
-      this.listeners.set(event, listeners);
+      this.eventListeners.set(event, listeners);
     }
+  }
+
+  removeAllListeners() {
+    this.eventListeners.clear();
   }
 
   static getCurrentWindowId() {
