@@ -14,44 +14,32 @@ appReady.then(() => {
       child: isChild
     });
 
-    win.addListener('hide', () => {
+    const addListItem = (text) => {
       const newElem = document.createElement('li');
-      newElem.innerText = 'hide';
+      newElem.innerText = text;
       newElem.className = 'list-group-item';
       eventLogList.appendChild(newElem);
       eventLogList.scrollTop = eventLogList.scrollHeight;
+    };
+
+    win.addListener('hide', () => {
+      addListItem('hide');
     });
 
     win.addListener('show', () => {
-      const newElem = document.createElement('li');
-      newElem.innerText = 'show';
-      newElem.className = 'list-group-item';
-      eventLogList.appendChild(newElem);
-      eventLogList.scrollTop = eventLogList.scrollHeight;
+      addListItem('show');
     });
 
     win.addListener('blur', () => {
-      const newElem = document.createElement('li');
-      newElem.innerText = 'blur';
-      newElem.className = 'list-group-item';
-      eventLogList.appendChild(newElem);
-      eventLogList.scrollTop = eventLogList.scrollHeight;
+      addListItem('blur');
     });
 
     win.addListener('focus', () => {
-      const newElem = document.createElement('li');
-      newElem.innerText = 'focus';
-      newElem.className = 'list-group-item';
-      eventLogList.appendChild(newElem);
-      eventLogList.scrollTop = eventLogList.scrollHeight;
+      addListItem('focus');
     });
 
     win.addListener('close', () => {
-      const newElem = document.createElement('li');
-      newElem.innerText = 'close';
-      newElem.className = 'list-group-item';
-      eventLogList.appendChild(newElem);
-      eventLogList.scrollTop = eventLogList.scrollHeight;
+      addListItem('close');
     });
   };
 

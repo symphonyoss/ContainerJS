@@ -111,11 +111,26 @@
   </ul>
   <h5>Class Methods</h5>
   <ul>
+    <li><code>addListener(event, callback)</code> - Add an event listener to execute a given callback</li>
     <li><code>blur()</code> - Remove focus from the window</li>
     <li><code>close()</code> - Close the window</li>
     <li><code>focus()</code> - Give the window focus</li>
     <li><code>hide()</code> - Hide a visible window (Non browser only)</li>
+    <li><code>removeListener(event, callback)</code> - Remove an event listener that was previously added</li>
+    <li><code>removeAllListeners()</code> - Remove all added listeners</li>
     <li><code>show()</code> - Show a hidden window (Non browser only)</li>
+  </ul>
+
+  <h5>Events</h5>
+  <ul>
+    <li><b>blur</b> - When the window has lost focus</li>
+    <li><b>close</b> - when the window has been closed</li>
+    <li><b>focus</b> - When the window has gained focus</li>
+    <li><b>hide</b> - When the window is hidden</li>
+    <li><b>maximize</b> - When the window is maximized (non browser)</li>
+    <li><b>minimize</b> - When the window is minimized (non browser)</li>
+    <li><b>restore</b> - When the window is restored from a minimized state (non browser)</li>
+    <li><b>show</b> - When the window is shown</li>
   </ul>
 </div>
 
