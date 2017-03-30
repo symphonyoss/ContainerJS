@@ -10,7 +10,7 @@ let win;
 const windows = [];
 const preloadPath = path.join(__dirname, 'dist', 'ssf-desktop-api.js');
 
-module.exports = (url) => {
+module.exports = (appJson) => {
   const eNotify = require('electron-notify');
 
   ipc.on('ssf-notification', (e, msg) => {
@@ -79,15 +79,15 @@ module.exports = (url) => {
     destinationWindow.webContents.send(`ssf-send-message-*`, msg.message, senderId);
   });
 
-  createInitialHiddenWindow(url);
+  createInitialHiddenWindow(appJson);
 };
 
-const createInitialHiddenWindow = (url) => {
+const createInitialHiddenWindow = (appJson) => {
   // Create an invisible window to run the load script
   win = new BrowserWindow({
     width: 800,
     height: 600,
-    show: false,
+    show: appJson.startup_app.autoShow,
     webPreferences: {
       sandbox: true,
       preload: preloadPath
@@ -95,7 +95,7 @@ const createInitialHiddenWindow = (url) => {
   });
 
   // and load the page used for the hidden window
-  win.loadURL(url);
+  win.loadURL(appJson.startup_app.url);
 
   // Emitted when the window is closed.
   win.on('closed', () => {
