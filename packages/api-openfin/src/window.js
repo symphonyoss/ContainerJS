@@ -56,6 +56,14 @@ class Window {
     this.innerWindow.blur();
   }
 
+  addListener(event, listener) {
+    this.innerWindow.addEventListener(eventMap[event], listener);
+  }
+
+  removeListener(event, listener) {
+    this.innerWindow.removeEventListener(eventMap[event], listener);
+  }
+
   static getCurrentWindowId() {
     const currentWin = fin.desktop.Window.getCurrent();
     return `${currentWin.uuid}:${currentWin.name}`;
@@ -70,5 +78,32 @@ class Window {
     return currentWindow;
   }
 }
+
+const eventMap = {
+  'auth-requested': 'auth-requested',
+  'blur': 'blurred',
+  'move': 'bounds-changed',
+  'resize': 'bounds-changed',
+  'bounds-changing': 'bounds-changing',
+  'close-requested': 'close-requested',
+  'close': 'closed',
+  'disabled-frame-bounds-changed': 'disabled-frame-bounds-changed',
+  'disabled-frame-bounds-changing': 'disabled-frame-bounds-changing',
+  'embedded': 'embedded',
+  'external-process-exited': 'external-process-exited',
+  'external-process-started': 'external-process-started',
+  'focus': 'focused',
+  'frame-disabled': 'frame-disabled',
+  'frame-enabled': 'frame-enabled',
+  'group-changed': 'group-changed',
+  'hide': 'hidden',
+  'initialized': 'initialized',
+  'maximize': 'maximized',
+  'minimize': 'minimized',
+  'navigation-rejected': 'navigation-rejected',
+  'restore': 'restored',
+  'show-requested': 'show-requested',
+  'show': 'shown'
+};
 
 export default Window;
