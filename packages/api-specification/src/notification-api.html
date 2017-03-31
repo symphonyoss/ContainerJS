@@ -34,50 +34,7 @@
     <button type="button" id="notification-test" class="btn btn-default">Send Test Notification</button>
   </form>
 
-
-  <h3>Overview</h3>
-
-  <p>The Notifications API is used to configure and display desktop notifications to the user. It is exposed as an extension to the <a href="https://developer.mozilla.org/en/docs/Web/API/notification">HTML5 Notification API</a>, providing additional functionality that is useful for financial desktop applications.</p>
-
-  <p>The exact visual style and the extent of the OS-level integration is container dependent and hence out-of-scope of this specification.</p>
-
-  <h3>Constructor</h3>
-
-  <pre>
-  Notification()
-  </pre>
-
-  <p>Creates a new instance of the Notification object.</p>
-
-  <h4>Syntax</h4>
-
-  <pre>
-  var myNotification = new Notification(title, options);
-  </pre>
-
-  <h4>Parameters</h4>
-
-  <dl>
-    <dt>title</dt>
-    <dd>Defines a title for the notification, which will be shown at the top of the notification window when it is fired.</dd>
-
-    <dt>options (optional)</dt>
-    <dd>
-      <p>An options object containing any custom settings that you want to apply to the notification. These options can container the standard HTML5 notification API options</p>
-      <ul>
-        <li><code>dir</code> - ...</li>
-        <li><code>lang</code>  - ...</li>
-      </ul>
-      <p>In addition, the following ‘extension’ options are supported:</p>
-      <p><b>NOTE:</b> These properties are currently illustrative!</p>
-      <ul>
-        <li><code>ssfBlink</code>  - causes the notification to blink</li>
-        <li><code>ssfBlinkColor</code>  - the color used for the blinking effect</li>
-      </ul>
-    </dd>
-  </dl>
-</div>
-
 <script src="ssf-desktop-api.js"></script>
 <script src="notification-demo.js"></script>
-</body>
+
+<!-- intentionally unclosed body to append markdown -->

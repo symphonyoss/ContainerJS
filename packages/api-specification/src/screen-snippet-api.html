@@ -31,54 +31,7 @@
 
 <img id="screen-snippet-test-preview" class="img-responsive text-center"></img>
 
-<h3>Overview</h3>
-
-<p>The ScreenSnippet API is used to capture a snippet of their desktop (unconstrained by the host application window) and highlight portions of this snippet so it can then be consumed by the host application.</p>
-
-<div class="alert alert-warning" role="alert">Currently, the ScreenSnippet API will only capture the <code>body</code> element of the current page.</div>
-
-<h3>Constructor</h3>
-
-<pre>
-ScreenSnippet()
-</pre>
-
-<p>Creates a new instance of the ScreenSnippet class.</p>
-
-<h4>Syntax</h4>
-
-<pre>
-var mySnippet = new ScreenSnippet();
-</pre>
-
-<h4>Parameters</h4>
-
-<p>None</p>
-
-<h3>Methods</h3>
-
-<pre>
-capture()
-</pre>
-
-<p>Captures a screen snippet.</p>
-
-<h4>Syntax</h4>
-
-<pre>
-var mySnippet = new ScreenSnippet();
-mySnippet.capture().then(function(dataUri) { ... });
-</pre>
-
-<h4>Parameters</h4>
-
-<p>None</p>
-
-<h4>Returns</h4>
-
-<p>A Promise that resolves to a base64-encoded PNG [Data URI](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) string with contains the captured image.</p>
-</div>
-
 <script src="ssf-desktop-api.js"></script>
 <script src="screen-snippet-api-demo.js"></script>
-</body>
+
+<!-- intentionally unclosed body to append markdown -->
