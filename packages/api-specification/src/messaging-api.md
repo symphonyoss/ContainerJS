@@ -29,7 +29,7 @@ Subscribes to messages from a specific window/topic. Window id can also be a wil
 
 **unsubscribe**  
 ```javascript
-ssf.MessageService.subscribe(windowId, topic, listener);
+ssf.MessageService.unsubscribe(windowId, topic, listener);
 ```
 Unsubscribes from messages from a particular window and topic that has already been subscribed to
 * `windowId` - id of the sending window.
