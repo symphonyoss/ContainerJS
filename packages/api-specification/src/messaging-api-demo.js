@@ -1,6 +1,8 @@
 const messageBox = document.getElementById('message-box');
 const sendButton = document.getElementById('send-message');
 const newWindowButton = document.getElementById('new-window');
+const subscribeButton = document.getElementById('subscribe-button');
+const unsubscribeButton = document.getElementById('unsubscribe-button');
 
 const appReady = ssf.app.ready();
 
@@ -16,15 +18,23 @@ appReady.then(() => {
 
     // eslint-disable-next-line no-new
     new ssf.Window(`http://localhost:${location.port}/messaging-api-test-window.html`, id, 'child=' + isChild);
-
-    ssf.MessageService.subscribe('*', 'test', (message, senderId) => {
-      messageBox.innerText = '\'' + message + '\' from ' + senderId;
-    });
   };
 
   sendButton.onclick = () => {
     const uuid = document.getElementById('uuid').value;
     const message = document.getElementById('message').value;
     ssf.MessageService.send(uuid, 'test', message);
+  };
+
+  const messageReceived = (message, senderId) => {
+    messageBox.innerText = '\'' + message + '\' from ' + senderId;
+  };
+
+  subscribeButton.onclick = () => {
+    ssf.MessageService.subscribe('*', 'test', messageReceived);
+  };
+
+  unsubscribeButton.onclick = () => {
+    ssf.MessageService.unsubscribe('*', 'test', messageReceived);
   };
 });

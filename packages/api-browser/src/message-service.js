@@ -1,5 +1,7 @@
 import { getAccessibleWindow } from './accessible-windows';
 
+const listenerMap = new Map();
+
 class MessageService {
   static send(windowId, topic, message) {
     const win = getAccessibleWindow(windowId);
@@ -21,6 +23,28 @@ class MessageService {
     };
 
     window.addEventListener('message', receiveMessage, false);
+
+    // Map the arguments to the actual listener that was added
+    listenerMap.set({
+      windowId,
+      topic,
+      listener
+    }, receiveMessage);
+  }
+
+  static unsubscribe(windowId, topic, listener) {
+    let deleteKey = null;
+
+    // We cant use listenerMap.has() here because reconstructing the key from the arguments is a different object
+    // i.e. {} !== {}
+    listenerMap.forEach((value, key) => {
+      if (key.windowId === windowId && key.topic === topic && key.listener === listener) {
+        window.removeEventListener('message', listener);
+        deleteKey = key;
+      }
+    });
+
+    listenerMap.delete(deleteKey);
   }
 }
 
