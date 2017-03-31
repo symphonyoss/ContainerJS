@@ -169,8 +169,6 @@ const pushToMapArray = (map, key, newValue) => {
   map.set(key, temp);
 };
 
-console.log(windowToListener);
-
 module.exports.app = {
   ready
 };
