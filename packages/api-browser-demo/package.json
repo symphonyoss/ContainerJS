@@ -5,8 +5,7 @@
   "main": "",
   "scripts": {
     "start": "live-server --port=5002 src/",
-    "copy-markdown": "node copy-markdown.js",
-    "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src && copyfiles -f node_modules/ssf-desktop-api-browser/dist/** src && npm run copy-markdown",
+    "postinstall": "rimraf src && copyfiles -f node_modules/ssf-desktop-api-specification/src/** src && copyfiles -f node_modules/ssf-desktop-api-browser/dist/** src",
     "test": "echo \"No test specified\" && exit 0"
   },
   "author": "",
@@ -18,7 +17,6 @@
   "devDependencies": {
     "copyfiles": "^1.2.0",
     "live-server": "^1.2.0",
-    "marked": "^0.3.6",
     "rimraf": "^2.6.1"
   }
 }
