@@ -19,6 +19,8 @@ class Window {
 
       addAccessibleWindow(name, this.innerWindow);
     }
+
+    this.eventListeners = new Map();
   }
 
   close() {
@@ -48,6 +50,40 @@ class Window {
     }
   }
 
+  addListener(event, listener) {
+    if (this.eventListeners.has(event)) {
+      const temp = this.eventListeners.get(event);
+      temp.push(listener);
+      this.eventListeners.set(event, temp);
+    } else {
+      this.eventListeners.set(event, [listener]);
+    }
+    this.innerWindow.addEventListener(eventMap[event], listener);
+  }
+
+  removeListener(event, listener) {
+    if (this.eventListeners.has(event)) {
+      let listeners = this.eventListeners.get(event);
+      let index = listeners.indexOf(listener);
+      if (index >= 0) {
+        listeners = listeners.splice(index, 1);
+        this.eventListeners.set(listeners);
+      }
+    }
+
+    this.innerWindow.removeEventListener(eventMap[event], listener);
+  }
+
+  removeAllListeners() {
+    this.eventListeners.forEach((value, key) => {
+      value.forEach((listener) => {
+        this.innerWindow.removeEventListener(eventMap[key], listener);
+      });
+    });
+
+    this.eventListeners.clear();
+  }
+
   static getCurrentWindowId() {
     return window.name;
   };
@@ -75,6 +111,14 @@ const objectToFeaturesString = (features) => {
 
     return `${key}=${value}`;
   }).join(',');
+};
+
+const eventMap = {
+  'blur': 'blur',
+  'close': 'unload',
+  'focus': 'focus',
+  'hide': 'hidden',
+  'show': 'load'
 };
 
 export default Window;

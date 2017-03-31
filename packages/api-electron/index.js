@@ -138,6 +138,39 @@ const getWindowFromId = (id, cb) => {
   }
 };
 
+const windowToListener = new Map();
+
+ipc.on('ssf-window-subscribe-events', (e, windowId) => {
+  if (windowToListener.has(windowId)) {
+    if (!windowToListener.get(windowId).includes(e.sender)) {
+      pushToMapArray(windowToListener, windowId, e.sender);
+    }
+  } else {
+    windowToListener.set(windowId, [e.sender]);
+  }
+
+  getWindowFromId(windowId, (win) => {
+    // Override emit to forward all events onto the window so we can handle them there
+    const oldEmit = BrowserWindow.prototype.emit;
+    win.emit = function() {
+      windowToListener.get(windowId).forEach((sender) => {
+        if (!win.isDestroyed()) {
+          sender.send('ssf-window-event', win.id, ...arguments);
+        }
+      });
+      oldEmit.apply(win, arguments);
+    };
+  });
+});
+
+const pushToMapArray = (map, key, newValue) => {
+  const temp = map.get(key);
+  temp.push(newValue);
+  map.set(key, temp);
+};
+
+console.log(windowToListener);
+
 module.exports.app = {
   ready
 };

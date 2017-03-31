@@ -34,6 +34,8 @@ class Window {
       }
       this.innerWindow = newWindow;
     }
+
+    this.eventListeners = new Map();
   }
 
   close() {
@@ -56,6 +58,40 @@ class Window {
     this.innerWindow.blur();
   }
 
+  addListener(event, listener) {
+    if (this.eventListeners.has(event)) {
+      const temp = this.eventListeners.get(event);
+      temp.push(listener);
+      this.eventListeners.set(event, temp);
+    } else {
+      this.eventListeners.set(event, [listener]);
+    }
+    this.innerWindow.addEventListener(eventMap[event], listener);
+  }
+
+  removeListener(event, listener) {
+    if (this.eventListeners.has(event)) {
+      let listeners = this.eventListeners.get(event);
+      let index = listeners.indexOf(listener);
+      if (index >= 0) {
+        listeners = listeners.splice(index, 1);
+        this.eventListeners.set(listeners);
+      }
+    }
+
+    this.innerWindow.removeEventListener(eventMap[event], listener);
+  }
+
+  removeAllListeners() {
+    this.eventListeners.forEach((value, key) => {
+      value.forEach((listener) => {
+        this.innerWindow.removeEventListener(eventMap[key], listener);
+      });
+    });
+
+    this.eventListeners.clear();
+  }
+
   static getCurrentWindowId() {
     const currentWin = fin.desktop.Window.getCurrent();
     return `${currentWin.uuid}:${currentWin.name}`;
@@ -70,5 +106,32 @@ class Window {
     return currentWindow;
   }
 }
+
+const eventMap = {
+  'auth-requested': 'auth-requested',
+  'blur': 'blurred',
+  'move': 'bounds-changed',
+  'resize': 'bounds-changed',
+  'bounds-changing': 'bounds-changing',
+  'close-requested': 'close-requested',
+  'close': 'closed',
+  'disabled-frame-bounds-changed': 'disabled-frame-bounds-changed',
+  'disabled-frame-bounds-changing': 'disabled-frame-bounds-changing',
+  'embedded': 'embedded',
+  'external-process-exited': 'external-process-exited',
+  'external-process-started': 'external-process-started',
+  'focus': 'focused',
+  'frame-disabled': 'frame-disabled',
+  'frame-enabled': 'frame-enabled',
+  'group-changed': 'group-changed',
+  'hide': 'hidden',
+  'initialized': 'initialized',
+  'maximize': 'maximized',
+  'minimize': 'minimized',
+  'navigation-rejected': 'navigation-rejected',
+  'restore': 'restored',
+  'show-requested': 'show-requested',
+  'show': 'shown'
+};
 
 export default Window;

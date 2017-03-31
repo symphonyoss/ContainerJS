@@ -1,4 +1,5 @@
 var newWindowButton = document.getElementById('new-window-test');
+var eventLogList = document.getElementById('event-log');
 
 const appReady = ssf.app.ready();
 
@@ -12,12 +13,42 @@ appReady.then(() => {
     win = new ssf.Window(url, windowName, {
       child: isChild
     });
+
+    const addListItem = (text) => {
+      const newElem = document.createElement('li');
+      newElem.innerText = text;
+      newElem.className = 'list-group-item';
+      eventLogList.appendChild(newElem);
+      eventLogList.scrollTop = eventLogList.scrollHeight;
+    };
+
+    win.addListener('hide', () => {
+      addListItem('hide');
+    });
+
+    win.addListener('show', () => {
+      addListItem('show');
+    });
+
+    win.addListener('blur', () => {
+      addListItem('blur');
+    });
+
+    win.addListener('focus', () => {
+      addListItem('focus');
+    });
+
+    win.addListener('close', () => {
+      addListItem('close');
+    });
   };
 
   var closeWindow = document.getElementById('close-window');
 
   closeWindow.onclick = () => {
     win.close();
+    win.removeAllListeners();
+    win = null;
   };
 
   var hideWindow = document.getElementById('hide-window');
