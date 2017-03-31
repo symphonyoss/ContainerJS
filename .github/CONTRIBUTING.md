@@ -1,4 +1,4 @@
-# Contributing to unfurl bot
+# Contributing to ssf-desktop-wrapper
 :+1: First off, thanks for taking the time to contribute! :+1:
 
 # Contributor License Agreement (CLA)
@@ -17,7 +17,7 @@ As a result, PRs submitted to the ssf-desktop-wrapper project cannot be accepted
 ## Prerequisites
 
 * [ ] Have you [searched for duplicates](https://github.com/ScottLogic/ssf-desktop-wrapper/issues?utf8=%E2%9C%93&q=)?  A simple search for exception error messages or a summary of the unexpected behaviour should suffice.
-* [ ] Are you running the [latest release of the unfurl bot](https://github.com/ScottLogic/ssf-desktop-wrapper/commits/master)?
+* [ ] Are you running the [latest release of the ssf-desktop-wrapper](https://github.com/ScottLogic/ssf-desktop-wrapper/commits/master)?
 
 ## Raising an Issue
 * Create your issue [here](https://github.com/ScottLogic/ssf-desktop-wrapper/issues/new).
