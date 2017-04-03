@@ -1,0 +1,40 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<title>Symphony Desktop Wrapper API Specification</title>
+<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="style.css"></link>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="index.html">Symphony Desktop Wrapper API Demo</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Notification API</h1>
+  </div>
+
+  <h3>Try me</h3>
+
+  <form class="form-inline">
+    <div class="form-group">
+      <label>title</label>
+      <input type="text" class="form-control" placeholder="title" id="title">
+    </div>
+    <div class="form-group">
+      <label>body</label>
+      <input type="text" class="form-control" placeholder="body" id="body">
+    </div>
+    <button type="button" id="notification-test" class="btn btn-default">Send Test Notification</button>
+  </form>
+
+<script src="ssf-desktop-api.js"></script>
+<script src="notification-demo.js"></script>
+
+<!-- intentionally unclosed body to append markdown -->
