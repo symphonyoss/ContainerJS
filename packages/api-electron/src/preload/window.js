@@ -1,4 +1,5 @@
 const ipc = require('electron').ipcRenderer;
+import ipcConstants from '../common/ipcConstants';
 
 let currentWindow = null;
 
@@ -11,17 +12,17 @@ class Window {
     } else {
       const [url, name, features] = args;
 
-      this.innerWindow = ipc.sendSync('ssf-new-window', {
+      this.innerWindow = ipc.sendSync(ipcConstants.IPC_SSF_NEW_WINDOW, {
         url,
         name,
         features
       });
     }
 
-    ipc.send('ssf-window-subscribe-events', this.innerWindow.id);
+    ipc.send(ipcConstants.IPC_SSF_WINDOW_SUBSCRIBE_EVENTS, this.innerWindow.id);
     this.eventListeners = new Map();
 
-    ipc.on('ssf-window-event', (windowId, e) => {
+    ipc.on(ipcConstants.IPC_SSF_WINDOW_EVENT, (windowId, e) => {
       // Need to check if the event is for this window in case the
       // current native window has subscribed to more than 1 window's events
       if (windowId === this.innerWindow.id && this.eventListeners.has(e)) {
@@ -31,23 +32,23 @@ class Window {
   }
 
   close() {
-    this.sendWindowAction('ssf-close-window');
+    this.sendWindowAction(ipcConstants.IPC_SSF_CLOSE_WINDOW);
   }
 
   show() {
-    this.sendWindowAction('ssf-show-window');
+    this.sendWindowAction(ipcConstants.IPC_SSF_SHOW_WINDOW);
   }
 
   hide() {
-    this.sendWindowAction('ssf-hide-window');
+    this.sendWindowAction(ipcConstants.IPC_SSF_HIDE_WINDOW);
   }
 
   focus() {
-    this.sendWindowAction('ssf-focus-window');
+    this.sendWindowAction(ipcConstants.IPC_SSF_FOCUS_WINDOW);
   }
 
   blur() {
-    this.sendWindowAction('ssf-blur-window');
+    this.sendWindowAction(ipcConstants.IPC_SSF_BLUR_WINDOW);
   }
 
   sendWindowAction(action) {
@@ -77,7 +78,7 @@ class Window {
   }
 
   static getCurrentWindowId() {
-    return ipc.sendSync('ssf-get-window-id');
+    return ipc.sendSync(ipcConstants.IPC_SSF_GET_WINDOW_ID);
   }
 
   static getCurrentWindow() {
