@@ -5,6 +5,7 @@ const {
   ipcMain: ipc
 } = require('electron');
 const path = require('path');
+const ipcConstants = require('./src/common/ipcConstants');
 
 let win;
 const windows = [];
@@ -13,7 +14,7 @@ const preloadPath = path.join(__dirname, 'dist', 'ssf-desktop-api.js');
 module.exports = (appJson) => {
   const eNotify = require('electron-notify');
 
-  ipc.on('ssf-notification', (e, msg) => {
+  ipc.on(ipcConstants.IPC_SSF_NOTIFICATION, (e, msg) => {
     if (!msg.options) {
       msg.options = {};
     }
@@ -24,7 +25,7 @@ module.exports = (appJson) => {
     });
   });
 
-  ipc.on('ssf-new-window', (e, msg) => {
+  ipc.on(ipcConstants.IPC_SSF_NEW_WINDOW, (e, msg) => {
     const options = {
       webPreferences: {
         sandbox: true,
@@ -52,14 +53,14 @@ module.exports = (appJson) => {
     windows.push(newWindow);
   });
 
-  ipc.on('ssf-capture-screen-snippet', (e) => {
+  ipc.on(ipcConstants.IPC_SSF_CAPTURE_SCREEN_SNIPPET, (e) => {
     e.sender.capturePage((image) => {
       const dataUri = 'data:image/png;base64,' + image.toPng().toString('base64');
-      e.sender.send('ssf-screen-snippet-captured', dataUri);
+      e.sender.send(ipcConstants.IPC_SSF_SCREEN_SNIPPET_CAPTURED, dataUri);
     });
   });
 
-  ipc.on('ssf-send-message', (e, msg) => {
+  ipc.on(ipcConstants.IPC_SSF_SEND_MESSAGE, (e, msg) => {
     const windowId = parseInt(msg.windowId, 10);
 
     if (isNaN(windowId)) {
@@ -75,8 +76,8 @@ module.exports = (appJson) => {
     const senderId = e.sender.id;
 
     // Need to send to topic and * in case the user has subscribed to the wildcard
-    destinationWindow.webContents.send(`ssf-send-message-${msg.topic}`, msg.message, senderId);
-    destinationWindow.webContents.send(`ssf-send-message-*`, msg.message, senderId);
+    destinationWindow.webContents.send(`${ipcConstants.IPC_SSF_SEND_MESSAGE}-${msg.topic}`, msg.message, senderId);
+    destinationWindow.webContents.send(`${ipcConstants.IPC_SSF_SEND_MESSAGE}-*`, msg.message, senderId);
   });
 
   createInitialHiddenWindow(appJson);
@@ -107,27 +108,27 @@ const ready = (cb) => {
   app.on('ready', cb);
 };
 
-ipc.on('ssf-get-window-id', (e) => {
+ipc.on(ipcConstants.IPC_SSF_GET_WINDOW_ID, (e) => {
   e.returnValue = BrowserWindow.fromWebContents(e.sender).id;
 });
 
-ipc.on('ssf-close-window', (e, id) => {
+ipc.on(ipcConstants.IPC_SSF_CLOSE_WINDOW, (e, id) => {
   getWindowFromId(id, (win) => win.close());
 });
 
-ipc.on('ssf-show-window', (e, id) => {
+ipc.on(ipcConstants.IPC_SSF_SHOW_WINDOW, (e, id) => {
   getWindowFromId(id, (win) => win.show());
 });
 
-ipc.on('ssf-hide-window', (e, id) => {
+ipc.on(ipcConstants.IPC_SSF_HIDE_WINDOW, (e, id) => {
   getWindowFromId(id, (win) => win.hide());
 });
 
-ipc.on('ssf-focus-window', (e, id) => {
+ipc.on(ipcConstants.IPC_SSF_FOCUS_WINDOW, (e, id) => {
   getWindowFromId(id, (win) => win.focus());
 });
 
-ipc.on('ssf-blur-window', (e, id) => {
+ipc.on(ipcConstants.IPC_SSF_BLUR_WINDOW, (e, id) => {
   getWindowFromId(id, (win) => win.blur());
 });
 
@@ -140,7 +141,7 @@ const getWindowFromId = (id, cb) => {
 
 const windowToListener = new Map();
 
-ipc.on('ssf-window-subscribe-events', (e, windowId) => {
+ipc.on(ipcConstants.IPC_SSF_WINDOW_SUBSCRIBE_EVENTS, (e, windowId) => {
   if (windowToListener.has(windowId)) {
     if (!windowToListener.get(windowId).includes(e.sender)) {
       pushToMapArray(windowToListener, windowId, e.sender);
@@ -155,7 +156,7 @@ ipc.on('ssf-window-subscribe-events', (e, windowId) => {
     win.emit = function() {
       windowToListener.get(windowId).forEach((sender) => {
         if (!win.isDestroyed()) {
-          sender.send('ssf-window-event', win.id, ...arguments);
+          sender.send(ipcConstants.IPC_SSF_WINDOW_EVENT, win.id, ...arguments);
         }
       });
       oldEmit.apply(win, arguments);
