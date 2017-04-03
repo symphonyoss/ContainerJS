@@ -1,13 +1,13 @@
 const ipc = require('electron').ipcRenderer;
-import ipcConstants from '../common/ipcConstants';
+import constants from '../common/constants';
 
 class ScreenSnippet {
   capture() {
     return new Promise((resolve) => {
-      ipc.once(ipcConstants.IPC_SSF_SCREEN_SNIPPET_CAPTURED, (imageDataUri) => {
+      ipc.once(constants.ipc.SSF_SCREEN_SNIPPET_CAPTURED, (imageDataUri) => {
         resolve(imageDataUri);
       });
-      ipc.send(ipcConstants.IPC_SSF_CAPTURE_SCREEN_SNIPPET);
+      ipc.send(constants.ipc.SSF_CAPTURE_SCREEN_SNIPPET);
     });
   }
 }

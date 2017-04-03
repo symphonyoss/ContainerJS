@@ -1,8 +1,8 @@
 const ipc = require('electron').ipcRenderer;
-import ipcConstants from '../common/ipcConstants';
+import constants from '../common/constants';
 
 window.Notification = function(title, options) {
-  ipc.send(ipcConstants.IPC_SSF_NOTIFICATION, {
+  ipc.send(constants.ipc.SSF_NOTIFICATION, {
     title,
     options
   });
