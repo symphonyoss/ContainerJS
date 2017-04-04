@@ -17,12 +17,16 @@ class Window {
       }
 
       if (windowOptions.child) {
-        Object.assign(windowOptions, {
-          name,
-          url
-        });
+        const options = Object.assign(
+          {},
+          windowOptions,
+          {
+            name,
+            url
+          }
+        );
 
-        newWindow = new fin.desktop.Window(windowOptions, () => newWindow.show(), handleError);
+        newWindow = new fin.desktop.Window(options, () => newWindow.show(), handleError);
       } else {
         // UUID must be the same as name
         const uuid = name;
