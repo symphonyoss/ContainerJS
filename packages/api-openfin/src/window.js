@@ -11,16 +11,22 @@ class Window {
       const handleError = (error) => console.error('Error creating window: ' + error);
 
       if (features && features.child) {
-        newWindow = new fin.desktop.Window({
+        const windowOptions = {
           name,
           url
-        }, () => newWindow.show(), handleError);
+        };
+
+        Object.assign(windowOptions, features);
+
+        newWindow = new fin.desktop.Window(windowOptions, () => newWindow.show(), handleError);
       } else {
         // UUID must be the same as name
         const uuid = name;
         const mainWindowOptions = {
           autoShow: true
         };
+
+        Object.assign(mainWindowOptions, features);
 
         const app = new fin.desktop.Application({
           name,
