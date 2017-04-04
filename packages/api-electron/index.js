@@ -26,12 +26,13 @@ module.exports = (appJson) => {
   });
 
   ipc.on(constants.ipc.SSF_NEW_WINDOW, (e, msg) => {
-    const options = {
-      webPreferences: {
-        sandbox: true,
-        preload: preloadPath
-      }
+    const webPreferences = {
+      sandbox: true,
+      preload: preloadPath
     };
+
+    const options = msg.features;
+    options.webPreferences = webPreferences;
 
     if (msg.features && msg.features.child) {
       options.parent = BrowserWindow.fromWebContents(e.sender);
