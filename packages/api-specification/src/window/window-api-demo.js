@@ -11,9 +11,11 @@ appReady.then(() => {
     var windowName = document.getElementById('name').value;
     var isChild = document.getElementById('child').checked;
     var hasFrame = document.getElementById('frame').checked;
+    var isTransparent = document.getElementById('transparent').checked;
     win = new ssf.Window(url, windowName, {
       child: isChild,
-      frame: hasFrame
+      frame: hasFrame,
+      transparent: isTransparent
     });
 
     const addListItem = (text) => {

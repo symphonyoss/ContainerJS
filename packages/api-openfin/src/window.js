@@ -10,29 +10,29 @@ class Window {
       let newWindow;
       const handleError = (error) => console.error('Error creating window: ' + error);
 
-      if (features && features.child) {
-        const windowOptions = {
+      const windowOptions = features || {};
+      if (windowOptions.transparent) {
+        // OpenFin needs opacity between 1 (not transparent) and 0 (fully transparent)
+        windowOptions.opacity = features.transparency === true ? 1 : 0;
+      }
+
+      if (windowOptions.child) {
+        Object.assign(windowOptions, {
           name,
           url
-        };
-
-        Object.assign(windowOptions, features);
+        });
 
         newWindow = new fin.desktop.Window(windowOptions, () => newWindow.show(), handleError);
       } else {
         // UUID must be the same as name
         const uuid = name;
-        const mainWindowOptions = {
-          autoShow: true
-        };
-
-        Object.assign(mainWindowOptions, features);
+        windowOptions.autoShow = true;
 
         const app = new fin.desktop.Application({
           name,
           url,
           uuid,
-          mainWindowOptions
+          mainWindowOptions: windowOptions
         }, () => app.run(), handleError);
 
         // Need to return the window object, not the application
