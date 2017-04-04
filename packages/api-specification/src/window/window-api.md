@@ -24,6 +24,8 @@ Name of the new window. Should not contain whitespace.
 **features (optional)**  
 Object to set features of the new window.  
 * `child: boolean` - make the new window a child of the current window (non browser only).
+* `frame: boolean` - create the new window with a frame (non browser only).
+* `transparent: boolean` - make the window transparent (non browser only). Clicks are not registered through the transparent window in Electron.
 
 ### Return Value
 **window**  
