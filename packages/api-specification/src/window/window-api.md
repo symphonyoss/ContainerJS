@@ -22,10 +22,19 @@ URL to open in the window. Must be prefixed with the protocol (i.e. http://).
 Name of the new window. Should not contain whitespace.
 
 **features (optional)**  
-Object to set features of the new window.  
-* `child: boolean` - make the new window a child of the current window (non browser only).
-* `frame: boolean` - create the new window with a frame (non browser only).
-* `transparent: boolean` - make the window transparent (non browser only). Clicks are not registered through the transparent window in Electron.
+Object to set features of the new window (non browser only).  
+* `alwaysOnTop: boolean` - whether the window is always on top of other windows.
+* `backgroundColor: string` - set the backgroundColor of the window before the page loads.
+* `child: boolean` - make the new window a child of the current window.
+* `frame: boolean` - create the new window with a frame.
+* `maxHeight: number` - sets the maximum height of the window.
+* `maximizable: boolean` - whether the window can be maximized.
+* `maxWidth: number` - sets the maximum width of the window.
+* `minHeight: number` - sets the minimum height of the window.
+* `minimizable: boolean` - whether the window can be minimized.
+* `minWidth: number` - sets the minimum width of the window.
+* `resizable: boolean` - whether the window is resizable.
+* `transparent: boolean` - make the window transparent. Clicks are not registered through the transparent window in Electron.
 
 ### Return Value
 **window**  
