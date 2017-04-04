@@ -10,8 +10,10 @@ appReady.then(() => {
     var url = document.getElementById('url').value;
     var windowName = document.getElementById('name').value;
     var isChild = document.getElementById('child').checked;
+    var hasFrame = document.getElementById('frame').checked;
     win = new ssf.Window(url, windowName, {
-      child: isChild
+      child: isChild,
+      frame: hasFrame
     });
 
     const addListItem = (text) => {
