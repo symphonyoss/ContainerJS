@@ -13,7 +13,7 @@ class Window {
       const windowOptions = features || {};
       if (windowOptions.transparent) {
         // OpenFin needs opacity between 1 (not transparent) and 0 (fully transparent)
-        windowOptions.opacity = features.transparency === true ? 1 : 0;
+        windowOptions.opacity = features.transparent === true ? 0 : 1;
       }
 
       if (windowOptions.child) {
