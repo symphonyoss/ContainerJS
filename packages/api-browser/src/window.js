@@ -21,6 +21,7 @@ class Window {
     }
 
     this.eventListeners = new Map();
+    this.addListener('message', (event) => this.onMessage(event.data));
   }
 
   close() {
@@ -58,7 +59,7 @@ class Window {
     } else {
       this.eventListeners.set(event, [listener]);
     }
-    this.innerWindow.addEventListener(eventMap[event], listener);
+    this.innerWindow.addEventListener(eventMap[event] || event, listener);
   }
 
   removeListener(event, listener) {
@@ -71,18 +72,25 @@ class Window {
       }
     }
 
-    this.innerWindow.removeEventListener(eventMap[event], listener);
+    this.innerWindow.removeEventListener(eventMap[event] || event, listener);
   }
 
   removeAllListeners() {
     this.eventListeners.forEach((value, key) => {
       value.forEach((listener) => {
-        this.innerWindow.removeEventListener(eventMap[key], listener);
+        this.innerWindow.removeEventListener(eventMap[key] || key, listener);
       });
     });
 
     this.eventListeners.clear();
   }
+
+  postMessage(message) {
+    this.innerWindow.postMessage(message, '*');
+  }
+
+  // To be overridden by user
+  onMessage() {}
 
   static getCurrentWindowId() {
     return window.name;

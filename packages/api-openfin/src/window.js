@@ -1,4 +1,5 @@
 let currentWindow = null;
+import MessageService from './message-service';
 
 class Window {
   constructor(...args) {
@@ -45,6 +46,7 @@ class Window {
       this.innerWindow = newWindow;
     }
 
+    MessageService.subscribe('*', 'ssf-window-message', (...args) => this.onMessage(...args));
     this.eventListeners = new Map();
   }
 
@@ -101,6 +103,13 @@ class Window {
 
     this.eventListeners.clear();
   }
+
+  postMessage(message) {
+    MessageService.send(`${this.innerWindow.uuid}:${this.innerWindow.name}`, 'ssf-window-message', message);
+  }
+
+  // To be overridden by user
+  onMessage() {}
 
   static getCurrentWindowId() {
     const currentWin = fin.desktop.Window.getCurrent();
