@@ -1,4 +1,5 @@
 const ipc = require('electron').ipcRenderer;
+import MessageService from './message-service';
 import constants from '../common/constants';
 
 let currentWindow = null;
@@ -29,6 +30,8 @@ class Window {
         this.eventListeners.get(e).forEach((listener) => listener());
       }
     });
+
+    MessageService.subscribe('*', 'ssf-window-message', (...args) => this.onMessage(...args));
   }
 
   close() {
@@ -76,6 +79,13 @@ class Window {
   removeAllListeners() {
     this.eventListeners.clear();
   }
+
+  postMessage(message) {
+    MessageService.send(this.innerWindow.id, 'ssf-window-message', message);
+  }
+
+  // To be overridden by user
+  onMessage() {}
 
   static getCurrentWindowId() {
     return ipc.sendSync(constants.ipc.SSF_GET_WINDOW_ID);

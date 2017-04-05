@@ -50,6 +50,8 @@ A reference to the new window.
 * `close()` - Close the window
 * `focus()` - Give the window focus
 * `hide()` - Hide a visible window (Non browser only)
+* `onMessage` - Method that is called when the window receives a message from another window
+* `postMessage(message)` - Sends a message to the window, which can be received via the onMessage handler. `message` can be any serializable object
 * `removeListener(event, callback)` - Remove an event listener that was previously added
 * `removeAllListeners()` - Remove all added listeners
 * `show()` - Show a hidden window (Non browser only)

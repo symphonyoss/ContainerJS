@@ -21,6 +21,7 @@ class Window {
     }
 
     this.eventListeners = new Map();
+    this.addListener('message', (event) => this.onMessage(event.data));
   }
 
   close() {
@@ -84,6 +85,13 @@ class Window {
     this.eventListeners.clear();
   }
 
+  postMessage(message) {
+    this.innerWindow.postMessage(message, '*');
+  }
+
+  // To be overridden by user
+  onMessage() {}
+
   static getCurrentWindowId() {
     return window.name;
   };
@@ -118,6 +126,7 @@ const eventMap = {
   'close': 'unload',
   'focus': 'focus',
   'hide': 'hidden',
+  'message': 'message',
   'show': 'load'
 };
 
