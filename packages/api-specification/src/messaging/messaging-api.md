@@ -1,5 +1,5 @@
 ## Overview
-The Messaging API is used to communicate between windows
+The Messaging API is used to communicate between windows. Messages can also be send directly to a window using the window API.
 
 ### Methods
 The `MessageService` class exposes the following static methods:</p>
