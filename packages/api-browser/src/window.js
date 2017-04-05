@@ -59,7 +59,7 @@ class Window {
     } else {
       this.eventListeners.set(event, [listener]);
     }
-    this.innerWindow.addEventListener(eventMap[event] || event, listener);
+    this.innerWindow.addEventListener(eventMap[event], listener);
   }
 
   removeListener(event, listener) {
@@ -72,13 +72,13 @@ class Window {
       }
     }
 
-    this.innerWindow.removeEventListener(eventMap[event] || event, listener);
+    this.innerWindow.removeEventListener(eventMap[event], listener);
   }
 
   removeAllListeners() {
     this.eventListeners.forEach((value, key) => {
       value.forEach((listener) => {
-        this.innerWindow.removeEventListener(eventMap[key] || key, listener);
+        this.innerWindow.removeEventListener(eventMap[key], listener);
       });
     });
 
@@ -126,6 +126,7 @@ const eventMap = {
   'close': 'unload',
   'focus': 'focus',
   'hide': 'hidden',
+  'message': 'message',
   'show': 'load'
 };
 
