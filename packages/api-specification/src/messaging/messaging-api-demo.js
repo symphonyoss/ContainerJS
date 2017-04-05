@@ -14,10 +14,10 @@ appReady.then(() => {
     // Create a random hex string as the window name
     const id = (((1 + Math.random()) * 0x1000000) | 0).toString(16).substring(1);
 
-    const isChild = document.getElementById('child').checked ? 'yes' : 'no';
+    const isChild = document.getElementById('child').checked;
 
     // eslint-disable-next-line no-new
-    new ssf.Window(`http://localhost:${location.port}/messaging-api-test-window.html`, id, 'child=' + isChild);
+    new ssf.Window(`http://localhost:${location.port}/messaging-api-test-window.html`, id, {child: isChild});
   };
 
   sendButton.onclick = () => {
