@@ -15,6 +15,10 @@ const constants = {
     SSF_SHOW_WINDOW: 'ssf-show-window',
     SSF_WINDOW_EVENT: 'ssf-window-event',
     SSF_WINDOW_SUBSCRIBE_EVENTS: 'ssf-window-subscribe-events'
+  },
+  modifier: {
+    SSF_ERROR: '-error',
+    SSF_SUCCESS: '-success'
   }
 };
 

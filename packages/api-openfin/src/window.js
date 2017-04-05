@@ -115,23 +115,23 @@ class Window {
   }
 
   close() {
-    this.innerWindow.close();
+    return new Promise((resolve, reject) => this.innerWindow.close(false, resolve, reject));
   }
 
   hide() {
-    this.innerWindow.hide();
+    return new Promise((resolve, reject) => this.innerWindow.hide(resolve, reject));
   }
 
   show() {
-    this.innerWindow.show();
+    return new Promise((resolve, reject) => this.innerWindow.show(false, resolve, reject));
   }
 
   focus() {
-    this.innerWindow.focus();
+    return new Promise((resolve, reject) => this.innerWindow.focus(resolve, reject));
   }
 
   blur() {
-    this.innerWindow.blur();
+    return new Promise((resolve, reject) => this.innerWindow.blur(resolve, reject));
   }
 
   addListener(event, listener) {

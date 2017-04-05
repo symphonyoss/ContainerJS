@@ -54,15 +54,15 @@ A reference to the new window.
 
 ### Class Methods
 * `addListener(event, callback)` - Add an event listener to execute a given callback
-* `blur()` - Remove focus from the window
-* `close()` - Close the window
-* `focus()` - Give the window focus
-* `hide()` - Hide a visible window (Non browser only)
+* `blur()` - Remove focus from the window. Returns a promise
+* `close()` - Close the window. Returns a promise
+* `focus()` - Give the window focus. Returns a promise
+* `hide()` - Hide a visible window (Non browser only). Returns a promise
 * `onMessage` - Method that is called when the window receives a message from another window
 * `postMessage(message)` - Sends a message to the window, which can be received via the onMessage handler. `message` can be any serializable object
 * `removeListener(event, callback)` - Remove an event listener that was previously added
 * `removeAllListeners()` - Remove all added listeners
-* `show()` - Show a hidden window (Non browser only)
+* `show()` - Show a hidden window (Non browser only). Returns a promise
 
 ### Events
 * **blur** - When the window has lost focus

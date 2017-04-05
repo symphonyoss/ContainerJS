@@ -117,29 +117,56 @@ ipc.on(constants.ipc.SSF_GET_WINDOW_ID, (e) => {
 });
 
 ipc.on(constants.ipc.SSF_CLOSE_WINDOW, (e, id) => {
-  getWindowFromId(id, (win) => win.close());
+  getWindowFromId(id, (win) => {
+    win.close();
+    e.sender.send(`${constants.ipc.SSF_CLOSE_WINDOW}${constants.modifier.SSF_SUCCESS}`);
+  }, (error) => {
+    e.sender.send(`${constants.ipc.SSF_CLOSE_WINDOW}${constants.modifier.SSF_ERROR}`, error);
+  });
 });
 
 ipc.on(constants.ipc.SSF_SHOW_WINDOW, (e, id) => {
-  getWindowFromId(id, (win) => win.show());
+  getWindowFromId(id, (win) => {
+    win.show();
+    e.sender.send(`${constants.ipc.SSF_SHOW_WINDOW}${constants.modifier.SSF_SUCCESS}`);
+  }, (error) => {
+    e.sender.send(`${constants.ipc.SSF_SHOW_WINDOW}${constants.modifier.SSF_ERROR}`, error);
+  });
 });
 
 ipc.on(constants.ipc.SSF_HIDE_WINDOW, (e, id) => {
-  getWindowFromId(id, (win) => win.hide());
+  getWindowFromId(id, (win) => {
+    win.hide();
+    e.sender.send(`${constants.ipc.SSF_HIDE_WINDOW}${constants.modifier.SSF_SUCCESS}`);
+  }, (error) => {
+    e.sender.send(`${constants.ipc.SSF_HIDE_WINDOW}${constants.modifier.SSF_ERROR}`, error);
+  });
 });
 
 ipc.on(constants.ipc.SSF_FOCUS_WINDOW, (e, id) => {
-  getWindowFromId(id, (win) => win.focus());
+  getWindowFromId(id, (win) => {
+    win.focus();
+    e.sender.send(`${constants.ipc.SSF_FOCUS_WINDOW}${constants.modifier.SSF_SUCCESS}`);
+  }, (error) => {
+    e.sender.send(`${constants.ipc.SSF_FOCUS_WINDOW}${constants.modifier.SSF_ERROR}`, error);
+  });
 });
 
 ipc.on(constants.ipc.SSF_BLUR_WINDOW, (e, id) => {
-  getWindowFromId(id, (win) => win.blur());
+  getWindowFromId(id, (win) => {
+    win.blur();
+    e.sender.send(`${constants.ipc.SSF_BLUR_WINDOW}${constants.modifier.SSF_SUCCESS}`);
+  }, (error) => {
+    e.sender.send(`${constants.ipc.SSF_BLUR_WINDOW}${constants.modifier.SSF_ERROR}`, error);
+  });
 });
 
-const getWindowFromId = (id, cb) => {
+const getWindowFromId = (id, cb, errorcb) => {
   const win = BrowserWindow.fromId(id);
   if (win) {
     cb(win);
+  } else {
+    errorcb('Error: The window does not exist or the window has been closed');
   }
 };
 

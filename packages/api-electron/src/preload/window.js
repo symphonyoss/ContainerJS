@@ -35,27 +35,31 @@ class Window {
   }
 
   close() {
-    this.sendWindowAction(constants.ipc.SSF_CLOSE_WINDOW);
+    return this.sendWindowAction(constants.ipc.SSF_CLOSE_WINDOW);
   }
 
   show() {
-    this.sendWindowAction(constants.ipc.SSF_SHOW_WINDOW);
+    return this.sendWindowAction(constants.ipc.SSF_SHOW_WINDOW);
   }
 
   hide() {
-    this.sendWindowAction(constants.ipc.SSF_HIDE_WINDOW);
+    return this.sendWindowAction(constants.ipc.SSF_HIDE_WINDOW);
   }
 
   focus() {
-    this.sendWindowAction(constants.ipc.SSF_FOCUS_WINDOW);
+    return this.sendWindowAction(constants.ipc.SSF_FOCUS_WINDOW);
   }
 
   blur() {
-    this.sendWindowAction(constants.ipc.SSF_BLUR_WINDOW);
+    return this.sendWindowAction(constants.ipc.SSF_BLUR_WINDOW);
   }
 
   sendWindowAction(action) {
-    ipc.send(action, this.innerWindow.id);
+    return new Promise((resolve, reject) => {
+      ipc.send(action, this.innerWindow.id);
+      ipc.once(action + constants.modifier.SSF_SUCCESS, resolve);
+      ipc.once(action + constants.modifier.SSF_ERROR, reject);
+    });
   }
 
   addListener(event, listener) {
