@@ -23,18 +23,26 @@ Name of the new window. Should not contain whitespace.
 
 **features (optional)**  
 Object to set features of the new window (non browser only).  
-* `alwaysOnTop: boolean` - whether the window is always on top of other windows.
-* `backgroundColor: string` - set the backgroundColor of the window before the page loads.
-* `child: boolean` - make the new window a child of the current window.
-* `frame: boolean` - create the new window with a frame.
+* `alwaysOnTop: Boolean` - whether the window is always on top of other windows.
+* `backgroundColor: String` - set the backgroundColor of the window before the page loads.
+* `child: Boolean` - make the new window a child of the current window.
+* `center: Boolean` - position the new window in the center of the main screen. (only works on new windows with new ids)
+* `frame: Boolean` - create the new window with a frame.
+* `hasShadow: Boolean` - show shadows for frameless windows.
+* `height: Integer` - window's height in pixels.
 * `maxHeight: number` - sets the maximum height of the window.
-* `maximizable: boolean` - whether the window can be maximized.
-* `maxWidth: number` - sets the maximum width of the window.
-* `minHeight: number` - sets the minimum height of the window.
-* `minimizable: boolean` - whether the window can be minimized.
-* `minWidth: number` - sets the minimum width of the window.
-* `resizable: boolean` - whether the window is resizable.
-* `transparent: boolean` - make the window transparent. Clicks are not registered through the transparent window in Electron.
+* `maximizable: Boolean` - whether the window can be maximized.
+* `maxWidth: Integer` - sets the maximum width of the window.
+* `minHeight: Integer` - sets the minimum height of the window.
+* `minimizable: Boolean` - whether the window can be minimized.
+* `minWidth: Integer` - sets the minimum width of the window.
+* `resizable: Boolean` - whether the window is resizable.
+* `show: Boolean` - whether the window should be shown when created.
+* `skipTaskbar: Boolean` - whether to show the window in taskbar.
+* `transparent: Boolean` - make the window transparent. Clicks are not registered through the transparent window in Electron.
+* `width: Integer` - window's width in pixels.
+* `x: Integer` - window's left offset.
+* `y: Integer` - window's top offset.
 
 ### Return Value
 **window**  

@@ -23,20 +23,60 @@
   <h3>Try me</h3>
   <hr/>
   <h4>Options</h4>
-  <form class="form">
-    <div class="form-check">
-      <label class="form-check-label">Frame</label>
-      <input type="checkbox" class="form-check-input" id="frame">
+  <div class="row">
+    <div class="col-md-6">
+      <form>
+        <div class="form-group">
+          <label>Height</label>
+          <input type="text" class="form-control" placeholder="name" id="height" value="500">
+        </div>
+        <div class="form-group">
+          <label>Width</label>
+          <input type="text" class="form-control" placeholder="name" id="width" value="500">
+        </div>
+      </form>
     </div>
-    <div class="form-check">
-      <label class="form-check-label">Transparent</label>
-      <input type="checkbox" class="form-check-input" id="transparent">
+    <div class="col-md-6">
+      <form>
+        <div class="form-check">
+          <label class="form-check-label">Always On Top</label>
+          <input type="checkbox" class="form-check-input" id="alwaysOnTop">
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">Child</label>
+          <input type="checkbox" class="form-check-input" id="child">
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">Center</label>
+          <input type="checkbox" class="form-check-input" id="center">
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">Frame</label>
+          <input type="checkbox" class="form-check-input" id="frame" checked>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">Maximizable</label>
+          <input type="checkbox" class="form-check-input" id="maximizable" checked>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">Minimizable</label>
+          <input type="checkbox" class="form-check-input" id="minimizable" checked>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">Resizable</label>
+          <input type="checkbox" class="form-check-input" id="resizable" checked>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">Show</label>
+          <input type="checkbox" class="form-check-input" id="show" checked>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">Skip Taskbar</label>
+          <input type="checkbox" class="form-check-input" id="skipTaskbar">
+        </div>
+      </form>
     </div>
-    <div class="form-check">
-      <label class="form-check-label">Child</label>
-      <input type="checkbox" class="form-check-input" id="child">
-    </div>
-  </form>
+  </div>
   <hr/>
 
   <form class="form-inline">

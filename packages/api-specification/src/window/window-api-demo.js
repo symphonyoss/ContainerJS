@@ -9,13 +9,29 @@ appReady.then(() => {
   newWindowButton.onclick = function() {
     var url = document.getElementById('url').value;
     var windowName = document.getElementById('name').value;
+    var isAlwaysOnTop = document.getElementById('alwaysOnTop').checked;
     var isChild = document.getElementById('child').checked;
+    var isCentered = document.getElementById('center').checked;
     var hasFrame = document.getElementById('frame').checked;
-    var isTransparent = document.getElementById('transparent').checked;
+    var height = parseInt(document.getElementById('height').value, 10);
+    var isMaximizable = document.getElementById('maximizable').checked;
+    var isMinimizable = document.getElementById('minimizable').checked;
+    var isResizable = document.getElementById('resizable').checked;
+    var isShown = document.getElementById('show').checked;
+    var isSkippingTaskbar = document.getElementById('skipTaskbar').checked;
+    var width = parseInt(document.getElementById('width').value, 10);
     win = new ssf.Window(url, windowName, {
+      alwaysOnTop: isAlwaysOnTop,
       child: isChild,
+      center: isCentered,
       frame: hasFrame,
-      transparent: isTransparent
+      height,
+      maximizable: isMaximizable,
+      minimizable: isMinimizable,
+      resizable: isResizable,
+      show: isShown,
+      skipTaskbar: isSkippingTaskbar,
+      width
     });
 
     const addListItem = (text) => {
