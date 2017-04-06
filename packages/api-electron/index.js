@@ -5,7 +5,22 @@ const {
   ipcMain: ipc
 } = require('electron');
 const path = require('path');
-const constants = require('./src/common/constants');
+const {
+  IpcModifiers,
+  IPC_SSF_BLUR_WINDOW,
+  IPC_SSF_CAPTURE_SCREEN_SNIPPET,
+  IPC_SSF_CLOSE_WINDOW,
+  IPC_SSF_FOCUS_WINDOW,
+  IPC_SSF_GET_WINDOW_ID,
+  IPC_SSF_HIDE_WINDOW,
+  IPC_SSF_NEW_WINDOW,
+  IPC_SSF_NOTIFICATION,
+  IPC_SSF_SCREEN_SNIPPET_CAPTURED,
+  IPC_SSF_SEND_MESSAGE,
+  IPC_SSF_SHOW_WINDOW,
+  IPC_SSF_WINDOW_EVENT,
+  IPC_SSF_WINDOW_SUBSCRIBE_EVENTS
+} = require('./src/common/constants');
 
 let win;
 const windows = [];
@@ -14,7 +29,7 @@ const preloadPath = path.join(__dirname, 'dist', 'ssf-desktop-api.js');
 module.exports = (appJson) => {
   const eNotify = require('electron-notify');
 
-  ipc.on(constants.ipc.SSF_NOTIFICATION, (e, msg) => {
+  ipc.on(IPC_SSF_NOTIFICATION, (e, msg) => {
     if (!msg.options) {
       msg.options = {};
     }
@@ -25,7 +40,7 @@ module.exports = (appJson) => {
     });
   });
 
-  ipc.on(constants.ipc.SSF_NEW_WINDOW, (e, msg) => {
+  ipc.on(IPC_SSF_NEW_WINDOW, (e, msg) => {
     const options = Object.assign(
       {},
       msg.features,
@@ -57,14 +72,14 @@ module.exports = (appJson) => {
     windows.push(newWindow);
   });
 
-  ipc.on(constants.ipc.SSF_CAPTURE_SCREEN_SNIPPET, (e) => {
+  ipc.on(IPC_SSF_CAPTURE_SCREEN_SNIPPET, (e) => {
     e.sender.capturePage((image) => {
       const dataUri = 'data:image/png;base64,' + image.toPng().toString('base64');
-      e.sender.send(constants.ipc.SSF_SCREEN_SNIPPET_CAPTURED, dataUri);
+      e.sender.send(IPC_SSF_SCREEN_SNIPPET_CAPTURED, dataUri);
     });
   });
 
-  ipc.on(constants.ipc.SSF_SEND_MESSAGE, (e, msg) => {
+  ipc.on(IPC_SSF_SEND_MESSAGE, (e, msg) => {
     const windowId = parseInt(msg.windowId, 10);
 
     if (isNaN(windowId)) {
@@ -80,8 +95,8 @@ module.exports = (appJson) => {
     const senderId = e.sender.id;
 
     // Need to send to topic and * in case the user has subscribed to the wildcard
-    destinationWindow.webContents.send(`${constants.ipc.SSF_SEND_MESSAGE}-${msg.topic}`, msg.message, senderId);
-    destinationWindow.webContents.send(`${constants.ipc.SSF_SEND_MESSAGE}-*`, msg.message, senderId);
+    destinationWindow.webContents.send(`${IPC_SSF_SEND_MESSAGE}-${msg.topic}`, msg.message, senderId);
+    destinationWindow.webContents.send(`${IPC_SSF_SEND_MESSAGE}-*`, msg.message, senderId);
   });
 
   createInitialHiddenWindow(appJson);
@@ -112,52 +127,70 @@ const ready = (cb) => {
   app.on('ready', cb);
 };
 
-ipc.on(constants.ipc.SSF_GET_WINDOW_ID, (e) => {
+const sendSuccess = (sender, event, nonce) => {
+  sender.send(`${event}${IpcModifiers.SUCCESS}-${nonce}`);
+};
+
+const sendFailure = (sender, event, nonce, message) => {
+  sender.send(`${event}${IpcModifiers.ERROR}-${nonce}`, message);
+};
+
+ipc.on(IPC_SSF_GET_WINDOW_ID, (e) => {
   e.returnValue = BrowserWindow.fromWebContents(e.sender).id;
 });
 
-ipc.on(constants.ipc.SSF_CLOSE_WINDOW, (e, id) => {
+ipc.on(IPC_SSF_CLOSE_WINDOW, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_CLOSE_WINDOW, nonce];
+
   getWindowFromId(id, (win) => {
     win.close();
-    e.sender.send(`${constants.ipc.SSF_CLOSE_WINDOW}${constants.modifier.SSF_SUCCESS}`);
+    sendSuccess(...messageInfo);
   }, (error) => {
-    e.sender.send(`${constants.ipc.SSF_CLOSE_WINDOW}${constants.modifier.SSF_ERROR}`, error);
+    sendFailure(...messageInfo, error);
   });
 });
 
-ipc.on(constants.ipc.SSF_SHOW_WINDOW, (e, id) => {
+ipc.on(IPC_SSF_SHOW_WINDOW, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_SHOW_WINDOW, nonce];
+
   getWindowFromId(id, (win) => {
     win.show();
-    e.sender.send(`${constants.ipc.SSF_SHOW_WINDOW}${constants.modifier.SSF_SUCCESS}`);
+    sendSuccess(...messageInfo);
   }, (error) => {
-    e.sender.send(`${constants.ipc.SSF_SHOW_WINDOW}${constants.modifier.SSF_ERROR}`, error);
+    sendFailure(...messageInfo, error);
   });
 });
 
-ipc.on(constants.ipc.SSF_HIDE_WINDOW, (e, id) => {
+ipc.on(IPC_SSF_HIDE_WINDOW, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_HIDE_WINDOW, nonce];
+
   getWindowFromId(id, (win) => {
     win.hide();
-    e.sender.send(`${constants.ipc.SSF_HIDE_WINDOW}${constants.modifier.SSF_SUCCESS}`);
+    sendSuccess(...messageInfo);
   }, (error) => {
-    e.sender.send(`${constants.ipc.SSF_HIDE_WINDOW}${constants.modifier.SSF_ERROR}`, error);
+    sendFailure(...messageInfo, error);
   });
 });
 
-ipc.on(constants.ipc.SSF_FOCUS_WINDOW, (e, id) => {
+ipc.on(IPC_SSF_FOCUS_WINDOW, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_FOCUS_WINDOW, nonce];
+
   getWindowFromId(id, (win) => {
     win.focus();
-    e.sender.send(`${constants.ipc.SSF_FOCUS_WINDOW}${constants.modifier.SSF_SUCCESS}`);
+    sendSuccess(...messageInfo);
   }, (error) => {
-    e.sender.send(`${constants.ipc.SSF_FOCUS_WINDOW}${constants.modifier.SSF_ERROR}`, error);
+    sendFailure(...messageInfo, error);
   });
 });
 
-ipc.on(constants.ipc.SSF_BLUR_WINDOW, (e, id) => {
+ipc.on(IPC_SSF_BLUR_WINDOW, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_BLUR_WINDOW, nonce];
+
   getWindowFromId(id, (win) => {
     win.blur();
-    e.sender.send(`${constants.ipc.SSF_BLUR_WINDOW}${constants.modifier.SSF_SUCCESS}`);
+    sendSuccess(...messageInfo);
   }, (error) => {
-    e.sender.send(`${constants.ipc.SSF_BLUR_WINDOW}${constants.modifier.SSF_ERROR}`, error);
+    sendFailure(...messageInfo, error);
   });
 });
 
@@ -172,7 +205,7 @@ const getWindowFromId = (id, cb, errorcb) => {
 
 const windowToListener = new Map();
 
-ipc.on(constants.ipc.SSF_WINDOW_SUBSCRIBE_EVENTS, (e, windowId) => {
+ipc.on(IPC_SSF_WINDOW_SUBSCRIBE_EVENTS, (e, windowId) => {
   if (windowToListener.has(windowId)) {
     if (!windowToListener.get(windowId).includes(e.sender)) {
       pushToMapArray(windowToListener, windowId, e.sender);
@@ -187,7 +220,7 @@ ipc.on(constants.ipc.SSF_WINDOW_SUBSCRIBE_EVENTS, (e, windowId) => {
     win.emit = function() {
       windowToListener.get(windowId).forEach((sender) => {
         if (!win.isDestroyed()) {
-          sender.send(constants.ipc.SSF_WINDOW_EVENT, win.id, ...arguments);
+          sender.send(IPC_SSF_WINDOW_EVENT, win.id, ...arguments);
         }
       });
       oldEmit.apply(win, arguments);
