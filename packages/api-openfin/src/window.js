@@ -51,6 +51,14 @@ const optionsMap = {
   'y': 'defaultTop'
 };
 
+const checkWindowOpen = (win, windowMethod, reject) => {
+  if (win) {
+    windowMethod();
+  } else {
+    reject();
+  }
+};
+
 class Window {
   constructor(...args) {
     if (args.length === 0) {
@@ -115,23 +123,26 @@ class Window {
   }
 
   close() {
-    this.innerWindow.close();
+    return new Promise((resolve, reject) => {
+      checkWindowOpen(this.innerWindow, () => this.innerWindow.close(false, resolve, reject), reject);
+      this.innerWindow = undefined;
+    });
   }
 
   hide() {
-    this.innerWindow.hide();
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.hide(resolve, reject), reject));
   }
 
   show() {
-    this.innerWindow.show();
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.show(false, resolve, reject), reject));
   }
 
   focus() {
-    this.innerWindow.focus();
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.focus(resolve, reject), reject));
   }
 
   blur() {
-    this.innerWindow.blur();
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.blur(resolve, reject), reject));
   }
 
   addListener(event, listener) {

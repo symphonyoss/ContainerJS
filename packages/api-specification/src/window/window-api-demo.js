@@ -66,32 +66,45 @@ appReady.then(() => {
   var closeWindow = document.getElementById('close-window');
 
   closeWindow.onclick = () => {
-    win.close();
-    win.removeAllListeners();
-    win = null;
+    win.close()
+    .catch((error) => {
+      console.log(error);
+    });
   };
 
   var hideWindow = document.getElementById('hide-window');
 
   hideWindow.onclick = () => {
-    win.hide();
+    win.hide()
+    .catch((error) => {
+      console.log(error);
+    });
   };
 
   var showWindow = document.getElementById('show-window');
 
   showWindow.onclick = () => {
-    win.show();
+    win.show()
+    .catch((error) => {
+      console.log(error);
+    });
   };
 
   var focusWindow = document.getElementById('focus-window');
 
   focusWindow.onclick = () => {
-    win.focus();
+    win.focus()
+    .catch((error) => {
+      console.log(error);
+    });
   };
 
   var blurWindow = document.getElementById('blur-window');
 
   blurWindow.onclick = () => {
-    win.blur();
+    win.blur()
+    .catch((error) => {
+      console.log(error);
+    });
   };
 });

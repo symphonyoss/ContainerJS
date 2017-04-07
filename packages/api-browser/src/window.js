@@ -5,6 +5,19 @@ import {
 
 let currentWindow = null;
 
+const windowClosedError = new Error('The window does not exist or the window has been closed');
+
+const withInnerWindow = (fn) => {
+  return new Promise((resolve, reject) => {
+    if (this.innerWindow) {
+      fn(this.innerWindow);
+      resolve();
+    } else {
+      reject(windowClosedError);
+    }
+  });
+};
+
 class Window {
   constructor(...args) {
     if (args.length === 0) {
@@ -26,9 +39,7 @@ class Window {
 
   close() {
     // Close only works on windows that were opened by the current window
-    if (this.innerWindow) {
-      this.innerWindow.close();
-    }
+    return withInnerWindow(innerWindow => innerWindow.close());
   }
 
   show() {
@@ -40,15 +51,11 @@ class Window {
   }
 
   focus() {
-    if (this.innerWindow) {
-      this.innerWindow.focus();
-    }
+    return withInnerWindow(innerWindow => innerWindow.focus());
   }
 
   blur() {
-    if (this.innerWindow) {
-      this.innerWindow.blur();
-    }
+    return withInnerWindow(innerWindow => innerWindow.blur());
   }
 
   addListener(event, listener) {
