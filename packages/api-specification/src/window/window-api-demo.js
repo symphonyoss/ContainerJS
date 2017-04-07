@@ -67,9 +67,6 @@ appReady.then(() => {
 
   closeWindow.onclick = () => {
     win.close()
-    .then(() => {
-      win.removeAllListeners();
-    })
     .catch((error) => {
       console.log(error);
     });

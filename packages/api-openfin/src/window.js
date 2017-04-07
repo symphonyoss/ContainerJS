@@ -115,7 +115,10 @@ class Window {
   }
 
   close() {
-    return new Promise((resolve, reject) => this.innerWindow.close(false, resolve, reject));
+    return new Promise((resolve, reject) => {
+      this.innerWindow.close(false, resolve, reject);
+      this.innerWindow = undefined;
+    });
   }
 
   hide() {

@@ -141,65 +141,44 @@ ipc.on(IPC_SSF_GET_WINDOW_ID, (e) => {
 
 ipc.on(IPC_SSF_CLOSE_WINDOW, (e, id, nonce) => {
   const messageInfo = [e.sender, IPC_SSF_CLOSE_WINDOW, nonce];
-
-  getWindowFromId(id, (win) => {
-    win.close();
-    sendSuccess(...messageInfo);
-  }, (error) => {
-    sendFailure(...messageInfo, error);
-  });
+  callWindowFunction(id, messageInfo, win => win.close());
 });
 
 ipc.on(IPC_SSF_SHOW_WINDOW, (e, id, nonce) => {
   const messageInfo = [e.sender, IPC_SSF_SHOW_WINDOW, nonce];
-
-  getWindowFromId(id, (win) => {
-    win.show();
-    sendSuccess(...messageInfo);
-  }, (error) => {
-    sendFailure(...messageInfo, error);
-  });
+  callWindowFunction(id, messageInfo, win => win.show());
 });
 
 ipc.on(IPC_SSF_HIDE_WINDOW, (e, id, nonce) => {
   const messageInfo = [e.sender, IPC_SSF_HIDE_WINDOW, nonce];
-
-  getWindowFromId(id, (win) => {
-    win.hide();
-    sendSuccess(...messageInfo);
-  }, (error) => {
-    sendFailure(...messageInfo, error);
-  });
+  callWindowFunction(id, messageInfo, win => win.hide());
 });
 
 ipc.on(IPC_SSF_FOCUS_WINDOW, (e, id, nonce) => {
   const messageInfo = [e.sender, IPC_SSF_FOCUS_WINDOW, nonce];
-
-  getWindowFromId(id, (win) => {
-    win.focus();
-    sendSuccess(...messageInfo);
-  }, (error) => {
-    sendFailure(...messageInfo, error);
-  });
+  callWindowFunction(id, messageInfo, win => win.focus());
 });
 
 ipc.on(IPC_SSF_BLUR_WINDOW, (e, id, nonce) => {
   const messageInfo = [e.sender, IPC_SSF_BLUR_WINDOW, nonce];
+  callWindowFunction(id, messageInfo, win => win.blur());
+});
 
+const callWindowFunction = (id, messageInfo, windowFunction) => {
   getWindowFromId(id, (win) => {
-    win.blur();
+    windowFunction(win);
     sendSuccess(...messageInfo);
   }, (error) => {
     sendFailure(...messageInfo, error);
   });
-});
+};
 
 const getWindowFromId = (id, cb, errorcb) => {
   const win = BrowserWindow.fromId(id);
   if (win) {
     cb(win);
   } else {
-    errorcb('Error: The window does not exist or the window has been closed');
+    errorcb('The window does not exist or the window has been closed');
   }
 };
 

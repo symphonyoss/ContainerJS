@@ -82,7 +82,7 @@ class Window {
       });
       ipc.once(errorEvent, (error) => {
         ipc.removeListener(successEvent, resolve);
-        reject(error);
+        reject(new Error(error));
       });
     });
   }
