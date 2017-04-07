@@ -2,11 +2,13 @@
 
 var electron = require('electron')
 var process = require('process')
-
 var proc = require('child_process')
+var path = require('path')
+
+var mainFile = path.join(__dirname, '../main.js');
 
 // add the location of the main JS file to the command line args
-var args = [process.cwd() + '/node_modules/ssf-desktop-api-electron/main.js', '--enable-sandbox'].concat(process.argv);
+var args = [mainFile, '--enable-sandbox'].concat(process.argv);
 
 var child = proc.spawn(electron, args, {stdio: 'inherit'})
 child.on('close', function (code) {
