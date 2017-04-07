@@ -21,6 +21,7 @@ const eventMap = {
   'hide': 'hidden',
   'initialized': 'initialized',
   'maximize': 'maximized',
+  'message': 'message',
   'minimize': 'minimized',
   'navigation-rejected': 'navigation-rejected',
   'restore': 'restored',
@@ -118,8 +119,13 @@ class Window {
       this.innerWindow = newWindow;
     }
 
-    MessageService.subscribe('*', 'ssf-window-message', (...args) => this.onMessage(...args));
     this.eventListeners = new Map();
+    MessageService.subscribe('*', 'ssf-window-message', (...args) => {
+      const event = 'message';
+      if (this.eventListeners.has(event)) {
+        this.eventListeners.get(event).forEach(listener => listener(...args));
+      }
+    });
   }
 
   close() {
@@ -172,7 +178,7 @@ class Window {
   removeAllListeners() {
     this.eventListeners.forEach((value, key) => {
       value.forEach((listener) => {
-        this.innerWindow.removeEventListener(eventMap[key], listener);
+        this.innerWindow.removeEventListener(key, listener);
       });
     });
 
@@ -182,9 +188,6 @@ class Window {
   postMessage(message) {
     MessageService.send(`${this.innerWindow.uuid}:${this.innerWindow.name}`, 'ssf-window-message', message);
   }
-
-  // To be overridden by user
-  onMessage() {}
 
   static getCurrentWindowId() {
     const currentWin = fin.desktop.Window.getCurrent();

@@ -34,7 +34,12 @@ class Window {
     }
 
     this.eventListeners = new Map();
-    this.addListener('message', (event) => this.onMessage(event.data));
+    this.addListener('message', (e) => {
+      const event = 'message';
+      if (this.eventListeners.has(event)) {
+        this.eventListeners.get(event).forEach(listener => listener(e.data));
+      }
+    });
   }
 
   close() {
@@ -74,7 +79,7 @@ class Window {
       let listeners = this.eventListeners.get(event);
       let index = listeners.indexOf(listener);
       if (index >= 0) {
-        listeners = listeners.splice(index, 1);
+        listeners.splice(index, 1);
         this.eventListeners.set(listeners);
       }
     }
@@ -95,9 +100,6 @@ class Window {
   postMessage(message) {
     this.innerWindow.postMessage(message, '*');
   }
-
-  // To be overridden by user
-  onMessage() {}
 
   static getCurrentWindowId() {
     return window.name;
