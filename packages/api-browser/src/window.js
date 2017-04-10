@@ -22,6 +22,7 @@ class Window {
   constructor(...args) {
     if (args.length === 0) {
       this.innerWindow = window;
+      this.children = [];
     } else {
       const [url, name, features] = args;
 

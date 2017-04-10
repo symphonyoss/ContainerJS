@@ -64,6 +64,7 @@ class Window {
   constructor(...args) {
     if (args.length === 0) {
       this.innerWindow = fin.desktop.Window.getCurrent();
+      this.children = [];
     } else {
       const [url, name, options] = args;
 
