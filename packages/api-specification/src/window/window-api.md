@@ -57,6 +57,7 @@ A reference to the new window.
 * `blur()` - Remove focus from the window. Returns a promise that resolves to nothing
 * `close()` - Close the window. Returns a promise that resolves to nothing
 * `focus()` - Give the window focus. Returns a promise that resolves to nothing
+* `getChildWindows()` - Returns an array of the current child windows (including closed windows)
 * `hide()` - Hide a visible window (Non browser only). Returns a promise that resolves to nothing
 * `postMessage(message)` - Sends a message to the window. `message` can be any serializable object
 * `removeListener(event, callback)` - Remove an event listener that was previously added
