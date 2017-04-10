@@ -1,4 +1,5 @@
 {
+  "devtools_port": 9090,
   "startup_app": {
     "name": "SSF Desktop Wrapper",
     "url": "http://localhost:5000/index.html",
