@@ -64,6 +64,7 @@ class Window {
   constructor(...args) {
     if (args.length === 0) {
       this.innerWindow = fin.desktop.Window.getCurrent();
+      this.children = [];
     } else {
       const [url, name, options] = args;
 
@@ -102,6 +103,13 @@ class Window {
         );
 
         newWindow = new fin.desktop.Window(childOptions);
+
+        const currentWindow = Window.getCurrentWindow();
+        if (currentWindow.children) {
+          currentWindow.children.push(this);
+        } else {
+          currentWindow.children = [this];
+        }
       } else {
         // UUID must be the same as name
         const uuid = name;
@@ -187,6 +195,10 @@ class Window {
 
   postMessage(message) {
     MessageService.send(`${this.innerWindow.uuid}:${this.innerWindow.name}`, 'ssf-window-message', message);
+  }
+
+  getChildWindows() {
+    return this.children;
   }
 
   static getCurrentWindowId() {

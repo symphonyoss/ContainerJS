@@ -25,6 +25,7 @@ class Window {
       this.innerWindow = {
         id: window.ssf.Window.getCurrentWindowId()
       };
+      this.children = [];
     } else {
       const [url, name, features] = args;
 
@@ -33,6 +34,13 @@ class Window {
         name,
         features
       });
+
+      const currentWin = Window.getCurrentWindow();
+      if (currentWin.children) {
+        currentWin.children.push(this);
+      } else {
+        currentWin.children = [this];
+      }
     }
 
     ipc.send(IPC_SSF_WINDOW_SUBSCRIBE_EVENTS, this.innerWindow.id);
@@ -119,6 +127,10 @@ class Window {
 
   postMessage(message) {
     MessageService.send(this.innerWindow.id, 'ssf-window-message', message);
+  }
+
+  getChildWindows() {
+    return this.children;
   }
 
   static getCurrentWindowId() {

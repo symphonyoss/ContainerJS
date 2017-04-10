@@ -7,10 +7,10 @@ let currentWindow = null;
 
 const windowClosedError = new Error('The window does not exist or the window has been closed');
 
-const withInnerWindow = (fn) => {
+const withInnerWindow = (win, fn) => {
   return new Promise((resolve, reject) => {
-    if (this.innerWindow) {
-      fn(this.innerWindow);
+    if (win) {
+      fn(win);
       resolve();
     } else {
       reject(windowClosedError);
@@ -22,6 +22,7 @@ class Window {
   constructor(...args) {
     if (args.length === 0) {
       this.innerWindow = window;
+      this.children = [];
     } else {
       const [url, name, features] = args;
 
@@ -30,6 +31,12 @@ class Window {
         removeAccessibleWindow(this.innerWindow.name);
       };
 
+      const currentWindow = Window.getCurrentWindow();
+      if (currentWindow.children) {
+        currentWindow.children.push(this);
+      } else {
+        currentWindow.children = [this];
+      }
       addAccessibleWindow(name, this.innerWindow);
     }
 
@@ -44,7 +51,7 @@ class Window {
 
   close() {
     // Close only works on windows that were opened by the current window
-    return withInnerWindow(innerWindow => innerWindow.close());
+    return withInnerWindow(this.innerWindow, innerWindow => innerWindow.close());
   }
 
   show() {
@@ -56,11 +63,11 @@ class Window {
   }
 
   focus() {
-    return withInnerWindow(innerWindow => innerWindow.focus());
+    return withInnerWindow(this.innerWindow, innerWindow => innerWindow.focus());
   }
 
   blur() {
-    return withInnerWindow(innerWindow => innerWindow.blur());
+    return withInnerWindow(this.innerWindow, innerWindow => innerWindow.blur());
   }
 
   addListener(event, listener) {
@@ -99,6 +106,10 @@ class Window {
 
   postMessage(message) {
     this.innerWindow.postMessage(message, '*');
+  }
+
+  getChildWindows() {
+    return this.children;
   }
 
   static getCurrentWindowId() {
