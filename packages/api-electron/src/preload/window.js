@@ -46,7 +46,12 @@ class Window {
       }
     });
 
-    MessageService.subscribe('*', 'ssf-window-message', (...args) => this.onMessage(...args));
+    MessageService.subscribe('*', 'ssf-window-message', (...args) => {
+      const event = 'message';
+      if (this.eventListeners.has(event)) {
+        this.eventListeners.get(event).forEach(listener => listener(...args));
+      }
+    });
   }
 
   close() {
@@ -99,9 +104,12 @@ class Window {
 
   removeListener(event, listener) {
     if (this.eventListeners.has(event)) {
-      let listeners = this.eventListeners.get(event);
-      listeners = listeners.splice(listeners.indexOf(listener), 1);
-      this.eventListeners.set(event, listeners);
+      const listeners = this.eventListeners.get(event);
+      const index = listeners.indexOf(listener);
+      if (index >= 0) {
+        listeners.splice(index, 1);
+        this.eventListeners.set(event, listeners);
+      }
     }
   }
 
@@ -112,9 +120,6 @@ class Window {
   postMessage(message) {
     MessageService.send(this.innerWindow.id, 'ssf-window-message', message);
   }
-
-  // To be overridden by user
-  onMessage() {}
 
   static getCurrentWindowId() {
     return ipc.sendSync(IPC_SSF_GET_WINDOW_ID);

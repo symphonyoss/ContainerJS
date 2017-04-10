@@ -58,8 +58,7 @@ A reference to the new window.
 * `close()` - Close the window. Returns a promise that resolves to nothing
 * `focus()` - Give the window focus. Returns a promise that resolves to nothing
 * `hide()` - Hide a visible window (Non browser only). Returns a promise that resolves to nothing
-* `onMessage` - Method that is called when the window receives a message from another window
-* `postMessage(message)` - Sends a message to the window, which can be received via the onMessage handler. `message` can be any serializable object
+* `postMessage(message)` - Sends a message to the window. `message` can be any serializable object
 * `removeListener(event, callback)` - Remove an event listener that was previously added
 * `removeAllListeners()` - Remove all added listeners
 * `show()` - Show a hidden window (Non browser only). Returns a promise that resolves to nothing
@@ -70,6 +69,7 @@ A reference to the new window.
 * **focus** - When the window has gained focus
 * **hide** - When the window is hidden
 * **maximize** - When the window is maximized (non browser)
+* **message** - When the window receives a message from another window
 * **minimize** - When the window is minimized (non browser)
 * **restore** - When the window is restored from a minimized state (non browser)
 * **show** - When the window is shown
