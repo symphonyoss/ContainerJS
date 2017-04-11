@@ -65,12 +65,23 @@ A reference to the new window.
 * `show()` - Show a hidden window (Non browser only). Returns a promise that resolves to nothing
 
 ### Events
-* **blur** - When the window has lost focus
-* **close**- when the window has been closed
-* **focus** - When the window has gained focus
-* **hide** - When the window is hidden
-* **maximize** - When the window is maximized (non browser)
-* **message** - When the window receives a message from another window
-* **minimize** - When the window is minimized (non browser)
-* **restore** - When the window is restored from a minimized state (non browser)
-* **show** - When the window is shown
+* **blur** - When the window has lost focus  
+ _No arguments are passed to the listener_
+* **close**- When the window has been closed  
+_No arguments are passed to the listener_
+* **focus** - When the window has gained focus  
+_No arguments are passed to the listener_
+* **hide** - When the window is hidden  
+_No arguments are passed to the listener_
+* **maximize** - When the window is maximized (non browser)  
+_No arguments are passed to the listener_
+* **message** - When the window receives a message from another window  
+Listener arguments:
+  * `message` - The message that was sent
+  * `senderId` - The id of the sending window
+* **minimize** - When the window is minimized (non browser)  
+_No arguments are passed to the listener_
+* **restore** - When the window is restored from a minimized state (non browser)  
+_No arguments are passed to the listener_
+* **show** - When the window is shown  
+_No arguments are passed to the listener_
