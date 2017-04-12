@@ -8,3 +8,10 @@ This project provides a demonstration of ContainerJS which follows the Symphony 
 npm install
 npm start
 ```
+## Testing
+
+```
+npm install
+npm run mocha
+```
+
