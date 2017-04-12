@@ -1,11 +1,11 @@
 const ipc = require('electron').ipcRenderer;
-import { IPC_SSF_SEND_MESSAGE } from '../common/constants';
+import { IpcMessages } from '../common/constants';
 
 const listenerMap = new Map();
 
 class MessageService {
   static send(windowId, topic, message) {
-    ipc.send(IPC_SSF_SEND_MESSAGE, {
+    ipc.send(IpcMessages.IPC_SSF_SEND_MESSAGE, {
       windowId,
       topic,
       message
@@ -20,7 +20,7 @@ class MessageService {
       }
     };
 
-    ipc.on(`${IPC_SSF_SEND_MESSAGE}-${topic}`, receiveMessage);
+    ipc.on(`${IpcMessages.IPC_SSF_SEND_MESSAGE}-${topic}`, receiveMessage);
 
     // Map the arguments to the actual listener that was added
     listenerMap.set({
@@ -37,7 +37,7 @@ class MessageService {
     // i.e. {} !== {}
     listenerMap.forEach((value, key) => {
       if (key.windowId === windowId && key.topic === topic && key.listener === listener) {
-        ipc.removeListener(`${IPC_SSF_SEND_MESSAGE}-${topic}`, value);
+        ipc.removeListener(`${IpcMessages.IPC_SSF_SEND_MESSAGE}-${topic}`, value);
         deleteKey = key;
       }
     });

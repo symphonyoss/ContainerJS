@@ -62,7 +62,7 @@ const checkWindowOpen = (win, windowMethod, reject) => {
   if (win) {
     return windowMethod();
   } else {
-    return reject(new Error('window does not exist'));
+    return reject(new Error('The window does not exist or the window has been closed'));
   }
 };
 
@@ -234,7 +234,6 @@ class Window {
   hasShadow() {
     return this.getOptions()
       .then((options) => {
-        console.log(options);
         return options.shadow;
       });
   }
