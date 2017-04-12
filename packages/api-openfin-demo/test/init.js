@@ -15,7 +15,8 @@ const params = {
   port: 5000,
   host: '127.0.0.1',
   root: 'src',
-  open: false
+  open: false,
+  ignore: '*'
 };
 
 liveServer.start(params);
@@ -72,12 +73,9 @@ describe('application launch', function() {
    * @param resultCallback callback with result of the javascript code
    */
   function executeAsyncJavascript(script, resultCallback) {
-    console.log('executeAsyncJavascript running ', script);
     client.executeAsync(script).then((result) => {
-      console.log('executeAsyncJavascript returns ', result);
       resultCallback(undefined, result);
     }, (err) => {
-      console.error(err);
       resultCallback(err, undefined);
     });
   }
