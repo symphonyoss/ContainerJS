@@ -56,13 +56,45 @@ A reference to the new window.
 * `addListener(event, callback)` - Add an event listener to execute a given callback
 * `blur()` - Remove focus from the window. Returns a promise that resolves to nothing
 * `close()` - Close the window. Returns a promise that resolves to nothing
+* `flashFrame(flag)` - Flashes the window’s frame and taskbar icon.
 * `focus()` - Give the window focus. Returns a promise that resolves to nothing
 * `getChildWindows()` - Returns an array of the current child windows (including closed windows)
+* `getBounds()` - Gets the current bounds ({x, y, width, height}) of the window.
+* `getMaximumSize()` - Returns `Integer[width, height]` - Contains the window’s maximum width and height.
+* `getMinimumSize()` - Returns `Integer[width, height]` - Contains the window’s minimum width and height.
+* `getParentWindow()` - Returns the parent window.
+* `getPosition()` - Returns `Integer[x, y]` - Contains the window’s current position.
+* `getSize()` - Returns `Integer[width, height]` - Contains the window’s width and height.
+* `getTitle()` - Returns the title of the native window.
+* `hasShadow()` - Returns whether the window has a shadow.
 * `hide()` - Hide a visible window (Non browser only). Returns a promise that resolves to nothing
+* `isAlwaysOnTop()` - Returns whether the window is always on top of other windows.
+* `isMaximizable()` - Returns whether the window can be manually maximized by user.
+* `isMaximized()` - Returns whether the window is maximized.
+* `isMinimizable()` - Returns whether the window can be manually minimized by user.
+* `isMinimized()` - Returns whether the window is minimized.
+* `isResizable()` - Returns whether the window can be manually resized by user.
+* `loadURL(url)` - Loads the specified URL.
+* `maximize()` - Maximizes the window.
+* `minimize()` - Minimizes the window.
 * `postMessage(message)` - Sends a message to the window. `message` can be any serializable object
+* `reload()` - Reloads the window.
 * `removeListener(event, callback)` - Remove an event listener that was previously added
 * `removeAllListeners()` - Remove all added listeners
+* `restore()` - Restores the window to its previous state.
 * `show()` - Show a hidden window (Non browser only). Returns a promise that resolves to nothing
+* `setAlwaysOnTop(flag)` - Sets whether the window should show always on top of other windows.
+* `setBounds(bounds)` - Resizes and moves the window to the supplied bounds.
+* `setIcon(iconURL)` - Changes window icon.
+* `setMaximizable(flag)` - Sets whether the window can be manually maximized by user.
+* `setMaximumSize(maxWidth, maxHeight)` - Sets the maximum size of window to width and height.
+* `setMinimizable(flag)` - Sets whether the window can be manually minimized by user.
+* `setMinimumSize(minWidth, minHeight)` - Sets the minimum size of window to width and height.
+* `setPosition(x, y)` - Moves window to `x` and `y`.
+* `setResizable()` - Sets whether the window can be manually resized by user.
+* `setSize(width, height)` - Resizes the window to `width` and `height`.
+* `setSkipTaskbar()` - Sets whether the window shows in the taskbar.
+* `unmaximize()` - Unmaximizes the window.
 
 ### Events
 * **blur** - When the window has lost focus
