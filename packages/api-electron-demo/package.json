@@ -8,18 +8,26 @@
     "launch": "ssf-electron ./src/app.json",
     "start": "npm-run-all --parallel launch serve",
     "postinstall": "rimraf src && copyfiles -f \"node_modules/containerjs-api-specification/src/**\" src",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "mocha": "mocha test/init.js"
   },
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
     "containerjs-api-specification": "0.0.1",
-    "containerjs-api-electron": "0.0.1"
+    "containerjs-api-electron": "0.0.1",
+    "assert": "^1.4.1",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "electron": "^1.6.2",
+    "mocha": "^3.2.0",
+    "should": "^11.2.1"
   },
   "devDependencies": {
     "copyfiles": "^1.2.0",
     "live-server": "^1.2.0",
     "npm-run-all": "^4.0.2",
-    "rimraf": "^2.6.1"
+    "rimraf": "^2.6.1",
+    "spectron": "^3.6.1"
   }
 }

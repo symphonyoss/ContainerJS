@@ -22,8 +22,6 @@ liveServer.start(params);
 
 
 describe('application launch', function() {
-  const runtimeVersion = '6.49.18.41';
-
   let app;
   let client;
   let timeout = 30000;
@@ -90,16 +88,6 @@ describe('application launch', function() {
       should.not.exist(err);
       should.exist(result.value.title);
       result.value.title.should.equal('Symphony Desktop Wrapper API Specification');
-      done();
-    });
-  });
-
-  it('Verify OpenFin Runtime Version', function(done) {
-    executeAsyncJavascript('var callback = arguments[arguments.length - 1];' +
-      'fin.desktop.System.getVersion(function(v) { callback(v); } );', function(err, result) {
-      should.not.exist(err);
-      should.exist(result.value);
-      result.value.should.equal(runtimeVersion);
       done();
     });
   });

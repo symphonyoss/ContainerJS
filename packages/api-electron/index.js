@@ -95,15 +95,15 @@ const createInitialHiddenWindow = (appJson) => {
   win = new BrowserWindow({
     width: 800,
     height: 600,
-    show: appJson.startup_app.autoShow,
+    show: true,
     webPreferences: {
-      sandbox: true,
+      sandbox: false,
       preload: preloadPath
     }
   });
 
   // and load the page used for the hidden window
-  win.loadURL(appJson.startup_app.url);
+  win.loadURL('http://localhost:5000/index.html');
 
   // Emitted when the window is closed.
   win.on('closed', () => {

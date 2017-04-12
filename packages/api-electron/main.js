@@ -1,7 +1,8 @@
+const process = require('process');
 const { app } = require('electron');
 const ssfElectron = require('./index.js');
 const fs = require('fs');
-const process = require('process');
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -9,7 +10,8 @@ let win;
 
 function createWindow() {
   // the appJson location is passed to the ssf-electron bin script
-  const appJsonPath = process.cwd() + '/' + process.argv[5];
+  let configLocation = process.env.TEST ? 'src/app.json' : process.argv[5];
+  const appJsonPath = process.cwd() + '/' + configLocation;
   const appJson = JSON.parse(fs.readFileSync(appJsonPath, 'utf8'));
 
   ssfElectron(appJson);
