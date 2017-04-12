@@ -52,19 +52,25 @@ const optionsMap = {
   'y': 'defaultTop'
 };
 
+const windowStates = {
+  MAXIMIZED: 'maximized',
+  MINIMIZED: 'minimized',
+  RESTORED: 'restored'
+};
+
 const checkWindowOpen = (win, windowMethod, reject) => {
   if (win) {
-    windowMethod();
+    return windowMethod();
   } else {
-    reject();
+    return reject(new Error('The window does not exist or the window has been closed'));
   }
 };
 
 class Window {
   constructor(...args) {
+    this.children = [];
     if (args.length === 0) {
       this.innerWindow = fin.desktop.Window.getCurrent();
-      this.children = [];
     } else {
       const [url, name, options] = args;
 
@@ -88,9 +94,8 @@ class Window {
         // OpenFin needs opacity between 1 (not transparent) and 0 (fully transparent)
         mergedOptions.opacity = options.transparent === true ? 0 : 1;
       }
-      if (options.skipTaskbar) {
-        mergedOptions.showTaskbarIcon = !options.skipTaskbar;
-      }
+
+      mergedOptions.showTaskbarIcon = !options.skipTaskbar;
 
       if (mergedOptions.child) {
         const childOptions = Object.assign(
@@ -105,11 +110,8 @@ class Window {
         newWindow = new fin.desktop.Window(childOptions);
 
         const currentWindow = Window.getCurrentWindow();
-        if (currentWindow.children) {
-          currentWindow.children.push(this);
-        } else {
-          currentWindow.children = [this];
-        }
+
+        currentWindow.children.push(this);
       } else {
         // UUID must be the same as name
         const uuid = name;
@@ -136,6 +138,10 @@ class Window {
     });
   }
 
+  blur() {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.blur(resolve, reject), reject));
+  }
+
   close() {
     return new Promise((resolve, reject) => {
       checkWindowOpen(this.innerWindow, () => this.innerWindow.close(false, resolve, reject), reject);
@@ -143,20 +149,215 @@ class Window {
     });
   }
 
-  hide() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.hide(resolve, reject), reject));
-  }
-
-  show() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.show(false, resolve, reject), reject));
+  flashFrame(flag) {
+    if (flag) {
+      return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.flash({}, resolve, reject), reject));
+    } else {
+      return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.stopFlashing(resolve, reject), reject));
+    }
   }
 
   focus() {
     return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.focus(resolve, reject), reject));
   }
 
-  blur() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.blur(resolve, reject), reject));
+  getBounds() {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.getBounds((bounds) => {
+      resolve({
+        x: bounds.left,
+        y: bounds.top,
+        width: bounds.width,
+        height: bounds.height
+      });
+    }, reject), reject));
+  }
+
+  getChildWindows() {
+    return this.children;
+  }
+
+  getMaximumSize() {
+    return this.getOptions()
+      .then((options) => {
+        return [options.maxWidth, options.maxHeight];
+      });
+  }
+
+  getMinimumSize() {
+    return this.getOptions()
+      .then((options) => {
+        return [options.minWidth, options.minHeight];
+      });
+  }
+
+  getOptions() {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.getOptions(resolve, reject), reject));
+  }
+
+  getParentWindow() {
+    return checkWindowOpen(this.innerWindow, () => {
+      const parent = this.innerWindow.getParentWindow();
+
+      if (parent.name === this.innerWindow.name) {
+        return null;
+      }
+
+      return parent;
+    }, (error) => { console.log(error); });
+  }
+
+  getPosition() {
+    return this.getBounds()
+      .then((bounds) => {
+        return [bounds.left, bounds.top];
+      });
+  }
+
+  getSize() {
+    return this.getBounds()
+      .then((bounds) => {
+        return [bounds.width, bounds.height];
+      });
+  }
+
+  getTitle() {
+    return this.getOptions()
+      .then((options) => {
+        return options.title;
+      });
+  }
+
+  getState() {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.getState(resolve, reject), reject));
+  }
+
+  hasShadow() {
+    return this.getOptions()
+      .then((options) => {
+        return options.shadow;
+      });
+  }
+
+  hide() {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.hide(resolve, reject), reject));
+  }
+
+  isAlwaysOnTop() {
+    return this.getOptions()
+      .then((options) => {
+        return options.alwaysOnTop;
+      });
+  }
+
+  isMaximizable() {
+    return this.getOptions()
+      .then((options) => {
+        return options.maximizable;
+      });
+  }
+
+  isMaximized() {
+    return this.getState()
+      .then((state) => {
+        return state === windowStates.MAXIMIZED;
+      });
+  }
+
+  isMinimizable() {
+    return this.getOptions()
+      .then((options) => {
+        return options.minimizable;
+      });
+  }
+
+  isMinimized() {
+    return this.getState()
+      .then((state) => {
+        return state === windowStates.MINIMIZED;
+      });
+  }
+
+  isResizable() {
+    return this.getOptions()
+      .then((options) => {
+        return options.resizable;
+      });
+  }
+
+  loadURL(url) {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.executeJavaScript(`window.location = '${url}'`, resolve, reject), reject));
+  }
+
+  reload() {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.executeJavaScript('window.location.reload()', resolve, reject), reject));
+  }
+
+  restore() {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.restore(resolve, reject), reject));
+  }
+
+  setAlwaysOnTop(alwaysOnTop) {
+    return this.updateOptions({ alwaysOnTop });
+  }
+
+  setBounds(bounds) {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.setBounds(bounds.x, bounds.y, bounds.width, bounds.height, resolve, reject), reject));
+  }
+
+  setIcon(icon) {
+    return this.updateOptions({ icon });
+  }
+
+  setMaximizable(maximizable) {
+    return this.updateOptions({ maximizable });
+  }
+
+  setMaximumSize(maxWidth, maxHeight) {
+    return this.updateOptions({ maxWidth, maxHeight });
+  }
+
+  setMinimizable(minimizable) {
+    return this.updateOptions({ minimizable });
+  }
+
+  setMinimumSize(minWidth, minHeight) {
+    return this.updateOptions({ minWidth, minHeight });
+  }
+
+  setPosition(x, y) {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.moveTo(x, y, resolve, reject), reject));
+  }
+
+  setResizable(resizable) {
+    return this.updateOptions({ resizable });
+  }
+
+  setSize(width, height) {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.resizeTo(width, height, 'top-left', resolve, reject), reject));
+  }
+
+  setSkipTaskbar(skipTaskbar) {
+    return this.updateOptions({ showTaskbarIcon: !skipTaskbar });
+  }
+
+  show() {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.show(false, resolve, reject), reject));
+  }
+
+  maximize() {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.maximize(resolve, reject), reject));
+  }
+
+  minimize() {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.minimize(resolve, reject), reject));
+  }
+
+  unmaximize() {
+    return this.restore();
+  }
+
+  updateOptions(options) {
+    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.updateOptions(options, resolve, reject), reject));
   }
 
   addListener(event, listener) {
@@ -195,10 +396,6 @@ class Window {
 
   postMessage(message) {
     MessageService.send(`${this.innerWindow.uuid}:${this.innerWindow.name}`, 'ssf-window-message', message);
-  }
-
-  getChildWindows() {
-    return this.children;
   }
 
   static getCurrentWindowId() {
