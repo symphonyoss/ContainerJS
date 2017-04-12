@@ -7,8 +7,6 @@ const {
   it
 } = require('mocha');
 const spawn = require('child_process').spawn;
-
-// Start serving files
 const liveServer = require('live-server');
 
 const params = {
@@ -20,7 +18,6 @@ const params = {
 };
 
 liveServer.start(params);
-
 
 describe('application launch', function() {
   let app;

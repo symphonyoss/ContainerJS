@@ -8,8 +8,6 @@ const {
 } = require('mocha');
 const path = require('path');
 const electronPath = path.join(__dirname, '..', 'node_modules', '.bin', 'electron.cmd');
-
-// Start serving files
 const liveServer = require('live-server');
 
 const params = {

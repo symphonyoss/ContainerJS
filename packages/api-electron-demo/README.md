@@ -8,3 +8,10 @@ This project provides a demonstration of the Symphony Desktop Wrapper API within
 npm install
 npm start
 ```
+
+## Testing
+
+```
+npm install
+npm run mocha
+```
