@@ -10,16 +10,48 @@ const {
   IPC_SSF_BLUR_WINDOW,
   IPC_SSF_CAPTURE_SCREEN_SNIPPET,
   IPC_SSF_CLOSE_WINDOW,
+  IPC_SSF_FLASH_FRAME,
   IPC_SSF_FOCUS_WINDOW,
+  IPC_SSF_GET_WINDOW_BOUNDS,
   IPC_SSF_GET_WINDOW_ID,
+  IPC_SSF_GET_WINDOW_MAXIMUM_SIZE,
+  IPC_SSF_GET_WINDOW_MINIMUM_SIZE,
+  IPC_SSF_GET_WINDOW_PARENT,
+  IPC_SSF_GET_WINDOW_POSITION,
+  IPC_SSF_GET_WINDOW_SIZE,
+  IPC_SSF_GET_WINDOW_TITLE,
   IPC_SSF_HIDE_WINDOW,
+  IPC_SSF_IS_WINDOW_ALWAYS_ON_TOP,
+  IPC_SSF_IS_WINDOW_MAXIMIZABLE,
+  IPC_SSF_IS_WINDOW_MAXIMIZED,
+  IPC_SSF_IS_WINDOW_MINIMIZABLE,
+  IPC_SSF_IS_WINDOW_MINIMIZED,
+  IPC_SSF_IS_WINDOW_RESIZABLE,
+  IPC_SSF_LOAD_URL,
+  IPC_SSF_MAXIMIZE_WINDOW,
+  IPC_SSF_MINIMIZE_WINDOW,
   IPC_SSF_NEW_WINDOW,
   IPC_SSF_NOTIFICATION,
+  IPC_SSF_RELOAD_WINDOW,
+  IPC_SSF_RESTORE_WINDOW,
   IPC_SSF_SCREEN_SNIPPET_CAPTURED,
+  IPC_SSF_SET_WINDOW_ALWAYS_ON_TOP,
+  IPC_SSF_SET_WINDOW_BOUNDS,
+  IPC_SSF_SET_WINDOW_ICON,
+  IPC_SSF_SET_WINDOW_MAXIMIZABLE,
+  IPC_SSF_SET_WINDOW_MAXIMUM_SIZE,
+  IPC_SSF_SET_WINDOW_MINIMIZABLE,
+  IPC_SSF_SET_WINDOW_MINIMUM_SIZE,
+  IPC_SSF_SET_WINDOW_POSITION,
+  IPC_SSF_SET_WINDOW_RESIZABLE,
+  IPC_SSF_SET_WINDOW_SIZE,
+  IPC_SSF_SET_WINDOW_SKIP_TASKBAR,
   IPC_SSF_SEND_MESSAGE,
   IPC_SSF_SHOW_WINDOW,
   IPC_SSF_WINDOW_EVENT,
-  IPC_SSF_WINDOW_SUBSCRIBE_EVENTS
+  IPC_SSF_WINDOW_HAS_SHADOW,
+  IPC_SSF_WINDOW_SUBSCRIBE_EVENTS,
+  IPC_SSF_UNMAXIMIZE_WINDOW
 } = require('./src/common/constants');
 
 let win;
@@ -127,16 +159,17 @@ const ready = (cb) => {
   app.on('ready', cb);
 };
 
-const sendSuccess = (sender, event, nonce) => {
-  sender.send(`${event}${IpcModifiers.SUCCESS}-${nonce}`);
+const sendSuccess = (sender, event, nonce, message) => {
+  sender.send(`${event}${IpcModifiers.SUCCESS}-${nonce}`, message);
 };
 
 const sendFailure = (sender, event, nonce, message) => {
   sender.send(`${event}${IpcModifiers.ERROR}-${nonce}`, message);
 };
 
-ipc.on(IPC_SSF_GET_WINDOW_ID, (e) => {
-  e.returnValue = BrowserWindow.fromWebContents(e.sender).id;
+ipc.on(IPC_SSF_BLUR_WINDOW, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_BLUR_WINDOW, nonce];
+  callWindowFunction(id, messageInfo, win => win.blur());
 });
 
 ipc.on(IPC_SSF_CLOSE_WINDOW, (e, id, nonce) => {
@@ -144,14 +177,10 @@ ipc.on(IPC_SSF_CLOSE_WINDOW, (e, id, nonce) => {
   callWindowFunction(id, messageInfo, win => win.close());
 });
 
-ipc.on(IPC_SSF_SHOW_WINDOW, (e, id, nonce) => {
-  const messageInfo = [e.sender, IPC_SSF_SHOW_WINDOW, nonce];
-  callWindowFunction(id, messageInfo, win => win.show());
-});
-
-ipc.on(IPC_SSF_HIDE_WINDOW, (e, id, nonce) => {
-  const messageInfo = [e.sender, IPC_SSF_HIDE_WINDOW, nonce];
-  callWindowFunction(id, messageInfo, win => win.hide());
+ipc.on(IPC_SSF_FLASH_FRAME, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_FLASH_FRAME, nonce];
+  const [flag] = args;
+  callWindowFunction(id, messageInfo, win => win.flashFrame(flag));
 });
 
 ipc.on(IPC_SSF_FOCUS_WINDOW, (e, id, nonce) => {
@@ -159,15 +188,191 @@ ipc.on(IPC_SSF_FOCUS_WINDOW, (e, id, nonce) => {
   callWindowFunction(id, messageInfo, win => win.focus());
 });
 
-ipc.on(IPC_SSF_BLUR_WINDOW, (e, id, nonce) => {
-  const messageInfo = [e.sender, IPC_SSF_BLUR_WINDOW, nonce];
-  callWindowFunction(id, messageInfo, win => win.blur());
+ipc.on(IPC_SSF_GET_WINDOW_BOUNDS, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_GET_WINDOW_BOUNDS, nonce];
+  callWindowFunction(id, messageInfo, win => win.getBounds());
+});
+
+ipc.on(IPC_SSF_GET_WINDOW_ID, (e) => {
+  e.returnValue = BrowserWindow.fromWebContents(e.sender).id;
+});
+
+ipc.on(IPC_SSF_GET_WINDOW_MAXIMUM_SIZE, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_GET_WINDOW_MAXIMUM_SIZE, nonce];
+  callWindowFunction(id, messageInfo, win => win.getMaximumSize());
+});
+
+ipc.on(IPC_SSF_GET_WINDOW_MINIMUM_SIZE, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_GET_WINDOW_MINIMUM_SIZE, nonce];
+  callWindowFunction(id, messageInfo, win => win.getMinimumSize());
+});
+
+ipc.on(IPC_SSF_GET_WINDOW_PARENT, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_GET_WINDOW_PARENT, nonce];
+  callWindowFunction(id, messageInfo, win => win.getParentWindow());
+});
+
+ipc.on(IPC_SSF_GET_WINDOW_POSITION, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_GET_WINDOW_POSITION, nonce];
+  callWindowFunction(id, messageInfo, win => win.getPosition());
+});
+
+ipc.on(IPC_SSF_GET_WINDOW_SIZE, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_GET_WINDOW_SIZE, nonce];
+  callWindowFunction(id, messageInfo, win => win.getSize());
+});
+
+ipc.on(IPC_SSF_GET_WINDOW_TITLE, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_GET_WINDOW_TITLE, nonce];
+  callWindowFunction(id, messageInfo, win => win.getTitle());
+});
+
+ipc.on(IPC_SSF_WINDOW_HAS_SHADOW, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_WINDOW_HAS_SHADOW, nonce];
+  callWindowFunction(id, messageInfo, win => win.hasShadow());
+});
+
+ipc.on(IPC_SSF_HIDE_WINDOW, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_HIDE_WINDOW, nonce];
+  callWindowFunction(id, messageInfo, win => win.hide());
+});
+
+ipc.on(IPC_SSF_IS_WINDOW_ALWAYS_ON_TOP, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_IS_WINDOW_ALWAYS_ON_TOP, nonce];
+  callWindowFunction(id, messageInfo, win => win.isAlwaysOnTop());
+});
+
+ipc.on(IPC_SSF_IS_WINDOW_MAXIMIZABLE, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_IS_WINDOW_MAXIMIZABLE, nonce];
+  callWindowFunction(id, messageInfo, win => win.isMaximizable());
+});
+
+ipc.on(IPC_SSF_IS_WINDOW_MAXIMIZED, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_IS_WINDOW_MAXIMIZED, nonce];
+  callWindowFunction(id, messageInfo, win => win.isMaximized());
+});
+
+ipc.on(IPC_SSF_IS_WINDOW_MINIMIZABLE, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_IS_WINDOW_MINIMIZABLE, nonce];
+  callWindowFunction(id, messageInfo, win => win.isMinimizable());
+});
+
+ipc.on(IPC_SSF_IS_WINDOW_MINIMIZED, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_IS_WINDOW_MINIMIZED, nonce];
+  callWindowFunction(id, messageInfo, win => win.isMinimized());
+});
+
+ipc.on(IPC_SSF_IS_WINDOW_RESIZABLE, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_IS_WINDOW_RESIZABLE, nonce];
+  callWindowFunction(id, messageInfo, win => win.isResizable());
+});
+
+ipc.on(IPC_SSF_LOAD_URL, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_LOAD_URL, nonce];
+  const [url] = args;
+  callWindowFunction(id, messageInfo, win => win.loadURL(url));
+});
+
+ipc.on(IPC_SSF_RELOAD_WINDOW, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_RELOAD_WINDOW, nonce];
+  callWindowFunction(id, messageInfo, win => win.reload());
+});
+
+ipc.on(IPC_SSF_RESTORE_WINDOW, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_RESTORE_WINDOW, nonce];
+  callWindowFunction(id, messageInfo, win => win.restore());
+});
+
+ipc.on(IPC_SSF_SET_WINDOW_ALWAYS_ON_TOP, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_SET_WINDOW_ALWAYS_ON_TOP, nonce];
+  const [alwaysOnTop] = args;
+  callWindowFunction(id, messageInfo, win => win.setAlwaysOnTop(alwaysOnTop));
+});
+
+ipc.on(IPC_SSF_SET_WINDOW_BOUNDS, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_SET_WINDOW_BOUNDS, nonce];
+  const [bounds] = args;
+  callWindowFunction(id, messageInfo, win => win.setBounds(bounds));
+});
+
+ipc.on(IPC_SSF_SET_WINDOW_ICON, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_SET_WINDOW_BOUNDS, nonce];
+  const [icon] = args;
+  callWindowFunction(id, messageInfo, win => win.setIcon(icon));
+});
+
+ipc.on(IPC_SSF_SET_WINDOW_MAXIMIZABLE, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_SET_WINDOW_MAXIMIZABLE, nonce];
+  const [maximizable] = args;
+  callWindowFunction(id, messageInfo, win => win.setMaximizable(maximizable));
+});
+
+ipc.on(IPC_SSF_SET_WINDOW_MAXIMUM_SIZE, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_SET_WINDOW_MAXIMUM_SIZE, nonce];
+  const [width, height] = args;
+  callWindowFunction(id, messageInfo, win => win.setMaximumSize(width, height));
+});
+
+ipc.on(IPC_SSF_SET_WINDOW_MINIMIZABLE, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_SET_WINDOW_MINIMIZABLE, nonce];
+  const [minimizable] = args;
+  callWindowFunction(id, messageInfo, win => win.setMinimizable(minimizable));
+});
+
+ipc.on(IPC_SSF_SET_WINDOW_MINIMUM_SIZE, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_SET_WINDOW_MINIMUM_SIZE, nonce];
+  const [width, height] = args;
+  callWindowFunction(id, messageInfo, win => win.setMinimumSize(width, height));
+});
+
+ipc.on(IPC_SSF_SET_WINDOW_POSITION, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_SET_WINDOW_POSITION, nonce];
+  const [x, y] = args;
+  callWindowFunction(id, messageInfo, win => win.setPosition(x, y));
+});
+
+ipc.on(IPC_SSF_SET_WINDOW_RESIZABLE, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_SET_WINDOW_RESIZABLE, nonce];
+  const [resizable] = args;
+  callWindowFunction(id, messageInfo, win => win.setResizable(resizable));
+});
+
+ipc.on(IPC_SSF_SET_WINDOW_SIZE, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_SET_WINDOW_SIZE, nonce];
+  const [width, height] = args;
+  callWindowFunction(id, messageInfo, win => win.setSize(width, height));
+});
+
+ipc.on(IPC_SSF_SET_WINDOW_SKIP_TASKBAR, (e, id, nonce, args) => {
+  const messageInfo = [e.sender, IPC_SSF_SET_WINDOW_SKIP_TASKBAR, nonce];
+  const [skipTaskbar] = args;
+  callWindowFunction(id, messageInfo, win => win.setSkipTaskbar(skipTaskbar));
+});
+
+ipc.on(IPC_SSF_SHOW_WINDOW, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_SHOW_WINDOW, nonce];
+  callWindowFunction(id, messageInfo, win => win.show());
+});
+
+ipc.on(IPC_SSF_MAXIMIZE_WINDOW, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_MAXIMIZE_WINDOW, nonce];
+  callWindowFunction(id, messageInfo, win => win.maximize());
+});
+
+ipc.on(IPC_SSF_MINIMIZE_WINDOW, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_MINIMIZE_WINDOW, nonce];
+  callWindowFunction(id, messageInfo, win => win.minimize());
+});
+
+ipc.on(IPC_SSF_UNMAXIMIZE_WINDOW, (e, id, nonce) => {
+  const messageInfo = [e.sender, IPC_SSF_UNMAXIMIZE_WINDOW, nonce];
+  callWindowFunction(id, messageInfo, win => win.unmaximize());
 });
 
 const callWindowFunction = (id, messageInfo, windowFunction) => {
   getWindowFromId(id, (win) => {
-    windowFunction(win);
-    sendSuccess(...messageInfo);
+    const returnValue = windowFunction(win);
+    sendSuccess(...messageInfo, returnValue);
   }, (error) => {
     sendFailure(...messageInfo, error);
   });

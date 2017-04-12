@@ -31,7 +31,8 @@ appReady.then(() => {
       resizable: isResizable,
       show: isShown,
       skipTaskbar: isSkippingTaskbar,
-      width
+      width,
+      shadow: true
     });
 
     const addListItem = (text) => {
@@ -103,6 +104,42 @@ appReady.then(() => {
 
   blurWindow.onclick = () => {
     win.blur()
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+
+  var maximizeWindow = document.getElementById('maximize-window');
+
+  maximizeWindow.onclick = () => {
+    win.maximize()
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+
+  var unmaximizeWindow = document.getElementById('unmaximize-window');
+
+  unmaximizeWindow.onclick = () => {
+    win.unmaximize()
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+
+  var minimizeWindow = document.getElementById('minimize-window');
+
+  minimizeWindow.onclick = () => {
+    win.minimize()
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+
+  var restoreWindow = document.getElementById('restore-window');
+
+  restoreWindow.onclick = () => {
+    win.restore()
     .catch((error) => {
       console.log(error);
     });
