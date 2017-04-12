@@ -1,5 +1,5 @@
 var Application = require('spectron').Application;
-var assert = require('assert');
+var should = require('chai').should();
 const {
   before,
   after,
@@ -46,7 +46,8 @@ describe('application launch', function() {
 
   it('Check title is correct', function() {
     return this.app.client.getTitle().then(function(title) {
-      assert.equal(title, 'Symphony Desktop Wrapper API Specification');
+      should.exist(title);
+      title.should.equal('Symphony Desktop Wrapper API Specification');
     });
   });
 });

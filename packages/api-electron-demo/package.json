@@ -16,7 +16,6 @@
   "dependencies": {
     "containerjs-api-specification": "0.0.1",
     "containerjs-api-electron": "0.0.1",
-    "assert": "^1.4.1",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "electron": "^1.6.2",
