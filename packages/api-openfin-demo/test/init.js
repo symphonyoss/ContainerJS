@@ -22,7 +22,7 @@ liveServer.start(params);
 describe('application launch', function() {
   let app;
   let client;
-  let timeout = 30000;
+  const timeout = 30000;
 
   this.timeout(timeout);
 

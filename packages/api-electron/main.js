@@ -9,7 +9,7 @@ let win;
 
 function createWindow() {
   // the appJson location is passed to the ssf-electron bin script
-  let configLocation = process.env.TEST ? 'src/app.json' : process.argv[5];
+  const configLocation = process.env.TEST ? 'src/app.json' : process.argv[5];
   const appJsonPath = process.cwd() + '/' + configLocation;
   const appJson = JSON.parse(fs.readFileSync(appJsonPath, 'utf8'));
 
