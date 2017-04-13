@@ -4,7 +4,7 @@ The Window API is used to create a new browser window. Compatability between sup
 
 ### Constructor
 ```javascript
-new ssf.Window(url, name, features)
+new ssf.Window(features[, callback, errorCallback])
 ```
 Creates a new window. If a window with the same name already exists, that window will be reused.  
 _Note:_ Window resuse is platform dependant. The API is [inconsistent between browsers](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) and Electron only allows this for windows created via the built in `window.open()` method (child windows), not `new BrowserWindow()` that is used to implement this API.
