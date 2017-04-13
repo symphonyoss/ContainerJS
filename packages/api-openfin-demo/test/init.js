@@ -77,12 +77,10 @@ describe('application launch', function() {
     });
   }
 
-  it('Check title is correct', function(done) {
+  it('Check ssf is available globally', function(done) {
     executeAsyncJavascript('var callback = arguments[arguments.length - 1];' +
-      'fin.desktop.Window.getCurrent().getInfo(function(v) { callback(v); } );', (err, result) => {
+      'if (ssf !== undefined) { callback(); }', (err, result) => {
       should.not.exist(err);
-      should.exist(result.value.title);
-      result.value.title.should.equal('Symphony Desktop Wrapper API Specification');
       done();
     });
   });

@@ -21,10 +21,14 @@ const params = {
 liveServer.start(params);
 
 describe('application launch', function() {
-  this.timeout(30000);
+  let app;
+  let client;
+  const timeout = 30000;
+
+  this.timeout(timeout);
 
   before(function() {
-    this.app = new Application({
+    app = new Application({
       path: electronPath,
       args: [path.join('node_modules', 'ssf-desktop-api-electron', 'main.js')],
       env: {
@@ -32,20 +36,45 @@ describe('application launch', function() {
       }
     });
 
-    return this.app.start();
+    return app.start().then(function() {
+      app.isRunning().should.equal(true);
+      client = app.client;
+      client.timeoutsImplicitWait(timeout);
+      client.timeoutsAsyncScript(timeout);
+      client.timeouts('page load', timeout);
+    }, function(err) {
+      console.error(err);
+    });
   });
 
   after(function() {
     liveServer.shutdown();
-    if (this.app && this.app.isRunning()) {
-      return this.app.stop();
+    if (app && app.isRunning()) {
+      return app.stop();
     }
   });
 
-  it('Check title is correct', function() {
-    return this.app.client.getTitle().then(function(title) {
-      should.exist(title);
-      title.should.equal('Symphony Desktop Wrapper API Specification');
+  /**
+   * Inject a snippet of JavaScript into the page for execution in the context of the currently selected window.
+   * The executed script is assumed to be asynchronous and must signal that is done by invoking the provided callback, which is always
+   * provided as the final argument to the function. The value to this callback will be returned to the client.
+   *
+   * @param script
+   * @param resultCallback callback with result of the javascript code
+   */
+  function executeAsyncJavascript(script, resultCallback) {
+    client.executeAsync(script).then((result) => {
+      resultCallback(undefined, result);
+    }, (err) => {
+      resultCallback(err, undefined);
+    });
+  }
+
+  it('Check ssf is available globally', function(done) {
+    executeAsyncJavascript('var callback = arguments[arguments.length - 1];' +
+      'if (ssf !== undefined) { callback(); }', (err, result) => {
+      should.not.exist(err);
+      done();
     });
   });
 });
