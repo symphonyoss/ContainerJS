@@ -18,7 +18,7 @@ minimizable|minimizable|minimizable|</br>|
 minWidth|minWidth|minWidth|</br>|
 resizable|resizable|resizable|</br>|
 show|show|autoShow|</br>|
-skipTaskbar|skipTaskbar|showTaskbarIcon|</br>|NOT showTaskbarIcon
+skipTaskbar|skipTaskbar|showTaskbarIcon|</br>|This option is the inverse of showTaskbarIcon
 transparent|transparent|opacity|</br>|Transparent is true or false. Opacity is between 0-1
 width|width|defaultWidth|</br>|
 x|x|defaultLeft|</br>|
@@ -80,8 +80,8 @@ blur|blur|blurred|blur
 move|move|bounds-changed|
 resize|resize|bounds-changed|
 bounds-changing|bounds-changing|bounds-changing|
-close-requested|close-requested|close-requested|
-close|close|closed|unload
+close|close|close-requested|beforeunload
+closed|closed|closed|unload
 disabled-frame-bounds-changed|disabled-frame-bounds-changed|disabled-frame-bounds-changed|
 disabled-frame-bounds-changing|disabled-frame-bounds-changing|disabled-frame-bounds-changing|
 embedded|embedded|embedded|
