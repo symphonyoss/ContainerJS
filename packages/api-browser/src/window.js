@@ -19,34 +19,37 @@ const withInnerWindow = (win, fn) => {
 };
 
 class Window {
-  constructor(...args) {
-    if (args.length === 0) {
-      this.innerWindow = window;
-      this.children = [];
-    } else {
-      const [url, name, features] = args;
+  constructor(options, callback, errorCallback) {
+    this.children = [];
 
-      this.innerWindow = window.open(url, name, objectToFeaturesString(features));
+    this.eventListeners = new Map();
+
+    if (!options) {
+      this.innerWindow = window;
+      if (callback) {
+        callback();
+      }
+    } else {
+      this.innerWindow = window.open(options.url, options.name, objectToFeaturesString(options));
       this.innerWindow.onclose = () => {
         removeAccessibleWindow(this.innerWindow.name);
       };
 
       const currentWindow = Window.getCurrentWindow();
-      if (currentWindow.children) {
-        currentWindow.children.push(this);
-      } else {
-        currentWindow.children = [this];
-      }
-      addAccessibleWindow(name, this.innerWindow);
+      currentWindow.children.push(this);
+      addAccessibleWindow(options.name, this.innerWindow);
     }
 
-    this.eventListeners = new Map();
     this.addListener('message', (e) => {
       const event = 'message';
       if (this.eventListeners.has(event)) {
         this.eventListeners.get(event).forEach(listener => listener(e.data));
       }
     });
+
+    if (callback) {
+      callback();
+    }
   }
 
   close() {

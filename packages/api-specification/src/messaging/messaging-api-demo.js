@@ -17,7 +17,12 @@ appReady.then(() => {
     const isChild = document.getElementById('child').checked;
 
     // eslint-disable-next-line no-new
-    new ssf.Window(`http://localhost:${location.port}/messaging-api-test-window.html`, id, {child: isChild, show: true});
+    new ssf.Window({
+      child: isChild,
+      name: id,
+      show: true,
+      url: `http://localhost:${location.port}/messaging-api-test-window.html`
+    });
   };
 
   sendButton.onclick = () => {

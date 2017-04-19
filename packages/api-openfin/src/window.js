@@ -66,68 +66,27 @@ const checkWindowOpen = (win, windowMethod, reject) => {
   }
 };
 
+const convertOptions = (options) => {
+  const convertedOptions = {};
+
+  Object.keys(optionsMap).forEach((key) => {
+    const openfinOption = optionsMap[key];
+    convertedOptions[openfinOption] = options[key];
+  });
+
+  if (options.transparent) {
+    // OpenFin needs opacity between 1 (not transparent) and 0 (fully transparent)
+    convertedOptions.opacity = options.transparent === true ? 0 : 1;
+  }
+
+  convertedOptions.showTaskbarIcon = !options.skipTaskbar;
+
+  return convertedOptions;
+};
+
 class Window {
-  constructor(...args) {
+  constructor(options, callback, errorCallback) {
     this.children = [];
-    if (args.length === 0) {
-      this.innerWindow = fin.desktop.Window.getCurrent();
-    } else {
-      const [url, name, options] = args;
-
-      let newWindow;
-      const handleError = (error) => console.error('Error creating window: ' + error);
-
-      const convertedOptions = {};
-
-      Object.keys(optionsMap).forEach((key) => {
-        const openfinOption = optionsMap[key];
-        convertedOptions[openfinOption] = options[key];
-      });
-
-      const mergedOptions = Object.assign(
-        {},
-        convertedOptions,
-        options
-      );
-
-      if (options.transparent) {
-        // OpenFin needs opacity between 1 (not transparent) and 0 (fully transparent)
-        mergedOptions.opacity = options.transparent === true ? 0 : 1;
-      }
-
-      mergedOptions.showTaskbarIcon = !options.skipTaskbar;
-
-      if (mergedOptions.child) {
-        const childOptions = Object.assign(
-          {},
-          mergedOptions,
-          {
-            name,
-            url
-          }
-        );
-
-        newWindow = new fin.desktop.Window(childOptions);
-
-        const currentWindow = Window.getCurrentWindow();
-
-        currentWindow.children.push(this);
-      } else {
-        // UUID must be the same as name
-        const uuid = name;
-
-        const app = new fin.desktop.Application({
-          name,
-          url,
-          uuid,
-          mainWindowOptions: mergedOptions
-        }, () => app.run(), handleError);
-
-        // Need to return the window object, not the application
-        newWindow = app.getWindow();
-      }
-      this.innerWindow = newWindow;
-    }
 
     this.eventListeners = new Map();
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
@@ -136,6 +95,44 @@ class Window {
         this.eventListeners.get(event).forEach(listener => listener(...args));
       }
     });
+
+    if (!options) {
+      this.innerWindow = fin.desktop.Window.getCurrent();
+      if (callback) {
+        callback();
+      }
+      return this;
+    }
+
+    MessageService.subscribe('*', 'test2', (message) => console.log(message));
+
+    const convertedOptions = convertOptions(options);
+    const mergedOptions = Object.assign(
+      {},
+      convertedOptions,
+      options
+    );
+
+    if (mergedOptions.child) {
+      const currentWindow = Window.getCurrentWindow();
+      currentWindow.children.push(this);
+      this.innerWindow = new fin.desktop.Window(mergedOptions, callback, errorCallback);
+    } else {
+      const appOptions = {
+        name: mergedOptions.name,
+        url: mergedOptions.url,
+        uuid: mergedOptions.name, // UUID must be the same as name
+        mainWindowOptions: mergedOptions
+      };
+
+      const app = new fin.desktop.Application(appOptions, (successObject) => {
+        app.run();
+        this.innerWindow = app.getWindow();
+        if (callback) {
+          callback(successObject);
+        }
+      }, errorCallback);
+    }
   }
 
   blur() {
@@ -403,12 +400,12 @@ class Window {
     return `${currentWin.uuid}:${currentWin.name}`;
   }
 
-  static getCurrentWindow() {
+  static getCurrentWindow(callback, errorCallback) {
     if (currentWindow) {
       return currentWindow;
     }
 
-    currentWindow = new Window();
+    currentWindow = new Window(null, callback, errorCallback);
     return currentWindow;
   }
 }

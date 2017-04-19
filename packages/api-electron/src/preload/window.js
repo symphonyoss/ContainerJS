@@ -12,29 +12,38 @@ const generateNonce = () => {
 };
 
 class Window {
-  constructor(...args) {
+  constructor(options, callback, errorCallback) {
     this.children = [];
-    if (args.length === 0) {
+
+    this.eventListeners = new Map();
+    MessageService.subscribe('*', 'ssf-window-message', (...args) => {
+      const event = 'message';
+      if (this.eventListeners.has(event)) {
+        this.eventListeners.get(event).forEach(listener => listener(...args));
+      }
+    });
+
+    if (!options) {
       this.innerWindow = {
         id: window.ssf.Window.getCurrentWindowId()
       };
-    } else {
-      const [url, name, features] = args;
-
-      this.innerWindow = ipc.sendSync(IpcMessages.IPC_SSF_NEW_WINDOW, {
-        url,
-        name,
-        features
-      });
-
-      const currentWin = Window.getCurrentWindow();
-
-      currentWin.children.push(this);
+      if (callback) {
+        callback();
+      }
+      return this;
     }
 
-    ipc.send(IpcMessages.IPC_SSF_WINDOW_SUBSCRIBE_EVENTS, this.innerWindow.id);
-    this.eventListeners = new Map();
+    this.innerWindow = ipc.sendSync(IpcMessages.IPC_SSF_NEW_WINDOW, {
+      url: options.url,
+      name: options.name,
+      features: options
+    });
 
+    const currentWin = Window.getCurrentWindow();
+
+    currentWin.children.push(this);
+
+    ipc.send(IpcMessages.IPC_SSF_WINDOW_SUBSCRIBE_EVENTS, this.innerWindow.id);
     ipc.on(IpcMessages.IPC_SSF_WINDOW_EVENT, (windowId, e) => {
       // Need to check if the event is for this window in case the
       // current native window has subscribed to more than 1 window's events
@@ -43,12 +52,9 @@ class Window {
       }
     });
 
-    MessageService.subscribe('*', 'ssf-window-message', (...args) => {
-      const event = 'message';
-      if (this.eventListeners.has(event)) {
-        this.eventListeners.get(event).forEach(listener => listener(...args));
-      }
-    });
+    if (callback) {
+      callback();
+    }
   }
 
   blur() {
@@ -254,12 +260,12 @@ class Window {
     return ipc.sendSync(IpcMessages.IPC_SSF_GET_WINDOW_ID);
   }
 
-  static getCurrentWindow() {
+  static getCurrentWindow(callback, errorCallback) {
     if (currentWindow) {
       return currentWindow;
     }
 
-    currentWindow = new Window();
+    currentWindow = new Window(null, callback, errorCallback);
     return currentWindow;
   }
 }

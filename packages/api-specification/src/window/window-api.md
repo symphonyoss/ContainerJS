@@ -4,7 +4,7 @@ The Window API is used to create a new browser window. Compatability between sup
 
 ### Constructor
 ```javascript
-new ssf.Window(url, name, features)
+new ssf.Window([features, callback, errorCallback])
 ```
 Creates a new window. If a window with the same name already exists, that window will be reused.  
 _Note:_ Window resuse is platform dependant. The API is [inconsistent between browsers](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) and Electron only allows this for windows created via the built in `window.open()` method (child windows), not `new BrowserWindow()` that is used to implement this API.
@@ -15,11 +15,6 @@ ssf.Window.getCurrentWindow()
 ```
 
 ### Parameters
-**url**  
-URL to open in the window. Must be prefixed with the protocol (i.e. http://).
-
-**name**  
-Name of the new window. Should not contain whitespace.
 
 **features (optional)**  
 Object to set features of the new window (non browser only).  
@@ -43,6 +38,12 @@ Object to set features of the new window (non browser only).
 * `width: Integer` - window's width in pixels.
 * `x: Integer` - window's left offset.
 * `y: Integer` - window's top offset.
+
+**callback (optional)**
+Function to be ran once the window has been created successfully. In Electron and browser, this is called after the new window has been created. In OpenFin this is used as the `successCallback`;
+
+**errorCallback (optional)**
+Function to be ran if the Window creation fails (eg. a window with the same name already exists). This is not implemented in Electron and browser. In OpenFin this is used as the `errorCallback`;
 
 ### Return Value
 **window**  

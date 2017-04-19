@@ -20,7 +20,7 @@ appReady.then(() => {
     var isShown = document.getElementById('show').checked;
     var isSkippingTaskbar = document.getElementById('skipTaskbar').checked;
     var width = parseInt(document.getElementById('width').value, 10);
-    win = new ssf.Window(url, windowName, {
+    win = new ssf.Window({
       alwaysOnTop: isAlwaysOnTop,
       child: isChild,
       center: isCentered,
@@ -28,11 +28,13 @@ appReady.then(() => {
       height,
       maximizable: isMaximizable,
       minimizable: isMinimizable,
+      name: windowName,
       resizable: isResizable,
       show: isShown,
       skipTaskbar: isSkippingTaskbar,
       width,
-      shadow: true
+      shadow: true,
+      url
     });
 
     const addListItem = (text) => {
