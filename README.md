@@ -1,4 +1,4 @@
-# Symphony Desktop Wrapper
+# ContainerJS
 
 This project contains the current work-in-progress Symphony Desktop Wrapper. The goal of this project is to provide a common API across multiple HTML5 containers. For more details, refer to the [confluence page](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/Working+Group+-+Desktop+Wrapper+API) for this working group.
 
