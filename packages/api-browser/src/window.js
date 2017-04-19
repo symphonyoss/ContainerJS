@@ -24,7 +24,7 @@ class Window {
 
     this.eventListeners = new Map();
 
-    if (options === undefined || options === null) {
+    if (!options) {
       this.innerWindow = window;
       if (callback) {
         callback();

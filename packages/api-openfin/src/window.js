@@ -96,13 +96,15 @@ class Window {
       }
     });
 
-    if (options === undefined || options === null) {
+    if (!options) {
       this.innerWindow = fin.desktop.Window.getCurrent();
       if (callback) {
         callback();
       }
       return this;
     }
+
+    MessageService.subscribe('*', 'test2', (message) => console.log(message));
 
     const convertedOptions = convertOptions(options);
     const mergedOptions = Object.assign(
@@ -123,11 +125,11 @@ class Window {
         mainWindowOptions: mergedOptions
       };
 
-      const app = new fin.desktop.Application(appOptions, () => {
+      const app = new fin.desktop.Application(appOptions, (successObject) => {
         app.run();
         this.innerWindow = app.getWindow();
         if (callback) {
-          callback();
+          callback(successObject);
         }
       }, errorCallback);
     }

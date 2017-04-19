@@ -23,7 +23,7 @@ class Window {
       }
     });
 
-    if (options === undefined || options === null) {
+    if (!options) {
       this.innerWindow = {
         id: window.ssf.Window.getCurrentWindowId()
       };
