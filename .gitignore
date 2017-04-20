@@ -69,3 +69,7 @@ dist/
 
 # Visual Studio Code
 .vscode
+
+#gh-pages
+/docs/_site
+/docs/Gemfile.lock
