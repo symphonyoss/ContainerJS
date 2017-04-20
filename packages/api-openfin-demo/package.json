@@ -1,5 +1,5 @@
 {
-  "name": "ssf-desktop-api-openfin-demo",
+  "name": "containerjs-desktop-api-openfin-demo",
   "version": "0.0.1",
   "description": "",
   "main": "",
@@ -7,15 +7,15 @@
     "serve": "live-server --port=5000 --no-browser src/",
     "launch": "openfin --launch --config ./src/app.json",
     "start": "npm-run-all --parallel serve launch",
-    "postinstall": "rimraf src && copyfiles -f 'node_modules/ssf-desktop-api-specification/src/**' src && copyfiles -f 'node_modules/ssf-desktop-api-openfin/dist/**' src",
+    "postinstall": "rimraf src && copyfiles -f 'node_modules/containerjs-api-specification/src/**' src && copyfiles -f 'node_modules/containerjs-api-openfin/dist/**' src",
     "test": "echo \"No test specified\" && exit 0"
   },
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
     "openfin-cli": "^1.1.5",
-    "ssf-desktop-api-specification": "0.0.1",
-    "ssf-desktop-api-openfin": "0.0.1"
+    "containerjs-api-specification": "0.0.1",
+    "containerjs-api-openfin": "0.0.1"
   },
   "devDependencies": {
     "copyfiles": "^1.2.0",
