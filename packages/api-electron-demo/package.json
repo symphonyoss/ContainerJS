@@ -7,7 +7,7 @@
     "serve": "live-server --port=5000 --no-browser src/",
     "launch": "ssf-electron ./src/app.json",
     "start": "npm-run-all --parallel launch serve",
-    "postinstall": "rimraf src && copyfiles -f 'node_modules/containerjs-api-specification/src/**' src",
+    "postinstall": "rimraf src && copyfiles -f \"node_modules/containerjs-api-specification/src/**\" src",
     "test": "echo \"No test specified\" && exit 0"
   },
   "author": "",
