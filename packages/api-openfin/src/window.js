@@ -29,29 +29,6 @@ const eventMap = {
   'show': 'shown'
 };
 
-const optionsMap = {
-  'alwaysOnTop': 'alwaysOnTop',
-  'backgroundColor': 'backgroundColor',
-  'child': 'child',
-  'center': 'defaultCentered',
-  'frame': 'frame',
-  'hasShadow': 'shadow',
-  'height': 'defaultHeight',
-  'maxHeight': 'maxHeight',
-  'maximizable': 'maximizable',
-  'maxWidth': 'maxWidth',
-  'minHeight': 'minHeight',
-  'minimizable': 'minimizable',
-  'minWidth': 'minWidth',
-  'resizable': 'resizable',
-  'show': 'autoShow',
-  'skipTaskbar': 'showTaskbarIcon',
-  'transparent': 'opacity',
-  'width': 'defaultWidth',
-  'x': 'defaultLeft',
-  'y': 'defaultTop'
-};
-
 const windowStates = {
   MAXIMIZED: 'maximized',
   MINIMIZED: 'minimized',
@@ -59,21 +36,51 @@ const windowStates = {
 };
 
 const convertOptions = (options) => {
-  const convertedOptions = {};
+  let clonedOptions = Object.assign({}, options);
 
-  Object.keys(optionsMap).forEach((key) => {
-    const openfinOption = optionsMap[key];
-    convertedOptions[openfinOption] = options[key];
+  const optionsMap = {
+    'alwaysOnTop': 'alwaysOnTop',
+    'backgroundColor': 'backgroundColor',
+    'child': 'child',
+    'center': 'defaultCentered',
+    'frame': 'frame',
+    'hasShadow': 'shadow',
+    'height': 'defaultHeight',
+    'maxHeight': 'maxHeight',
+    'maximizable': 'maximizable',
+    'maxWidth': 'maxWidth',
+    'minHeight': 'minHeight',
+    'minimizable': 'minimizable',
+    'minWidth': 'minWidth',
+    'resizable': 'resizable',
+    'show': 'autoShow',
+    'skipTaskbar': 'showTaskbarIcon',
+    'transparent': 'opacity',
+    'width': 'defaultWidth',
+    'x': 'defaultLeft',
+    'y': 'defaultTop'
+  };
+
+  Object.keys(optionsMap).forEach((optionKey) => {
+    const openfinOptionKey = optionsMap[optionKey];
+    if (clonedOptions[optionKey]) {
+      clonedOptions[openfinOptionKey] = clonedOptions[optionKey];
+      delete clonedOptions[optionKey];
+    }
   });
 
-  if (options.transparent) {
+  if (clonedOptions.transparent) {
     // OpenFin needs opacity between 1 (not transparent) and 0 (fully transparent)
-    convertedOptions.opacity = options.transparent === true ? 0 : 1;
+    clonedOptions.opacity = clonedOptions.transparent === true ? 0 : 1;
+    delete clonedOptions.transparent;
   }
 
-  convertedOptions.showTaskbarIcon = !options.skipTaskbar;
+  if (clonedOptions.skipTaskbar) {
+    convertedOptions.showTaskbarIcon = !clonedOptions.skipTaskbar;
+    delete clonedOptions.skipTaskbar;
+  }
 
-  return convertedOptions;
+  return clonedOptions;
 };
 
 class Window {
@@ -98,23 +105,18 @@ class Window {
 
     MessageService.subscribe('*', 'test2', (message) => console.log(message));
 
-    const convertedOptions = convertOptions(options);
-    const mergedOptions = Object.assign(
-      {},
-      convertedOptions,
-      options
-    );
+    const openFinOptions = convertOptions(options);
 
-    if (mergedOptions.child) {
+    if (openFinOptions.child) {
       const currentWindow = Window.getCurrentWindow();
       currentWindow.children.push(this);
-      this.innerWindow = new fin.desktop.Window(mergedOptions, callback, errorCallback);
+      this.innerWindow = new fin.desktop.Window(openFinOptions, callback, errorCallback);
     } else {
       const appOptions = {
-        name: mergedOptions.name,
-        url: mergedOptions.url,
-        uuid: mergedOptions.name, // UUID must be the same as name
-        mainWindowOptions: mergedOptions
+        name: openFinOptions.name,
+        url: openFinOptions.url,
+        uuid: openFinOptions.name, // UUID must be the same as name
+        mainWindowOptions: openFinOptions
       };
 
       const app = new fin.desktop.Application(appOptions, (successObject) => {
