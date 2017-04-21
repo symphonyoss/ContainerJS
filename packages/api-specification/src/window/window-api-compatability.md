@@ -1,6 +1,6 @@
 ## Window Options Compatability Martix
 
-**Symphony**|**Electron**|**OpenFin**|**Browser**|**Notes**
+**ContainerJS**|**Electron**|**OpenFin**|**Browser**|**Notes**
 -----|-----|-----|-----|-----
 alwaysOnTop|alwaysOnTop|alwaysOnTop|</br>|
 backgroundColor|backgroundColor|backgroundColor|</br>|
@@ -28,7 +28,7 @@ y|y|defaultTop|</br>|
 
 ## Method Compatability Matrix
 
-**Symphony**|**Electron**|**OpenFin**|**Browser**|**Notes**
+**ContainerJS**|**Electron**|**OpenFin**|**Browser**|**Notes**
 -----|-----|-----|-----|-----
 blur|blur|blur|blur|
 close|close|close|close|
@@ -73,7 +73,7 @@ unmaximize|unmaximize|restore|</br>|
 
 ## Event Compatability Matrix
 
-**Symphony**|**Electron**|**OpenFin**|**Browser**
+**ContainerJS**|**Electron**|**OpenFin**|**Browser**
 -----|-----|-----|-----
 auth-requested|auth-requested|auth-requested|
 blur|blur|blurred|blur

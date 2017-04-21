@@ -1,6 +1,6 @@
-# Symphony API for Electron
+# ContainerJS API for Electron
 
-This project provides an implementation of the Symphony Desktop Wrapper API Specification for Electron
+This project provides an implementation of ContainerJS which follows the Symphony Desktop Wrapper API Specification for Electron
 
 ## Usage
 

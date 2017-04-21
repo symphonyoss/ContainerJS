@@ -1,5 +1,5 @@
 {
-  "name": "ssf-desktop-wrapper",
+  "name": "containerjs",
   "version": "0.0.0",
   "scripts": {
     "build": "lerna run build",

@@ -1,6 +1,6 @@
-# Symphony API for Electron Demo
+# ContainerJS API for Electron Demo
 
-This project provides a demonstration of the Symphony Desktop Wrapper API within Electron.
+This project provides a demonstration of ContainerJS which follows the Symphony Desktop Wrapper API within Electron.
 
 ## Usage
 

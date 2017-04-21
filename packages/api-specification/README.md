@@ -1,6 +1,6 @@
-# Symphony Desktop Wrapper API Specification
+# ContainerJS Desktop Wrapper API Specification
 
-This project both documents and demonstrates the Symphony Desktop Wrapper API specification.
+This project both documents and demonstrates ContainerJS which follows the Symphony Desktop Wrapper API specification.
 
 ## Getting started
 
