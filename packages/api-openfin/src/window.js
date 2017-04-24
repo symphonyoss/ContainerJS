@@ -62,9 +62,9 @@ const convertOptions = (options) => {
   };
 
   Object.keys(optionsMap).forEach((optionKey) => {
-    const openfinOptionKey = optionsMap[optionKey];
+    const openFinOptionKey = optionsMap[optionKey];
     if (clonedOptions[optionKey]) {
-      clonedOptions[openfinOptionKey] = clonedOptions[optionKey];
+      clonedOptions[openFinOptionKey] = clonedOptions[optionKey];
       delete clonedOptions[optionKey];
     }
   });
@@ -164,7 +164,7 @@ class Window {
   }
 
   getBounds() {
-    return this.getBounds('focus')
+    return this.asPromise('getBounds')
       .then(bounds => ({
         x: bounds.left,
         y: bounds.top,
