@@ -1,0 +1,18 @@
+os: unstable
+
+platform:
+  - x64
+
+environment:
+  nodejs_version: "6.10.2"
+
+install:
+  - ps: Install-Product node
+  - npm install
+
+test_script:
+  - node --version
+  - npm --version
+  - npm test
+
+build: off

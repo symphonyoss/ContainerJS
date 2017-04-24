@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "build": "lerna run build",
-    "test": "npm run lint && lerna run test",
+    "test": "npm run lint && lerna exec --concurrency 1 -- npm test",
     "lint": "eslint --ignore-path .gitignore **/*.js",
     "postinstall": "lerna bootstrap && node copy-markdown.js"
   },

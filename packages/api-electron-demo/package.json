@@ -8,7 +8,7 @@
     "launch": "ssf-electron ./src/app.json",
     "start": "npm-run-all --parallel launch serve",
     "postinstall": "rimraf src && rimraf test && copyfiles -f \"node_modules/containerjs-api-specification/src/**\" src && copyfiles -f \"node_modules/containerjs-api-tests/test/**\" test",
-    "test": "echo \"No test specified\" && exit 0",
+    "test": "npm run mocha",
     "mocha": "mocha test/*.js"
   },
   "author": "",

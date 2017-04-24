@@ -8,7 +8,7 @@
     "launch": "openfin --launch --config ./src/app.json",
     "start": "npm-run-all --parallel serve launch",
     "postinstall": "rimraf src && rimraf test && copyfiles -f \"node_modules/containerjs-api-specification/src/**\" src && copyfiles -f \"node_modules/containerjs-api-openfin/dist/**\" src && copyfiles -f \"node_modules/containerjs-api-tests/test/**\" test",
-    "test": "echo \"No test specified\" && exit 0",
+    "test": "npm run mocha",
     "mocha": "mocha test/*.js"
   },
   "author": "",
@@ -16,15 +16,16 @@
   "dependencies": {
     "chai": "^1.9.2",
     "chai-as-promised": "^4.1.1",
+    "live-server": "^1.2.0",
     "mocha": "^2.0.1",
     "openfin-cli": "^1.1.5",
     "containerjs-api-specification": "0.0.1",
     "containerjs-api-openfin": "0.0.1",
     "containerjs-api-tests": "0.0.1",
+    "openfin-launcher": "^1.3.12",
     "selenium-webdriver": "^2.44.0",
     "should": "^4.1.0",
     "wd": "^0.3.10",
-    "live-server": "^1.2.0",
     "webdriverio": "^2.3.0"
   },
   "devDependencies": {
@@ -33,6 +34,6 @@
     "npm-run-all": "^4.0.2",
     "rimraf": "^2.6.1",
     "mocha": "^3.2.0",
-    "spectron": "^3.6.1"
+    "spectron": "3.2.3"
   }
 }
