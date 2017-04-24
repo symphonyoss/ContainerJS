@@ -29,59 +29,58 @@ const eventMap = {
   'show': 'shown'
 };
 
-const optionsMap = {
-  'alwaysOnTop': 'alwaysOnTop',
-  'backgroundColor': 'backgroundColor',
-  'child': 'child',
-  'center': 'defaultCentered',
-  'frame': 'frame',
-  'hasShadow': 'shadow',
-  'height': 'defaultHeight',
-  'maxHeight': 'maxHeight',
-  'maximizable': 'maximizable',
-  'maxWidth': 'maxWidth',
-  'minHeight': 'minHeight',
-  'minimizable': 'minimizable',
-  'minWidth': 'minWidth',
-  'resizable': 'resizable',
-  'show': 'autoShow',
-  'skipTaskbar': 'showTaskbarIcon',
-  'transparent': 'opacity',
-  'width': 'defaultWidth',
-  'x': 'defaultLeft',
-  'y': 'defaultTop'
-};
-
 const windowStates = {
   MAXIMIZED: 'maximized',
   MINIMIZED: 'minimized',
   RESTORED: 'restored'
 };
 
-const checkWindowOpen = (win, windowMethod, reject) => {
-  if (win) {
-    return windowMethod();
-  } else {
-    return reject(new Error('The window does not exist or the window has been closed'));
-  }
-};
-
 const convertOptions = (options) => {
-  const convertedOptions = {};
+  let clonedOptions = Object.assign({}, options);
 
-  Object.keys(optionsMap).forEach((key) => {
-    const openfinOption = optionsMap[key];
-    convertedOptions[openfinOption] = options[key];
+  const optionsMap = {
+    'alwaysOnTop': 'alwaysOnTop',
+    'backgroundColor': 'backgroundColor',
+    'child': 'child',
+    'center': 'defaultCentered',
+    'frame': 'frame',
+    'hasShadow': 'shadow',
+    'height': 'defaultHeight',
+    'maxHeight': 'maxHeight',
+    'maximizable': 'maximizable',
+    'maxWidth': 'maxWidth',
+    'minHeight': 'minHeight',
+    'minimizable': 'minimizable',
+    'minWidth': 'minWidth',
+    'resizable': 'resizable',
+    'show': 'autoShow',
+    'skipTaskbar': 'showTaskbarIcon',
+    'transparent': 'opacity',
+    'width': 'defaultWidth',
+    'x': 'defaultLeft',
+    'y': 'defaultTop'
+  };
+
+  Object.keys(optionsMap).forEach((optionKey) => {
+    const openFinOptionKey = optionsMap[optionKey];
+    if (clonedOptions[optionKey]) {
+      clonedOptions[openFinOptionKey] = clonedOptions[optionKey];
+      delete clonedOptions[optionKey];
+    }
   });
 
-  if (options.transparent) {
+  if (clonedOptions.transparent) {
     // OpenFin needs opacity between 1 (not transparent) and 0 (fully transparent)
-    convertedOptions.opacity = options.transparent === true ? 0 : 1;
+    clonedOptions.opacity = clonedOptions.transparent === true ? 0 : 1;
+    delete clonedOptions.transparent;
   }
 
-  convertedOptions.showTaskbarIcon = !options.skipTaskbar;
+  if (clonedOptions.skipTaskbar) {
+    clonedOptions.showTaskbarIcon = !clonedOptions.skipTaskbar;
+    delete clonedOptions.skipTaskbar;
+  }
 
-  return convertedOptions;
+  return clonedOptions;
 };
 
 class Window {
@@ -106,23 +105,18 @@ class Window {
 
     MessageService.subscribe('*', 'test2', (message) => console.log(message));
 
-    const convertedOptions = convertOptions(options);
-    const mergedOptions = Object.assign(
-      {},
-      convertedOptions,
-      options
-    );
+    const openFinOptions = convertOptions(options);
 
-    if (mergedOptions.child) {
+    if (openFinOptions.child) {
       const currentWindow = Window.getCurrentWindow();
       currentWindow.children.push(this);
-      this.innerWindow = new fin.desktop.Window(mergedOptions, callback, errorCallback);
+      this.innerWindow = new fin.desktop.Window(openFinOptions, callback, errorCallback);
     } else {
       const appOptions = {
-        name: mergedOptions.name,
-        url: mergedOptions.url,
-        uuid: mergedOptions.name, // UUID must be the same as name
-        mainWindowOptions: mergedOptions
+        name: openFinOptions.name,
+        url: openFinOptions.url,
+        uuid: openFinOptions.name, // UUID must be the same as name
+        mainWindowOptions: openFinOptions
       };
 
       const app = new fin.desktop.Application(appOptions, (successObject) => {
@@ -135,38 +129,48 @@ class Window {
     }
   }
 
+  asPromise(fn, ...args) {
+    return new Promise((resolve, reject) => {
+      if (this.innerWindow) {
+        const openFinFunction = this.innerWindow[fn];
+        openFinFunction.call(this.innerWindow, ...args, resolve, reject);
+      } else {
+        reject(new Error('The window does not exist or the window has been closed'));
+      }
+    });
+  }
+
   blur() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.blur(resolve, reject), reject));
+    return this.asPromise('blur');
   }
 
   close() {
-    return new Promise((resolve, reject) => {
-      checkWindowOpen(this.innerWindow, () => this.innerWindow.close(false, resolve, reject), reject);
-      this.innerWindow = undefined;
-    });
+    return this.asPromise('close', false)
+      .then(() => {
+        this.innerWindow = undefined;
+      });
   }
 
   flashFrame(flag) {
     if (flag) {
-      return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.flash({}, resolve, reject), reject));
+      return this.asPromise('flash', {});
     } else {
-      return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.stopFlashing(resolve, reject), reject));
+      return this.asPromise('stopFlashing');
     }
   }
 
   focus() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.focus(resolve, reject), reject));
+    return this.asPromise('focus');
   }
 
   getBounds() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.getBounds((bounds) => {
-      resolve({
+    return this.asPromise('getBounds')
+      .then(bounds => ({
         x: bounds.left,
         y: bounds.top,
         width: bounds.width,
         height: bounds.height
-      });
-    }, reject), reject));
+      }));
   }
 
   getChildWindows() {
@@ -175,24 +179,20 @@ class Window {
 
   getMaximumSize() {
     return this.getOptions()
-      .then((options) => {
-        return [options.maxWidth, options.maxHeight];
-      });
+      .then((options) => [options.maxWidth, options.maxHeight]);
   }
 
   getMinimumSize() {
     return this.getOptions()
-      .then((options) => {
-        return [options.minWidth, options.minHeight];
-      });
+      .then((options) => [options.minWidth, options.minHeight]);
   }
 
   getOptions() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.getOptions(resolve, reject), reject));
+    return this.asPromise('getOptions');
   }
 
   getParentWindow() {
-    return checkWindowOpen(this.innerWindow, () => {
+    if (this.innerWindow) {
       const parent = this.innerWindow.getParentWindow();
 
       if (parent.name === this.innerWindow.name) {
@@ -200,97 +200,79 @@ class Window {
       }
 
       return parent;
-    }, (error) => { console.log(error); });
+    } else {
+      console.log(new Error('The window does not exist or the window has been closed'));
+    }
   }
 
   getPosition() {
     return this.getBounds()
-      .then((bounds) => {
-        return [bounds.left, bounds.top];
-      });
+      .then((bounds) => [bounds.left, bounds.top]);
   }
 
   getSize() {
     return this.getBounds()
-      .then((bounds) => {
-        return [bounds.width, bounds.height];
-      });
+      .then((bounds) => [bounds.width, bounds.height]);
   }
 
   getTitle() {
     return this.getOptions()
-      .then((options) => {
-        return options.title;
-      });
+      .then((options) => options.title);
   }
 
   getState() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.getState(resolve, reject), reject));
+    return this.asPromise('getState');
   }
 
   hasShadow() {
     return this.getOptions()
-      .then((options) => {
-        return options.shadow;
-      });
+      .then((options) => options.shadow);
   }
 
   hide() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.hide(resolve, reject), reject));
+    return this.asPromise('hide');
   }
 
   isAlwaysOnTop() {
     return this.getOptions()
-      .then((options) => {
-        return options.alwaysOnTop;
-      });
+      .then((options) => options.alwaysOnTop);
   }
 
   isMaximizable() {
     return this.getOptions()
-      .then((options) => {
-        return options.maximizable;
-      });
+      .then((options) => options.maximizable);
   }
 
   isMaximized() {
     return this.getState()
-      .then((state) => {
-        return state === windowStates.MAXIMIZED;
-      });
+      .then((state) => state === windowStates.MAXIMIZED);
   }
 
   isMinimizable() {
     return this.getOptions()
-      .then((options) => {
-        return options.minimizable;
-      });
+      .then((options) => options.minimizable);
   }
 
   isMinimized() {
     return this.getState()
-      .then((state) => {
-        return state === windowStates.MINIMIZED;
-      });
+      .then((state) => state === windowStates.MINIMIZED);
   }
 
   isResizable() {
     return this.getOptions()
-      .then((options) => {
-        return options.resizable;
-      });
+      .then((options) => options.resizable);
   }
 
   loadURL(url) {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.executeJavaScript(`window.location = '${url}'`, resolve, reject), reject));
+    return this.asPromise('executeJavaScript', `window.location = '${url}'`);
   }
 
   reload() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.executeJavaScript('window.location.reload()', resolve, reject), reject));
+    return this.asPromise('executeJavaScript', 'window.location.reload()');
   }
 
   restore() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.restore(resolve, reject), reject));
+    return this.asPromise('restore');
   }
 
   setAlwaysOnTop(alwaysOnTop) {
@@ -298,7 +280,7 @@ class Window {
   }
 
   setBounds(bounds) {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.setBounds(bounds.x, bounds.y, bounds.width, bounds.height, resolve, reject), reject));
+    return this.asPromise('setBounds', bounds.x, bounds.y, bounds.width, bounds.height);
   }
 
   setIcon(icon) {
@@ -322,7 +304,7 @@ class Window {
   }
 
   setPosition(x, y) {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.moveTo(x, y, resolve, reject), reject));
+    return this.asPromise('moveTo', x, y);
   }
 
   setResizable(resizable) {
@@ -330,7 +312,7 @@ class Window {
   }
 
   setSize(width, height) {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.resizeTo(width, height, 'top-left', resolve, reject), reject));
+    return this.asPromise('resizeTo', width, height);
   }
 
   setSkipTaskbar(skipTaskbar) {
@@ -338,15 +320,15 @@ class Window {
   }
 
   show() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.show(false, resolve, reject), reject));
+    return this.asPromise('show', false);
   }
 
   maximize() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.maximize(resolve, reject), reject));
+    return this.asPromise('maximize');
   }
 
   minimize() {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.minimize(resolve, reject), reject));
+    return this.asPromise('minimize');
   }
 
   unmaximize() {
@@ -354,7 +336,7 @@ class Window {
   }
 
   updateOptions(options) {
-    return new Promise((resolve, reject) => checkWindowOpen(this.innerWindow, () => this.innerWindow.updateOptions(options, resolve, reject), reject));
+    return this.asPromise('updateOptions', options);
   }
 
   addListener(event, listener) {
