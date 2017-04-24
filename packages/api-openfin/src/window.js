@@ -76,7 +76,7 @@ const convertOptions = (options) => {
   }
 
   if (clonedOptions.skipTaskbar) {
-    convertedOptions.showTaskbarIcon = !clonedOptions.skipTaskbar;
+    clonedOptions.showTaskbarIcon = !clonedOptions.skipTaskbar;
     delete clonedOptions.skipTaskbar;
   }
 
@@ -133,7 +133,7 @@ class Window {
     return new Promise((resolve, reject) => {
       if (this.innerWindow) {
         const openFinFunction = this.innerWindow[fn];
-        openFinFunction.call(this.innerWindow, ...args, resolve, reject)
+        openFinFunction.call(this.innerWindow, ...args, resolve, reject);
       } else {
         reject(new Error('The window does not exist or the window has been closed'));
       }
@@ -324,7 +324,7 @@ class Window {
   }
 
   maximize() {
-    return this.asPromise('maximize', width, height);
+    return this.asPromise('maximize');
   }
 
   minimize() {
