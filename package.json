@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "build": "lerna run build",
-    "test": "npm run lint && lerna exec --concurrency 1 -- npm test",
+    "test": "npm run lint",
     "lint": "eslint --ignore-path .gitignore **/*.js",
-    "postinstall": "lerna bootstrap && node copy-markdown.js"
+    "postinstall": "lerna bootstrap && node copy-markdown.js",
+    "mocha": "npm run lint && lerna exec --concurrency 1 -- npm run mocha"
   },
   "license": "Apache-2.0",
   "repository": {

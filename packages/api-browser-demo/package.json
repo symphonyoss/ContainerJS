@@ -6,7 +6,8 @@
   "scripts": {
     "start": "live-server --port=5002 src/",
     "postinstall": "rimraf src && copyfiles -f \"node_modules/containerjs-api-specification/src/**\" src && copyfiles -f \"node_modules/containerjs-api-browser/dist/**\" src",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "mocha": "exit 0"
   },
   "author": "",
   "license": "Apache-2.0",
