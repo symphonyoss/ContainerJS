@@ -13,8 +13,6 @@ class MessageService {
   static subscribe(windowId, topic, listener) {
     const [appId, windowName] = windowId.split(':');
 
-    console.log(windowId, topic);
-
     if (appId && windowName) {
       fin.desktop.InterApplicationBus.subscribe(appId, windowName, topic, listener);
     } else if (appId) {

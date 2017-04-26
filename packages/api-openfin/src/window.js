@@ -65,7 +65,9 @@ const convertOptions = (options) => {
     const openFinOptionKey = optionsMap[optionKey];
     if (clonedOptions[optionKey]) {
       clonedOptions[openFinOptionKey] = clonedOptions[optionKey];
-      delete clonedOptions[optionKey];
+      if (openFinOptionKey !== optionKey) {
+        delete clonedOptions[optionKey];
+      }
     }
   });
 
@@ -102,8 +104,6 @@ class Window {
       }
       return this;
     }
-
-    MessageService.subscribe('*', 'test2', (message) => console.log(message));
 
     const openFinOptions = convertOptions(options);
 
