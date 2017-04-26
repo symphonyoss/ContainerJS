@@ -1,7 +1,6 @@
 const { app } = require('electron');
 const ssfElectron = require('./index.js');
 const fs = require('fs');
-const process = require('process');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.

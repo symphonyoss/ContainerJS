@@ -28,6 +28,6 @@
     "live-server": "^1.2.0",
     "npm-run-all": "^4.0.2",
     "rimraf": "^2.6.1",
-    "spectron": "^3.6.1"
+    "spectron": "^3.6.2"
   }
 }
