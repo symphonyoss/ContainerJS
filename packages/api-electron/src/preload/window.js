@@ -44,7 +44,7 @@ class Window {
     currentWin.children.push(this);
 
     ipc.send(IpcMessages.IPC_SSF_WINDOW_SUBSCRIBE_EVENTS, this.innerWindow.id);
-    ipc.on(IpcMessages.IPC_SSF_WINDOW_EVENT, (windowId, e) => {
+    ipc.on(IpcMessages.IPC_SSF_WINDOW_EVENT, (event, windowId, e) => {
       // Need to check if the event is for this window in case the
       // current native window has subscribed to more than 1 window's events
       if (windowId === this.innerWindow.id && this.eventListeners.has(e)) {
@@ -212,11 +212,11 @@ class Window {
       const errorEvent = `${action}${IpcModifiers.ERROR}-${nonce}`;
 
       ipc.send(action, this.innerWindow.id, nonce, args);
-      ipc.once(successEvent, (response) => {
+      ipc.once(successEvent, (event, response) => {
         ipc.removeListener(errorEvent, reject);
         resolve(response);
       });
-      ipc.once(errorEvent, (error) => {
+      ipc.once(errorEvent, (event, error) => {
         ipc.removeListener(successEvent, resolve);
         reject(new Error(error));
       });

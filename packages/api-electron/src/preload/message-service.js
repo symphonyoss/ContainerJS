@@ -13,7 +13,7 @@ class MessageService {
   }
 
   static subscribe(windowId, topic, listener) {
-    const receiveMessage = (message, sender) => {
+    const receiveMessage = (event, message, sender) => {
       // Check this was from the correct window
       if (windowId === sender.toString() || windowId === '*') {
         listener(message, sender);
