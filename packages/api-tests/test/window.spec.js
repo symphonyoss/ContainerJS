@@ -52,9 +52,11 @@ describe('Window API', function(done) {
 
   it('Check window constructor opens a new window', function() {
     const script = `
-      var callback = arguments[arguments.length - 1];
-      new ssf.Window({url: 'about:blank', name: 'test', show: true, child: true});
-      setTimeout(() => callback(), 500);
+      ssf.app.ready().then(() => {
+        var callback = arguments[arguments.length - 1];
+        new ssf.Window({url: 'about:blank', name: 'test', show: true, child: true});
+        setTimeout(() => callback(), 500);
+      });
     `;
     return executeAsyncJavascript(app.client, script).then((result) => {
       return app.client.getWindowCount().then((count) => {
@@ -65,13 +67,15 @@ describe('Window API', function(done) {
 
   it('Check new window has correct x position', function() {
     const windowTitle = 'windowname';
-    const xValue = 10;
+    const xValue = 100;
     const script = `
-      var callback = arguments[arguments.length - 1];
-      new ssf.Window({url: 'http://localhost:5000/index.html', name: '${windowTitle}', show: true, x: ${xValue}, y: 0, child: true});
-      callback();
+      ssf.app.ready().then(() => {
+        var callback = arguments[arguments.length - 1];
+        new ssf.Window({url: 'http://localhost:5000/window-api.html', name: '${windowTitle}', show: true, x: ${xValue}, y: 0, child: true});
+        setTimeout(() => callback(), 500);
+      });
     `;
-    return executeAsyncJavascript(app.client, script)
+    return app.client.isVisible('.container').then(() => executeAsyncJavascript(app.client, script)
     .then(() =>
       app.client.windowHandles()
         .then((handles) => {
@@ -92,6 +96,6 @@ describe('Window API', function(done) {
                   assert.equal(result.value, xValue);
                 }));
         })
-    );
+    ));
   });
 });
