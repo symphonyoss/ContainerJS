@@ -7,9 +7,9 @@
     "serve": "live-server --port=5000 --no-browser src/",
     "launch": "ssf-electron ./src/app.json",
     "start": "npm-run-all --parallel launch serve",
-    "postinstall": "rimraf src && rimraf test && copyfiles -f \"node_modules/containerjs-api-specification/src/**\" src && copyfiles -f \"node_modules/containerjs-api-tests/test/**\" test",
+    "postinstall": "rimraf src && copyfiles -f \"node_modules/containerjs-api-specification/src/**\" src",
     "test": "exit 0",
-    "test:ui": "mocha test/*.js"
+    "test:ui": "mocha test/main.spec.js"
   },
   "author": "",
   "license": "Apache-2.0",
