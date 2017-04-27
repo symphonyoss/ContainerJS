@@ -14,8 +14,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "assert": "^1.4.1",
-    "live-server": "^1.2.0",
     "mocha": "^3.2.0",
     "openfin-cli": "^1.1.5",
     "containerjs-api-specification": "0.0.1",
