@@ -30,6 +30,29 @@ module.exports = (setup, mocha) => {
       return client.executeAsync(script);
     };
 
+    const openNewWindow = (options) => {
+      const script = `
+        ssf.app.ready().then(() => {
+          var callback = arguments[arguments.length - 1];
+          new ssf.Window(${JSON.stringify(options)});
+          setTimeout(() => callback(), 500);
+        });
+      `;
+      return executeAsyncJavascript(app.client, script);
+    };
+
+    const callWindowMethod = (method) => {
+      const script = `
+        var callback = arguments[arguments.length - 1];
+        var currentWin = ssf.Window.getCurrentWindow();
+        currentWin.${method}().then((data) => {
+          callback(data);
+        });
+      `;
+
+      return executeAsyncJavascript(app.client, script);
+    };
+
     it('Check ssf.Window is available globally', function() {
       const script = `
         var callback = arguments[arguments.length - 1];
@@ -41,14 +64,7 @@ module.exports = (setup, mocha) => {
     });
 
     it('Check window constructor opens a new window', function() {
-      const script = `
-        ssf.app.ready().then(() => {
-          var callback = arguments[arguments.length - 1];
-          new ssf.Window({url: 'about:blank', name: 'test', show: true, child: true});
-          setTimeout(() => callback(), 500);
-        });
-      `;
-      return executeAsyncJavascript(app.client, script).then((result) => {
+      return openNewWindow({url: 'about:blank', name: 'test', show: true, child: true}).then((result) => {
         return app.client.getWindowCount().then((count) => {
           assert.equal(count, 2);
         });
@@ -56,37 +72,45 @@ module.exports = (setup, mocha) => {
     });
 
     it('Check new window has correct x position', function() {
-      const windowTitle = 'windowname';
+      const windowTitle = 'windownamex';
       const xValue = 100;
-      const script = `
-        ssf.app.ready().then(() => {
-          var callback = arguments[arguments.length - 1];
-          new ssf.Window({url: 'http://localhost:5000/window-api.html', name: '${windowTitle}', show: true, x: ${xValue}, y: 0, child: true});
-          setTimeout(() => callback(), 500);
-        });
-      `;
-      return app.client.isVisible('.container').then(() => executeAsyncJavascript(app.client, script)
-      .then(() =>
-        app.client.windowHandles()
-          .then((handles) => {
-            const getBoundsScript = `
-              var callback = arguments[arguments.length - 1];
-              var currentWin = ssf.Window.getCurrentWindow();
-              currentWin.getBounds().then((bounds) => {
-                callback(bounds.x);
-              });
-            `;
+      const windowOptions = {
+        url: 'http://localhost:5000/window-api.html',
+        name: windowTitle,
+        show: true,
+        x: xValue,
+        y: 0,
+        child: true
+      };
 
-            app.client.window(handles.value[1]);
+      return app.client.isVisible('.container')
+        .then(() => openNewWindow(windowOptions))
+        .then(() => app.client.windowHandles())
+        .then((handles) => app.client.window(handles.value[1]))
+        .then(() => app.client.waitForVisible('.container'))
+        .then(() => callWindowMethod('getBounds'))
+        .then((result) => assert.equal(result.value.x, xValue));
+    });
 
-            return app.client.waitForVisible('.container')
-              .then(() =>
-                executeAsyncJavascript(app.client, getBoundsScript)
-                  .then((result) => {
-                    assert.equal(result.value, xValue);
-                  }));
-          })
-      ));
+    it('Check new window has correct y position', function() {
+      const windowTitle = 'windownamey';
+      const yValue = 100;
+      const windowOptions = {
+        url: 'http://localhost:5000/window-api.html',
+        name: windowTitle,
+        show: true,
+        x: 0,
+        y: yValue,
+        child: true
+      };
+
+      return app.client.isVisible('.container')
+        .then(() => openNewWindow(windowOptions))
+        .then(() => app.client.windowHandles())
+        .then((handles) => app.client.window(handles.value[1]))
+        .then(() => app.client.waitForVisible('.container'))
+        .then(() => callWindowMethod('getBounds'))
+        .then((result) => assert.equal(result.value.y, yValue));
     });
   });
 };
