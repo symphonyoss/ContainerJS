@@ -6,8 +6,7 @@
   "scripts": {
     "start": "live-server src/",
     "postinstall": "rimraf src/bootstrap.min.css && copyfiles -f node_modules/bootstrap/dist/css/bootstrap.min.css src",
-    "test": "echo \"No test specified\" && exit 0",
-    "test:ui": "exit 0"
+    "test": "echo \"No test specified\" && exit 0"
   },
   "author": "",
   "license": "Apache-2.0",

@@ -1,8 +1,5 @@
 {
   "name": "containerjs-api-tests",
   "version": "0.0.1",
-  "license": "Apache-2.0",
-  "scripts": {
-    "test:ui": "exit 0"
-  }
+  "license": "Apache-2.0"
 }
