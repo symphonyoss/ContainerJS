@@ -11,6 +11,7 @@ install:
 test_script:
   - node --version
   - npm --version
-  - npm run mocha
+  - npm run test
+  - npm run test:ui
 
 build: off

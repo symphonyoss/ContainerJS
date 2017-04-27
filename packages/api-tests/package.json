@@ -3,6 +3,6 @@
   "version": "0.0.1",
   "license": "Apache-2.0",
   "scripts": {
-    "mocha": "exit 0"
+    "test:ui": "exit 0"
   }
 }

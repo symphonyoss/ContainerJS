@@ -12,6 +12,6 @@ npm start
 
 ```
 npm install
-npm run mocha
+npm run test:ui
 ```
 

@@ -7,7 +7,7 @@
     "build": "rimraf dist && rollup -c",
     "test": "npm run build",
     "postinstall": "npm run build",
-    "mocha": "exit 0"
+    "test:ui": "exit 0"
   },
   "author": "",
   "license": "Apache-2.0",
