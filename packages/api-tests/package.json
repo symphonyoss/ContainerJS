@@ -1,0 +1,11 @@
+{
+  "name": "containerjs-api-tests",
+  "version": "0.0.1",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "live-server": "^1.2.0",
+    "mocha": "^3.2.0"
+  }
+}

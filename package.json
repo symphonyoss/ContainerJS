@@ -5,7 +5,8 @@
     "build": "lerna run build",
     "test": "npm run lint && lerna run test",
     "lint": "eslint --ignore-path .gitignore **/*.js",
-    "postinstall": "lerna bootstrap && node copy-markdown.js"
+    "postinstall": "lerna bootstrap --concurrency 1 && node copy-markdown.js",
+    "test:ui": "lerna run --concurrency 1 test:ui"
   },
   "license": "Apache-2.0",
   "repository": {
@@ -20,7 +21,7 @@
     "eslint-plugin-node": "^4.2.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^2.1.1",
-    "lerna": "2.0.0-beta.38",
+    "lerna": "2.0.0-rc.3",
     "marked": "^0.3.6"
   }
 }
