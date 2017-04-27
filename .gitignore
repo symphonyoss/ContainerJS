@@ -61,11 +61,8 @@ typings/
 npm
 
 /packages/api-browser-demo/src/
-/packages/api-browser-demo/test/
 /packages/api-electron-demo/src/
-/packages/api-electron-demo/test/
 /packages/api-openfin-demo/src/
-/packages/api-openfin-demo/test/
 /packages/api-specification/src/bootstrap.min.css
 dist/
 
