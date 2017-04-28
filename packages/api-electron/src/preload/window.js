@@ -25,7 +25,7 @@ class Window {
 
     if (!options) {
       this.innerWindow = {
-        id: window.ssf.Window.getCurrentWindowId()
+        id: Window.getCurrentWindowId()
       };
       if (callback) {
         callback();
