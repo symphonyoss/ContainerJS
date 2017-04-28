@@ -5,5 +5,5 @@ export default {
   format: 'umd',
   moduleName: 'ssf',
   plugins: [resolve()],
-  dest: 'dist/ssf-desktop-api.js'
+  dest: 'dist/containerjs-api.js'
 };
