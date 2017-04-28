@@ -6,7 +6,7 @@
     "test": "npm run lint && lerna run test",
     "lint": "eslint --ignore-path .gitignore **/*.js",
     "postinstall": "lerna bootstrap --concurrency 1 && node copy-markdown.js",
-    "test:ui": "lerna run --concurrency 1 test:ui"
+    "test:ui": "cd packages/api-tests && npm run test:ui"
   },
   "license": "Apache-2.0",
   "repository": {

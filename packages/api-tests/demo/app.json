@@ -1,0 +1,12 @@
+{
+  "devtools_port": 9090,
+  "startup_app": {
+    "name": "SSF Desktop Wrapper",
+    "url": "http://localhost:5000/index.html",
+    "uuid": "ssf-desktop-api-openfin-demo",
+    "autoShow": true
+  },
+  "runtime": {
+    "version": "stable"
+  }
+}
