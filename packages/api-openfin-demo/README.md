@@ -9,9 +9,4 @@ npm install
 npm start
 ```
 ## Testing
-
-```
-npm install
-npm run test:ui
-```
-
+See api-tests directory
