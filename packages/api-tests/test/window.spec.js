@@ -45,40 +45,43 @@ describe('Window API', function(done) {
     }
   });
 
-  const executeAsyncJavascript = (client, script) => {
-    return client.executeAsync(script);
+  const executeAsyncJavascript = (client, script, ...args) => {
+    // script is passed a callback as its final argument
+    return client.executeAsync(script, ...args);
   };
 
   const openNewWindow = (options) => {
-    const script = `
+    /* eslint-disable no-undef, no-new */
+    const script = (options, callback) => {
       ssf.app.ready().then(() => {
-        var callback = arguments[arguments.length - 1];
-        new ssf.Window(${JSON.stringify(options)});
+        new ssf.Window(options);
         setTimeout(() => callback(), 500);
       });
-    `;
-    return executeAsyncJavascript(app.client, script);
+    };
+    /* eslint-enable no-undef, no-new */
+    return executeAsyncJavascript(app.client, script, options);
   };
 
   const callWindowMethod = (method) => {
-    const script = `
-      var callback = arguments[arguments.length - 1];
+    /* eslint-disable no-undef */
+    const script = (method, callback) => {
       var currentWin = ssf.Window.getCurrentWindow();
-      currentWin.${method}().then((data) => {
+      currentWin[method]().then((data) => {
         callback(data);
       });
-    `;
-
-    return executeAsyncJavascript(app.client, script);
+    };
+    /* eslint-enable no-undef */
+    return executeAsyncJavascript(app.client, script, method);
   };
 
   it('Check ssf.Window is available globally', function() {
-    const script = `
-      var callback = arguments[arguments.length - 1];
+    /* eslint-disable no-undef */
+    const script = (callback) => {
       if (ssf.Window !== undefined) {
         callback();
       }
-    `;
+    };
+    /* eslint-enable no-undef */
     return executeAsyncJavascript(app.client, script);
   });
 
