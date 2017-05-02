@@ -22,6 +22,15 @@ const params = {
   logLevel: 0
 };
 
+const defaultWindowOptions = {
+  url: 'http://localhost:5000/index.html',
+  name: 'messagetest',
+  show: true,
+  child: true
+};
+
+let secondWindowId = '';
+
 describe('Messaging API', function(done) {
   const timeout = 60000;
   this.timeout(timeout);
@@ -57,16 +66,33 @@ describe('Messaging API', function(done) {
   };
 
   const openNewWindow = (options) => {
-     /* eslint-disable */
+    /* eslint-disable no-undef, no-new */
     const script = (options, callback) => {
       ssf.app.ready().then(() => {
         new ssf.Window(options);
         setTimeout(() => callback(), 500);
       });
     };
-    /* eslint-enable */
-    return executeAsyncJavascript(app.client, script, options);
+    /* eslint-enable no-undef */
+    return executeAsyncJavascript(app.client, script, options)
+      .then(() => app.client.isVisible('.visible-check'));
   };
+
+  /* eslint-disable no-undef */
+  const setupScript = (id, topic, callback) => {
+    ssf.MessageService.subscribe(id, topic, (message) => {
+      window.testMessage = message;
+    });
+    callback(ssf.Window.getCurrentWindowId());
+  };
+  const sendMessageScript = (id, topic, message, callback) => {
+    ssf.MessageService.send(id, topic, message);
+    callback();
+  };
+  const getMessageScript = (callback) => {
+    callback(window.testMessage || 'empty');
+  };
+  /* eslint-enable no-undef */
 
   it('ssf.MessageService is available globally', () => {
     /* eslint-disable no-undef */
@@ -81,84 +107,116 @@ describe('Messaging API', function(done) {
 
   describe('Send message', () => {
     it('Send message sends string correctly', function() {
-      const windowOptions = {
+      const message = 'message';
+
+      return openNewWindow(defaultWindowOptions)
+        .then(() => selectWindow(1))
+        .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
+        .then((result) => { secondWindowId = result.value; })
+        .then(() => selectWindow(0))
+        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
+        .then(() => selectWindow(1))
+        .then(() => executeAsyncJavascript(app.client, getMessageScript))
+        .then((result) => assert(result.value, message));
+    });
+
+    it('Send message sends javascript object correctly', function() {
+      const message = {
+        a: 1,
+        b: '20'
+      };
+
+      return openNewWindow(defaultWindowOptions)
+        .then(() => selectWindow(1))
+        .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
+        .then((result) => { secondWindowId = result.value; })
+        .then(() => selectWindow(0))
+        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
+        .then(() => selectWindow(1))
+        .then(() => executeAsyncJavascript(app.client, getMessageScript))
+        .then((result) => assert(result.value, message));
+    });
+
+    it('Send message sends to correct window', function() {
+      const message = 'message';
+
+      const thirdWindowOptions = {
         url: 'http://localhost:5000/index.html',
-        name: 'messagetest',
+        name: 'messagetest2',
         show: true,
         child: true
       };
 
-      let win2Id;
-
-      /* eslint-disable no-undef */
-      const setupScript = (callback) => {
-        ssf.MessageService.subscribe('*', 'topic', (message) => {
-          window.testMessage = message;
-        });
-        callback(ssf.Window.getCurrentWindowId());
-      };
-      const sendMessageScript = (id, callback) => {
-        ssf.MessageService.send(id, 'topic2', 'message');
-        callback();
-      };
-      const getMessageScript = (callback) => {
-        callback(window.testMessage || 'empty');
-      };
-      /* eslint-enable no-undef */
-
-      return openNewWindow(windowOptions)
-        // Select window 2, subscribe to messages and get the window id
+      return openNewWindow(defaultWindowOptions)
+        .then(() => openNewWindow(thirdWindowOptions))
         .then(() => selectWindow(1))
-        .then(() => app.client.isVisible('.visible-check'))
-        .then(() => executeAsyncJavascript(app.client, setupScript))
-        .then((result) => { win2Id = result.value; })
-        // Select window 1 and send a message
+        .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
+        .then((result) => { secondWindowId = result.value; })
+        .then(() => selectWindow(2))
+        .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
         .then(() => selectWindow(0))
-        .then(() => executeAsyncJavascript(app.client, sendMessageScript, win2Id))
-        // Select window 2 and see if the listener was called
+        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
         .then(() => selectWindow(1))
         .then(() => executeAsyncJavascript(app.client, getMessageScript))
-        .then((result) => assert(result.value, 'message'));
+        .then((result) => assert(result.value, message))
+        .then(() => selectWindow(2))
+        .then(() => executeAsyncJavascript(app.client, getMessageScript))
+        .then((result) => assert(result.value, 'empty'));
     });
   });
 
   describe('Receive message', () => {
-    it('Subscribing to wrong topic does not call listener', function() {
-      const windowOptions = {
-        url: 'http://localhost:5000/index.html',
-        name: 'messagetest',
-        show: true,
-        child: true
-      };
+    it('Subscribing to correct topic calls listener', function() {
+      const message = 'message';
 
-      let win2Id;
-
-      /* eslint-disable no-undef */
-      const setupScript = (callback) => {
-        ssf.MessageService.subscribe('*', 'topic', (message) => {
-          window.testMessage = message;
-        });
-        callback(ssf.Window.getCurrentWindowId());
-      };
-      const sendMessageScript = (id, callback) => {
-        ssf.MessageService.send(id, 'topic2', 'message');
-        callback();
-      };
-      const getMessageScript = (callback) => {
-        callback(window.testMessage || 'empty');
-      };
-      /* eslint-enable no-undef */
-
-      return openNewWindow(windowOptions)
-        // Select window 2, subscribe to messages and get the window id
+      return openNewWindow(defaultWindowOptions)
         .then(() => selectWindow(1))
-        .then(() => app.client.isVisible('.visible-check'))
-        .then(() => executeAsyncJavascript(app.client, setupScript))
-        .then((result) => { win2Id = result.value; })
-        // Select window 1 and send a message
+        .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
+        .then((result) => { secondWindowId = result.value; })
         .then(() => selectWindow(0))
-        .then(() => executeAsyncJavascript(app.client, sendMessageScript, win2Id))
-        // Select window 2 and see if the listener was called
+        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
+        .then(() => selectWindow(1))
+        .then(() => executeAsyncJavascript(app.client, getMessageScript))
+        .then((result) => assert(result.value, message));
+    });
+
+    it('Subscribing to wildcard topic calls listener', function() {
+      const message = 'message';
+
+      return openNewWindow(defaultWindowOptions)
+        .then(() => selectWindow(1))
+        .then(() => executeAsyncJavascript(app.client, setupScript, '*', '*'))
+        .then((result) => { secondWindowId = result.value; })
+        .then(() => selectWindow(0))
+        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
+        .then(() => selectWindow(1))
+        .then(() => executeAsyncJavascript(app.client, getMessageScript))
+        .then((result) => assert(result.value, message));
+    });
+
+    it('Subscribing to wrong topic does not call listener', function() {
+      const message = 'message';
+
+      return openNewWindow(defaultWindowOptions)
+        .then(() => selectWindow(1))
+        .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
+        .then((result) => { secondWindowId = result.value; })
+        .then(() => selectWindow(0))
+        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic2', message))
+        .then(() => selectWindow(1))
+        .then(() => executeAsyncJavascript(app.client, getMessageScript))
+        .then((result) => assert(result.value, 'empty'));
+    });
+
+    it('Subscribing to wrong window id does not call listener', function() {
+      const message = 'message';
+
+      return openNewWindow(defaultWindowOptions)
+        .then(() => selectWindow(1))
+        .then(() => executeAsyncJavascript(app.client, setupScript, 'wrong', 'topic'))
+        .then((result) => { secondWindowId = result.value; })
+        .then(() => selectWindow(0))
+        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
         .then(() => selectWindow(1))
         .then(() => executeAsyncJavascript(app.client, getMessageScript))
         .then((result) => assert(result.value, 'empty'));
