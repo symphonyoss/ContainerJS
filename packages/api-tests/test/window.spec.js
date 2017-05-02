@@ -18,7 +18,8 @@ const params = {
   host: '127.0.0.1',
   root: 'src',
   open: false,
-  ignore: '*'
+  ignore: '*',
+  logLevel: 0
 };
 
 describe('Window API', function(done) {
