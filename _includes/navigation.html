@@ -1,0 +1,22 @@
+<div class="nav-main">
+  <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-brand">ContainerJS</div>
+
+    <div class="collapse navbar-collapse" id="navbarToggler">
+      <ul class="navbar-nav mr-auto mt-2 mt-md-0">
+        <li {% if page.sectionid == 'home' %} class="nav-item active" {% else %} class="nav-item" {% endif %}>
+          <a class="nav-link" href="/ssf-desktop-wrapper">Home</a>
+        </li>
+        <li {% if page.sectionid == 'docs' %} class="nav-item active" {% else %} class="nav-item" {% endif %}>
+          <a class="nav-link" href="/ssf-desktop-wrapper/docs/app">Docs</a>
+        </li>
+      </ul>
+      <a class="nav-link p-1" href="https://github.com/symphonyoss/containerjs">
+        <img class="nav-brand p-0" src="/ssf-desktop-wrapper/img/GitHub-Mark-Light-32px.png" width="32" height="32" />
+      </a>
+    </div>
+  </nav>
+</div>
