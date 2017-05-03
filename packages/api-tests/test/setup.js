@@ -10,7 +10,7 @@ const params = {
   root: 'src',
   open: false,
   ignore: '*',
-  logLevel: 2
+  logLevel: 0
 };
 
 before(() => {

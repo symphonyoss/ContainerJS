@@ -10,7 +10,8 @@ const setup = require(`./${testContainer}-test-setup`);
 const {
   executeAsyncJavascript,
   selectWindow,
-  openNewWindow
+  openNewWindow,
+  chainPromises
 } = require('./test-helpers');
 
 let app;
@@ -71,15 +72,19 @@ describe('Messaging API', function(done) {
     it('Send message sends string correctly', function() {
       const message = 'message';
 
-      return openNewWindow(app.client, defaultWindowOptions)
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
-        .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(app.client, 0))
-        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, getMessageScript))
-        .then((result) => assert(result.value, message));
+      const steps = [
+        () => openNewWindow(app.client, defaultWindowOptions),
+        () => selectWindow(app.client, 1),
+        () => executeAsyncJavascript(app.client, setupScript, '*', 'topic'),
+        (result) => { secondWindowId = result.value; },
+        () => selectWindow(app.client, 0),
+        () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
+        () => selectWindow(app.client, 1),
+        () => executeAsyncJavascript(app.client, getMessageScript),
+        (result) => assert(result.value, message)
+      ];
+
+      return chainPromises(steps);
     });
 
     it('Send message sends javascript object correctly', function() {
@@ -88,15 +93,19 @@ describe('Messaging API', function(done) {
         b: '20'
       };
 
-      return openNewWindow(app.client, defaultWindowOptions)
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
-        .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(app.client, 0))
-        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, getMessageScript))
-        .then((result) => assert(result.value, message));
+      const steps = [
+        () => openNewWindow(app.client, defaultWindowOptions),
+        () => selectWindow(app.client, 1),
+        () => executeAsyncJavascript(app.client, setupScript, '*', 'topic'),
+        (result) => { secondWindowId = result.value; },
+        () => selectWindow(app.client, 0),
+        () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
+        () => selectWindow(app.client, 1),
+        () => executeAsyncJavascript(app.client, getMessageScript),
+        (result) => assert(result.value, message)
+      ];
+
+      return chainPromises(steps);
     });
 
     it('Send message sends to correct window', function() {
@@ -109,21 +118,25 @@ describe('Messaging API', function(done) {
         child: true
       };
 
-      return openNewWindow(app.client, defaultWindowOptions)
-        .then(() => openNewWindow(app.client, thirdWindowOptions))
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
-        .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(app.client, 2))
-        .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
-        .then(() => selectWindow(app.client, 0))
-        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, getMessageScript))
-        .then((result) => assert(result.value, message))
-        .then(() => selectWindow(app.client, 2))
-        .then(() => executeAsyncJavascript(app.client, getMessageScript))
-        .then((result) => assert(result.value, 'empty'));
+      const steps = [
+        () => openNewWindow(app.client, defaultWindowOptions),
+        () => openNewWindow(app.client, thirdWindowOptions),
+        () => selectWindow(app.client, 1),
+        () => executeAsyncJavascript(app.client, setupScript, '*', 'topic'),
+        (result) => { secondWindowId = result.value; },
+        () => selectWindow(app.client, 2),
+        () => executeAsyncJavascript(app.client, setupScript, '*', 'topic'),
+        () => selectWindow(app.client, 0),
+        () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
+        () => selectWindow(app.client, 1),
+        () => executeAsyncJavascript(app.client, getMessageScript),
+        (result) => assert(result.value, message),
+        () => selectWindow(app.client, 2),
+        () => executeAsyncJavascript(app.client, getMessageScript),
+        (result) => assert(result.value, 'empty')
+      ];
+
+      return chainPromises(steps);
     });
   });
 
@@ -131,57 +144,72 @@ describe('Messaging API', function(done) {
     it('Subscribing to correct topic calls listener', function() {
       const message = 'message';
 
-      return openNewWindow(app.client, defaultWindowOptions)
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
-        .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(app.client, 0))
-        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, getMessageScript))
-        .then((result) => assert(result.value, message));
+      const steps = [
+        () => openNewWindow(app.client, defaultWindowOptions),
+        () => selectWindow(app.client, 1),
+        () => executeAsyncJavascript(app.client, setupScript, '*', 'topic'),
+        (result) => { secondWindowId = result.value; },
+        () => selectWindow(app.client, 0),
+        () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
+        () => selectWindow(app.client, 1),
+        () => executeAsyncJavascript(app.client, getMessageScript),
+        (result) => assert(result.value, message)
+      ];
+
+      return chainPromises(steps);
     });
 
     it('Subscribing to wildcard topic calls listener', function() {
       const message = 'message';
 
-      return openNewWindow(app.client, defaultWindowOptions)
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, setupScript, '*', '*'))
-        .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(app.client, 0))
-        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, getMessageScript))
-        .then((result) => assert(result.value, message));
+      const steps = [
+        () => openNewWindow(app.client, defaultWindowOptions),
+        () => selectWindow(app.client, 1),
+        () => executeAsyncJavascript(app.client, setupScript, '*', '*'),
+        (result) => { secondWindowId = result.value; },
+        () => selectWindow(app.client, 0),
+        () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
+        () => selectWindow(app.client, 1),
+        () => executeAsyncJavascript(app.client, getMessageScript),
+        (result) => assert(result.value, message)
+      ];
+
+      return chainPromises(steps);
     });
 
     it('Subscribing to wrong topic does not call listener', function() {
       const message = 'message';
 
-      return openNewWindow(app.client, defaultWindowOptions)
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
-        .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(app.client, 0))
-        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic2', message))
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, getMessageScript))
-        .then((result) => assert(result.value, 'empty'));
+      const steps = [
+        () => openNewWindow(app.client, defaultWindowOptions),
+        () => selectWindow(app.client, 1),
+        () => executeAsyncJavascript(app.client, setupScript, '*', 'topic'),
+        (result) => { secondWindowId = result.value; },
+        () => selectWindow(app.client, 0),
+        () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic2', message),
+        () => selectWindow(app.client, 1),
+        () => executeAsyncJavascript(app.client, getMessageScript),
+        (result) => assert(result.value, 'empty')
+      ];
+
+      return chainPromises(steps);
     });
 
     it('Subscribing to wrong window id does not call listener', function() {
       const message = 'message';
 
-      return openNewWindow(app.client, defaultWindowOptions)
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, setupScript, 'wrong', 'topic'))
-        .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(app.client, 0))
-        .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
-        .then(() => selectWindow(app.client, 1))
-        .then(() => executeAsyncJavascript(app.client, getMessageScript))
-        .then((result) => assert(result.value, 'empty'));
+      const steps = [
+        () => openNewWindow(app.client, defaultWindowOptions),
+        () => executeAsyncJavascript(app.client, setupScript, 'wrong', 'topic'),
+        (result) => { secondWindowId = result.value; },
+        () => selectWindow(app.client, 0),
+        () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
+        () => selectWindow(app.client, 1),
+        () => executeAsyncJavascript(app.client, getMessageScript),
+        (result) => assert(result.value, 'empty')
+      ];
+
+      return chainPromises(steps);
     });
   });
 });

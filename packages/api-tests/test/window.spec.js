@@ -10,7 +10,8 @@ const setup = require(`./${testContainer}-test-setup`);
 const {
   executeAsyncJavascript,
   selectWindow,
-  openNewWindow
+  openNewWindow,
+  chainPromises
 } = require('./test-helpers');
 
 let app;
@@ -74,12 +75,16 @@ describe('Window API', function(done) {
         child: true
       };
 
-      return app.client.isVisible('.visible-check')
-        .then(() => openNewWindow(app.client, windowOptions))
-        .then(() => selectWindow(app.client, 1))
-        .then(() => app.client.waitForVisible('.visible-check'))
-        .then(() => callWindowMethod('getBounds'))
-        .then((result) => assert.equal(result.value.x, xValue));
+      const steps = [
+        () => app.client.isVisible('.visible-check'),
+        () => openNewWindow(app.client, windowOptions),
+        () => selectWindow(app.client, 1),
+        () => app.client.waitForVisible('.visible-check'),
+        () => callWindowMethod('getBounds'),
+        (result) => assert.equal(result.value.x, xValue)
+      ];
+
+      return chainPromises(steps);
     });
 
     it('Check new window has correct y position', function() {
@@ -94,12 +99,16 @@ describe('Window API', function(done) {
         child: true
       };
 
-      return app.client.isVisible('.visible-check')
-        .then(() => openNewWindow(app.client, windowOptions))
-        .then(() => selectWindow(app.client, 1))
-        .then(() => app.client.waitForVisible('.visible-check'))
-        .then(() => callWindowMethod('getBounds'))
-        .then((result) => assert.equal(result.value.y, yValue));
+      const steps = [
+        () => app.client.isVisible('.visible-check'),
+        () => openNewWindow(app.client, windowOptions),
+        () => selectWindow(app.client, 1),
+        () => app.client.waitForVisible('.visible-check'),
+        () => callWindowMethod('getBounds'),
+        (result) => assert.equal(result.value.y, yValue)
+      ];
+
+      return chainPromises(steps);
     });
   });
 });
