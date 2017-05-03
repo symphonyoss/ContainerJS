@@ -1,8 +1,5 @@
 const assert = require('assert');
-const liveServer = require('live-server');
 const {
-  before,
-  after,
   beforeEach,
   afterEach,
   describe,
@@ -10,17 +7,13 @@ const {
 } = require('mocha');
 const testContainer = process.env.MOCHA_CONTAINER;
 const setup = require(`./${testContainer}-test-setup`);
+const {
+  executeAsyncJavascript,
+  selectWindow,
+  openNewWindow
+} = require('./test-helpers');
 
 let app;
-
-const params = {
-  port: 5000,
-  host: '127.0.0.1',
-  root: 'src',
-  open: false,
-  ignore: '*',
-  logLevel: 0
-};
 
 const defaultWindowOptions = {
   url: 'http://localhost:5000/index.html',
@@ -35,14 +28,6 @@ describe('Messaging API', function(done) {
   const timeout = 60000;
   this.timeout(timeout);
 
-  before(() => {
-    liveServer.start(params);
-  });
-
-  after(() => {
-    liveServer.shutdown();
-  });
-
   beforeEach(() => {
     app = setup(timeout);
 
@@ -54,29 +39,6 @@ describe('Messaging API', function(done) {
       return app.stop();
     }
   });
-
-  const executeAsyncJavascript = (client, script, ...args) => {
-    // script is passed a callback as its final argument
-    return client.executeAsync(script, ...args);
-  };
-
-  const selectWindow = (handle) => {
-    return app.client.windowHandles()
-        .then((handles) => app.client.window(handles.value[handle]));
-  };
-
-  const openNewWindow = (options) => {
-    /* eslint-disable no-undef, no-new */
-    const script = (options, callback) => {
-      ssf.app.ready().then(() => {
-        new ssf.Window(options);
-        setTimeout(() => callback(), 500);
-      });
-    };
-    /* eslint-enable no-undef */
-    return executeAsyncJavascript(app.client, script, options)
-      .then(() => app.client.isVisible('.visible-check'));
-  };
 
   /* eslint-disable no-undef */
   const setupScript = (id, topic, callback) => {
@@ -109,13 +71,13 @@ describe('Messaging API', function(done) {
     it('Send message sends string correctly', function() {
       const message = 'message';
 
-      return openNewWindow(defaultWindowOptions)
-        .then(() => selectWindow(1))
+      return openNewWindow(app.client, defaultWindowOptions)
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
         .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(0))
+        .then(() => selectWindow(app.client, 0))
         .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
-        .then(() => selectWindow(1))
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, getMessageScript))
         .then((result) => assert(result.value, message));
     });
@@ -126,13 +88,13 @@ describe('Messaging API', function(done) {
         b: '20'
       };
 
-      return openNewWindow(defaultWindowOptions)
-        .then(() => selectWindow(1))
+      return openNewWindow(app.client, defaultWindowOptions)
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
         .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(0))
+        .then(() => selectWindow(app.client, 0))
         .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
-        .then(() => selectWindow(1))
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, getMessageScript))
         .then((result) => assert(result.value, message));
     });
@@ -147,19 +109,19 @@ describe('Messaging API', function(done) {
         child: true
       };
 
-      return openNewWindow(defaultWindowOptions)
-        .then(() => openNewWindow(thirdWindowOptions))
-        .then(() => selectWindow(1))
+      return openNewWindow(app.client, defaultWindowOptions)
+        .then(() => openNewWindow(app.client, thirdWindowOptions))
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
         .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(2))
+        .then(() => selectWindow(app.client, 2))
         .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
-        .then(() => selectWindow(0))
+        .then(() => selectWindow(app.client, 0))
         .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
-        .then(() => selectWindow(1))
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, getMessageScript))
         .then((result) => assert(result.value, message))
-        .then(() => selectWindow(2))
+        .then(() => selectWindow(app.client, 2))
         .then(() => executeAsyncJavascript(app.client, getMessageScript))
         .then((result) => assert(result.value, 'empty'));
     });
@@ -169,13 +131,13 @@ describe('Messaging API', function(done) {
     it('Subscribing to correct topic calls listener', function() {
       const message = 'message';
 
-      return openNewWindow(defaultWindowOptions)
-        .then(() => selectWindow(1))
+      return openNewWindow(app.client, defaultWindowOptions)
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
         .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(0))
+        .then(() => selectWindow(app.client, 0))
         .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
-        .then(() => selectWindow(1))
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, getMessageScript))
         .then((result) => assert(result.value, message));
     });
@@ -183,13 +145,13 @@ describe('Messaging API', function(done) {
     it('Subscribing to wildcard topic calls listener', function() {
       const message = 'message';
 
-      return openNewWindow(defaultWindowOptions)
-        .then(() => selectWindow(1))
+      return openNewWindow(app.client, defaultWindowOptions)
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, setupScript, '*', '*'))
         .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(0))
+        .then(() => selectWindow(app.client, 0))
         .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
-        .then(() => selectWindow(1))
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, getMessageScript))
         .then((result) => assert(result.value, message));
     });
@@ -197,13 +159,13 @@ describe('Messaging API', function(done) {
     it('Subscribing to wrong topic does not call listener', function() {
       const message = 'message';
 
-      return openNewWindow(defaultWindowOptions)
-        .then(() => selectWindow(1))
+      return openNewWindow(app.client, defaultWindowOptions)
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, setupScript, '*', 'topic'))
         .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(0))
+        .then(() => selectWindow(app.client, 0))
         .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic2', message))
-        .then(() => selectWindow(1))
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, getMessageScript))
         .then((result) => assert(result.value, 'empty'));
     });
@@ -211,13 +173,13 @@ describe('Messaging API', function(done) {
     it('Subscribing to wrong window id does not call listener', function() {
       const message = 'message';
 
-      return openNewWindow(defaultWindowOptions)
-        .then(() => selectWindow(1))
+      return openNewWindow(app.client, defaultWindowOptions)
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, setupScript, 'wrong', 'topic'))
         .then((result) => { secondWindowId = result.value; })
-        .then(() => selectWindow(0))
+        .then(() => selectWindow(app.client, 0))
         .then(() => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message))
-        .then(() => selectWindow(1))
+        .then(() => selectWindow(app.client, 1))
         .then(() => executeAsyncJavascript(app.client, getMessageScript))
         .then((result) => assert(result.value, 'empty'));
     });
