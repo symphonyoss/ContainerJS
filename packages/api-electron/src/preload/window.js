@@ -1,15 +1,12 @@
-const ipc = require('electron').ipcRenderer;
+const {
+  ipcRenderer: ipc,
+  remote
+} = require('electron');
+const BrowserWindow = remote.BrowserWindow;
 import MessageService from './message-service';
-import {
-  IpcModifiers,
-  IpcMessages
-} from '../common/constants';
+import { IpcMessages } from '../common/constants';
 
 let currentWindow = null;
-
-const generateNonce = () => {
-  return Math.floor((Math.random() * 1000000));
-};
 
 class Window {
   constructor(options, callback, errorCallback) {
@@ -24,30 +21,28 @@ class Window {
     });
 
     if (!options) {
-      this.innerWindow = {
-        id: Window.getCurrentWindowId()
-      };
+      this.innerWindow = remote.getCurrentWindow();
       if (callback) {
         callback();
       }
       return this;
     }
 
-    this.innerWindow = ipc.sendSync(IpcMessages.IPC_SSF_NEW_WINDOW, {
+    this.id = ipc.sendSync(IpcMessages.IPC_SSF_NEW_WINDOW, {
       url: options.url,
       name: options.name,
       features: options
     });
+    this.innerWindow = BrowserWindow.fromId(this.id);
 
     const currentWin = Window.getCurrentWindow();
-
     currentWin.children.push(this);
 
     ipc.send(IpcMessages.IPC_SSF_WINDOW_SUBSCRIBE_EVENTS, this.innerWindow.id);
     ipc.on(IpcMessages.IPC_SSF_WINDOW_EVENT, (event, windowId, e) => {
       // Need to check if the event is for this window in case the
       // current native window has subscribed to more than 1 window's events
-      if (windowId === this.innerWindow.id && this.eventListeners.has(e)) {
+      if (windowId === this.id && this.eventListeners.has(e)) {
         this.eventListeners.get(e).forEach((listener) => listener());
       }
     });
@@ -58,168 +53,161 @@ class Window {
   }
 
   blur() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_BLUR_WINDOW);
+    return this.asPromise(this.innerWindow.blur);
   }
 
   close() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_CLOSE_WINDOW);
+    return this.asPromise(this.innerWindow.close);
   }
 
   flashFrame(flag) {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_FLASH_FRAME, flag);
+    return this.asPromise(this.innerWindow.flashFrame, flag);
   }
 
   focus() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_FOCUS_WINDOW);
+    return this.asPromise(this.innerWindow.focus);
   }
 
   getBounds() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_GET_WINDOW_BOUNDS);
+    return this.asPromise(this.innerWindow.getBounds);
   }
 
   getMaximumSize() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_GET_WINDOW_MAXIMUM_SIZE);
+    return this.asPromise(this.innerWindow.getMaximumSize);
   }
 
   getMinimumSize() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_GET_WINDOW_MINIMUM_SIZE);
+    return this.asPromise(this.innerWindow.getMinimumSize);
   }
 
   getParentWindow() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_GET_WINDOW_PARENT);
+    return this.asPromise(this.innerWindow.getParentWindow);
   }
 
   getPosition() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_GET_WINDOW_POSITION);
+    return this.asPromise(this.innerWindow.getPosition);
   }
 
   getSize() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_GET_WINDOW_SIZE);
+    return this.asPromise(this.innerWindow.getSize);
   }
 
   getTitle() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_GET_WINDOW_TITLE);
+    return this.asPromise(this.innerWindow.getTitle);
   }
 
   hasShadow() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_WINDOW_HAS_SHADOW);
+    return this.asPromise(this.innerWindow.hasShadow);
   }
 
   hide() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_HIDE_WINDOW);
+    return this.asPromise(this.innerWindow.hide);
   }
 
   isAlwaysOnTop() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_IS_WINDOW_ALWAYS_ON_TOP);
+    return this.asPromise(this.innerWindow.isAlwaysOnTop);
   }
 
   isMaximizable() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_IS_WINDOW_MAXIMIZABLE);
+    return this.asPromise(this.innerWindow.isMaximizable);
   }
 
   isMaximized() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_IS_WINDOW_MAXIMIZED);
+    return this.asPromise(this.innerWindow.isMaximized);
   }
 
   isMinimizable() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_IS_WINDOW_MINIMIZABLE);
+    return this.asPromise(this.innerWindow.isMinimizable);
   }
 
   isMinimized() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_IS_WINDOW_MINIMIZED);
+    return this.asPromise(this.innerWindow.isMinimized);
   }
 
   isResizable() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_IS_WINDOW_RESIZABLE);
+    return this.asPromise(this.innerWindow.isResizable);
   }
 
   loadURL(url) {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_LOAD_URL, url);
+    return this.asPromise(this.innerWindow.loadURL, url);
   }
 
   maximize() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_MAXIMIZE_WINDOW);
+    return this.asPromise(this.innerWindow.maximize);
   }
 
   minimize() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_MINIMIZE_WINDOW);
+    return this.asPromise(this.innerWindow.minimize);
   }
 
   reload() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_RELOAD_WINDOW);
+    return this.asPromise(this.innerWindow.reload);
   }
 
   restore() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_RESTORE_WINDOW);
+    return this.asPromise(this.innerWindow.restore);
   }
 
   setAlwaysOnTop(alwaysOnTop) {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_SET_WINDOW_ALWAYS_ON_TOP, alwaysOnTop);
+    return this.asPromise(this.innerWindow.setAlwaysOnTop, alwaysOnTop);
   }
 
   setBounds(bounds) {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_SET_WINDOW_BOUNDS, bounds);
+    return this.asPromise(this.innerWindow.setBounds, bounds);
   }
 
   setIcon(icon) {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_SET_WINDOW_ICON, icon);
+    return this.asPromise(this.innerWindow.setIcon, icon);
   }
 
   setMaximizable(maximizable) {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_SET_WINDOW_MAXIMIZABLE, maximizable);
+    return this.asPromise(this.innerWindow.setMaximizable, maximizable);
   }
 
   setMaximumSize(width, height) {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_SET_WINDOW_MAXIMUM_SIZE, width, height);
+    return this.asPromise(this.innerWindow.setMaximumSize, width, height);
   }
 
   setMinimizable(minimizable) {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_SET_WINDOW_MINIMIZABLE, minimizable);
+    return this.asPromise(this.innerWindow.setMinimizable, minimizable);
   }
 
   setMinimumSize(width, height) {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_SET_WINDOW_MINIMUM_SIZE, width, height);
+    return this.asPromise(this.innerWindow.setMinimumSize, width, height);
   }
 
   setPosition(x, y) {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_SET_WINDOW_POSITION, x, y);
+    return this.asPromise(this.innerWindow.setPosition, x, y);
   }
 
   setResizable(resizable) {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_SET_WINDOW_RESIZABLE, resizable);
+    return this.asPromise(this.innerWindow.setResizable, resizable);
   }
 
   setSize(width, height) {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_SET_WINDOW_SIZE, width, height);
+    return this.asPromise(this.innerWindow.setSize, width, height);
   }
 
   setSkipTaskbar(skipTaskbar) {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_SET_WINDOW_SKIP_TASKBAR, skipTaskbar);
+    return this.asPromise(this.innerWindow.setSkipTaskbar, skipTaskbar);
   }
 
   show() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_SHOW_WINDOW);
+    return this.asPromise(this.innerWindow.show);
   }
 
   unmaximize() {
-    return this.sendWindowAction(IpcMessages.IPC_SSF_UNMAXIMIZE_WINDOW);
+    return this.asPromise(this.innerWindow.unmaximize);
   }
 
-  sendWindowAction(action, ...args) {
+  asPromise(windowFunction, ...args) {
     return new Promise((resolve, reject) => {
-      const nonce = generateNonce();
-      const successEvent = `${action}${IpcModifiers.SUCCESS}-${nonce}`;
-      const errorEvent = `${action}${IpcModifiers.ERROR}-${nonce}`;
-
-      ipc.send(action, this.innerWindow.id, nonce, args);
-      ipc.once(successEvent, (event, response) => {
-        ipc.removeListener(errorEvent, reject);
-        resolve(response);
-      });
-      ipc.once(errorEvent, (event, error) => {
-        ipc.removeListener(successEvent, resolve);
-        reject(new Error(error));
-      });
+      try {
+        const result = windowFunction(...args);
+        resolve(result);
+      } catch (e) {
+        reject(e);
+      }
     });
   }
 
@@ -257,7 +245,7 @@ class Window {
   }
 
   static getCurrentWindowId() {
-    return ipc.sendSync(IpcMessages.IPC_SSF_GET_WINDOW_ID);
+    return remote.getCurrentWindow().id;
   }
 
   static getCurrentWindow(callback, errorCallback) {
