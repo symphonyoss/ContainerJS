@@ -10,14 +10,9 @@ let currentWindow = null;
 
 class Window {
   constructor(options, callback, errorCallback) {
-    this.children = [];
-
-    this.eventListeners = new Map();
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
       const event = 'message';
-      if (this.eventListeners.has(event)) {
-        this.eventListeners.get(event).forEach(listener => listener(...args));
-      }
+      this.innerWindow.emit(event, ...args);
     });
 
     if (!options) {
@@ -34,18 +29,6 @@ class Window {
       features: options
     });
     this.innerWindow = BrowserWindow.fromId(this.id);
-
-    const currentWin = Window.getCurrentWindow();
-    currentWin.children.push(this);
-
-    ipc.send(IpcMessages.IPC_SSF_WINDOW_SUBSCRIBE_EVENTS, this.innerWindow.id);
-    ipc.on(IpcMessages.IPC_SSF_WINDOW_EVENT, (event, windowId, e) => {
-      // Need to check if the event is for this window in case the
-      // current native window has subscribed to more than 1 window's events
-      if (windowId === this.id && this.eventListeners.has(e)) {
-        this.eventListeners.get(e).forEach((listener) => listener());
-      }
-    });
 
     if (callback) {
       callback();
@@ -212,28 +195,15 @@ class Window {
   }
 
   addListener(event, listener) {
-    if (this.eventListeners.has(event)) {
-      const listeners = this.eventListeners.get(event);
-      listeners.push(listener);
-      this.eventListeners.set(event, listeners);
-    } else {
-      this.eventListeners.set(event, [listener]);
-    }
+    this.innerWindow.addListener(event, listener);
   }
 
   removeListener(event, listener) {
-    if (this.eventListeners.has(event)) {
-      const listeners = this.eventListeners.get(event);
-      const index = listeners.indexOf(listener);
-      if (index >= 0) {
-        listeners.splice(index, 1);
-        this.eventListeners.set(event, listeners);
-      }
-    }
+    this.innerWindow.removeListener(event, listener);
   }
 
   removeAllListeners() {
-    this.eventListeners.clear();
+    this.innerWindow.removeAllListeners();
   }
 
   postMessage(message) {
@@ -241,7 +211,7 @@ class Window {
   }
 
   getChildWindows() {
-    return this.children;
+    return this.innerWindow.getChildWindows();
   }
 
   static getCurrentWindowId() {

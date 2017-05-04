@@ -90,46 +90,6 @@ const ready = (cb) => {
   app.on('ready', cb);
 };
 
-const getWindowFromId = (id, cb, errorcb) => {
-  const win = BrowserWindow.fromId(id);
-  if (win) {
-    cb(win);
-  } else {
-    errorcb('The window does not exist or the window has been closed');
-  }
-};
-
-const windowToListener = new Map();
-
-ipc.on(IpcMessages.IPC_SSF_WINDOW_SUBSCRIBE_EVENTS, (e, windowId) => {
-  if (windowToListener.has(windowId)) {
-    if (!windowToListener.get(windowId).includes(e.sender)) {
-      pushToMapArray(windowToListener, windowId, e.sender);
-    }
-  } else {
-    windowToListener.set(windowId, [e.sender]);
-  }
-
-  getWindowFromId(windowId, (win) => {
-    // Override emit to forward all events onto the window so we can handle them there
-    const oldEmit = BrowserWindow.prototype.emit;
-    win.emit = function() {
-      windowToListener.get(windowId).forEach((sender) => {
-        if (!win.isDestroyed()) {
-          sender.send(IpcMessages.IPC_SSF_WINDOW_EVENT, win.id, ...arguments);
-        }
-      });
-      oldEmit.apply(win, arguments);
-    };
-  });
-});
-
-const pushToMapArray = (map, key, newValue) => {
-  const temp = map.get(key);
-  temp.push(newValue);
-  map.set(key, temp);
-};
-
 module.exports.app = {
   ready
 };
