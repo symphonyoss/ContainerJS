@@ -6,7 +6,10 @@
     "test": "npm run lint && lerna run test",
     "lint": "eslint --ignore-path .gitignore **/*.js",
     "postinstall": "lerna bootstrap --concurrency 1 && node copy-markdown.js",
-    "test:ui": "cd packages/api-tests && npm run test:ui"
+    "test:ui": "cd packages/api-tests && npm run test:ui",
+    "browser": "npm i & cd packages/api-browser-demo && npm start",
+    "electron": "npm i & cd packages/api-electron-demo && npm start",
+    "openfin": "npm i & cd packages/api-openfin-demo && npm start"
   },
   "license": "Apache-2.0",
   "repository": {
