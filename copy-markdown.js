@@ -11,8 +11,12 @@ directories.forEach((dir) => {
     if (path.extname(file) === '.md') {
       // Convert markdown to html
       const md = fs.readFileSync(path.join(srcDir, file), {encoding: 'utf8'});
-      // Need to strip out the file data used for gh-pages
-      const strippedMd = md.split('---')[2];
+      // Need to strip out the file data used for gh-pages (2 indexOfs are needed to skip over the first three dashes)
+      const dashMarker = '---';
+      const markerLength = dashMarker.length;
+      const endOfFirstDash = md.indexOf(dashMarker) + markerLength;
+      const endOfSecondDash = md.indexOf(dashMarker, endOfFirstDash) + markerLength;
+      const strippedMd = md.slice(endOfSecondDash);
       const html = marked.parse(strippedMd);
 
       // Append the html to the api demo file
