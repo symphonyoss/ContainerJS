@@ -1,9 +1,13 @@
-const ipc = require('electron').ipcRenderer;
-import { IpcMessages } from '../common/constants';
+const remote = require('electron').remote;
+const eNotify = remote.require('electron-notify');
 
 window.Notification = function(title, options) {
-  ipc.send(IpcMessages.IPC_SSF_NOTIFICATION, {
-    title,
-    options
+  if (!options) {
+    options = {};
+  }
+
+  eNotify.notify({
+    title: title,
+    text: options.body
   });
 };
