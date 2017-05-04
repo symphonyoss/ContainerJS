@@ -116,4 +116,10 @@ npm install
 
 This will install Lerna and run `lerna bootstrap`, which runs `npm install` on all the sub-projects, and links any cross dependencies.
 
-For details on how to run each sub-project, refer to their README file.
+To run each project, use
+```
+npm run browser
+npm run electron
+npm run openfin
+```
+or refer to the demo projects
