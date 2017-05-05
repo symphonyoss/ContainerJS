@@ -51,7 +51,7 @@ describe('Messaging API', function(done) {
   };
   /* eslint-enable no-undef */
 
-  it('ssf.MessageService is available globally', () => {
+  it('Should have ssf.MessageService available globally', () => {
     /* eslint-disable no-undef */
     const script = (callback) => {
       if (ssf.MessageService !== undefined) {
@@ -63,7 +63,7 @@ describe('Messaging API', function(done) {
   });
 
   describe('Send message', () => {
-    it('Send message sends string correctly', function() {
+    it('Should send message string correctly', function() {
       const message = 'message';
 
       const steps = [
@@ -81,7 +81,7 @@ describe('Messaging API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Send message sends javascript object correctly', function() {
+    it('Should send javascript object message correctly', function() {
       const message = {
         a: 1,
         b: '20'
@@ -102,7 +102,7 @@ describe('Messaging API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Send message sends to correct window', function() {
+    it('Should send message to the correct window', function() {
       const message = 'message';
 
       const thirdWindowOptions = {
@@ -135,7 +135,7 @@ describe('Messaging API', function(done) {
   });
 
   describe('Receive message', () => {
-    it('Subscribing to correct topic calls listener', function() {
+    it('Should subscribe to the correct topic calls listener', function() {
       const message = 'message';
 
       const steps = [
@@ -153,7 +153,7 @@ describe('Messaging API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Subscribing to wildcard topic calls listener', function() {
+    it('Should subscribe to the wildcard topic calls listener', function() {
       const message = 'message';
 
       const steps = [
@@ -171,7 +171,7 @@ describe('Messaging API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Subscribing to wrong topic does not call listener', function() {
+    it('Should not receive message from wrong topic listener', function() {
       const message = 'message';
 
       const steps = [
@@ -189,7 +189,7 @@ describe('Messaging API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Subscribing to wrong window id does not call listener', function() {
+    it('Should not receive message from wrong id', function() {
       const message = 'message';
 
       const steps = [
