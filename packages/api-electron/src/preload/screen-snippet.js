@@ -1,13 +1,12 @@
-const ipc = require('electron').ipcRenderer;
-import { IpcMessages } from '../common/constants';
+const remote = require('electron').remote;
 
 class ScreenSnippet {
   capture() {
     return new Promise((resolve) => {
-      ipc.once(IpcMessages.IPC_SSF_SCREEN_SNIPPET_CAPTURED, (event, imageDataUri) => {
-        resolve(imageDataUri);
+      remote.getCurrentWindow().capturePage((image) => {
+        const dataUri = 'data:image/png;base64,' + image.toPng().toString('base64');
+        resolve(dataUri);
       });
-      ipc.send(IpcMessages.IPC_SSF_CAPTURE_SCREEN_SNIPPET);
     });
   }
 }
