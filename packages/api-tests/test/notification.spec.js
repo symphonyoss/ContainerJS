@@ -46,7 +46,7 @@ describe('Notification API', function(done) {
   };
 
   describe('New notification', function() {
-    it('Check notification constructor opens a notification window', function() {
+    it('Should open a notification window', function() {
       const steps = [
         () => createNotification('title', {body: 'body'}),
         () => app.client.getWindowCount(),
@@ -56,7 +56,7 @@ describe('Notification API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Check notification has correct title', function() {
+    it('Should have correct title', function() {
       const titleTest = 'testtitle';
       const steps = [
         () => createNotification(titleTest, {body: 'body'}),
@@ -68,7 +68,7 @@ describe('Notification API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Check notification has correct body', function() {
+    it('Should have correct body', function() {
       const bodyTest = 'testbody';
       const steps = [
         () => createNotification('title', {body: bodyTest}),
@@ -80,7 +80,7 @@ describe('Notification API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Check passing no body text creates notification with no body', function() {
+    it('Should create notification with no body if options omitted', function() {
       const steps = [
         () => createNotification('title'),
         () => selectWindow(app.client, 1),
