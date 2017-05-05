@@ -9,7 +9,8 @@ const testContainer = process.env.MOCHA_CONTAINER;
 const setup = require(`./${testContainer}-test-setup`);
 const {
   executeAsyncJavascript,
-  selectWindow
+  selectWindow,
+  chainPromises
 } = require('./test-helpers');
 
 let app;
@@ -46,36 +47,48 @@ describe('Notification API', function(done) {
 
   describe('New notification', function() {
     it('Check notification constructor opens a notification window', function() {
-      return createNotification('title', {body: 'body'})
-        .then(result => app.client.getWindowCount())
-        .then(count => assert.equal(count, 2))
-        .then(() => closeNotification(1));
+      const steps = [
+        () => createNotification('title', {body: 'body'}),
+        () => app.client.getWindowCount(),
+        (count) => assert.equal(count, 2),
+        () => closeNotification(1)
+      ];
+      return chainPromises(steps);
     });
 
     it('Check notification has correct title', function() {
       const titleTest = 'testtitle';
-      return createNotification(titleTest, {body: 'body'})
-        .then(() => selectWindow(app.client, 1))
-        .then(() => app.client.getText('#title'))
-        .then((text) => assert.equal(text, titleTest))
-        .then(() => closeNotification(1));
+      const steps = [
+        () => createNotification(titleTest, {body: 'body'}),
+        () => selectWindow(app.client, 1),
+        () => app.client.getText('#title'),
+        (text) => assert.equal(text, titleTest),
+        () => closeNotification(1)
+      ];
+      return chainPromises(steps);
     });
 
     it('Check notification has correct body', function() {
       const bodyTest = 'testbody';
-      return createNotification('title', {body: bodyTest})
-        .then(() => selectWindow(app.client, 1))
-        .then(() => app.client.getText('#message'))
-        .then((text) => assert.equal(text, bodyTest))
-        .then(() => closeNotification(1));
+      const steps = [
+        () => createNotification('title', {body: bodyTest}),
+        () => selectWindow(app.client, 1),
+        () => app.client.getText('#message'),
+        (text) => assert.equal(text, bodyTest),
+        () => closeNotification(1)
+      ];
+      return chainPromises(steps);
     });
 
     it('Check passing no body text creates notification with no body', function() {
-      return createNotification('title')
-        .then(() => selectWindow(app.client, 1))
-        .then(() => app.client.getText('#message'))
-        .then((text) => assert.equal(text, ''))
-        .then(() => closeNotification(1));
+      const steps = [
+        () => createNotification('title'),
+        () => selectWindow(app.client, 1),
+        () => app.client.getText('#message'),
+        (text) => assert.equal(text, ''),
+        () => closeNotification(1)
+      ];
+      return chainPromises(steps);
     });
   });
 });
