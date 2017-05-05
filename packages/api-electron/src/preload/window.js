@@ -184,13 +184,8 @@ class Window {
   }
 
   asPromise(windowFunction, ...args) {
-    return new Promise((resolve, reject) => {
-      try {
-        const result = windowFunction(...args);
-        resolve(result);
-      } catch (e) {
-        reject(e);
-      }
+    return new Promise((resolve) => {
+      resolve(windowFunction(...args));
     });
   }
 
