@@ -1,8 +1,4 @@
 const liveServer = require('live-server');
-const {
-  before,
-  after
-} = require('mocha');
 
 const params = {
   port: 5000,
