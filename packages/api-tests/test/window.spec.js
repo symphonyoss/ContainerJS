@@ -296,7 +296,8 @@ describe('Window API', function(done) {
       const xValue = 100;
       const windowOptions = getWindowOptions({
         name: windowTitle,
-        x: xValue
+        x: xValue,
+        y: 0
       });
 
       const steps = [
@@ -313,6 +314,7 @@ describe('Window API', function(done) {
       const yValue = 100;
       const windowOptions = getWindowOptions({
         name: windowTitle,
+        x: 0,
         y: yValue
       });
 
