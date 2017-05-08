@@ -1,4 +1,6 @@
 # ContainerJS
+[![Build Status](https://travis-ci.org/symphonyoss/containerjs.svg?branch=master)](https://travis-ci.org/symphonyoss/containerjs)
+[![Build Status](https://ci.appveyor.com/api/projects/status/v5u6x1hv81k4n8v7/branch/master?svg=true)](https://ci.appveyor.com/project/colineberhardt/containerjs)
 
 ContainerJS provides an abstraction layer over multiple HTML5 containers (OpenFin, Electron, Browser), that follows the Symphony Desktop APIs. For more details, refer to the [confluence page](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/Working+Group+-+Desktop+Wrapper+API) for this working group.
 
