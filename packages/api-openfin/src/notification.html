@@ -20,12 +20,12 @@
   </style>
 </head>
 <body>
-  <h4 id="message"></h4>
-  <p id="body"></p>
+  <h4 id="title"></h4>
+  <p id="message"></p>
   <script>
     function onNotificationMessage(message) {
-      document.getElementById('message').innerText = message.title;
-      document.getElementById('body').innerText = message.text;
+      document.getElementById('title').innerText = message.title || '';
+      document.getElementById('message').innerText = message.text || '';
     }
   </script>
 </body>
