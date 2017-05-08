@@ -24,8 +24,8 @@
   <p id="body"></p>
   <script>
     function onNotificationMessage(message) {
-      document.getElementById('message').innerText = message.title;
-      document.getElementById('body').innerText = message.text;
+      document.getElementById('message').textContent = message.title;
+      document.getElementById('body').textContent = message.text;
     }
   </script>
 </body>
