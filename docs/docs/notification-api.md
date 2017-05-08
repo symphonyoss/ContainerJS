@@ -31,12 +31,5 @@ var myNotification = new Notification(title, options);
 Defines a title for the notification, which will be shown at the top of the notification window when it is fired.
 
 **options (optional)**  
-An options object containing any custom settings that you want to apply to the notification. These options can container the standard HTML5 notification API options
-* `dir` - ...
-* `lang` - ...
-
-In addition, the following ‘extension’ options are supported:  
-**NOTE:** These properties are currently illustrative!
-
-* `ssfBlink` - causes the notification to blink
-* `ssfBlinkColor` - the color used for the blinking effect
+An options object containing any custom settings that you want to apply to the notification.
+* `body: String` - text to show underneath the title.
