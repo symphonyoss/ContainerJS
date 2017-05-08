@@ -57,9 +57,7 @@ module.exports = (appJson) => {
 
     const senderId = e.sender.id;
 
-    // Need to send to topic and * in case the user has subscribed to the wildcard
     destinationWindow.webContents.send(`${IpcMessages.IPC_SSF_SEND_MESSAGE}-${msg.topic}`, msg.message, senderId);
-    destinationWindow.webContents.send(`${IpcMessages.IPC_SSF_SEND_MESSAGE}-*`, msg.message, senderId);
   });
 
   createInitialHiddenWindow(appJson);

@@ -63,7 +63,7 @@ describe('Messaging API', function(done) {
   });
 
   describe('Send message', () => {
-    it('Should send message string correctly', function() {
+    it('Should send string correctly', function() {
       const message = 'message';
 
       const steps = [
@@ -81,7 +81,7 @@ describe('Messaging API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should send javascript object message correctly', function() {
+    it('Should send javascript object correctly', function() {
       const message = {
         a: 1,
         b: '20'
@@ -135,7 +135,7 @@ describe('Messaging API', function(done) {
   });
 
   describe('Receive message', () => {
-    it('Should subscribe to the correct topic calls listener', function() {
+    it('Should call listener when subscribed to correct topic', function() {
       const message = 'message';
 
       const steps = [
@@ -153,7 +153,7 @@ describe('Messaging API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should subscribe to the wildcard topic calls listener', function() {
+    it('Should not call listener when subscribed to wildcard topic', function() {
       const message = 'message';
 
       const steps = [
@@ -165,7 +165,7 @@ describe('Messaging API', function(done) {
         () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
         () => selectWindow(app.client, 1),
         () => executeAsyncJavascript(app.client, getMessageScript),
-        (result) => assert.equal(result.value, message)
+        (result) => assert.equal(result.value, undefined)
       ];
 
       return chainPromises(steps);
