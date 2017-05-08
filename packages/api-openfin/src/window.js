@@ -207,7 +207,7 @@ class Window {
 
   getPosition() {
     return this.getBounds()
-      .then((bounds) => [bounds.left, bounds.top]);
+      .then((bounds) => [bounds.x, bounds.y]);
   }
 
   getSize() {
