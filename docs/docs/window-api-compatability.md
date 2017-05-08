@@ -1,3 +1,11 @@
+---
+id: windowApiCompatability
+title: Window Api Compatability
+permalink: docs/window-compatability.html
+layout: docs
+sectionid: docs
+---
+
 ## Window Options Compatability Martix
 
 **ContainerJS**|**Electron**|**OpenFin**|**Browser**|**Notes**

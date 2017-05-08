@@ -8,7 +8,7 @@ sectionid: docs
 
 ## Overview
 
-The Window API is used to create a new browser window. Compatability between supported options and methods can be found [here](https://github.com/ScottLogic/ssf-desktop-wrapper/blob/master/packages/api-specification/src/window/window-api-compatability.md).
+The Window API is used to create a new browser window. Compatability between supported options and methods can be found [here](https://github.com/symphonyoss/containerjs/docs/window).
 
 ### Constructor
 ```javascript
