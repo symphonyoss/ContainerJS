@@ -53,7 +53,7 @@ describe('Messaging API', function(done) {
     callback();
   };
   const getMessageScript = (callback) => {
-    callback(window.testMessage || 'empty');
+    callback(window.testMessage);
   };
   /* eslint-enable no-undef */
 
@@ -81,7 +81,7 @@ describe('Messaging API', function(done) {
         () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
         () => selectWindow(app.client, 1),
         () => executeAsyncJavascript(app.client, getMessageScript),
-        (result) => assert(result.value, message)
+        (result) => assert.equal(result.value, message)
       ];
 
       return chainPromises(steps);
@@ -102,7 +102,7 @@ describe('Messaging API', function(done) {
         () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
         () => selectWindow(app.client, 1),
         () => executeAsyncJavascript(app.client, getMessageScript),
-        (result) => assert(result.value, message)
+        (result) => assert.deepStrictEqual(result.value, message)
       ];
 
       return chainPromises(steps);
@@ -130,10 +130,10 @@ describe('Messaging API', function(done) {
         () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
         () => selectWindow(app.client, 1),
         () => executeAsyncJavascript(app.client, getMessageScript),
-        (result) => assert(result.value, message),
+        (result) => assert.equal(result.value, message),
         () => selectWindow(app.client, 2),
         () => executeAsyncJavascript(app.client, getMessageScript),
-        (result) => assert(result.value, 'empty')
+        (result) => assert.equal(result.value, undefined)
       ];
 
       return chainPromises(steps);
@@ -153,7 +153,7 @@ describe('Messaging API', function(done) {
         () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
         () => selectWindow(app.client, 1),
         () => executeAsyncJavascript(app.client, getMessageScript),
-        (result) => assert(result.value, message)
+        (result) => assert.equal(result.value, message)
       ];
 
       return chainPromises(steps);
@@ -171,7 +171,7 @@ describe('Messaging API', function(done) {
         () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
         () => selectWindow(app.client, 1),
         () => executeAsyncJavascript(app.client, getMessageScript),
-        (result) => assert(result.value, message)
+        (result) => assert.equal(result.value, message)
       ];
 
       return chainPromises(steps);
@@ -189,7 +189,7 @@ describe('Messaging API', function(done) {
         () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic2', message),
         () => selectWindow(app.client, 1),
         () => executeAsyncJavascript(app.client, getMessageScript),
-        (result) => assert(result.value, 'empty')
+        (result) => assert.equal(result.value, undefined)
       ];
 
       return chainPromises(steps);
@@ -206,7 +206,7 @@ describe('Messaging API', function(done) {
         () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
         () => selectWindow(app.client, 1),
         () => executeAsyncJavascript(app.client, getMessageScript),
-        (result) => assert(result.value, 'empty')
+        (result) => assert.equal(result.value, undefined)
       ];
 
       return chainPromises(steps);
