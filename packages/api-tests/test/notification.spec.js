@@ -1,10 +1,4 @@
 const assert = require('assert');
-const {
-  beforeEach,
-  afterEach,
-  describe,
-  it
-} = require('mocha');
 const testContainer = process.env.MOCHA_CONTAINER;
 const setup = require(`./${testContainer}-test-setup`);
 const {
