@@ -110,7 +110,7 @@ You should now see exactly the same app running within Electron.
 
 ## Roadmap
 
-For details on the progress and roadmap, see the [wiki pages](https://github.com/ScottLogic/ssf-desktop-wrapper/wiki)
+For details on the progress and roadmap, see the [wiki pages](https://github.com/symphonyoss/containerjs/wiki)
 
 ## Development
 

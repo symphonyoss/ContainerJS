@@ -14,9 +14,9 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ScottLogic/ssf-desktop-wrapper.git"
+    "url": "git+https://github.com/symphonyoss/containerjs.git"
   },
-  "homepage": "https://github.com/ScottLogic/ssf-desktop-wrapper#readme",
+  "homepage": "https://github.com/symphonyoss/containerjs#readme",
   "devDependencies": {
     "eslint": "^3.17.1",
     "eslint-config-standard": "^7.0.1",
