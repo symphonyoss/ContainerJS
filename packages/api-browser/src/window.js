@@ -146,7 +146,8 @@ const objectToFeaturesString = (features) => {
 
 const eventMap = {
   'blur': 'blur',
-  'close': 'unload',
+  'close': 'beforeunload',
+  'closed': 'unload',
   'focus': 'focus',
   'hide': 'hidden',
   'message': 'message',
