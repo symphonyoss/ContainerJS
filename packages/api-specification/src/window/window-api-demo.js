@@ -35,34 +35,34 @@ appReady.then(() => {
       width,
       shadow: true,
       url
-    });
+    }, () => {
+      const addListItem = (text) => {
+        const newElem = document.createElement('li');
+        newElem.innerText = text;
+        newElem.className = 'list-group-item';
+        eventLogList.appendChild(newElem);
+        eventLogList.scrollTop = eventLogList.scrollHeight;
+      };
 
-    const addListItem = (text) => {
-      const newElem = document.createElement('li');
-      newElem.innerText = text;
-      newElem.className = 'list-group-item';
-      eventLogList.appendChild(newElem);
-      eventLogList.scrollTop = eventLogList.scrollHeight;
-    };
+      win.addListener('hide', () => {
+        addListItem('hide');
+      });
 
-    win.addListener('hide', () => {
-      addListItem('hide');
-    });
+      win.addListener('show', () => {
+        addListItem('show');
+      });
 
-    win.addListener('show', () => {
-      addListItem('show');
-    });
+      win.addListener('blur', () => {
+        addListItem('blur');
+      });
 
-    win.addListener('blur', () => {
-      addListItem('blur');
-    });
+      win.addListener('focus', () => {
+        addListItem('focus');
+      });
 
-    win.addListener('focus', () => {
-      addListItem('focus');
-    });
-
-    win.addListener('close', () => {
-      addListItem('close');
+      win.addListener('close', () => {
+        addListItem('close');
+      });
     });
   };
 
