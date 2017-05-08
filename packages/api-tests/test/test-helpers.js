@@ -21,7 +21,7 @@ const openNewWindow = (client, options) => {
 };
 /* eslint-enable no-undef, no-new */
 
-const chainPromises = (promises) => promises.reduce((acc, cur) => acc.then(cur), promises[0]());
+const chainPromises = (promises) => promises.reduce((acc, cur) => acc.then(cur), Promise.resolve());
 
 module.exports = {
   executeAsyncJavascript,
