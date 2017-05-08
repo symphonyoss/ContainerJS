@@ -16,6 +16,13 @@ const getWindowOptions = (options) => Object.assign({
   child: true
 }, options);
 
+const setupWindowSteps = (windowOptions) => [
+  () => app.client.isVisible('.visible-check'),
+  () => openNewWindow(app.client, windowOptions),
+  () => selectWindow(app.client, 1),
+  () => app.client.waitForVisible('.visible-check')
+];
+
 describe('Window API', function(done) {
   const timeout = 60000;
   this.timeout(timeout);
@@ -62,10 +69,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('close'),
         () => app.client.getWindowCount(),
         (result) => assert.equal(result, 1)
@@ -89,10 +93,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('getBounds'),
         (result) => {
           assert.equal(result.value.height, height);
@@ -114,10 +115,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('isAlwaysOnTop'),
         (result) => assert.equal(result.value, alwaysOnTop)
       ];
@@ -132,10 +130,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('isMaximizable'),
         (result) => assert.equal(result.value, true)
       ];
@@ -150,10 +145,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('isMinimizable'),
         (result) => assert.equal(result.value, true)
       ];
@@ -168,10 +160,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('isResizable'),
         (result) => assert.equal(result.value, true)
       ];
@@ -186,10 +175,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('isMinimized'),
         (result) => assert.equal(result.value, false)
       ];
@@ -204,10 +190,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('minimize'),
         () => callWindowMethod('isMinimized'),
         (result) => assert.equal(result.value, true)
@@ -223,10 +206,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('isMaximized'),
         (result) => assert.equal(result.value, false)
       ];
@@ -241,10 +221,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('maximize'),
         () => callWindowMethod('isMaximized'),
         (result) => assert.equal(result.value, true)
@@ -260,10 +237,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('maximize'),
         () => callWindowMethod('restore'),
         () => callWindowMethod('isMaximized'),
@@ -280,10 +254,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('minimize'),
         () => callWindowMethod('restore'),
         () => callWindowMethod('isMinimized'),
@@ -300,10 +271,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('maximize'),
         () => callWindowMethod('unmaximize'),
         () => callWindowMethod('isMaximized'),
@@ -332,10 +300,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('getPosition'),
         (result) => assert.equal(result.value[0], xValue)
       ];
@@ -352,10 +317,7 @@ describe('Window API', function(done) {
       });
 
       const steps = [
-        () => app.client.isVisible('.visible-check'),
-        () => openNewWindow(app.client, windowOptions),
-        () => selectWindow(app.client, 1),
-        () => app.client.waitForVisible('.visible-check'),
+        ...setupWindowSteps(windowOptions),
         () => callWindowMethod('getPosition'),
         (result) => assert.equal(result.value[1], yValue)
       ];
