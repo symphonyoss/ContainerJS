@@ -100,7 +100,7 @@ class Window {
     if (!options) {
       this.innerWindow = fin.desktop.Window.getCurrent();
       if (callback) {
-        callback();
+        callback(this);
       }
       return this;
     }
@@ -110,7 +110,12 @@ class Window {
     if (openFinOptions.child) {
       const currentWindow = Window.getCurrentWindow();
       currentWindow.children.push(this);
-      this.innerWindow = new fin.desktop.Window(openFinOptions, callback, errorCallback);
+      this.innerWindow = new fin.desktop.Window(openFinOptions, () => {
+        // We want to return our window, not the OpenFin window
+        if (callback) {
+          callback(this);
+        }
+      }, errorCallback);
     } else {
       const appOptions = {
         name: openFinOptions.name,
@@ -123,7 +128,7 @@ class Window {
         app.run();
         this.innerWindow = app.getWindow();
         if (callback) {
-          callback(successObject);
+          callback(this);
         }
       }, errorCallback);
     }

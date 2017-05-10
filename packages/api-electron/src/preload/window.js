@@ -18,7 +18,7 @@ class Window {
     if (!options) {
       this.innerWindow = remote.getCurrentWindow();
       if (callback) {
-        callback();
+        callback(this);
       }
       return this;
     }
@@ -31,7 +31,7 @@ class Window {
     this.innerWindow = BrowserWindow.fromId(this.id);
 
     if (callback) {
-      callback();
+      callback(this);
     }
   }
 

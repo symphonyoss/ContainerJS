@@ -35,7 +35,7 @@ appReady.then(() => {
       width,
       shadow: true,
       url
-    }, () => {
+    }, (win) => {
       const addListItem = (text) => {
         const newElem = document.createElement('li');
         newElem.innerText = text;
