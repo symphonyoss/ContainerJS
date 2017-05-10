@@ -25,7 +25,7 @@ Now you can start creating your app. From within an empty folder, add a minimal 
 <body>
   <h1>Hello World!</h1>
 
-  <script src="ssf-desktop-api.js"></script>
+  <script src="containerjs-api.js"></script>
 
   <script>
     ssf.app.ready()
@@ -36,7 +36,7 @@ Now you can start creating your app. From within an empty folder, add a minimal 
 </body>
 ```
 
-This file uses the ssf API to handle the container `ready` promise, then creates a notification. Notice that it loads the `ssf-desktop-api.js` script, which provides the client-side APIs (within OpenFin).
+This file uses the ssf API to handle the container `ready` promise, then creates a notification. Notice that it loads the `containerjs-api.js` script, which provides the client-side APIs (within OpenFin).
 
 Within the same folder, add the following `app.json` manifest file:
 
