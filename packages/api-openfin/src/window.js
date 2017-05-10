@@ -35,6 +35,12 @@ const windowStates = {
   RESTORED: 'restored'
 };
 
+const DEFAULT_X = 560;
+const DEFAULT_Y = 220;
+
+const DEFAULT_WIDTH = 800;
+const DEFAULT_HEIGHT = 600;
+
 const convertOptions = (options) => {
   let clonedOptions = Object.assign({}, options);
 
@@ -63,7 +69,7 @@ const convertOptions = (options) => {
 
   Object.keys(optionsMap).forEach((optionKey) => {
     const openFinOptionKey = optionsMap[optionKey];
-    if (clonedOptions[optionKey]) {
+    if (clonedOptions[optionKey] != null) {
       clonedOptions[openFinOptionKey] = clonedOptions[optionKey];
       if (openFinOptionKey !== optionKey) {
         delete clonedOptions[optionKey];
@@ -80,6 +86,20 @@ const convertOptions = (options) => {
   if (clonedOptions.skipTaskbar) {
     clonedOptions.showTaskbarIcon = !clonedOptions.skipTaskbar;
     delete clonedOptions.skipTaskbar;
+  }
+
+  if (clonedOptions.defaultLeft == null || clonedOptions.defaultTop == null) {
+    // Electron requires both x and y to be defined else it uses these defualts
+    clonedOptions.defaultLeft = DEFAULT_X;
+    clonedOptions.defaultTop = DEFAULT_Y;
+  }
+
+  if (clonedOptions.defaultWidth == null) {
+    clonedOptions.defaultWidth = DEFAULT_WIDTH;
+  }
+
+  if (clonedOptions.defaultHeight == null) {
+    clonedOptions.defaultHeight = DEFAULT_HEIGHT;
   }
 
   return clonedOptions;
@@ -197,17 +217,19 @@ class Window {
   }
 
   getParentWindow() {
-    if (this.innerWindow) {
-      const parent = this.innerWindow.getParentWindow();
+    return new Promise((resolve, reject) => {
+      if (this.innerWindow) {
+        let parent = this.innerWindow.getParentWindow();
 
-      if (parent.name === this.innerWindow.name) {
-        return null;
+        if (parent.name === this.innerWindow.name) {
+          parent = null;
+        }
+
+        resolve(parent);
+      } else {
+        reject(new Error('The window does not exist or the window has been closed'));
       }
-
-      return parent;
-    } else {
-      console.log(new Error('The window does not exist or the window has been closed'));
-    }
+    });
   }
 
   getPosition() {
@@ -317,7 +339,7 @@ class Window {
   }
 
   setSize(width, height) {
-    return this.asPromise('resizeTo', width, height);
+    return this.asPromise('resizeTo', width, height, 'top-left');
   }
 
   setSkipTaskbar(skipTaskbar) {

@@ -23,10 +23,12 @@ class Window {
       return this;
     }
 
+    const features = Object.assign({}, options, { title: options.name });
+
     this.id = ipc.sendSync(IpcMessages.IPC_SSF_NEW_WINDOW, {
-      url: options.url,
-      name: options.name,
-      features: options
+      url: features.url,
+      name: features.name,
+      features
     });
     this.innerWindow = BrowserWindow.fromId(this.id);
 

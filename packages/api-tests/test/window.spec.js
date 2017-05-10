@@ -23,6 +23,15 @@ const setupWindowSteps = (windowOptions) => [
   () => app.client.waitForVisible('.visible-check')
 ];
 
+const retrieveWebUrl = () => {
+  /* eslint-disable no-undef */
+  const script = (callback) => {
+    callback('test');
+  };
+  /* eslint-enable no-undef */
+  return executeAsyncJavascript(app.client, script);
+};
+
 describe('Window API', function(done) {
   const timeout = 60000;
   this.timeout(timeout);
@@ -38,16 +47,26 @@ describe('Window API', function(done) {
     }
   });
 
-  const callWindowMethod = (method) => {
+  const callAsyncWindowMethod = (method, ...args) => {
     /* eslint-disable no-undef */
-    const script = (method, callback) => {
+    const script = (method, args, callback) => {
       var currentWin = ssf.Window.getCurrentWindow();
-      currentWin[method]().then((data) => {
+      currentWin[method](...args).then((data) => {
         callback(data);
       });
     };
     /* eslint-enable no-undef */
-    return executeAsyncJavascript(app.client, script, method);
+    return executeAsyncJavascript(app.client, script, method, args);
+  };
+
+  const callWindowMethod = (method, ...args) => {
+    /* eslint-disable no-undef */
+    const script = (method, args, callback) => {
+      var currentWin = ssf.Window.getCurrentWindow();
+      callback(currentWin[method](...args));
+    };
+    /* eslint-enable no-undef */
+    return executeAsyncJavascript(app.client, script, method, args);
   };
 
   it('Should have ssf.Window available globally', function() {
@@ -62,6 +81,10 @@ describe('Window API', function(done) {
   });
 
   describe('Methods', function() {
+    it.skip('Should blur the window', function() {
+
+    });
+
     it('Should close the window', function() {
       const windowTitle = 'windownameclose';
       const windowOptions = getWindowOptions({
@@ -70,12 +93,20 @@ describe('Window API', function(done) {
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('close'),
+        () => callAsyncWindowMethod('close'),
         () => app.client.getWindowCount(),
         (result) => assert.equal(result, 1)
       ];
 
       return chainPromises(steps);
+    });
+
+    it.skip('Should flash the window frame', function() {
+
+    });
+
+    it.skip('Should focus on the window', function() {
+
     });
 
     it('Should get the bounds of the window', function() {
@@ -94,7 +125,7 @@ describe('Window API', function(done) {
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('getBounds'),
+        () => callAsyncWindowMethod('getBounds'),
         (result) => {
           assert.equal(result.value.height, height);
           assert.equal(result.value.width, width);
@@ -104,6 +135,254 @@ describe('Window API', function(done) {
       ];
 
       return chainPromises(steps);
+    });
+
+    it.skip('Should get the child windows', function() {
+      const windowTitle = 'windownameclose';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => selectWindow(app.client, 0),
+        () => callWindowMethod('getChildWindows'),
+        (result) => assert.equal(result.value.length, 1)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should not get child windows if there isn\'t any', function() {
+      const windowTitle = 'windownameclose';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => selectWindow(app.client, 1),
+        () => callWindowMethod('getChildWindows'),
+        (result) => assert.equal(result.value.length, 0)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should return the maximum width', function() {
+      const windowTitle = 'windownamemaxwidth';
+      const maxWidth = 500;
+      const maxHeight = 600;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        maxWidth,
+        maxHeight
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getMaximumSize'),
+        (result) => assert.equal(result.value[0], maxWidth)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it.skip('Should return the maximum height', function() {
+      const windowTitle = 'windownamemaxheight';
+      const maxWidth = 500;
+      const maxHeight = 600;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        maxWidth,
+        maxHeight
+      });
+
+      const frameSize = process.platform === 'win32' ? 20 : 25;
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getMaximumSize'),
+        (result) => assert.equal(result.value[1], maxHeight + frameSize)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should return the minimum width', function() {
+      const windowTitle = 'windownameminwidth';
+      const minWidth = 500;
+      const minHeight = 600;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        minWidth,
+        minHeight
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getMinimumSize'),
+        (result) => assert.equal(result.value[0], minWidth)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it.skip('Should return the minimum height', function() {
+      const windowTitle = 'windownameminheight';
+      const minWidth = 500;
+      const minHeight = 600;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        minWidth,
+        minHeight
+      });
+
+      const frameSize = process.platform === 'win32' ? 20 : 25;
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getMinimumSize'),
+        (result) => assert.equal(result.value[1], minHeight + frameSize)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it.skip('Should return the parent window', function() {
+      const windowTitle = 'windownamegetparent';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getParentWindow'),
+        (result) => assert.equal(true, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should return null if there is no parent window', function() {
+      const windowTitle = 'windownamegetparentnull';
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        child: false
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getParentWindow'),
+        (result) => assert.equal(result.value, null),
+        () => callAsyncWindowMethod('close')
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should return the x position', function() {
+      const windowTitle = 'windownamegetposX';
+      const x = 300;
+      const y = 400;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        x,
+        y
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getPosition'),
+        (result) => assert.equal(result.value[0], x)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should return the y position', function() {
+      const windowTitle = 'windownamegetposy';
+      const x = 300;
+      const y = 400;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        x,
+        y
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getPosition'),
+        (result) => assert.equal(result.value[1], y)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should return the width', function() {
+      const windowTitle = 'windownamesizewidth';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getSize'),
+        (result) => assert.equal(result.value[0], 800)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should return the height', function() {
+      const windowTitle = 'windownamesizeheight';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getSize'),
+        (result) => assert.equal(result.value[1], 600)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should return the title', function() {
+      const windowTitle = 'windownamegettitle';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getTitle'),
+        (result) => assert.equal(result.value, windowTitle)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should return if the window has a shadow', function() {
+      const windowTitle = 'windownamehasshadow';
+      const hasShadow = true;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        hasShadow
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('hasShadow'),
+        (result) => assert.equal(result.value, hasShadow)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it.skip('Should hide the window', function() {
+
     });
 
     it('Should return a boolean stating if the window is alwaysOnTop', function() {
@@ -116,7 +395,7 @@ describe('Window API', function(done) {
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('isAlwaysOnTop'),
+        () => callAsyncWindowMethod('isAlwaysOnTop'),
         (result) => assert.equal(result.value, alwaysOnTop)
       ];
 
@@ -131,68 +410,7 @@ describe('Window API', function(done) {
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('isMaximizable'),
-        (result) => assert.equal(result.value, true)
-      ];
-
-      return chainPromises(steps);
-    });
-
-    it('Should return a boolean stating if the window is minimizable', function() {
-      const windowTitle = 'windownameminimized';
-      const windowOptions = getWindowOptions({
-        name: windowTitle
-      });
-
-      const steps = [
-        ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('isMinimizable'),
-        (result) => assert.equal(result.value, true)
-      ];
-
-      return chainPromises(steps);
-    });
-
-    it('Should return a boolean stating if the window is resizable', function() {
-      const windowTitle = 'windownameminimized';
-      const windowOptions = getWindowOptions({
-        name: windowTitle
-      });
-
-      const steps = [
-        ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('isResizable'),
-        (result) => assert.equal(result.value, true)
-      ];
-
-      return chainPromises(steps);
-    });
-
-    it('Should return a boolean stating if the window is minimized', function() {
-      const windowTitle = 'windownameminimized';
-      const windowOptions = getWindowOptions({
-        name: windowTitle
-      });
-
-      const steps = [
-        ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('isMinimized'),
-        (result) => assert.equal(result.value, false)
-      ];
-
-      return chainPromises(steps);
-    });
-
-    it('Should minimize the window', function() {
-      const windowTitle = 'windownameminimize';
-      const windowOptions = getWindowOptions({
-        name: windowTitle
-      });
-
-      const steps = [
-        ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('minimize'),
-        () => callWindowMethod('isMinimized'),
+        () => callAsyncWindowMethod('isMaximizable'),
         (result) => assert.equal(result.value, true)
       ];
 
@@ -207,8 +425,71 @@ describe('Window API', function(done) {
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('isMaximized'),
+        () => callAsyncWindowMethod('isMaximized'),
         (result) => assert.equal(result.value, false)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should return a boolean stating if the window is minimizable', function() {
+      const windowTitle = 'windownameminimized';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('isMinimizable'),
+        (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should return a boolean stating if the window is minimized', function() {
+      const windowTitle = 'windownameminimized';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('isMinimized'),
+        (result) => assert.equal(result.value, false)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should return a boolean stating if the window is resizable', function() {
+      const windowTitle = 'windownameminimized';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('isResizable'),
+        (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it.skip('Should load a url', function() {
+      const windowTitle = 'windownameloadurl';
+      const url = 'http://github.com/symphonyoss/containerjs';
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        url: 'http://github.com/symphonyoss/containerjs'
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('loadURL', url),
+        () => retrieveWebUrl(),
+        (result) => assert.equal(result.value, url)
       ];
 
       return chainPromises(steps);
@@ -222,12 +503,32 @@ describe('Window API', function(done) {
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('maximize'),
-        () => callWindowMethod('isMaximized'),
+        () => callAsyncWindowMethod('maximize'),
+        () => callAsyncWindowMethod('isMaximized'),
         (result) => assert.equal(result.value, true)
       ];
 
       return chainPromises(steps);
+    });
+
+    it('Should minimize the window', function() {
+      const windowTitle = 'windownameminimize';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('minimize'),
+        () => callAsyncWindowMethod('isMinimized'),
+        (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it.skip('Should reload the page', function() {
+
     });
 
     it('Should restore the window from maximized', function() {
@@ -238,9 +539,9 @@ describe('Window API', function(done) {
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('maximize'),
-        () => callWindowMethod('restore'),
-        () => callWindowMethod('isMaximized'),
+        () => callAsyncWindowMethod('maximize'),
+        () => callAsyncWindowMethod('restore'),
+        () => callAsyncWindowMethod('isMaximized'),
         (result) => assert.equal(result.value, false)
       ];
 
@@ -255,13 +556,239 @@ describe('Window API', function(done) {
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('minimize'),
-        () => callWindowMethod('restore'),
-        () => callWindowMethod('isMinimized'),
+        () => callAsyncWindowMethod('minimize'),
+        () => callAsyncWindowMethod('restore'),
+        () => callAsyncWindowMethod('isMinimized'),
         (result) => assert.equal(result.value, false)
       ];
 
       return chainPromises(steps);
+    });
+
+    it('Should set alwaysOnTop', function() {
+      const windowTitle = 'windownamesetalwaysontop';
+      const alwaysOnTop = true;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        alwaysOnTop
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('setAlwaysOnTop', !alwaysOnTop),
+        () => callAsyncWindowMethod('isAlwaysOnTop'),
+        (result) => assert.equal(result.value, !alwaysOnTop)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should set the bounds', function() {
+      const windowTitle = 'windownamesetbounds';
+      const bounds = { x: 0, y: 0, width: 500, height: 500 };
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('setBounds', bounds),
+        () => callAsyncWindowMethod('getBounds'),
+        (result) => {
+          assert.equal(result.value.height, bounds.height);
+          assert.equal(result.value.width, bounds.width);
+          assert.equal(result.value.x, bounds.x);
+          assert.equal(result.value.y, bounds.y);
+        }
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it.skip('Should set the icon', function() {
+
+    });
+
+    it('Should set if the window is maximizable', function() {
+      const windowTitle = 'windownamesetismaximizable';
+      const maximizable = true;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        maximizable
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('setMaximizable', !maximizable),
+        () => callAsyncWindowMethod('isMaximizable'),
+        (result) => assert.equal(result.value, !maximizable)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should set the windows maximum width', function() {
+      const windowTitle = 'windownamesetmaxwidth';
+      const maxWidth = 777;
+      const maxHeight = 780;
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('setMaximumSize', maxWidth, maxHeight),
+        () => callAsyncWindowMethod('getMaximumSize'),
+        (result) => assert.equal(result.value[0], maxWidth)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it.skip('Should set the windows maximum height', function() {
+      const windowTitle = 'windownamesetmaxheight';
+      const maxWidth = 777;
+      const maxHeight = 780;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        maxHeight,
+        maxWidth
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('setMaximumSize', maxWidth, maxHeight),
+        () => callAsyncWindowMethod('getMaximumSize'),
+        (result) => assert.equal(result.value[1], maxHeight)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should set if the window is minimizable', function() {
+      const windowTitle = 'windownamesetisminimizable';
+      const minimizable = true;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        minimizable
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('setMinimizable', !minimizable),
+        () => callAsyncWindowMethod('isMinimizable'),
+        (result) => assert.equal(result.value, !minimizable)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should set the windows minimum width', function() {
+      const windowTitle = 'windownamesetminwidth';
+      const minWidth = 777;
+      const minHeight = 780;
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('setMinimumSize', minWidth, minHeight),
+        () => callAsyncWindowMethod('getMinimumSize'),
+        (result) => assert.equal(result.value[0], minWidth)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it.skip('Should set the windows minimum height', function() {
+      const windowTitle = 'windownamesetminheight';
+      const minWidth = 777;
+      const minHeight = 780;
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('setMinimumSize', minWidth, minHeight),
+        () => callAsyncWindowMethod('getMinimumSize'),
+        (result) => assert.equal(result.value[1], minHeight)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should set the windows position', function() {
+      const windowTitle = 'windownamesetposition';
+      const newX = 400;
+      const newY = 450;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        x: 300,
+        y: 250
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('setPosition', newX, newY),
+        () => callAsyncWindowMethod('getPosition'),
+        (result) => {
+          assert.equal(result.value[0], newX);
+          assert.equal(result.value[1], newY);
+        }
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should set if the window is resizable', function() {
+      const windowTitle = 'windownamesetisresizable';
+      const resizable = true;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        resizable
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('setResizable', !resizable),
+        () => callAsyncWindowMethod('isResizable'),
+        (result) => assert.equal(result.value, !resizable)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should set the windows size', function() {
+      const windowTitle = 'windownamesetsize';
+      const newWidth = 400;
+      const newHeight = 450;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        width: 300,
+        height: 250
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('setSize', newWidth, newHeight),
+        () => callAsyncWindowMethod('getSize'),
+        (result) => {
+          assert.equal(result.value[0], newWidth);
+          assert.equal(result.value[1], newHeight);
+        }
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it.skip('Should set if the window skips the task bar', function() {
+
+    });
+
+    it.skip('Should show the window', function() {
+
     });
 
     it('Should unmaximize the window from maximized', function() {
@@ -272,9 +799,9 @@ describe('Window API', function(done) {
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('maximize'),
-        () => callWindowMethod('unmaximize'),
-        () => callWindowMethod('isMaximized'),
+        () => callAsyncWindowMethod('maximize'),
+        () => callAsyncWindowMethod('unmaximize'),
+        () => callAsyncWindowMethod('isMaximized'),
         (result) => assert.equal(result.value, false)
       ];
 
@@ -302,7 +829,7 @@ describe('Window API', function(done) {
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('getPosition'),
+        () => callAsyncWindowMethod('getPosition'),
         (result) => assert.equal(result.value[0], xValue)
       ];
 
@@ -320,7 +847,7 @@ describe('Window API', function(done) {
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callWindowMethod('getPosition'),
+        () => callAsyncWindowMethod('getPosition'),
         (result) => assert.equal(result.value[1], yValue)
       ];
 
