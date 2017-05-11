@@ -35,65 +35,61 @@ const getColorCode = (percent) => {
   return colorCode;
 };
 
-const tags = [];
-
-electronTestOutput.forEach((test) => {
-  test.tags.forEach((tag) => {
-    if (!testTable.electron[tag]) {
-      testTable.electron[tag] = {
-        passed: 0,
-        total: 0
-      };
-    }
-
-    if (test.status === testStatus.pass) {
-      testTable.electron[tag].passed++;
-      testTable.electron[tag].total++;
-    } else if (test.status !== testStatus.skip) {
-      testTable.electron[tag].total++;
-    }
-
-    if (tags.indexOf(tag) < 0) {
-      tags.push(tag);
+const listOfTests = [];
+const tagCount = {};
+// generate the total test count
+const generateTotals = (testOutput) => {
+  testOutput.forEach((test) => {
+    if (!listOfTests.find((t) => t === test.title)) {
+      listOfTests.push(test.title);
+      test.tags.forEach((tag) => {
+        if (test.status !== testStatus.skip) {
+          if (tagCount[tag]) {
+            tagCount[tag]++;
+          } else {
+            tagCount[tag] = 1;
+          }
+        } else if (!tagCount[tag]) {
+          tagCount[tag] = 0;
+        }
+      });
     }
   });
+};
+
+const passCount = (table, tag, test) => {
+  if (!table[tag]) {
+    table[tag] = 0;
+  }
+
+  if (test.status === testStatus.pass) {
+    table[tag]++;
+  }
+};
+
+electronTestOutput.forEach((test) => {
+  test.tags.forEach((tag) => passCount(testTable.electron, tag, test));
 });
 
 openfinTestOutput.forEach((test) => {
-  test.tags.forEach((tag) => {
-    if (!testTable.openfin[tag]) {
-      testTable.openfin[tag] = {
-        passed: 0,
-        total: 0
-      };
-    }
-
-    if (test.status === testStatus.pass) {
-      testTable.openfin[tag].passed++;
-      testTable.openfin[tag].total++;
-    } else if (test.status !== testStatus.skip) {
-      testTable.openfin[tag].total++;
-    }
-
-    if (tags.indexOf(tag) < 0) {
-      tags.push(tag);
-    }
-  });
+  test.tags.forEach((tag) => passCount(testTable.openfin, tag, test));
 });
 
-const sortedTags = tags.sort();
+generateTotals(electronTestOutput);
+generateTotals(openfinTestOutput);
+
+const sortedTags = Object.keys(tagCount).sort();
 
 let markdownString = '| Method | Electron | OpenFin |\n|:---|:---:|:---:|\n';
 
 sortedTags.forEach((tag) => {
-  const electronPassed = testTable.electron[tag].passed;
-  const openfinPassed = testTable.openfin[tag].passed;
-  const electronTotal = testTable.electron[tag].total;
-  const openfinTotal = testTable.openfin[tag].total;
-  const electronColor = electronTotal > 0 ? getColorCode((electronPassed / electronTotal) * 100) : '';
-  const openfinColor = openfinTotal > 0 ? getColorCode((openfinPassed / openfinTotal) * 100) : '';
+  const electronPassed = testTable.electron[tag];
+  const openfinPassed = testTable.openfin[tag];
+  const total = tagCount[tag];
+  const electronColor = total > 0 ? getColorCode((electronPassed / total) * 100) : '';
+  const openfinColor = total > 0 ? getColorCode((openfinPassed / total) * 100) : '';
   const label = tag.substring(1); // Removes the # from the front of the tag
-  markdownString += `|${label}|<div style="background-color:${electronColor}">${electronPassed}/${electronTotal}</div>|<div style="background-color:${openfinColor}">${openfinPassed}/${openfinTotal}</div>|\n`;
+  markdownString += `|${label}|<div style="background-color:${electronColor}">${electronPassed}/${total}</div>|<div style="background-color:${openfinColor}">${openfinPassed}/${total}</div>|\n`;
 });
 
 const ghPagesMarkdown =
