@@ -1,5 +1,5 @@
 const fs = require('fs');
-
+const path = require('path');
 const electronTestOutput = JSON.parse(fs.readFileSync('electron.json'));
 const openfinTestOutput = JSON.parse(fs.readFileSync('openfin.json'));
 
@@ -34,7 +34,6 @@ const getColorCode = (percent) => {
   });
   return colorCode;
 };
-
 
 const tags = [];
 
@@ -97,4 +96,14 @@ sortedTags.forEach((tag) => {
   markdownString += `|${label}|<div style="background-color:${electronColor}">${electronPassed}/${electronTotal}</div>|<div style="background-color:${openfinColor}">${openfinPassed}/${openfinTotal}</div>|\n`;
 });
 
-fs.writeFileSync('table.md', markdownString);
+const ghPagesMarkdown =
+`---
+id: testMatrix
+title: Test Report
+permalink: docs/test-matrix.html
+layout: docs
+sectionid: docs
+---\n
+`;
+
+fs.writeFileSync(path.join(__dirname, '..', '..', 'docs', 'docs', 'test-matrix.md'), ghPagesMarkdown + markdownString);
