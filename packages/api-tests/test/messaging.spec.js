@@ -63,7 +63,7 @@ describe('Messaging API', function(done) {
   });
 
   describe('Send message', () => {
-    it('Should send string correctly', function() {
+    it('Should send string correctly #ssf.MessageService.send', function() {
       const message = 'message';
 
       const steps = [
@@ -81,7 +81,7 @@ describe('Messaging API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should send javascript object correctly', function() {
+    it('Should send javascript object correctly #ssf.MessageService.send', function() {
       const message = {
         a: 1,
         b: '20'
@@ -102,7 +102,7 @@ describe('Messaging API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should send message to the correct window', function() {
+    it('Should send message to the correct window #ssf.MessageService.send', function() {
       const message = 'message';
 
       const thirdWindowOptions = {
@@ -135,7 +135,7 @@ describe('Messaging API', function(done) {
   });
 
   describe('Receive message', () => {
-    it('Should call listener when subscribed to correct topic', function() {
+    it('Should call listener when subscribed to correct topic #ssf.MessageService.receive', function() {
       const message = 'message';
 
       const steps = [
@@ -153,7 +153,7 @@ describe('Messaging API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should not call listener when subscribed to wildcard topic', function() {
+    it('Should not call listener when subscribed to wildcard topic #ssf.MessageService.receive', function() {
       const message = 'message';
 
       const steps = [
@@ -171,7 +171,7 @@ describe('Messaging API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should not receive message from wrong topic listener', function() {
+    it('Should not receive message from wrong topic listener #ssf.MessageService.receive', function() {
       const message = 'message';
 
       const steps = [
@@ -189,7 +189,7 @@ describe('Messaging API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should not receive message from wrong id', function() {
+    it('Should not receive message from wrong id #ssf.MessageService.receive', function() {
       const message = 'message';
 
       const steps = [
