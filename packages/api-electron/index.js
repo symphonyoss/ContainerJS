@@ -9,7 +9,7 @@ const { IpcMessages } = require('./src/common/constants');
 
 let win;
 const windows = [];
-const preloadPath = path.join(__dirname, 'dist', 'ssf-desktop-api.js');
+const preloadPath = path.join(__dirname, 'dist', 'containerjs-api.js');
 
 module.exports = (appJson) => {
   ipc.on(IpcMessages.IPC_SSF_NEW_WINDOW, (e, msg) => {

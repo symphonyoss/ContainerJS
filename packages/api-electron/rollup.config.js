@@ -4,7 +4,7 @@ export default {
   entry: 'preload.js',
   format: 'umd',
   moduleName: 'ssf',
-  dest: 'dist/ssf-desktop-api.js',
+  dest: 'dist/containerjs-api.js',
   plugins: [
     commonjs({
       ignore: ['electron']
