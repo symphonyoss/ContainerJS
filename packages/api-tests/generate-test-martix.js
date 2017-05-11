@@ -17,6 +17,12 @@ const percentageColors = {
   100: '#50ce5b'
 };
 
+const testStatus = {
+  pass: 'pass',
+  skip: 'pending',
+  error: 'error'
+};
+
 const getColorCode = (percent) => {
   let colorCode = '';
   Object.keys(percentageColors).some((key) => {
@@ -41,10 +47,10 @@ electronTestOutput.forEach((test) => {
       };
     }
 
-    if (test.status === 'pass') {
+    if (test.status === testStatus.pass) {
       testTable.electron[tag].passed++;
       testTable.electron[tag].total++;
-    } else if (test.status !== 'pending') {
+    } else if (test.status !== testStatus.skip) {
       testTable.electron[tag].total++;
     }
 
@@ -63,10 +69,10 @@ openfinTestOutput.forEach((test) => {
       };
     }
 
-    if (test.status === 'pass') {
+    if (test.status === testStatus.pass) {
       testTable.openfin[tag].passed++;
       testTable.openfin[tag].total++;
-    } else if (test.status !== 'pending') {
+    } else if (test.status !== testStatus.skip) {
       testTable.openfin[tag].total++;
     }
 
