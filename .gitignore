@@ -67,6 +67,12 @@ npm
 /packages/api-specification/src/bootstrap.min.css
 dist/
 transpiled/
+
+# Test output
+/packages/api-tests/electron.json
+/packages/api-tests/openfin.json
+/packages/api-tests/table.md
+
 # Visual Studio Code
 .vscode
 
