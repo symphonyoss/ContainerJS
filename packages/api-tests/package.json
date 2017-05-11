@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test:ui": "npm run test:electron && npm run test:openfin",
+    "test:ci": "npm run test:electron -- --reporter reporter.js && npm run test:openfin -- --reporter reporter.js",
     "test:electron": "rimraf src && copyfiles -f \"demo/**\" src && cross-env MOCHA_CONTAINER=electron mocha test/*.js",
-    "test:openfin": "rimraf src && copyfiles -f \"demo/**\" src && copyfiles -f \"node_modules/containerjs-api-openfin/dist/**\" src && cross-env MOCHA_CONTAINER=openfin mocha test/*.js"
+    "test:openfin": "rimraf src && copyfiles -f \"demo/**\" src && copyfiles -f \"node_modules/containerjs-api-openfin/dist/**\" src && cross-env MOCHA_CONTAINER=openfin mocha test/*.js --reporter reporter.js"
   },
   "dependencies": {
     "assert": "^1.4.1",
