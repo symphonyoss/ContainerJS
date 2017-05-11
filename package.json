@@ -2,10 +2,11 @@
   "name": "containerjs",
   "version": "0.0.0",
   "scripts": {
+    "bootstrap": "if-env CI=true && lerna bootstrap --concurrency 1 || lerna bootstrap",
     "build": "lerna run build",
     "test": "npm run lint && lerna run test",
     "lint": "eslint --ignore-path .gitignore **/*.js",
-    "postinstall": "lerna bootstrap --concurrency 1 && node copy-markdown.js",
+    "postinstall": "npm run bootstrap && node copy-markdown.js",
     "test:ui": "cd packages/api-tests && npm run test:ui",
     "browser": "npm i & cd packages/api-browser-demo && npm start",
     "electron": "npm i & cd packages/api-electron-demo && npm start",
@@ -24,6 +25,7 @@
     "eslint-plugin-node": "^4.2.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^2.1.1",
+    "if-env": "^1.0.0",
     "lerna": "2.0.0-rc.3",
     "marked": "^0.3.6"
   }
