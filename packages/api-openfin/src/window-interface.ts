@@ -59,7 +59,7 @@ declare class SSFWindow {
 
   /**
    * Get the parent of the window. Null will be returned if the window has no parent.
-   * @returns {object} The parent window.
+   * @returns {Promise<Window>} The parent window.
    */
   getParentWindow(): Promise<any>;
 
@@ -276,14 +276,14 @@ declare class SSFWindow {
    * Send a message to the window.
    * @param {string|object} message - The message to send to the window. Can be any serializable object.
    */
-  postMessage(message: string): void;
+  postMessage(message: string | Object): void;
 
   /**
  * Gets the id of the current window.
  * @returns {string} The window id.
  * @static
  */
-  static getCurrentWindowId(): number;
+  static getCurrentWindowId(): string;
 
   /**
  * Gets the current window object.
@@ -292,5 +292,5 @@ declare class SSFWindow {
  * @returns {Window} The window.
  * @static
  */
-  static getCurrentWindow(callback: Function, errorCallback: Function): any;
+  static getCurrentWindow(callback: Function, errorCallback: Function): Window;
 }
