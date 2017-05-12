@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "module": "es2015",
+        "lib": [
+            "dom",
+            "es2015",
+            "dom.iterable",
+            "scripthost"
+        ],
+        "outDir": "./transpiled",
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "target": "es5"
+    },
+    "files": [
+        "./preload.ts"
+    ]
+}

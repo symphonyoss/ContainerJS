@@ -1,6 +1,12 @@
 let currentWindow = null;
 import MessageService from './message-service';
 
+declare namespace fin {
+  interface OpenFinWindow {
+    uuid: string;
+  }
+}
+
 const eventMap = {
   'auth-requested': 'auth-requested',
   'blur': 'blurred',
@@ -105,8 +111,12 @@ const convertOptions = (options) => {
   return clonedOptions;
 };
 
-class Window {
-  constructor(options, callback, errorCallback) {
+class Window implements SSFWindow {
+  children: Array<any>;
+  eventListeners: Map<any, any>;
+  innerWindow: any;
+
+  constructor(options: any, callback?: any, errorCallback?: any) {
     this.children = [];
 
     this.eventListeners = new Map();
@@ -154,8 +164,8 @@ class Window {
     }
   }
 
-  asPromise(fn, ...args) {
-    return new Promise((resolve, reject) => {
+  asPromise<T>(fn, ...args): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
       if (this.innerWindow) {
         const openFinFunction = this.innerWindow[fn];
         openFinFunction.call(this.innerWindow, ...args, resolve, reject);
@@ -166,11 +176,11 @@ class Window {
   }
 
   blur() {
-    return this.asPromise('blur');
+    return this.asPromise<void>('blur');
   }
 
   close() {
-    return this.asPromise('close', false)
+    return this.asPromise<void>('close', false)
       .then(() => {
         this.innerWindow = undefined;
       });
@@ -178,19 +188,19 @@ class Window {
 
   flashFrame(flag) {
     if (flag) {
-      return this.asPromise('flash', {});
+      return this.asPromise<void>('flash', {});
     } else {
-      return this.asPromise('stopFlashing');
+      return this.asPromise<void>('stopFlashing');
     }
   }
 
   focus() {
-    return this.asPromise('focus');
+    return this.asPromise<void>('focus');
   }
 
   getBounds() {
-    return this.asPromise('getBounds')
-      .then(bounds => ({
+    return this.asPromise<Rectangle>('getBounds')
+      .then((bounds: any) => ({
         x: bounds.left,
         y: bounds.top,
         width: bounds.width,
@@ -204,16 +214,16 @@ class Window {
 
   getMaximumSize() {
     return this.getOptions()
-      .then((options) => [options.maxWidth, options.maxHeight]);
+      .then((options: any) => [options.maxWidth, options.maxHeight]);
   }
 
   getMinimumSize() {
     return this.getOptions()
-      .then((options) => [options.minWidth, options.minHeight]);
+      .then((options: any) => [options.minWidth, options.minHeight]);
   }
 
   getOptions() {
-    return this.asPromise('getOptions');
+    return this.asPromise<any>('getOptions');
   }
 
   getParentWindow() {
@@ -234,72 +244,72 @@ class Window {
 
   getPosition() {
     return this.getBounds()
-      .then((bounds) => [bounds.x, bounds.y]);
+      .then((bounds: any) => [bounds.x, bounds.y]);
   }
 
   getSize() {
     return this.getBounds()
-      .then((bounds) => [bounds.width, bounds.height]);
+      .then((bounds: any) => [bounds.width, bounds.height]);
   }
 
   getTitle() {
     return this.getOptions()
-      .then((options) => options.title);
+      .then((options: any) => options.title);
   }
 
   getState() {
-    return this.asPromise('getState');
+    return this.asPromise<any>('getState');
   }
 
   hasShadow() {
     return this.getOptions()
-      .then((options) => options.shadow);
+      .then((options: any) => options.shadow);
   }
 
   hide() {
-    return this.asPromise('hide');
+    return this.asPromise<void>('hide');
   }
 
   isAlwaysOnTop() {
     return this.getOptions()
-      .then((options) => options.alwaysOnTop);
+      .then((options: any) => options.alwaysOnTop);
   }
 
   isMaximizable() {
     return this.getOptions()
-      .then((options) => options.maximizable);
+      .then((options: any) => options.maximizable);
   }
 
   isMaximized() {
     return this.getState()
-      .then((state) => state === windowStates.MAXIMIZED);
+      .then((state: any) => state === windowStates.MAXIMIZED);
   }
 
   isMinimizable() {
     return this.getOptions()
-      .then((options) => options.minimizable);
+      .then((options: any) => options.minimizable);
   }
 
   isMinimized() {
     return this.getState()
-      .then((state) => state === windowStates.MINIMIZED);
+      .then((state: any) => state === windowStates.MINIMIZED);
   }
 
   isResizable() {
     return this.getOptions()
-      .then((options) => options.resizable);
+      .then((options: any) => options.resizable);
   }
 
   loadURL(url) {
-    return this.asPromise('executeJavaScript', `window.location = '${url}'`);
+    return this.asPromise<void>('executeJavaScript', `window.location = '${url}'`);
   }
 
   reload() {
-    return this.asPromise('executeJavaScript', 'window.location.reload()');
+    return this.asPromise<void>('executeJavaScript', 'window.location.reload()');
   }
 
   restore() {
-    return this.asPromise('restore');
+    return this.asPromise<void>('restore');
   }
 
   setAlwaysOnTop(alwaysOnTop) {
@@ -307,7 +317,7 @@ class Window {
   }
 
   setBounds(bounds) {
-    return this.asPromise('setBounds', bounds.x, bounds.y, bounds.width, bounds.height);
+    return this.asPromise<void>('setBounds', bounds.x, bounds.y, bounds.width, bounds.height);
   }
 
   setIcon(icon) {
@@ -331,7 +341,7 @@ class Window {
   }
 
   setPosition(x, y) {
-    return this.asPromise('moveTo', x, y);
+    return this.asPromise<void>('moveTo', x, y);
   }
 
   setResizable(resizable) {
@@ -339,7 +349,7 @@ class Window {
   }
 
   setSize(width, height) {
-    return this.asPromise('resizeTo', width, height, 'top-left');
+    return this.asPromise<void>('resizeTo', width, height, 'top-left');
   }
 
   setSkipTaskbar(skipTaskbar) {
@@ -347,15 +357,15 @@ class Window {
   }
 
   show() {
-    return this.asPromise('show', false);
+    return this.asPromise<void>('show', false);
   }
 
   maximize() {
-    return this.asPromise('maximize');
+    return this.asPromise<void>('maximize');
   }
 
   minimize() {
-    return this.asPromise('minimize');
+    return this.asPromise<void>('minimize');
   }
 
   unmaximize() {
@@ -363,7 +373,7 @@ class Window {
   }
 
   updateOptions(options) {
-    return this.asPromise('updateOptions', options);
+    return this.asPromise<void>('updateOptions', options);
   }
 
   addListener(event, listener) {
@@ -383,7 +393,7 @@ class Window {
       let index = listeners.indexOf(listener);
       if (index >= 0) {
         listeners = listeners.splice(index, 1);
-        this.eventListeners.set(listeners);
+        this.eventListeners.set(event, listeners);
       }
     }
 
@@ -405,11 +415,11 @@ class Window {
   }
 
   static getCurrentWindowId() {
-    const currentWin = fin.desktop.Window.getCurrent();
+    const currentWin: any = fin.desktop.Window.getCurrent();
     return `${currentWin.uuid}:${currentWin.name}`;
   }
 
-  static getCurrentWindow(callback, errorCallback) {
+  static getCurrentWindow(callback?: any, errorCallback?: any) {
     if (currentWindow) {
       return currentWindow;
     }
