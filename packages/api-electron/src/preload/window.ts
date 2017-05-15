@@ -2,7 +2,8 @@ const {
   ipcRenderer: ipc,
   remote
 } = require('electron');
-const BrowserWindow = remote.BrowserWindow;
+const { BrowserWindow, nativeImage } = remote;
+const request = remote.require('request');
 import MessageService from './message-service';
 import { IpcMessages } from '../common/constants';
 
@@ -154,7 +155,19 @@ class Window implements SSFWindow {
   }
 
   setIcon(icon) {
-    return this.asPromise<void>(this.innerWindow.setIcon, icon);
+    const req = request.defaults({ encoding: null });
+    return new Promise<void>((resolve, reject) => {
+        req.get(icon, (err, res, body) => {
+          const image = nativeImage.createFromBuffer(Buffer.from(body));
+          if (image.isEmpty()) {
+            reject(new Error('Image could not be created from the URL'));
+          }
+          this.asPromise<void>(this.innerWindow.setIcon, image).then(() => {
+            resolve();
+          });
+        }
+      );
+    });
   }
 
   setMaximizable(maximizable) {

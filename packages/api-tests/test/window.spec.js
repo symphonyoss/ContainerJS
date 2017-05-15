@@ -650,6 +650,16 @@ describe('Window API', function(done) {
 
     });
 
+    it('Should not throw an error when a url is passed to setIcon #ssf.Window.setIcon', function() {
+      const imageUrl = 'http://localhost:5000/test-image.png';
+      const steps = [
+        () => callAsyncWindowMethod('setIcon', imageUrl),
+        () => assert(true)
+      ];
+
+      return chainPromises(steps);
+    });
+
     it('Should set if the window is maximizable #ssf.Window.setMaximizable', function() {
       const windowTitle = 'windownamesetismaximizable';
       const maximizable = true;
