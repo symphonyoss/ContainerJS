@@ -89,7 +89,7 @@ sortedTags.forEach((tag) => {
   const electronColor = total > 0 ? getColorCode((electronPassed / total) * 100) : '';
   const openfinColor = total > 0 ? getColorCode((openfinPassed / total) * 100) : '';
   const label = tag.substring(1); // Removes the # from the front of the tag
-  markdownString += `|${label}|<div style="background-color:${electronColor}">${electronPassed}/${total}</div>|<div style="background-color:${openfinColor}">${openfinPassed}/${total}</div>|\n`;
+  markdownString += `|${label}|<span style="background-color:${electronColor}; display: block;">${electronPassed}/${total}</span>|<span style="background-color:${openfinColor}; display: block;">${openfinPassed}/${total}</span>|\n`;
 });
 
 const ghPagesMarkdown =
@@ -100,6 +100,7 @@ permalink: docs/test-matrix.html
 layout: docs
 sectionid: docs
 ---\n
+{: width="100%"}
 `;
 
 fs.writeFileSync(path.join(__dirname, '..', '..', 'docs', 'docs', 'test-matrix.md'), ghPagesMarkdown + markdownString);
