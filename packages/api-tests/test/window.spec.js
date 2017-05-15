@@ -26,7 +26,7 @@ const setupWindowSteps = (windowOptions) => [
 const retrieveWebUrl = () => {
   /* eslint-disable no-undef */
   const script = (callback) => {
-    callback('test');
+    callback(window.location.href);
   };
   /* eslint-enable no-undef */
   return executeAsyncJavascript(app.client, script);
@@ -477,17 +477,32 @@ describe('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it.skip('Should load a url #ssf.Window.loadURL', function() {
+    it('Should load a url #ssf.Window.loadURL', function() {
       const windowTitle = 'windownameloadurl';
-      const url = 'http://github.com/symphonyoss/containerjs';
+      const url = 'http://localhost:5000/load-url-test.html';
       const windowOptions = getWindowOptions({
-        name: windowTitle,
-        url: 'http://github.com/symphonyoss/containerjs'
+        name: windowTitle
       });
+
+      // We MUST run the callback before we call loadURL otherwise webdriver loses the context
+      const executeLoadURL = (url) => {
+        /* eslint-disable no-undef */
+        const script = (url, callback) => {
+          var currentWin = ssf.Window.getCurrentWindow();
+          setTimeout(() => {
+            currentWin.loadURL(url);
+          }, 100);
+          callback();
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script, url);
+      };
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callAsyncWindowMethod('loadURL', url),
+        () => executeLoadURL(url),
+        // We need to give the window time to load, otherwise we might get the old url
+        () => new Promise((resolve) => setTimeout(resolve, 2000)),
         () => retrieveWebUrl(),
         (result) => assert.equal(result.value, url)
       ];
