@@ -67,6 +67,10 @@ npm
 /packages/api-specification/src/bootstrap.min.css
 dist/
 transpiled/
+
+# Test output
+/packages/api-tests/coverage/
+
 # Visual Studio Code
 .vscode
 
