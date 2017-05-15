@@ -6,6 +6,8 @@ module.exports = JsonReporter;
 const testContainer = process.env.MOCHA_CONTAINER;
 
 let jsonOutput = [];
+// Regex: (# followed by at least 1 word character, dot or bracket followed by 1 space) one or more times
+// Example: #ssf.Window.hide #electron
 const testTagPattern = /(#[\w.()]+[\s]?)+/;
 
 function JsonReporter(runner) {
