@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf dist && copyfiles -f src/notification.html dist && rollup -c",
+    "build": "rimraf dist transpiled && tsc && copyfiles -f src/notification.html dist && rollup -c && rimraf transpiled",
     "test": "npm run build",
     "postinstall": "npm run build"
   },
@@ -13,6 +13,10 @@
   "devDependencies": {
     "copyfiles": "^1.2.0",
     "rimraf": "^2.6.1",
-    "rollup": "^0.41.6"
+    "rollup": "^0.41.6",
+    "typescript": "^2.3.2"
+  },
+  "dependencies": {
+    "@types/openfin": "^17.0.2"
   }
 }
