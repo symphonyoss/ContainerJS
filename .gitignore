@@ -69,8 +69,7 @@ dist/
 transpiled/
 
 # Test output
-/packages/api-tests/electron.json
-/packages/api-tests/openfin.json
+/packages/api-tests/coverage/
 
 # Visual Studio Code
 .vscode

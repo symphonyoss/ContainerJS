@@ -1,13 +1,14 @@
 var mocha = require('mocha');
-module.exports = MyReporter;
-const testContainer = process.env.MOCHA_CONTAINER;
 var fs = require('fs');
 var path = require('path');
 
-let jsonOutput = [];
-const pattern = /(#[\w.()]+[\s]?)+/;
+module.exports = JsonReporter;
+const testContainer = process.env.MOCHA_CONTAINER;
 
-function MyReporter(runner) {
+let jsonOutput = [];
+const testTagPattern = /(#[\w.()]+[\s]?)+/;
+
+function JsonReporter(runner) {
   mocha.reporters.Base.call(this, runner);
   var passes = 0;
   var pending = 0;
@@ -19,7 +20,7 @@ function MyReporter(runner) {
 
   runner.on('pass', function(test) {
     passes++;
-    const tags = test.title.match(pattern);
+    const tags = test.title.match(testTagPattern);
     jsonOutput.push({
       title: test.fullTitle(),
       status: 'pass',
@@ -32,7 +33,7 @@ function MyReporter(runner) {
   // Runs when a test has been skipped
   runner.on('pending', function(test) {
     pending++;
-    const tags = test.title.match(pattern);
+    const tags = test.title.match(testTagPattern);
     jsonOutput.push({
       title: test.fullTitle(),
       status: 'pending',
@@ -44,7 +45,7 @@ function MyReporter(runner) {
 
   runner.on('fail', function(test, err) {
     failures++;
-    const tags = test.title.match(pattern);
+    const tags = test.title.match(testTagPattern);
     jsonOutput.push({
       title: test.fullTitle(),
       status: 'fail',
@@ -56,7 +57,10 @@ function MyReporter(runner) {
 
   runner.on('end', function() {
     console.log('pass:%d pending:%d failure:%d', passes, pending, failures);
-    fs.writeFileSync(path.join(process.cwd(), testContainer + '.json'), JSON.stringify(jsonOutput));
-    process.exit(failures);
+    if (!fs.existsSync(path.join(process.cwd(), 'coverage'))) {
+      fs.mkdirSync(path.join(process.cwd(), 'coverage'));
+    }
+    fs.writeFileSync(path.join(process.cwd(), 'coverage', testContainer + '.json'), JSON.stringify(jsonOutput));
+    process.exit(failures > 0 ? 1 : 0);
   });
 }

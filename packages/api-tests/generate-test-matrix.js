@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const electronTestOutput = JSON.parse(fs.readFileSync('electron.json'));
-const openfinTestOutput = JSON.parse(fs.readFileSync('openfin.json'));
+const electronTestOutput = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'coverage', 'electron.json')));
+const openfinTestOutput = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'coverage', 'openfin.json')));
 
 const testTable = {
   electron: {},
