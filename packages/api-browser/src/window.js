@@ -61,6 +61,10 @@ class Window {
     // Unable to 'show' browser window
   }
 
+  getId() {
+    return window.name;
+  }
+
   hide() {
     // Unable to 'hide' browser window
   }
@@ -114,10 +118,6 @@ class Window {
   getChildWindows() {
     return this.children;
   }
-
-  static getCurrentWindowId() {
-    return window.name;
-  };
 
   static getCurrentWindow() {
     if (currentWindow) {
