@@ -137,6 +137,12 @@ declare class SSFWindow {
   loadURL(url: string): Promise<void>;
 
   /**
+   * Check if the window is showing.
+   * @returns {Promise<boolean>} A promise that resolves to a boolean stating if the window is showing.
+   */
+  isVisible(): Promise<boolean>;
+
+  /**
    * Reload the window.
    * @returns {Promise<void>} A promise that resolves when the window method succeeds.
    */

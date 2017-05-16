@@ -130,6 +130,12 @@ declare class SSFWindow {
   isResizable(): Promise<boolean>;
 
   /**
+   * Check if the window is showing.
+   * @returns {Promise<boolean>} A promise that resolves to a boolean stating if the window is showing.
+   */
+  isVisible(): Promise<boolean>;
+
+  /**
    * Load a new URL in the window.
    * @param {string} url - The URL to load in the window.
    * @returns {Promise<void>} A promise that resolves when the window method succeeds.

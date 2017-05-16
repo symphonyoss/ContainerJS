@@ -116,6 +116,10 @@ class Window implements SSFWindow {
     return this.asPromise<boolean>(this.innerWindow.isResizable);
   }
 
+  isVisible() {
+    return this.asPromise<boolean>(this.innerWindow.isVisible);
+  }
+
   loadURL(url) {
     return this.asPromise<void>(this.innerWindow.loadURL, url);
   }

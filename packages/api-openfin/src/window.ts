@@ -309,6 +309,10 @@ class Window implements SSFWindow {
       .then((options: any) => options.resizable);
   }
 
+  isVisible() {
+    return this.asPromise<boolean>('isShowing');
+  }
+
   loadURL(url) {
     return this.asPromise<void>('executeJavaScript', `window.location = '${url}'`);
   }

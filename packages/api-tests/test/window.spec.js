@@ -475,6 +475,23 @@ describe('Window API', function(done) {
       return chainPromises(steps);
     });
 
+    it('Should return a boolean stating if the window is visible #ssf.Window.isVisible', function() {
+      const windowTitle = 'windownameminimized';
+      const show = false;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        show
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('isVisible'),
+        (result) => assert.equal(result.value, show)
+      ];
+
+      return chainPromises(steps);
+    });
+
     it('Should load a url #ssf.Window.loadURL', function() {
       const windowTitle = 'windownameloadurl';
       const url = 'http://localhost:5000/load-url-test.html';
