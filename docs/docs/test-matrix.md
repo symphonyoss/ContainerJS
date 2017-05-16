@@ -34,7 +34,7 @@ sectionid: docs
 |ssf.Window.isMinimizable|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window.isMinimized|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window.isResizable|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
-|ssf.Window.loadURL|<span style="background-color:; display: block;">0/0</span>|<span style="background-color:; display: block;">0/0</span>|
+|ssf.Window.loadURL|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window.maximize|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window.maximized|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window.minimize|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
@@ -42,7 +42,7 @@ sectionid: docs
 |ssf.Window.restore|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window.setAlwaysOnTop|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window.setBounds|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
-|ssf.Window.setIcon|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
+|ssf.Window.setIcon|<span style="background-color:; display: block;">0/0</span>|<span style="background-color:; display: block;">0/0</span>|
 |ssf.Window.setMaximizable|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window.setMaximumSize|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window.setMinimizable|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
