@@ -188,22 +188,21 @@ describe('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it.skip('Should return the maximum height #ssf.Window.getMaximumSize', function() {
+    it('Should return the maximum height #ssf.Window.getMaximumSize', function() {
       const windowTitle = 'windownamemaxheight';
       const maxWidth = 500;
       const maxHeight = 600;
       const windowOptions = getWindowOptions({
         name: windowTitle,
         maxWidth,
-        maxHeight
+        maxHeight,
+        frame: false
       });
-
-      const frameSize = process.platform === 'win32' ? 20 : 25;
 
       const steps = [
         ...setupWindowSteps(windowOptions),
         () => callAsyncWindowMethod('getMaximumSize'),
-        (result) => assert.equal(result.value[1], maxHeight + frameSize)
+        (result) => assert.equal(result.value[1], maxHeight)
       ];
 
       return chainPromises(steps);
@@ -228,22 +227,21 @@ describe('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it.skip('Should return the minimum height #ssf.Window.getMinimumSize', function() {
+    it('Should return the minimum height #ssf.Window.getMinimumSize', function() {
       const windowTitle = 'windownameminheight';
       const minWidth = 500;
       const minHeight = 600;
       const windowOptions = getWindowOptions({
         name: windowTitle,
         minWidth,
-        minHeight
+        minHeight,
+        frame: false
       });
-
-      const frameSize = process.platform === 'win32' ? 20 : 25;
 
       const steps = [
         ...setupWindowSteps(windowOptions),
         () => callAsyncWindowMethod('getMinimumSize'),
-        (result) => assert.equal(result.value[1], minHeight + frameSize)
+        (result) => assert.equal(result.value[1], minHeight)
       ];
 
       return chainPromises(steps);
@@ -660,7 +658,7 @@ describe('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it.skip('Should set the windows maximum height #ssf.Window.setMaximumSize', function() {
+    it('Should set the windows maximum height #ssf.Window.setMaximumSize', function() {
       const windowTitle = 'windownamesetmaxheight';
       const maxWidth = 777;
       const maxHeight = 780;
@@ -716,7 +714,7 @@ describe('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it.skip('Should set the windows minimum height #ssf.Window.setMinimumSize', function() {
+    it('Should set the windows minimum height #ssf.Window.setMinimumSize', function() {
       const windowTitle = 'windownamesetminheight';
       const minWidth = 777;
       const minHeight = 780;
@@ -864,6 +862,48 @@ describe('Window API', function(done) {
         ...setupWindowSteps(windowOptions),
         () => callAsyncWindowMethod('getPosition'),
         (result) => assert.equal(result.value[1], yValue)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should be created with added frame size to max height #ssf.Window(maxHeight)', function() {
+      const windowTitle = 'windownamemaxheight';
+      const maxWidth = 500;
+      const maxHeight = 600;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        maxWidth,
+        maxHeight
+      });
+
+      const frameSize = process.platform === 'win32' ? 20 : 25;
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getMaximumSize'),
+        (result) => assert.equal(result.value[1], maxHeight + frameSize)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should be created with added frame size to min height #ssf.Window(minHeight)', function() {
+      const windowTitle = 'windownamemaxheight';
+      const minWidth = 500;
+      const minHeight = 600;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        minWidth,
+        minHeight
+      });
+
+      const frameSize = process.platform === 'win32' ? 20 : 25;
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getMinimumSize'),
+        (result) => assert.equal(result.value[1], minHeight + frameSize)
       ];
 
       return chainPromises(steps);

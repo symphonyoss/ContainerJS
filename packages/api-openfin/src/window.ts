@@ -48,6 +48,7 @@ const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 600;
 
 const convertOptions = (options) => {
+  const frameSize = navigator.appVersion.indexOf('Win') != -1 ? 20 : 25;
   let clonedOptions = Object.assign({}, options);
 
   const optionsMap = {
@@ -106,6 +107,14 @@ const convertOptions = (options) => {
 
   if (clonedOptions.defaultHeight == null) {
     clonedOptions.defaultHeight = DEFAULT_HEIGHT;
+  }
+
+  if (clonedOptions.maxHeight != null && clonedOptions.frame !== false) {
+    clonedOptions.maxHeight += frameSize;
+  }
+
+  if (clonedOptions.minHeight != null && clonedOptions.frame !== false) {
+    clonedOptions.minHeight += frameSize;
   }
 
   return clonedOptions;
