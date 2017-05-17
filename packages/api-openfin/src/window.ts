@@ -41,9 +41,6 @@ const windowStates = {
   RESTORED: 'restored'
 };
 
-const DEFAULT_X = 560;
-const DEFAULT_Y = 220;
-
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 600;
 
@@ -96,9 +93,8 @@ const convertOptions = (options) => {
   }
 
   if (clonedOptions.defaultLeft == null || clonedOptions.defaultTop == null) {
-    // Electron requires both x and y to be defined else it uses these defualts
-    clonedOptions.defaultLeft = DEFAULT_X;
-    clonedOptions.defaultTop = DEFAULT_Y;
+    // Electron requires both x and y to be defined else it centers the window even if center is false
+    clonedOptions.defaultCentered = true;
   }
 
   if (clonedOptions.defaultWidth == null) {
