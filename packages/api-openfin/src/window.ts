@@ -314,7 +314,7 @@ class Window implements SSFWindow {
   }
 
   reload() {
-    return this.asPromise<void>('executeJavaScript', 'window.location.reload()');
+    return this.asPromise<void>('reload');
   }
 
   restore() {
