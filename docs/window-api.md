@@ -59,7 +59,6 @@ A reference to the new window.
 
 ### Static Methods
 * `getCurrentWindow()`- Get the current window object
-* `getCurrentWindowId()` - Get the current window id as a string
 
 ### Class Methods
 _All methods return a promise that resolves to nothing, unless stated otherwise_
@@ -70,6 +69,7 @@ _All methods return a promise that resolves to nothing, unless stated otherwise_
 * `focus()` - Give the window focus.
 * `getChildWindows()` - Returns an array of the current child windows (including closed windows)
 * `getBounds()` - Gets the current bounds ({x, y, width, height}) of the window.
+* `getId()` - Gets the id of the window.
 * `getMaximumSize()` - Returns `Integer[width, height]` - Contains the window’s maximum width and height.
 * `getMinimumSize()` - Returns `Integer[width, height]` - Contains the window’s minimum width and height.
 * `getParentWindow()` - Returns the parent window.
@@ -84,6 +84,7 @@ _All methods return a promise that resolves to nothing, unless stated otherwise_
 * `isMinimizable()` - Returns `Boolean` - Whether the window can be manually minimized by user.
 * `isMinimized()` - Returns `Boolean` - Whether the window is minimized.
 * `isResizable()` - Returns `Boolean` - Whether the window can be manually resized by user.
+* `isVisible()` - Returns `Boolean` - Whether the window is visible.
 * `loadURL(url)` - Loads the specified URL.
 * `maximize()` - Maximizes the window.
 * `minimize()` - Minimizes the window.
