@@ -46,6 +46,12 @@ declare class SSFWindow {
   getChildWindows(): ReadonlyArray<any>;
 
   /**
+   * Get the id of the window
+   * @returns {string|number} A string representing the id of the window.
+   */
+  getId(): string|number;
+
+  /**
    * Get the maximum size of the window.
    * @returns {Promise<Number[]>} A promise that resolves to an array containing the maximum width and height of the window.
    */
@@ -135,6 +141,12 @@ declare class SSFWindow {
    * @returns {Promise<void>} A promise that resolves when the window method succeeds.
    */
   loadURL(url: string): Promise<void>;
+
+  /**
+   * Check if the window is showing.
+   * @returns {Promise<boolean>} A promise that resolves to a boolean stating if the window is showing.
+   */
+  isVisible(): Promise<boolean>;
 
   /**
    * Reload the window.
@@ -277,13 +289,6 @@ declare class SSFWindow {
    * @param {string|object} message - The message to send to the window. Can be any serializable object.
    */
   postMessage(message: string | Object): void;
-
-  /**
- * Gets the id of the current window.
- * @returns {string} The window id.
- * @static
- */
-  static getCurrentWindowId(): string;
 
   /**
  * Gets the current window object.

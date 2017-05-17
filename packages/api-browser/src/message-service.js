@@ -6,7 +6,7 @@ const listenerMap = new Map();
 class MessageService {
   static send(windowId, topic, message) {
     const win = getAccessibleWindow(windowId);
-    const senderId = Window.getCurrentWindowId();
+    const senderId = Window.getCurrentWindow().getId();
     if (win) {
       win.postMessage({
         senderId,

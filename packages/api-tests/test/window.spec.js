@@ -169,6 +169,22 @@ describe('Window API', function(done) {
       return chainPromises(steps);
     });
 
+    it.skip('Should return the id of the window #ssf.Window.getId', function() {
+      const windowTitle = 'windownameclose';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => selectWindow(app.client, 1),
+        () => callWindowMethod('getId'),
+        (result) => assert.equal(result.value, null)
+      ];
+
+      return chainPromises(steps);
+    });
+
     it('Should return the maximum width #ssf.Window.getMaximumSize', function() {
       const windowTitle = 'windownamemaxwidth';
       const maxWidth = 500;
@@ -470,6 +486,23 @@ describe('Window API', function(done) {
         ...setupWindowSteps(windowOptions),
         () => callAsyncWindowMethod('isResizable'),
         (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should return a boolean stating if the window is visible #ssf.Window.isVisible', function() {
+      const windowTitle = 'windownameminimized';
+      const show = false;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        show
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('isVisible'),
+        (result) => assert.equal(result.value, show)
       ];
 
       return chainPromises(steps);

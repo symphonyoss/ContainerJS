@@ -20,6 +20,7 @@ class Window implements SSFWindow {
 
     if (!options) {
       this.innerWindow = remote.getCurrentWindow();
+      this.id = this.innerWindow.id;
       if (callback) {
         callback(this);
       }
@@ -58,6 +59,10 @@ class Window implements SSFWindow {
 
   getBounds() {
     return this.asPromise<Rectangle>(this.innerWindow.getBounds);
+  }
+
+  getId() {
+    return this.id;
   }
 
   getMaximumSize() {
@@ -114,6 +119,10 @@ class Window implements SSFWindow {
 
   isResizable() {
     return this.asPromise<boolean>(this.innerWindow.isResizable);
+  }
+
+  isVisible() {
+    return this.asPromise<boolean>(this.innerWindow.isVisible);
   }
 
   loadURL(url) {
@@ -212,10 +221,6 @@ class Window implements SSFWindow {
 
   getChildWindows() {
     return this.innerWindow.getChildWindows();
-  }
-
-  static getCurrentWindowId() {
-    return remote.getCurrentWindow().id;
   }
 
   static getCurrentWindow(callback, errorCallback) {

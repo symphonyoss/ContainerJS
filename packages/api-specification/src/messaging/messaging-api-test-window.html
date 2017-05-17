@@ -54,7 +54,7 @@
     const messageBox = document.getElementById('message-box');
 
     const windowDetailsId = document.getElementById('window-uuid');
-    windowDetailsId.innerText = ssf.Window.getCurrentWindowId();
+    windowDetailsId.innerText = ssf.Window.getCurrentWindow().getId();
 
     ssf.MessageService.subscribe('*', 'test', (message, senderId) => {
       messageBox.innerText = '\'' + message + '\' from ' + senderId;

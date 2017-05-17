@@ -40,7 +40,7 @@ describe('Messaging API', function(done) {
     ssf.MessageService.subscribe(id, topic, (message) => {
       window.testMessage = message;
     });
-    callback(ssf.Window.getCurrentWindowId());
+    callback(ssf.Window.getCurrentWindow().getId());
   };
   const sendMessageScript = (id, topic, message, callback) => {
     ssf.MessageService.send(id, topic, message);

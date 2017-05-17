@@ -221,6 +221,10 @@ class Window implements SSFWindow {
     return this.children;
   }
 
+  getId() {
+    return `${this.innerWindow.uuid}:${this.innerWindow.name}`;
+  }
+
   getMaximumSize() {
     return this.getOptions()
       .then((options: any) => [options.maxWidth, options.maxHeight]);
@@ -307,6 +311,10 @@ class Window implements SSFWindow {
   isResizable() {
     return this.getOptions()
       .then((options: any) => options.resizable);
+  }
+
+  isVisible() {
+    return this.asPromise<boolean>('isShowing');
   }
 
   loadURL(url) {
@@ -421,11 +429,6 @@ class Window implements SSFWindow {
 
   postMessage(message) {
     MessageService.send(`${this.innerWindow.uuid}:${this.innerWindow.name}`, 'ssf-window-message', message);
-  }
-
-  static getCurrentWindowId() {
-    const currentWin: any = fin.desktop.Window.getCurrent();
-    return `${currentWin.uuid}:${currentWin.name}`;
   }
 
   static getCurrentWindow(callback?: any, errorCallback?: any) {
