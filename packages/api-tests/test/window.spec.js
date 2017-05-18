@@ -640,12 +640,7 @@ describe('Window API', function(done) {
         ...setupWindowSteps(windowOptions),
         () => callAsyncWindowMethod('setBounds', bounds),
         () => callAsyncWindowMethod('getBounds'),
-        (result) => {
-          assert.equal(result.value.height, bounds.height);
-          assert.equal(result.value.width, bounds.width);
-          assert.equal(result.value.x, bounds.x);
-          assert.equal(result.value.y, bounds.y);
-        }
+        (result) => assert.deepEqual(result.value, bounds)
       ];
 
       return chainPromises(steps);
@@ -937,6 +932,48 @@ describe('Window API', function(done) {
         ...setupWindowSteps(windowOptions),
         () => callAsyncWindowMethod('getMinimumSize'),
         (result) => assert.equal(result.value[1], minHeight + frameSize)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should be created in the center if no x and y #ssf.Window(center)', function() {
+      const windowTitle = 'windownamecenter';
+      let targetX;
+      let targetY;
+      const width = 500;
+      const height = 500;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        center: false,
+        width,
+        height
+      });
+
+      const frameSize = process.platform === 'win32' ? 20 : 25;
+
+      const getScreenSize = () => {
+        /* eslint-disable no-undef */
+        const script = (callback) => {
+          const width = screen.width;
+          const height = screen.height;
+          callback({ width, height });
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script);
+      };
+
+      const calculateTargetPosition = (screenSize) => {
+        targetX = (screenSize.width / 2) - (width / 2);
+        targetY = (screenSize.height / 2) - (height / 2) - frameSize;
+      };
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => getScreenSize(),
+        (screenSizeObject) => calculateTargetPosition(screenSizeObject.value),
+        () => callAsyncWindowMethod('getPosition'),
+        (result) => assert.deepEqual(result.value, [targetX, targetY])
       ];
 
       return chainPromises(steps);
