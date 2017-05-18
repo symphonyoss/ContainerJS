@@ -6,14 +6,17 @@
   "scripts": {
     "start": "live-server src/",
     "postinstall": "rimraf src/bootstrap.min.css && copyfiles -f node_modules/bootstrap/dist/css/bootstrap.min.css src",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "docs": "typedoc --mode file --json type-info.json interface.ts && node generate-docs.js && copyfiles -f \"docs/docs.html\" \"../../docs/_layouts\" && copyfiles -f \"docs/**/*.md\" \"../../docs/docs/\" && rimraf docs"
   },
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
     "copyfiles": "^1.2.0",
     "live-server": "^1.2.0",
-    "rimraf": "^2.6.1"
+    "rimraf": "^2.6.1",
+    "typedoc": "^0.7.0",
+    "typedoc-markdown-theme": "0.0.4"
   },
   "dependencies": {
     "bootstrap": "^3.3.7"

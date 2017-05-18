@@ -8,10 +8,11 @@
     "lint": "eslint --ignore-path .gitignore **/*.js",
     "postinstall": "npm run bootstrap && node copy-markdown.js",
     "test:ui": "cd packages/api-tests && npm run test:ui",
-    "test:ci": "cd packages/api-tests && npm run test:ci && node generate-test-matrix.js",
+    "test:ci": "cd packages/api-tests && npm run test:ci && node generate-test-report.js",
     "browser": "npm i & cd packages/api-browser-demo && npm start",
     "electron": "npm i & cd packages/api-electron-demo && npm start",
-    "openfin": "npm i & cd packages/api-openfin-demo && npm start"
+    "openfin": "npm i & cd packages/api-openfin-demo && npm start",
+    "docs": "cd packages/api-specification && npm run docs"
   },
   "license": "Apache-2.0",
   "repository": {

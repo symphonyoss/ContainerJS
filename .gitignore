@@ -71,6 +71,12 @@ transpiled/
 # Test output
 /packages/api-tests/coverage/
 
+# Docs output
+/packages/api-specification/test-report.json
+/packages/api-specification/type-info.json
+/packages/api-specification/docs
+
+
 # Visual Studio Code
 .vscode
 
