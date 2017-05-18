@@ -116,7 +116,7 @@ const convertOptions = (options) => {
   return clonedOptions;
 };
 
-class Window implements SSFWindow {
+class Window implements ssf.Window {
   children: Array<any>;
   eventListeners: Map<any, any>;
   innerWindow: any;
@@ -204,7 +204,7 @@ class Window implements SSFWindow {
   }
 
   getBounds() {
-    return this.asPromise<Rectangle>('getBounds')
+    return this.asPromise<ssf.Rectangle>('getBounds')
       .then((bounds: any) => ({
         x: bounds.left,
         y: bounds.top,

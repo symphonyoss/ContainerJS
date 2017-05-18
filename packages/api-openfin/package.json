@@ -6,13 +6,14 @@
   "scripts": {
     "build": "rimraf dist transpiled && tsc && copyfiles -f src/notification.html dist && rollup -c && rimraf transpiled",
     "test": "npm run build",
-    "postinstall": "npm run build"
+    "postinstall": "copyfiles -f \"node_modules/containerjs-api-specification/interface.ts\" src/ && npm run build"
   },
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
     "copyfiles": "^1.2.0",
     "rimraf": "^2.6.1",
+    "containerjs-api-specification": "0.0.1",
     "rollup": "^0.41.6",
     "typescript": "^2.3.2"
   },

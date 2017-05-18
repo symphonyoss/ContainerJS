@@ -1,4 +1,4 @@
-class MessageService {
+class MessageService implements ssf.MessageService {
   // Window ID should be in the form 'application-uuid:window-name'
   static send(windowId, topic, message) {
     const [appId, windowName] = windowId.split(':');

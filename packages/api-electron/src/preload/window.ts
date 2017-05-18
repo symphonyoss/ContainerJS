@@ -9,7 +9,7 @@ import { IpcMessages } from '../common/constants';
 
 let currentWindow = null;
 
-class Window implements SSFWindow {
+class Window implements ssf.Window {
   innerWindow: any;
   id: number;
 
@@ -59,7 +59,7 @@ class Window implements SSFWindow {
   }
 
   getBounds() {
-    return this.asPromise<Rectangle>(this.innerWindow.getBounds);
+    return this.asPromise<ssf.Rectangle>(this.innerWindow.getBounds);
   }
 
   getId() {

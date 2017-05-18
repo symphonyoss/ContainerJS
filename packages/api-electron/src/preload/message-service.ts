@@ -3,7 +3,7 @@ import { IpcMessages } from '../common/constants';
 
 const listenerMap = new Map();
 
-class MessageService {
+class MessageService implements ssf.MessageService {
   static send(windowId, topic, message) {
     ipc.send(IpcMessages.IPC_SSF_SEND_MESSAGE, {
       windowId,

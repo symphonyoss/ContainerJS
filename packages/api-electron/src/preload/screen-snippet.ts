@@ -1,6 +1,6 @@
 const remote = require('electron').remote;
 
-class ScreenSnippet {
+class ScreenSnippet implements ssf.ScreenSnippet {
   capture() {
     return new Promise((resolve) => {
       remote.getCurrentWindow().capturePage((image: any) => {
