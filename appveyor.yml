@@ -3,8 +3,6 @@ platform:
 
 environment:
   nodejs_version: "7.9.0"
-  access_token:
-    secure: zYCOwcOlgTzvbD0CjJRDNQ==
 
 install:
   - ps: Install-Product node
