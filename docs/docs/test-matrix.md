@@ -12,9 +12,9 @@ sectionid: docs
 |ssf.MessageService.receive|<span style="background-color:#50ce5b; display: block;">4/4</span>|<span style="background-color:#50ce5b; display: block;">4/4</span>|
 |ssf.MessageService.send|<span style="background-color:#50ce5b; display: block;">3/3</span>|<span style="background-color:#50ce5b; display: block;">3/3</span>|
 |ssf.Window()|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
+|ssf.Window(center)|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window(maxHeight)|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window(minHeight)|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
-|ssf.Window(center)|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window(x)|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window(y)|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
 |ssf.Window.alwaysOnTop|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
@@ -23,11 +23,11 @@ sectionid: docs
 |ssf.Window.flashFrame|<span style="background-color:; display: block;">0/0</span>|<span style="background-color:; display: block;">0/0</span>|
 |ssf.Window.focus|<span style="background-color:; display: block;">0/0</span>|<span style="background-color:; display: block;">0/0</span>|
 |ssf.Window.getBounds|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
-|ssf.Window.getChildWindows|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
+|ssf.Window.getChildWindows|<span style="background-color:#50ce5b; display: block;">2/2</span>|<span style="background-color:#50ce5b; display: block;">2/2</span>|
 |ssf.Window.getId|<span style="background-color:; display: block;">0/0</span>|<span style="background-color:; display: block;">0/0</span>|
 |ssf.Window.getMaximumSize|<span style="background-color:#50ce5b; display: block;">2/2</span>|<span style="background-color:#50ce5b; display: block;">2/2</span>|
 |ssf.Window.getMinimumSize|<span style="background-color:#50ce5b; display: block;">2/2</span>|<span style="background-color:#50ce5b; display: block;">2/2</span>|
-|ssf.Window.getParentWindow|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
+|ssf.Window.getParentWindow|<span style="background-color:#50ce5b; display: block;">2/2</span>|<span style="background-color:#50ce5b; display: block;">2/2</span>|
 |ssf.Window.getPosition|<span style="background-color:#50ce5b; display: block;">2/2</span>|<span style="background-color:#50ce5b; display: block;">2/2</span>|
 |ssf.Window.getSize|<span style="background-color:#50ce5b; display: block;">2/2</span>|<span style="background-color:#50ce5b; display: block;">2/2</span>|
 |ssf.Window.getTitle|<span style="background-color:#50ce5b; display: block;">1/1</span>|<span style="background-color:#50ce5b; display: block;">1/1</span>|
