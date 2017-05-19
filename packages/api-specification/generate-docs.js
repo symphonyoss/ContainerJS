@@ -16,15 +16,7 @@ const badgeColors = {
 };
 
 const getBadgeColor = (percent) => {
-  let colorCode = '';
-  Object.keys(badgeColors).some((key) => {
-    if (percent <= parseInt(key)) {
-      colorCode = badgeColors[key];
-      return true;
-    }
-    return false;
-  });
-  return colorCode;
+  return badgeColors[Object.keys(badgeColors).find((col) => percent <= col)];
 };
 
 // === Markdown Generation Methods ===
@@ -46,10 +38,7 @@ const generateClass = (classObj) => {
 };
 
 const generateMethod = (methodObj, className) => {
-  let methodData = '';
-  if (methodObj.flags.isStatic) {
-    methodData += ' (static)';
-  }
+  const methodData = methodObj.flags.isStatic ? ' (static)' : '';
 
   let badgeString = `![${methodObj.name}](https://img.shields.io/badge/Electron-no_test_data-lightgrey.svg) ![${methodObj.name}](https://img.shields.io/badge/OpenFin-no_test_data-lightgrey.svg)`;
   if (testMatrixJson[`ssf.${className}.${methodObj.name}`]) {
@@ -157,7 +146,7 @@ const getParamList = (paramList) => {
     return params;
   }
 
-  paramList.forEach((arg, i) => {
+  paramList.forEach((arg) => {
     params.push(arg.name + ': ' + getType(arg.type));
   });
   return params;

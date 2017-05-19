@@ -38,7 +38,7 @@ Focuses the window.
 Returns the bounds of the window.  
 **Returns:** `<Rectangle>` - A promise that resolves to an object specifying the bounds of the window.
   
-#### getChildWindows  ![getChildWindows](https://img.shields.io/badge/Electron-1%2F1-brightgreen.svg) ![getChildWindows](https://img.shields.io/badge/OpenFin-1%2F1-brightgreen.svg)
+#### getChildWindows  ![getChildWindows](https://img.shields.io/badge/Electron-2%2F2-brightgreen.svg) ![getChildWindows](https://img.shields.io/badge/OpenFin-2%2F2-brightgreen.svg)
 `getChildWindows() => <any>`  
 Get the child windows of the window.  
 **Returns:** `<any>` - A promise that resolves to an array of child windows.
@@ -53,7 +53,7 @@ Get the maximum size of the window.
 Get the minimum size of the window.  
 **Returns:** `<<number>>` - A promise that resolves to an array containing the minimum width and height of the window.
   
-#### getParentWindow  ![getParentWindow](https://img.shields.io/badge/Electron-1%2F1-brightgreen.svg) ![getParentWindow](https://img.shields.io/badge/OpenFin-1%2F1-brightgreen.svg)
+#### getParentWindow  ![getParentWindow](https://img.shields.io/badge/Electron-2%2F2-brightgreen.svg) ![getParentWindow](https://img.shields.io/badge/OpenFin-2%2F2-brightgreen.svg)
 `getParentWindow() => <any>`  
 Get the parent of the window. Null will be returned if the window has no parent.  
 **Returns:** `<any>` - The parent window.
@@ -157,7 +157,7 @@ Sets the window to always be on top of other windows.
 Sets the window to always be on top of other windows.  
 **Returns:** `<void>` - A promise that resolves to nothing when the option is set.
   
-#### setIcon  ![setIcon](https://img.shields.io/badge/Electron-0%2F0-lightgrey.svg) ![setIcon](https://img.shields.io/badge/OpenFin-0%2F0-lightgrey.svg)
+#### setIcon  ![setIcon](https://img.shields.io/badge/Electron-1%2F1-brightgreen.svg) ![setIcon](https://img.shields.io/badge/OpenFin-1%2F1-brightgreen.svg)
 `setIcon(icon: string) => <void>`  
 Sets the window icon.  
 **Returns:** `<void>` - A promise that resolves to nothing when the option has been set.
