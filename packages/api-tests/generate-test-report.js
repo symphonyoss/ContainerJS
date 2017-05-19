@@ -59,8 +59,6 @@ generateTotals(openfinTestOutput);
 
 const sortedTags = Object.keys(tagCount).sort();
 
-let tableString = '<table><tr><th>Method</th><th style="text-align:center">Electron</th><th style="text-align:center">OpenFin</th></tr>\n';
-
 const outputJson = {};
 
 sortedTags.forEach((tag) => {
@@ -79,7 +77,5 @@ sortedTags.forEach((tag) => {
     }
   };
 });
-
-tableString += '</table>';
 
 fs.writeFileSync(path.join(__dirname, '..', 'api-specification', 'test-report.json'), JSON.stringify(outputJson));

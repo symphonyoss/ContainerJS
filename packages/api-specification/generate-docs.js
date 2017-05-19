@@ -51,7 +51,7 @@ const generateMethod = (methodObj, className) => {
     methodData += ' (static)';
   }
 
-  let badgeString = `![${methodObj.name}](https://img.shields.io/badge/Electron-no_test_data-lightgrey.svg) ![${methodObj.name}](https://img.shields.io/badge/OpenFin-no_test_data-lightgrey.svg)`;;
+  let badgeString = `![${methodObj.name}](https://img.shields.io/badge/Electron-no_test_data-lightgrey.svg) ![${methodObj.name}](https://img.shields.io/badge/OpenFin-no_test_data-lightgrey.svg)`;
   if (testMatrixJson[`ssf.${className}.${methodObj.name}`]) {
     const testResults = testMatrixJson[`ssf.${className}.${methodObj.name}`];
     const electronBadgeColor = testResults.electron.total > 0 ? getBadgeColor((testResults.electron.passed / testResults.electron.total) * 100) : 'lightgrey';
@@ -194,7 +194,7 @@ const generatePagesHeader = (api) => {
   const id = `id: ${api}Api\n`;
   const title = `title: ${api} Api\n`;
   const link = `permalink: docs/${api}.html\n`;
-  const layout = `layout: docs\n`
+  const layout = `layout: docs\n`;
   const section = `sectionid: docs\n`;
   return `---  \n${id}${title}${link}${layout}${section}---  \n\n`;
 };
