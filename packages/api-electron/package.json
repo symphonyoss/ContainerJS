@@ -21,6 +21,7 @@
     "ssf-electron": "./bin/ssf-electron"
   },
   "devDependencies": {
+    "copyfiles": "^1.2.0",
     "rimraf": "^2.6.1",
     "rollup": "^0.41.6",
     "rollup-plugin-commonjs": "^8.0.2",
