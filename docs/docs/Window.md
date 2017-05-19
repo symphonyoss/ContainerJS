@@ -43,12 +43,12 @@ Returns the bounds of the window.
 Get the child windows of the window.  
 **Returns:** `<any>` - A promise that resolves to an array of child windows.
   
-#### getMaximumSize  ![getMaximumSize](https://img.shields.io/badge/Electron-1%2F1-brightgreen.svg) ![getMaximumSize](https://img.shields.io/badge/OpenFin-1%2F1-brightgreen.svg)
+#### getMaximumSize  ![getMaximumSize](https://img.shields.io/badge/Electron-2%2F2-brightgreen.svg) ![getMaximumSize](https://img.shields.io/badge/OpenFin-2%2F2-brightgreen.svg)
 `getMaximumSize() => <<number>>`  
 Get the maximum size of the window.  
 **Returns:** `<<number>>` - A promise that resolves to an array containing the maximum width and height of the window.
   
-#### getMinimumSize  ![getMinimumSize](https://img.shields.io/badge/Electron-1%2F1-brightgreen.svg) ![getMinimumSize](https://img.shields.io/badge/OpenFin-1%2F1-brightgreen.svg)
+#### getMinimumSize  ![getMinimumSize](https://img.shields.io/badge/Electron-2%2F2-brightgreen.svg) ![getMinimumSize](https://img.shields.io/badge/OpenFin-2%2F2-brightgreen.svg)
 `getMinimumSize() => <<number>>`  
 Get the minimum size of the window.  
 **Returns:** `<<number>>` - A promise that resolves to an array containing the minimum width and height of the window.
@@ -167,7 +167,7 @@ Sets the window icon.
 Sets if the window can be maximized.  
 **Returns:** `<void>` - A promise that resolves to nothing when the option has been set.
   
-#### setMaximumSize  ![setMaximumSize](https://img.shields.io/badge/Electron-1%2F1-brightgreen.svg) ![setMaximumSize](https://img.shields.io/badge/OpenFin-1%2F1-brightgreen.svg)
+#### setMaximumSize  ![setMaximumSize](https://img.shields.io/badge/Electron-2%2F2-brightgreen.svg) ![setMaximumSize](https://img.shields.io/badge/OpenFin-2%2F2-brightgreen.svg)
 `setMaximumSize(maxWidth: number, maxHeight: number) => <void>`  
 Sets the windows maximum size.  
 **Returns:** `<void>` - A promise that resolves to nothing when the option has been set.
@@ -177,7 +177,7 @@ Sets the windows maximum size.
 Sets if the window can be minimized.  
 **Returns:** `<void>` - A promise that resolves to nothing when the option has been set.
   
-#### setMinimumSize  ![setMinimumSize](https://img.shields.io/badge/Electron-1%2F1-brightgreen.svg) ![setMinimumSize](https://img.shields.io/badge/OpenFin-1%2F1-brightgreen.svg)
+#### setMinimumSize  ![setMinimumSize](https://img.shields.io/badge/Electron-2%2F2-brightgreen.svg) ![setMinimumSize](https://img.shields.io/badge/OpenFin-2%2F2-brightgreen.svg)
 `setMinimumSize(minWidth: number, minHeight: number) => <void>`  
 Sets the windows minimum size.  
 **Returns:** `<void>` - A promise that resolves to nothing when the option has been set.
