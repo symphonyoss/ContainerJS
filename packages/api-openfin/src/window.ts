@@ -238,10 +238,9 @@ class Window implements SSFWindow {
   getParentWindow() {
     return new Promise((resolve, reject) => {
       if (this.innerWindow) {
-        let parent = this.innerWindow.getParentWindow();
-
-        if (parent.name === this.innerWindow.name) {
-          parent = null;
+        let parent = null;
+        if (window.opener) {
+          parent = fin.desktop.Window.wrap(this.innerWindow.uuid, window.opener.name);
         }
 
         resolve(parent);

@@ -137,17 +137,27 @@ describe('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it.skip('Should get the child windows #ssf.Window.getChildWindows', function() {
+    it('Should get the child windows #ssf.Window.getChildWindows', function() {
       const windowTitle = 'windownameclose';
       const windowOptions = getWindowOptions({
         name: windowTitle
       });
 
+      const getChildWindowsCount = () => {
+        /* eslint-disable no-undef */
+        const script = (callback) => {
+          var currentWin = ssf.Window.getCurrentWindow();
+          callback(currentWin.getChildWindows().length);
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script);
+      };
+
       const steps = [
         ...setupWindowSteps(windowOptions),
         () => selectWindow(app.client, 0),
-        () => callWindowMethod('getChildWindows'),
-        (result) => assert.equal(result.value.length, 1)
+        () => getChildWindowsCount(),
+        (result) => assert.equal(result.value, 1)
       ];
 
       return chainPromises(steps);
@@ -263,16 +273,35 @@ describe('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it.skip('Should return the parent window #ssf.Window.getParentWindow', function() {
+    it('Should return the parent window #ssf.Window.getParentWindow', function() {
       const windowTitle = 'windownamegetparent';
       const windowOptions = getWindowOptions({
-        name: windowTitle
+        name: windowTitle,
+        title: windowTitle
       });
+
+      const getParentWindowTitle = () => {
+        /* eslint-disable no-undef */
+        const script = (callback) => {
+          var currentWin = ssf.Window.getCurrentWindow();
+          currentWin.getParentWindow().then((parent) => {
+            if (window.fin === undefined) {
+              callback(parent.getTitle());
+            } else {
+              callback(parent.name);
+            }
+          });
+        };
+        return executeAsyncJavascript(app.client, script);
+      };
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callAsyncWindowMethod('getParentWindow'),
-        (result) => assert.equal(true, true)
+        () => openNewWindow(app.client, Object.assign({}, windowOptions, {name: 'child'})),
+        () => selectWindow(app.client, 2),
+        () => app.client.waitForVisible('.visible-check'),
+        () => getParentWindowTitle(),
+        (result) => assert.equal(result.value, windowTitle)
       ];
 
       return chainPromises(steps);
