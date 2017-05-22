@@ -1,7 +1,3 @@
-interface Window {
-  Notification: any;
-}
-
 window.Notification = function(title, options) {
   if (!options) {
     options = {};

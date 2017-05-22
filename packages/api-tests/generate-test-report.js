@@ -8,31 +8,10 @@ const testTable = {
   openfin: {}
 };
 
-// Read as 10% or less, 25% or less etc
-const percentageColors = {
-  10: '#f45858',
-  25: '#f2f23c',
-  50: '#aeea3f',
-  75: '#85ea4f',
-  100: '#50ce5b'
-};
-
 const testStatus = {
   pass: 'pass',
   skip: 'pending',
   error: 'error'
-};
-
-const getColorCode = (percent) => {
-  let colorCode = '';
-  Object.keys(percentageColors).some((key) => {
-    if (percent <= parseInt(key)) {
-      colorCode = percentageColors[key];
-      return true;
-    }
-    return false;
-  });
-  return colorCode;
 };
 
 const listOfTests = [];
@@ -80,27 +59,23 @@ generateTotals(openfinTestOutput);
 
 const sortedTags = Object.keys(tagCount).sort();
 
-let markdownString = '| Method | Electron | OpenFin |\n|:---|:---:|:---:|\n';
+const outputJson = {};
 
 sortedTags.forEach((tag) => {
   const electronPassed = testTable.electron[tag];
   const openfinPassed = testTable.openfin[tag];
   const total = tagCount[tag];
-  const electronColor = total > 0 ? getColorCode((electronPassed / total) * 100) : '';
-  const openfinColor = total > 0 ? getColorCode((openfinPassed / total) * 100) : '';
   const label = tag.substring(1); // Removes the # from the front of the tag
-  markdownString += `|${label}|<span style="background-color:${electronColor}; display: block;">${electronPassed}/${total}</span>|<span style="background-color:${openfinColor}; display: block;">${openfinPassed}/${total}</span>|\n`;
+  outputJson[label] = {
+    electron: {
+      passed: electronPassed,
+      total
+    },
+    openfin: {
+      passed: openfinPassed,
+      total
+    }
+  };
 });
 
-const ghPagesMarkdown =
-`---
-id: testMatrix
-title: Test Report
-permalink: docs/test-matrix.html
-layout: docs
-sectionid: docs
----\n
-{: width="100%"}
-`;
-
-fs.writeFileSync(path.join(__dirname, '..', '..', 'docs', 'docs', 'test-matrix.md'), ghPagesMarkdown + markdownString);
+fs.writeFileSync(path.join(__dirname, '..', 'api-specification', 'test-report.json'), JSON.stringify(outputJson));

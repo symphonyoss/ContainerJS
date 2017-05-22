@@ -71,6 +71,16 @@ transpiled/
 # Test output
 /packages/api-tests/coverage/
 
+# Interfaces
+/packages/api-electron/src/interface.ts
+/packages/api-openfin/src/interface.ts
+
+# Docs output
+/packages/api-specification/test-report.json
+/packages/api-specification/type-info.json
+/packages/api-specification/docs
+
+
 # Visual Studio Code
 .vscode
 

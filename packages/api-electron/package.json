@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rimraf dist transpiled && tsc && rollup -c && rimraf transpiled",
     "test": "npm run build",
-    "postinstall": "npm run build"
+    "postinstall": "copyfiles -f \"node_modules/containerjs-api-specification/interface.ts\" src/ && npm run build"
   },
   "author": "",
   "license": "Apache-2.0",
@@ -14,12 +14,14 @@
     "@types/electron": "^1.4.37",
     "@types/electron-notify": "^0.1.3",
     "electron": "^1.6.6",
+    "containerjs-api-specification": "0.0.1",
     "electron-notify": "^0.1.0"
   },
   "bin": {
     "ssf-electron": "./bin/ssf-electron"
   },
   "devDependencies": {
+    "copyfiles": "^1.2.0",
     "rimraf": "^2.6.1",
     "rollup": "^0.41.6",
     "rollup-plugin-commonjs": "^8.0.2",
