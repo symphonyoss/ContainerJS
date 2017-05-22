@@ -179,22 +179,6 @@ describe('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it.skip('Should return the id of the window #ssf.Window.getId', function() {
-      const windowTitle = 'windownameclose';
-      const windowOptions = getWindowOptions({
-        name: windowTitle
-      });
-
-      const steps = [
-        ...setupWindowSteps(windowOptions),
-        () => selectWindow(app.client, 1),
-        () => callWindowMethod('getId'),
-        (result) => assert.equal(result.value, null)
-      ];
-
-      return chainPromises(steps);
-    });
-
     it('Should return the maximum width #ssf.Window.getMaximumSize', function() {
       const windowTitle = 'windownamemaxwidth';
       const maxWidth = 500;
@@ -887,6 +871,42 @@ describe('Window API', function(done) {
 
       return chainPromises(steps);
     });
+
+    if (process.env.MOCHA_CONTAINER === 'electron') {
+      it('Should return the id of the window #ssf.Window.getId', function() {
+        const windowTitle = 'windownameid';
+        const windowOptions = getWindowOptions({
+          name: windowTitle
+        });
+
+        const steps = [
+          ...setupWindowSteps(windowOptions),
+          () => selectWindow(app.client, 1),
+          () => callWindowMethod('getId'),
+          (result) => assert.equal(result.value, 2)
+        ];
+
+        return chainPromises(steps);
+      });
+    }
+
+    if (process.env.MOCHA_CONTAINER === 'openfin') {
+      it('Should return the id of the window #ssf.Window.getId', function() {
+        const windowTitle = 'windownameid';
+        const windowOptions = getWindowOptions({
+          name: windowTitle
+        });
+
+        const steps = [
+          ...setupWindowSteps(windowOptions),
+          () => selectWindow(app.client, 1),
+          () => callWindowMethod('getId'),
+          (result) => assert.equal(result.value, `ssf-desktop-api-openfin-demo:${windowTitle}`)
+        ];
+
+        return chainPromises(steps);
+      });
+    }
   });
 
   describe('New Window', function() {
