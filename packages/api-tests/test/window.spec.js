@@ -32,6 +32,8 @@ const retrieveWebUrl = () => {
   return executeAsyncJavascript(app.client, script);
 };
 
+const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
+
 describe('Window API', function(done) {
   const timeout = 60000;
   this.timeout(timeout);
@@ -65,6 +67,7 @@ describe('Window API', function(done) {
       var currentWin = ssf.Window.getCurrentWindow();
       callback(currentWin[method](...args));
     };
+
     /* eslint-enable no-undef */
     return executeAsyncJavascript(app.client, script, method, args);
   };
@@ -546,7 +549,7 @@ describe('Window API', function(done) {
         ...setupWindowSteps(windowOptions),
         () => executeLoadURL(url),
         // We need to give the window time to load, otherwise we might get the old url
-        () => new Promise((resolve) => setTimeout(resolve, 2000)),
+        () => wait(2000),
         () => retrieveWebUrl(),
         (result) => assert.equal(result.value, url)
       ];
@@ -1033,6 +1036,254 @@ describe('Window API', function(done) {
         (screenSizeObject) => calculateTargetPosition(screenSizeObject.value),
         () => callAsyncWindowMethod('getPosition'),
         (result) => assert.deepEqual(result.value, [targetX, targetY])
+      ];
+
+      return chainPromises(steps);
+    });
+  });
+
+  describe('Event Listeners', function() {
+    const addListener = (event) => {
+      /* eslint-disable no-undef */
+      const script = (event, callback) => {
+        const currentWindow = ssf.Window.getCurrentWindow();
+        callback(currentWindow.addListener(event, () => { window.listenEventResult = true; }));
+      };
+      /* eslint-enable no-undef */
+      return executeAsyncJavascript(app.client, script, event);
+    };
+
+    const retrieveListenerResult = () => {
+      /* eslint-disable no-undef */
+      const script = (callback) => {
+        callback(window.listenEventResult);
+      };
+      /* eslint-enable no-undef */
+      return executeAsyncJavascript(app.client, script);
+    };
+
+    const retrieveDelay = 500;
+
+    it.skip('Should emit the blur event #ssf.WindowEvent.blur', function() {
+      // Electron works but OpenFin doesnt seem to set the value
+      const windowTitle = 'windoweventhide';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const event = 'blur';
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addListener(event),
+        () => callAsyncWindowMethod(event),
+        () => wait(retrieveDelay),
+        () => retrieveListenerResult(),
+        (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should emit the move event #ssf.WindowEvent.move', function() {
+      const windowTitle = 'windoweventmove';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const bounds = { x: 3, y: 3, width: 500, height: 500 };
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addListener('move'),
+        () => callAsyncWindowMethod('setBounds', bounds),
+        () => wait(retrieveDelay),
+        () => retrieveListenerResult(),
+        (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should emit the resize event #ssf.WindowEvent.resize', function() {
+      const windowTitle = 'windoweventresize';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const bounds = { x: 3, y: 3, width: 500, height: 500 };
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addListener('resize'),
+        () => callAsyncWindowMethod('setBounds', bounds),
+        () => wait(retrieveDelay),
+        () => retrieveListenerResult(),
+        (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it.skip('Should emit the closed event #ssf.WindowEvent.closed', function() {
+      // Need to put the listen on another window as closing the window removes the listener
+      const windowTitle = 'windoweventboundschanging';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addListener('closed'),
+        () => callAsyncWindowMethod('close'),
+        () => wait(retrieveDelay),
+        () => retrieveListenerResult(),
+        (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should emit the focus event #ssf.WindowEvent.focus', function() {
+      const windowTitle = 'windoweventfocus';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const event = 'focus';
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addListener(event),
+        () => callAsyncWindowMethod('blur'),
+        () => callAsyncWindowMethod(event),
+        () => wait(retrieveDelay),
+        () => retrieveListenerResult(),
+        (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should emit the hide event #ssf.WindowEvent.hide', function() {
+      const windowTitle = 'windoweventhide';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const event = 'hide';
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addListener(event),
+        () => callAsyncWindowMethod(event),
+        () => wait(retrieveDelay),
+        () => retrieveListenerResult(),
+        (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should emit the maximize event #ssf.WindowEvent.maximize', function() {
+      const windowTitle = 'windoweventmaximize';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const event = 'maximize';
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addListener(event),
+        () => callAsyncWindowMethod(event),
+        () => wait(retrieveDelay),
+        () => retrieveListenerResult(),
+        (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should emit the minimize event #ssf.WindowEvent.minimize', function() {
+      const windowTitle = 'windoweventminimize';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const event = 'minimize';
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addListener(event),
+        () => callAsyncWindowMethod(event),
+        () => wait(retrieveDelay),
+        () => retrieveListenerResult(),
+        (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should emit the restore event when minimized #ssf.WindowEvent.restore', function() {
+      const windowTitle = 'windoweventrestoremin';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const event = 'restore';
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addListener(event),
+        () => callAsyncWindowMethod('minimize'),
+        () => callAsyncWindowMethod(event),
+        () => wait(retrieveDelay),
+        () => retrieveListenerResult(),
+        (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it.skip('Should not emit the restore event from maximized #ssf.WindowEvent.restore', function() {
+      // Electron doesn't emit the event but OpenFin does
+      const windowTitle = 'windoweventrestoremax';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const event = 'restore';
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addListener(event),
+        () => callAsyncWindowMethod('maximize'),
+        () => callAsyncWindowMethod(event),
+        () => wait(retrieveDelay),
+        () => retrieveListenerResult(),
+        (result) => assert.equal(result.value, null)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should emit the show event #ssf.WindowEvent.show', function() {
+      const windowTitle = 'windoweventshow';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const event = 'show';
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addListener(event),
+        () => callAsyncWindowMethod('hide'),
+        () => callAsyncWindowMethod(event),
+        () => wait(retrieveDelay),
+        () => retrieveListenerResult(),
+        (result) => assert.equal(result.value, true)
       ];
 
       return chainPromises(steps);
