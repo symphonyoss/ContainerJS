@@ -3,6 +3,10 @@ platform:
 
 environment:
   nodejs_version: "7.9.0"
+  access_token:
+    secure: 4Nz2Y0bVRKdKUBmNVYN6XTLhf3tR1B3zKXN4yHKgR68EYc+3iY3nQuX5SJgJRr9p
+  github_email:
+    secure: YPjJuUxFqpDTxqi5tffpUiMz2Y62dgkDavR83tI59B4=
 
 install:
   - ps: Install-Product node
@@ -15,5 +19,9 @@ test_script:
   - npm run test
   - npm run test:ci
   - npm run docs
+
+
+deploy_script:
+  - ps: .\deploy-script.ps1
 
 build: off
