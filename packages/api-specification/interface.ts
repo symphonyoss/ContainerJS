@@ -140,6 +140,12 @@ declare namespace ssf {
     getChildWindows(): ReadonlyArray<any>;
 
     /**
+     * Gets the id of the current window.
+     * @returns {string} The window id.
+     */
+    getId(): string;
+
+    /**
      * Get the maximum size of the window.
      * @returns {Promise<Number[]>} A promise that resolves to an array containing the maximum width and height of the window.
      */
@@ -371,13 +377,6 @@ declare namespace ssf {
      * @param {string|object} message - The message to send to the window. Can be any serializable object.
      */
     postMessage(message: string | Object): void;
-
-    /**
-   * Gets the id of the current window.
-   * @returns {string} The window id.
-   * @static
-   */
-    static getCurrentWindowId(): string;
 
     /**
    * Gets the current window object.
