@@ -72,6 +72,7 @@ transpiled/
 /packages/api-tests/coverage/
 
 # Interfaces
+/packages/api-browser/src/interface.ts
 /packages/api-electron/src/interface.ts
 /packages/api-openfin/src/interface.ts
 
