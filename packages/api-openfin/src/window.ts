@@ -240,7 +240,9 @@ class Window implements ssf.Window {
       if (this.innerWindow) {
         let parent = null;
         if (window.opener) {
-          parent = fin.desktop.Window.wrap(this.innerWindow.uuid, window.opener.name);
+          const win = fin.desktop.Window.wrap(this.innerWindow.uuid, window.opener.name);
+          parent = new Window(null, null, null);
+          parent.innerWindow = win;
         }
 
         resolve(parent);
