@@ -4,9 +4,9 @@ platform:
 environment:
   nodejs_version: "7.9.0"
   access_token:
-    secure: 4Nz2Y0bVRKdKUBmNVYN6XTLhf3tR1B3zKXN4yHKgR68EYc+3iY3nQuX5SJgJRr9p
+    secure: j+oUaTR28O5BggYTM09pCva2UHkECRwG0zsMBrhg95oMnC/n18asKUHuVJMG6sQA
   github_email:
-    secure: YPjJuUxFqpDTxqi5tffpUiMz2Y62dgkDavR83tI59B4=
+    secure: zfTP/Yo202a1DXy7wNXFB/1QEY+cHW8l5hGJlq8PT7M=
 
 install:
   - ps: Install-Product node
