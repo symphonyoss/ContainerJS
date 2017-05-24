@@ -75,7 +75,15 @@ class Window implements ssf.Window {
   }
 
   getParentWindow() {
-    return this.asPromise<any>(this.innerWindow.getParentWindow);
+    return this.asPromise<Window>(this.innerWindow.getParentWindow).then((win) => {
+      if (win) {
+        const parentWin = new Window(null, null, null);
+        parentWin.innerWindow = win;
+        parentWin.id = win.id;
+        return parentWin;
+      }
+      return null;
+    });
   }
 
   getPosition() {

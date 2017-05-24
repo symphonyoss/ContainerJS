@@ -272,11 +272,9 @@ describe('Window API', function(done) {
         const script = (callback) => {
           var currentWin = ssf.Window.getCurrentWindow();
           currentWin.getParentWindow().then((parent) => {
-            if (window.fin === undefined) {
-              callback(parent.getTitle());
-            } else {
-              callback(parent.name);
-            }
+            parent.getTitle().then((title) => {
+              callback(title);
+            });
           });
         };
         return executeAsyncJavascript(app.client, script);
