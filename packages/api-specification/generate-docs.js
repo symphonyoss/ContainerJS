@@ -1,7 +1,9 @@
 const fs = require('fs');
 
 const output = JSON.parse(fs.readFileSync('type-info.json'));
-const testMatrixJson = JSON.parse(fs.readFileSync('test-report.json'));
+const testMatrixJson = fs.existsSync('test-report.json')
+  ? JSON.parse(fs.readFileSync('test-report.json'))
+  : '';
 
 let mdObject = {};
 
@@ -41,7 +43,7 @@ const generateMethod = (methodObj, className) => {
   const methodData = methodObj.flags.isStatic ? ' (static)' : '';
 
   let badgeString = `![${methodObj.name}](https://img.shields.io/badge/Electron-no_test_data-lightgrey.svg) ![${methodObj.name}](https://img.shields.io/badge/OpenFin-no_test_data-lightgrey.svg)`;
-  if (testMatrixJson[`ssf.${className}.${methodObj.name}`]) {
+  if (testMatrixJson && testMatrixJson[`ssf.${className}.${methodObj.name}`]) {
     const testResults = testMatrixJson[`ssf.${className}.${methodObj.name}`];
     const electronBadgeColor = testResults.electron.total > 0 ? getBadgeColor((testResults.electron.passed / testResults.electron.total) * 100) : 'lightgrey';
     const openfinBadgeColor = testResults.openfin.total > 0 ? getBadgeColor((testResults.openfin.passed / testResults.openfin.total) * 100) : 'lightgrey';
@@ -87,7 +89,7 @@ const generateCallSignature = (sig, className) => {
 
 const generateConstructor = (constructorObj, className) => {
   let badgeString = `![${constructorObj.name}](https://img.shields.io/badge/Electron-no_test_data-lightgrey.svg) ![${constructorObj.name}](https://img.shields.io/badge/OpenFin-no_test_data-lightgrey.svg)`;
-  if (testMatrixJson[`ssf.${className}()`]) {
+  if (testMatrixJson && testMatrixJson[`ssf.${className}()`]) {
     const testResults = testMatrixJson[`ssf.${className}()`];
     const electronBadgeColor = testResults.electron.total > 0 ? getBadgeColor((testResults.electron.passed / testResults.electron.total) * 100) : 'lightgrey';
     const openfinBadgeColor = testResults.openfin.total > 0 ? getBadgeColor((testResults.openfin.passed / testResults.openfin.total) * 100) : 'lightgrey';
