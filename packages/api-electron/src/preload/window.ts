@@ -11,7 +11,7 @@ let currentWindow = null;
 
 class Window implements ssf.Window {
   innerWindow: any;
-  id: number;
+  id: string;
 
   constructor(options: ssf.WindowOptions, callback, errorCallback) {
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
@@ -35,7 +35,7 @@ class Window implements ssf.Window {
       name: features.name,
       features
     });
-    this.innerWindow = BrowserWindow.fromId(this.id);
+    this.innerWindow = BrowserWindow.fromId(parseInt(this.id));
 
     if (callback) {
       callback(this);
