@@ -1,7 +1,7 @@
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
-  entry: 'index.js',
+  entry: 'transpiled/preload.js',
   format: 'umd',
   moduleName: 'ssf',
   plugins: [resolve()],
