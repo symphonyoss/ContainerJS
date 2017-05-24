@@ -3,7 +3,7 @@ import { getAccessibleWindow } from './accessible-windows';
 
 const listenerMap = new Map();
 
-class MessageService {
+class MessageService implements ssf.MessageService {
   static send(windowId, topic, message) {
     const win = getAccessibleWindow(windowId);
     const senderId = Window.getCurrentWindow().getId();

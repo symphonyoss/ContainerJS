@@ -19,6 +19,10 @@ const withInnerWindow = (win, fn) => {
 };
 
 class Window {
+  children: any;
+  innerWindow: any;
+  eventListeners: any;
+
   constructor(options, callback, errorCallback) {
     this.children = [];
 
@@ -119,12 +123,12 @@ class Window {
     return this.children;
   }
 
-  static getCurrentWindow() {
+  static getCurrentWindow(callback?: any, errorCallback?: any) {
     if (currentWindow) {
       return currentWindow;
     }
 
-    currentWindow = new Window();
+    currentWindow = new Window(null, callback, errorCallback);
     return currentWindow;
   }
 }
