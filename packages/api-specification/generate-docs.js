@@ -208,8 +208,9 @@ const generateLinks = () => {
 const generateDocsTemplate = () => {
   const metadata = '---\nlayout: default\nsectionid: docs\n---\n\n';
   const preListTemplate = '<section class="content row mr-0 ml-0">\n<div class="list-group col-3">\n';
+  const testMatrix = `<a {% if page.id == 'testMatrix' %} class="list-group-item active" {% else %} class="list-group-item" {% endif %} href="/ContainerJS/docs/test-matrix">Test Matrix</a>\n`;
   const postListTemplate = '</div>\n<div class="doc-body pl-2 pt-2 col-9">\n{{ content }}\n</div>\n</section>';
-  return `${metadata}${preListTemplate}${generateLinks()}${postListTemplate}`;
+  return `${metadata}${preListTemplate}${generateLinks()}${testMatrix}${postListTemplate}`;
 };
 
 fs.writeFileSync('docs/docs.html', generateDocsTemplate());
