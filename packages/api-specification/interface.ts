@@ -100,7 +100,12 @@ declare namespace ssf {
   class Window {
     innerWindow: any;
 
-    constructor(opts: WindowOptions);
+    /**
+     * @param opts A window options object
+     * @param callback A callback that is called if the window creation succeeds
+     * @param errorCallback A callback that is called if window creation fails
+     */
+    constructor(opts?: WindowOptions, callback?: Function, errorCallback?: Function);
 
     /**
      * Removes focus from the window.
