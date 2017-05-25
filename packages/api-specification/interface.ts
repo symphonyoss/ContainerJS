@@ -119,7 +119,7 @@ declare namespace ssf {
      * @param {boolean} flag - Flag to start or stop the window flashing.
      * @returns {Promise<void>} A promise which resolves to nothing when the function has completed.
      */
-    flashFrame(flag: Number): Promise<void>;
+    flashFrame(flag: boolean): Promise<void>;
 
     /**
      * Focuses the window.
@@ -411,4 +411,3 @@ declare namespace ssf {
 declare interface Window {
   Notification(title: string, options: ssf.NotificationOptions): void;
 }
-
