@@ -9,7 +9,7 @@ environment:
     secure: zfTP/Yo202a1DXy7wNXFB/1QEY+cHW8l5hGJlq8PT7M=
 
 cache:
-  - '%LOCALAPPDATA%\OpenFin'
+  - '%LOCALAPPDATA%\OpenFin\runtime'
 
 install:
   - ps: Install-Product node
