@@ -8,6 +8,9 @@ environment:
   github_email:
     secure: zfTP/Yo202a1DXy7wNXFB/1QEY+cHW8l5hGJlq8PT7M=
 
+cache:
+  - '%LOCALAPPDATA%\OpenFin'
+
 install:
   - ps: Install-Product node
   - set CI=true
