@@ -82,4 +82,3 @@ transpiled/
 
 #gh-pages
 /docs/_site
-/docs/Gemfile.lock
