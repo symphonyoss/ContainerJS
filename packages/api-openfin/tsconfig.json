@@ -13,7 +13,8 @@
         "allowSyntheticDefaultImports": true,
         "target": "es5"
     },
-    "files": [
-        "./preload.ts"
+    "include": [
+        "./preload.ts",
+        "node_modules/containerjs-api-specification/interface.ts"
     ]
 }

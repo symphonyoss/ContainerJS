@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rimraf dist transpiled && tsc && rollup -c && rimraf transpiled",
-    "test": "npm run build",
-    "postinstall": "copyfiles -f \"node_modules/containerjs-api-specification/interface.ts\" src/ && npm run build"
+    "test": "npm run build"
   },
   "author": "",
   "license": "Apache-2.0",
