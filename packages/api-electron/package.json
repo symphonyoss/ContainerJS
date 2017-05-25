@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf dist transpiled && tsc && rollup -c && rimraf transpiled",
+    "build": "rimraf dist lib && tsc && rollup -c",
     "test": "npm run build"
   },
   "author": "",
