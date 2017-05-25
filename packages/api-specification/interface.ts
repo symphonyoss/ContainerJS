@@ -56,7 +56,7 @@ declare namespace ssf {
      */
     backgroundColor: string;
     /**
-     * TODO: document
+     * Whether the window is a child of the current window. Default is false.
      */
     child: boolean;
     /**
@@ -95,14 +95,6 @@ declare namespace ssf {
      * Makes the window transparent. Default is false.
      */
     transparent: boolean;
-    /**
-     * TODO: document
-     */
-    opacity: number;
-    /**
-     * TODO: document
-     */
-    showTaskbarIcon: boolean;
   }
 
   class Window {
