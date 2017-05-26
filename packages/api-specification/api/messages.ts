@@ -4,7 +4,9 @@
  * Currently this is based on OpenFin bus
  */
 export interface MessagesAPI{
-    send(windowId: string, topic: string, message: string|object): void;
-    subscribe(windowId: string, topic: string, listener: Function): void;
+    send(destinationUuid: string, topic: string, message: string|object): void;
+    publish(topic: string, message: string|object);
+
+    subscribe(destinationUuid: string, topic: string, listener: Function): void;
     unsubscribe(windowId: string, topic: string, listener: Function): void;
 }
