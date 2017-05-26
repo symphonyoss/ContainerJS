@@ -2,9 +2,9 @@
   "name": "containerjs-api-openfin",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "build": "rimraf dist transpiled && tsc && copyfiles -f src/notification.html dist && rollup -c && rimraf transpiled",
+    "build": "rimraf dist lib && tsc && copyfiles -f src/notification.html dist && rollup -c",
     "test": "npm run build"
   },
   "author": "",
