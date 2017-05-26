@@ -1,7 +1,7 @@
 // contains common types
-export interface Rectangle {
-    x: number;
-    y: number;
+export interface Bounds {
+    top: number;
+    left: number;
     width: number;
     height: number;
 }

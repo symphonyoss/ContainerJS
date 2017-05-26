@@ -1,4 +1,4 @@
-import {Rectangle, Size} from "./common";
+import {Bounds, Size} from "./common";
 
 export interface SystemAPI {
     /**
@@ -56,10 +56,11 @@ export interface DisplayInfo {
     /** True if this is the primary display */
     primary: boolean;
 
-    bounds: Rectangle;
-    size: Size;
-    workArea: Rectangle;
-    workAreaSize: Size;
+    /** Bounds of the display **/
+    bounds: Bounds;
+
+    /** Working area of the display */
+    workingArea: Bounds;
 }
 
 export interface OperatingSystemInfo{
