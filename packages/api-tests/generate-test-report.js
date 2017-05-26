@@ -115,6 +115,10 @@ sectionid: docs
 {: width="100%"}
 `;
 
-fs.writeFileSync(path.join(__dirname, '..', '..', 'docs', 'docs', 'test-matrix.md'), ghPagesMarkdown + markdownString);
+const docsPath = path.join(__dirname, '..', '..', 'docs', 'docs');
+if (!fs.existsSync(docsPath)) {
+  fs.mkdirSync(docsPath);
+}
+fs.writeFileSync(path.join(docsPath, 'test-matrix.md'), ghPagesMarkdown + markdownString);
 
 fs.writeFileSync(path.join(__dirname, '..', 'api-specification', 'test-report.json'), JSON.stringify(outputJson));
