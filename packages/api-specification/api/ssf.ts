@@ -9,7 +9,7 @@ import {SSFInfo} from "./info";
  * Describes the ssf object as exposed to clients applications
  *
  * SSF object groups different APIs, where specific API methods can be access using the corresponding sub-object, e.g.
- * to access window manage API :
+ * to access window management API :
  *
  * ssf.windows.open({name:'search', url: 'http://google.com'});
  */
@@ -35,7 +35,7 @@ export interface SSF {
     application: ApplicationAPI;
 
     /**
-     * System API - access system specific stuff, like displays, user activity, os information, etc.
+     * System API - access system specific stuff,e.g. display information, user activity, os information...
      */
     system : SystemAPI;
 
