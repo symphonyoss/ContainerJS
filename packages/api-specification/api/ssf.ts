@@ -8,7 +8,7 @@ import {SSFInfo} from "./info";
 /**
  * Describes the ssf object as exposed to clients applications
  *
- * SSF object groups different APIs, where specific API methods can be access using the corresponding sub-object, e.g.
+ * SSF object groups different APIs, where specific API methods can be accessed using the corresponding sub-object, e.g.
  * to access window management API :
  *
  * ssf.windows.open({name:'search', url: 'http://google.com'});
