@@ -6,10 +6,101 @@ declare namespace ssf {
     height: number;
   }
 
+  interface WindowOptions {
+    /**
+     * Default window title.
+     */
+    name: string;
+    /**
+     * URL that this window loads.
+     */
+    url: string;
+    /**
+     * Window’s height in pixels.
+     */
+    height: number;
+    /**
+     * Window’s width in pixels.
+     */
+    width: number;
+    /**
+     * Window’s left offset from screen.
+     */
+    x: number;
+    /**
+     * Window’s top offset from screen.
+     */
+    y: number;
+    /**
+     * Window’s maximum width.
+     */
+    maxWidth: number;
+    /**
+     * Window’s minimum width.
+     */
+    minWidth: number;
+    /**
+     * Window’s maximum height.
+     */
+    maxHeight: number;
+    /**
+     * Window’s minimum height.
+     */
+    minHeight: number;
+    /**
+     * Whether the window should always stay on top of other windows. Default is false.
+     */
+    alwaysOnTop: boolean;
+    /**
+     * Window’s background color as Hexadecimal value.
+     */
+    backgroundColor: string;
+    /**
+     * Whether the window is a child of the current window. Default is false.
+     */
+    child: boolean;
+    /**
+     * Show window in the center of the screen.
+     */
+    center: boolean;
+    /**
+     * If false, creates a frameless window. Default is true.
+     */
+    frame: boolean;
+    /**
+     * Whether window should have a shadow. This is only implemented on macOS. Default is true.
+     */
+    hasShadow: boolean;
+    /**
+     * Whether window is maximizable. Default is true.
+     */
+    maximizable: boolean;
+    /**
+     * Whether window is minimizable. Default is true.
+     */
+    minimizable: boolean;
+    /**
+     * Whether window is resizable. Default is true.
+     */
+    resizable: boolean
+    /**
+     * Whether window should be shown when created. Default is true.
+     */
+    show: boolean;
+    /**
+     * Whether to show the window in taskbar. Default is false.
+     */
+    skipTaskbar: boolean;
+    /**
+     * Makes the window transparent. Default is false.
+     */
+    transparent: boolean;
+  }
+
   class Window {
     innerWindow: any;
 
-    constructor();
+    constructor(opts: WindowOptions);
 
     /**
      * Removes focus from the window.
@@ -320,4 +411,3 @@ declare namespace ssf {
 declare interface Window {
   Notification(title: string, options: ssf.NotificationOptions): void;
 }
-
