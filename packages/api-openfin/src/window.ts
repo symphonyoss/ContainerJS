@@ -44,9 +44,10 @@ const windowStates = {
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 600;
 
-const convertOptions = (options) => {
+
+const convertOptions = (options: ssf.WindowOptions) => {
   const frameSize = navigator.appVersion.indexOf('Win') != -1 ? 20 : 25;
-  let clonedOptions = Object.assign({}, options);
+  let clonedOptions: any = Object.assign({}, options);
 
   const optionsMap = {
     'alwaysOnTop': 'alwaysOnTop',
@@ -121,7 +122,7 @@ class Window implements ssf.Window {
   eventListeners: Map<any, any>;
   innerWindow: any;
 
-  constructor(options: any, callback?: any, errorCallback?: any) {
+  constructor(options: ssf.WindowOptions, callback?: any, errorCallback?: any) {
     this.children = [];
 
     this.eventListeners = new Map();
