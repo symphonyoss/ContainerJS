@@ -1,7 +1,6 @@
-// &#9888; TODO Revise - are we ok with bus pub/sub (the current model) or we want to propose AGM like RPC
-
 /**
- * Currently this is based on OpenFin bus
+ * Currently this is based on OpenFin InterApplicationBus
+ * http://cdn.openfin.co/jsdocs/stable/fin.desktop.InterApplicationBus.html
  */
 export interface MessagesAPI{
     send(destinationUuid: string, topic: string, message: string|object): void;
