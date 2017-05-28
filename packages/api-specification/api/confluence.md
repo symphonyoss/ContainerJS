@@ -26,14 +26,14 @@ ssf.windows.onWindowBoundsChanged(function(window, bounds){
 })
 ```
 
-or it can subscribe for each window individually 
+or subscribe for each window individually 
 ```javascript
 someWindow.on('boundsChanged', function(bounds){
     
 });
 ```
 
-or it can iterate the windows when the layout should be saved
+or iterate the windows when the layout should be saved
 ```javascript
 ssf.windows.all.forEach(function(window){
     var boundsToSave = window.bounds;    
@@ -51,17 +51,25 @@ ssf.system.onUserActivity(function(){
 }, 1000);
 ```
 
-## [ScreenSnippet API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/ScreenSnippet+API)
-> The ScreenSnippet API is used to capture a snippet of their desktop (unconstrained by the host application window) and highlight portions of this snippet so it can then be consumed by the host application.  This functionality is similar to the Windows Screen Snippet tool when used in rectangle capture mode.  This lets a user captures portions of the Windows Desktop, highlight aspects of the image and then save this image for sharing.
-
-```javascript
-
-```
 ## [getMediaSources API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/getMediaSources+API)
 > In order to support screen sharing the client api needs enumerate screens and windows. 
 > This api provided a list of screens (each monitor) and list of windows available; providing title, id and thumbnail.  This api is essentially equivalent of electron api: https://electron.atom.io/docs/api/desktop-capturer/#desktopcapturergetsourcesoptions-callback
 
 ```javascript
+
+```
+
+## [ScreenSnippet API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/ScreenSnippet+API)
+> The ScreenSnippet API is used to capture a snippet of their desktop (unconstrained by the host application window) and highlight portions of this snippet so it can then be consumed by the host application.  This functionality is similar to the Windows Screen Snippet tool when used in rectangle capture mode.  This lets a user captures portions of the Windows Desktop, highlight aspects of the image and then save this image for sharing.
+
+```javascript
+ssf.system.capture();
+
+ssf.system.captureDisplay();
+
+ssf.system.captureWindow();
+
+ssf.system.captureAllWindows();
 
 ```
 ## [BadgeCount API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/BadgeCount+API)
