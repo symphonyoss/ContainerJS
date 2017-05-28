@@ -1,6 +1,6 @@
 ## [Activate API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/Activate+API)
 
-> This api allows a window to be move to the front and given focus.   This API is needed since JS web apps have no capability to perform such a function.  
+> This api alseparateindow to be move to the front and given focus.   This API is needed since JS web apps have no capability to perform such a function.  
 
 The API proposal introduces window management section that enables the user to create, discover and manage windows.
 It also defines a window object that has a set of properties and methods.
@@ -51,34 +51,44 @@ ssf.system.onUserActivity(function(){
 }, 1000);
 ```
 
-## [getMediaSources API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/getMediaSources+API)
+## [getMediaSources API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/getMediaSources+API) and [ScreenSnippet API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/ScreenSnippet+API)
 > In order to support screen sharing the client api needs enumerate screens and windows. 
 > This api provided a list of screens (each monitor) and list of windows available; providing title, id and thumbnail.  This api is essentially equivalent of electron api: https://electron.atom.io/docs/api/desktop-capturer/#desktopcapturergetsourcesoptions-callback
 
-```javascript
-
-```
-
-## [ScreenSnippet API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/ScreenSnippet+API)
 > The ScreenSnippet API is used to capture a snippet of their desktop (unconstrained by the host application window) and highlight portions of this snippet so it can then be consumed by the host application.  This functionality is similar to the Windows Screen Snippet tool when used in rectangle capture mode.  This lets a user captures portions of the Windows Desktop, highlight aspects of the image and then save this image for sharing.
-
+Using the system API the user can enumerate the displays and capture any of them
 ```javascript
-ssf.system.capture();
+// capture all screens
+ssf.system.capture().then(function(image){
+    
+});
 
-ssf.system.captureDisplay();
+// capture each screen as separate image
+ssf.system.captureAllDisplays().then(function(images) {
+  
+});
 
-ssf.system.captureWindow();
+// capture specific display only
+ssf.system.displays[0].capture();
 
-ssf.system.captureAllWindows();
+// Capture all windows as separate images with custom size
+ssf.system.captureAllWindows({imageSize: {width: 100, height: 100}})
+    .then(function(images){
+        
+    });
 
+// capture specific window only
+ssf.system.captureWindow(windowId);
+// same as
+var window = ...
+window.capture();
 ```
+
 ## [BadgeCount API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/BadgeCount+API)
 > Display a number on the application icon in the desktop tray... usually to indicate number of unread messages for given application.
 
 There is application section that provides information about application config and allows 
 interactions with app specific functionalities like badgeCounts
-
-// TODO is this per application or per window????
 
 ```javascript
 ssf.application.setBadgeCount(11);

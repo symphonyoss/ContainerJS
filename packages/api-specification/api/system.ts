@@ -4,20 +4,22 @@ export interface SystemAPI {
     /**
      * Info about all displays available
      */
-    displays: () => DisplayInfo[];
+    displays: () => Display[];
 
     /**
      * Capture
      * @param options
      */
-    capture: (options?: CaptureOptions) => Promise<ImageData>;
+    capture: (options?: CaptureOptions) => Promise<Base64ImageData>;
 
     /**
      * Capture specific display
      * @param displayId
      * @param options
      */
-    captureDisplay: (displayId: number, options?: CaptureOptions) => Promise<ImageData>;
+    captureDisplay: (displayId: number, options?: CaptureOptions) => Promise<DisplayImageData>;
+
+    captureAllDisplays: (options?: CaptureOptions) => Promise<DisplayImageData>;
 
     /**
      * Capture specific window
@@ -39,11 +41,13 @@ export interface SystemAPI {
      */
     onUserActivity(callback: ()=> void, throtle: number);
 
-    /** Operating system information */
+    /**
+     * Operating system information
+     */
     os: OperatingSystemInfo;
 }
 
-export interface DisplayInfo {
+export interface Display {
     /** Unique identifier associated with the display. */
     id: number;
 
@@ -61,6 +65,8 @@ export interface DisplayInfo {
 
     /** Working area of the display */
     workingArea: Bounds;
+
+    capture(): Promise<DisplayImageData>;
 }
 
 export interface OperatingSystemInfo{
@@ -70,15 +76,20 @@ export interface OperatingSystemInfo{
 }
 
 export interface CaptureOptions {
-    captureSize: Size;
+    imageSize: Size;
 }
 
-export interface WindowImageData {
-    windowId: string;
-    image: ImageData;
+export interface DisplayImageData extends Base64ImageData{
+    display: Display;
 }
 
-export interface ImageData {
+export interface WindowImageData extends Base64ImageData {
+    window: Window;
+}
+
+export interface Base64ImageData {
     type: string;
     data: string;
+    width: number;
+    height: number;
 }

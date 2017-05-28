@@ -1,4 +1,5 @@
 import {Bounds, UnsubscribeFunction} from "./common";
+import {Base64ImageData, CaptureOptions} from "./system";
 
 export interface WindowsAPI {
 
@@ -215,6 +216,12 @@ export interface Window {
      * @returns {Promise<void>} A promise which resolves to nothing when the function has completed.
      */
     activate(focus?: boolean): Promise<void>;
+
+    /**
+     * Captures an image of the window
+     * @param options
+     */
+    capture(options?: CaptureOptions): Promise<Base64ImageData>;
 
     /**
      * Get the child windows of the window.
