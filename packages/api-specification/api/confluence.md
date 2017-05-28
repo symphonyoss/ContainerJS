@@ -26,14 +26,14 @@ ssf.windows.onWindowBoundsChanged(function(window, bounds){
 })
 ```
 
-Or it can subscribe for each window individually 
+or it can subscribe for each window individually 
 ```javascript
 someWindow.on('boundsChanged', function(bounds){
     
 });
 ```
 
-Or it can iterate the windows when the layout should be saved
+or it can iterate the windows when the layout should be saved
 ```javascript
 ssf.windows.all.forEach(function(window){
     var boundsToSave = window.bounds;    
@@ -44,17 +44,47 @@ ssf.windows.all.forEach(function(window){
 
 Another section in the proposal is system API that allows the application to access system specific stuff.
 
-
+The application can subscribe for user activity events:
 ```javascript
 ssf.system.onUserActivity(function(){
     
 }, 1000);
 ```
 
-## ScreenSnippet API
+## [ScreenSnippet API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/ScreenSnippet+API)
+> The ScreenSnippet API is used to capture a snippet of their desktop (unconstrained by the host application window) and highlight portions of this snippet so it can then be consumed by the host application.  This functionality is similar to the Windows Screen Snippet tool when used in rectangle capture mode.  This lets a user captures portions of the Windows Desktop, highlight aspects of the image and then save this image for sharing.
 
-## getMediaSources API
+```javascript
 
-## BadgeCount API
-## Notification API
-## Version API
+```
+## [getMediaSources API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/getMediaSources+API)
+> In order to support screen sharing the client api needs enumerate screens and windows. 
+> This api provided a list of screens (each monitor) and list of windows available; providing title, id and thumbnail.  This api is essentially equivalent of electron api: https://electron.atom.io/docs/api/desktop-capturer/#desktopcapturergetsourcesoptions-callback
+
+```javascript
+
+```
+## [BadgeCount API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/BadgeCount+API)
+> Display a number on the application icon in the desktop tray... usually to indicate number of unread messages for given application.
+
+There is application section that provides information about application config and allows 
+interactions with app specific functionalities like badgeCounts
+
+// TODO is this per application or per window????
+
+```javascript
+ssf.application.setBadgeCount(11);
+```
+## [Notification API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/Notification+API)
+>The Notifications API is used to configure and display desktop notifications to the user. It is exposed as an extension to the HTML5 Notification API, providing additional functionality that is useful for financial desktop applications.
+>
+>The exact visual style and the extent of the OS-level integration is container dependent and hence out-of-scope of this specification.
+
+## [Version API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/Version+API)
+> This API allows the JS web app to interrogate the container to find version support information.  One possible use case is to get ssf API version supported so that in future it is possible to deprecate older containers that do not support latest version of API.  Another possible use case is for logging purposes to help support track down issues.
+
+There is an info section in the API that provides the api version and also container information (version, capabilities, etc)
+
+```javascript
+var apiVersion = ssf.info.apiVersion;
+```
