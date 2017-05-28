@@ -1,4 +1,4 @@
-import {Bounds} from "./common";
+import {Bounds, UnsubscribeFunction} from "./common";
 
 export interface WindowsAPI {
 
@@ -8,14 +8,34 @@ export interface WindowsAPI {
     /** Returns all windows in the application */
     all: Window[];
 
-    /** Opens a new window */
+    /**
+     * The window that is focused in this application, otherwise returns null
+     */
+    focusedWindow: Window;
+
+    /**
+     getById(windowId: string): Window;
+
+     /** Opens a new window */
     open(options: WindowOptions): Promise<Window>;
 
-    /** Receive notifications when a new window is opened */
-    onWindowOpened(callback: (window: Window) => void);
+    /**
+     * Receive notifications when a new window is opened
+     * @returns Function Execute the function to unsubscribe
+     */
+    onWindowOpened(callback: (window: Window) => void): UnsubscribeFunction;
 
-    /** Receive notifications when a window was closed */
-    onWindowClosed(callback: (window: Window) => void);
+    /**
+     * Receive notifications when a window was closed
+     * @returns Function Execute the function to unsubscribe
+     */
+    onWindowClosed(callback: (window: Window) => void): UnsubscribeFunction;
+
+    /**
+     * Subscribe for bounds changed event for all windows
+     * @returns Function Execute the function to unsubscribe
+     */
+    onWindowBoundsChanged(callback: (window: Window, bounds: Bounds) => void): UnsubscribeFunction;
 }
 
 export interface WindowOptions {
@@ -190,10 +210,11 @@ export interface Window {
     flashFrame(flag: boolean): Promise<void>;
 
     /**
-     * Focuses the window.
+     * Activates the window. This will bring the window to front or restore it if minimized.
+     * If focus flag is true (default) the window will also receive input focus.
      * @returns {Promise<void>} A promise which resolves to nothing when the function has completed.
      */
-    focus(): Promise<void>;
+    activate(focus?: boolean): Promise<void>;
 
     /**
      * Get the child windows of the window.
