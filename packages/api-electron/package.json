@@ -3,8 +3,14 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
+  "module": "build/es/preload.js",
+  "jsnext:main": "build/es/preload.js",
+  "browser": "build/dist/containerjs-api.js",
   "scripts": {
-    "build": "rimraf dist lib && tsc && rollup -c",
+    "clean": "rimraf build",
+    "build": "npm run clean && npm run build:es && rollup -c",
+    "build:es": "rimraf build/es && tsc",
+    "build:umd": "rimraf build/dist && npm run build:es && rollup -c",
     "test": "npm run build"
   },
   "author": "",

@@ -65,8 +65,7 @@ npm
 /packages/api-openfin-demo/src/
 /packages/api-tests/src/
 /packages/api-specification/src/bootstrap.min.css
-dist/
-lib/
+build/
 
 # Test output
 /packages/api-tests/coverage/

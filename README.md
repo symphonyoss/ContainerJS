@@ -70,7 +70,7 @@ This starts a server on port 5000.
 
 ### Running with OpenFin
 
-First copy the contents of the `packages/api-openfin/dist` folder contents into the folder where your app is located. This provides the client-side API to your app.
+First copy the contents of the `packages/api-openfin/build/dist` folder contents into the folder where your app is located. This provides the client-side API to your app.
 
 Next, install the OpenFin CLI tool:
 
