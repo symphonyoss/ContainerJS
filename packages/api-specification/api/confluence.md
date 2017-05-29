@@ -1,6 +1,7 @@
 ## [Activate API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/Activate+API)
 
-> This api alseparateindow to be move to the front and given focus.   This API is needed since JS web apps have no capability to perform such a function.  
+> This api allows a window to be move to the front and given focus.   This API is needed since JS web apps have no capability to perform such a function.  
+> An example use case might be: the main window might be minimized (or otherwise hidden) and the notification shows that the user then clicks on.  The web app needs to ability to bring the window to the foreground and give focus.  
 
 The API proposal introduces window management section that enables the user to create, discover and manage windows.
 It also defines a window object that has a set of properties and methods.
