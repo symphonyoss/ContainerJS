@@ -99,6 +99,10 @@ ssf.application.setBadgeCount(11);
 >
 >The exact visual style and the extent of the OS-level integration is container dependent and hence out-of-scope of this specification.
 
+The notification API that we propose is following the HTML5 notifications standard (https://developer.mozilla.org/en-US/docs/Web/API/notification)
+
+If we need any extensions these can be added on top of it.
+
 ## [Version API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/Version+API)
 > This API allows the JS web app to interrogate the container to find version support information.  One possible use case is to get ssf API version supported so that in future it is possible to deprecate older containers that do not support latest version of API.  Another possible use case is for logging purposes to help support track down issues.
 
