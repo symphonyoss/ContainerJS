@@ -1,12 +1,6 @@
 let currentWindow = null;
 import MessageService from './message-service';
 
-declare namespace fin {
-  interface OpenFinWindow {
-    uuid: string;
-  }
-}
-
 const eventMap = {
   'auth-requested': 'auth-requested',
   'blur': 'blurred',
@@ -120,7 +114,7 @@ const convertOptions = (options: ssf.WindowOptions) => {
 class Window implements ssf.Window {
   children: Array<any>;
   eventListeners: Map<any, any>;
-  innerWindow: any;
+  innerWindow: fin.OpenFinWindow;
 
   constructor(options: ssf.WindowOptions, callback?: any, errorCallback?: any) {
     this.children = [];
@@ -146,7 +140,7 @@ class Window implements ssf.Window {
     if (openFinOptions.child) {
       const currentWindow = Window.getCurrentWindow();
       currentWindow.children.push(this);
-      this.innerWindow = new fin.desktop.Window(openFinOptions, () => {
+      this.innerWindow = new fin.desktop.Window(openFinOptions, (win) => {
         // We want to return our window, not the OpenFin window
         if (callback) {
           callback(this);

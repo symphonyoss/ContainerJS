@@ -1,3 +1,15 @@
+/// <reference types="electron" />
+/// <reference types="openfin" />
+
+// Needed to access the browsers window object
+type BrowserWindow = Window;
+
+declare namespace fin {
+  interface OpenFinWindow {
+    uuid: string;
+  }
+}
+
 declare namespace ssf {
   interface Rectangle {
     x: number;
@@ -101,7 +113,7 @@ declare namespace ssf {
     /**
      * The native window for the platform the API is running on.
      */
-    innerWindow: any;
+    innerWindow: Electron.BrowserWindow | fin.OpenFinWindow | BrowserWindow;
 
     /**
 

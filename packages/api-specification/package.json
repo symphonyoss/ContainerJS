@@ -19,6 +19,8 @@
     "typedoc-markdown-theme": "0.0.4"
   },
   "dependencies": {
-    "bootstrap": "^3.3.7"
+    "bootstrap": "^3.3.7",
+    "@types/electron": "^1.4.38",
+    "@types/openfin": "^17.0.2"
   }
 }
