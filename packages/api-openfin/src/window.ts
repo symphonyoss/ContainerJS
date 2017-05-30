@@ -115,6 +115,7 @@ class Window implements ssf.Window {
   children: Array<any>;
   eventListeners: Map<any, any>;
   innerWindow: fin.OpenFinWindow;
+  id: string;
 
   constructor(options: ssf.WindowOptions, callback?: any, errorCallback?: any) {
     this.children = [];
@@ -129,6 +130,7 @@ class Window implements ssf.Window {
 
     if (!options) {
       this.innerWindow = fin.desktop.Window.getCurrent();
+      this.id = `${this.innerWindow.uuid}:${this.innerWindow.name}`;
       if (callback) {
         callback(this);
       }
@@ -140,7 +142,8 @@ class Window implements ssf.Window {
     if (openFinOptions.child) {
       const currentWindow = Window.getCurrentWindow();
       currentWindow.children.push(this);
-      this.innerWindow = new fin.desktop.Window(openFinOptions, (win) => {
+      this.innerWindow = new fin.desktop.Window(openFinOptions, () => {
+        this.id = `${this.innerWindow.uuid}:${this.innerWindow.name}`;
         // We want to return our window, not the OpenFin window
         if (callback) {
           callback(this);
@@ -157,6 +160,7 @@ class Window implements ssf.Window {
       const app = new fin.desktop.Application(appOptions, (successObject) => {
         app.run();
         this.innerWindow = app.getWindow();
+        this.id = `${this.innerWindow.uuid}:${this.innerWindow.name}`;
         if (callback) {
           callback(this);
         }
@@ -213,7 +217,7 @@ class Window implements ssf.Window {
   }
 
   getId() {
-    return `${this.innerWindow.uuid}:${this.innerWindow.name}`;
+    return this.id;
   }
 
   getMaximumSize() {

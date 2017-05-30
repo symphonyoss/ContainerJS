@@ -110,6 +110,12 @@ declare namespace ssf {
   }
 
   class Window {
+
+    /**
+     * The id that uniquely identifies the window
+     */
+    id: string
+
     /**
      * The native window for the platform the API is running on.
      */
