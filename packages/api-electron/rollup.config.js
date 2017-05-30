@@ -1,10 +1,10 @@
 import commonjs from 'rollup-plugin-commonjs';
 
 export default {
-  entry: 'lib/preload.js',
+  entry: 'build/es/preload.js',
   format: 'umd',
   moduleName: 'ssf',
-  dest: 'dist/containerjs-api.js',
+  dest: 'build/dist/containerjs-api.js',
   plugins: [
     commonjs({
       ignore: ['electron']
