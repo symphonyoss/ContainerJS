@@ -4,6 +4,9 @@
 // Needed to access the browsers window object
 type BrowserWindow = Window;
 
+/**
+ * @ignore
+ */
 declare namespace fin {
   interface OpenFinWindow {
     uuid: string;
