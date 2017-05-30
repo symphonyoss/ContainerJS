@@ -413,7 +413,7 @@ describe('Window API', function(done) {
 
     });
 
-    it('Should return a boolean stating if the window is alwaysOnTop #ssf.Window.alwaysOnTop', function() {
+    it('Should return a boolean stating if the window is alwaysOnTop #ssf.Window.isAlwaysOnTop', function() {
       const windowTitle = 'windownameminimized';
       const alwaysOnTop = true;
       const windowOptions = getWindowOptions({

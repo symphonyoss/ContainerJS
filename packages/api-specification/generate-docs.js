@@ -142,7 +142,7 @@ const getType = (type) => {
   } else if (type.type === 'reflection') {
     return getReflectionType(type);
   } else if (type.typeArguments) {
-    return getArgsType(type.typeArguments);
+    return type.name + getArgsType(type.typeArguments);
   } else {
     return type.name;
   }
