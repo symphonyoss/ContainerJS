@@ -303,6 +303,11 @@ export interface Window extends EventEmitter {
     sendMessage(message: string | object): Promise<void>;
 }
 
-export interface WindowEvents {
-
-}
+/** To be extended **/
+export type WindowEvents =
+    'moved'|
+    'resized'|
+    'closed'|
+    'focused' |
+    'maximized' |
+    'minimized';
