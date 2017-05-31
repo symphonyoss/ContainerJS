@@ -153,10 +153,10 @@ export interface Window extends EventEmitter {
     minWidth?: number;
 
     /** Get or set the max height of the window. Might be undefined if no restrictions applied**/
-    maxHeight: number;
+    maxHeight?: number;
 
     /** Get or set the min height of the window. Might be undefined if no restrictions applied**/
-    minHeight: number;
+    minHeight?: number;
 
     /**
      * Get or set if the window has a shadow.
