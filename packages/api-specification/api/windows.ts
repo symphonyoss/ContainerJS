@@ -56,87 +56,87 @@ export interface WindowOptions {
      * Window initial bounds. Can contain partial bounds (e.g width only) and be
      * combined with center
      */
-    bounds: Bounds;
+    bounds?: Bounds;
 
     /**
      * Window’s maximum width.
      */
-    maxWidth: number;
+    maxWidth?: number;
 
     /**
      * Window’s minimum width.
      */
-    minWidth: number;
+    minWidth?: number;
 
     /**
      * Window’s maximum height.
      */
-    maxHeight: number;
+    maxHeight?: number;
 
     /**
      * Window’s minimum height.
      */
-    minHeight: number;
+    minHeight?: number;
 
     /**
      * Whether the window should always stay on top of other windows. Default is false.
      */
-    alwaysOnTop: boolean;
+    alwaysOnTop?: boolean;
 
     /**
      * Window’s background color as Hexadecimal value.
      */
-    backgroundColor: string;
+    backgroundColor?: string;
 
     /**
      * Whether the window is a child of the current window. Default is false.
      */
-    child: boolean;
+    child?: boolean;
 
     /**
      * Show window in the center of the screen.
      */
-    center: boolean;
+    center?: boolean;
 
     /**
      * If false, creates a frameless window. Default is true.
      */
-    frame: boolean;
+    frame?: boolean;
 
     /**
      * Whether window should have a shadow. This is only implemented on macOS. Default is true.
      */
-    hasShadow: boolean;
+    hasShadow?: boolean;
 
     /**
      * Whether window is maximizable. Default is true.
      */
-    maximizable: boolean;
+    maximizable?: boolean;
 
     /**
      * Whether window is minimizable. Default is true.
      */
-    minimizable: boolean;
+    minimizable?: boolean;
 
     /**
      * Whether window is resizable. Default is true.
      */
-    resizable: boolean
+    resizable?: boolean
 
     /**
      * Whether window should be shown when created. Default is true.
      */
-    show: boolean;
+    show?: boolean;
 
     /**
      * Whether to show the window in taskbar. Default is false.
      */
-    skipTaskbar: boolean;
+    skipTaskbar?: boolean;
 
     /**
      * Makes the window transparent. Default is false.
      */
-    transparent: boolean;
+    transparent?: boolean;
 }
 
 /**
