@@ -1,5 +1,6 @@
 import {Bounds, UnsubscribeFunction} from "./common";
 import {Base64ImageData, CaptureOptions} from "./system";
+import EventEmitter = NodeJS.EventEmitter;
 
 export interface WindowsAPI {
 
@@ -39,6 +40,7 @@ export interface WindowsAPI {
     onWindowBoundsChanged(callback: (window: Window, bounds: Bounds) => void): UnsubscribeFunction;
 }
 
+/** Window options used to open a new window **/
 export interface WindowOptions {
     /**
      * Default window title.
@@ -137,29 +139,29 @@ export interface WindowOptions {
     transparent: boolean;
 }
 
-export interface Window {
+/**
+ * A window running in the container.
+ * It implements EventEmitter which means users can subscribe for events using on, once , addEventListener etc.
+ * The list of events is in WindowsEvents structure;
+ */
+export interface Window extends EventEmitter {
 
-    constructor(options: WindowOptions);
+    /** Get or set the max width of the window. Might be undefined if no restrictions applied**/
+    maxWidth?: number;
 
-    /**
-     * Get or set the bounds of the window.
-     */
-    bounds: Bounds;
+    /** Get or set the min width of the window. Might be undefined if no restrictions applied**/
+    minWidth?: number;
+
+    /** Get or set the max height of the window. Might be undefined if no restrictions applied**/
+    maxHeight: number;
+
+    /** Get or set the min height of the window. Might be undefined if no restrictions applied**/
+    minHeight: number;
 
     /**
      * Get or set if the window has a shadow.
      */
     hasShadow: boolean;
-
-    /**
-     * Get or set the maximum size of the window.
-     */
-    maximumSize: Bounds;
-
-    /**
-     * Get or set the minimum size of the window.
-     */
-    minimumSize: Bounds;
 
     /**
      * Get or set the title of the window
@@ -223,6 +225,9 @@ export interface Window {
      */
     capture(options?: CaptureOptions): Promise<Base64ImageData>;
 
+    /** Get the bounds of the window */
+    getBounds(): Bounds;
+
     /**
      * Get the child windows of the window.
      */
@@ -263,6 +268,9 @@ export interface Window {
      */
     restore(): Promise<void>;
 
+    /** Set new bounds */
+    setBounds(bounds: Bounds);
+
     /**
      * Sets the window icon.
      * @param {string} icon - The url to the image.
@@ -293,4 +301,8 @@ export interface Window {
      * @param {string|object} message - The message to send to the window. Can be any serializable object.
      */
     sendMessage(message: string | object): Promise<void>;
+}
+
+export interface WindowEvents {
+
 }

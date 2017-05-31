@@ -37,7 +37,7 @@ someWindow.on('boundsChanged', function(bounds){
 or iterate the windows when the layout should be saved
 ```javascript
 ssf.windows.all.forEach(function(window){
-    var boundsToSave = window.bounds;    
+    var boundsToSave = window.getBounds(); 
 });
 ```
 ## [Activity API](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/Activity+API)
@@ -78,10 +78,8 @@ ssf.system.captureAllWindows({imageSize: {width: 100, height: 100}})
         
     });
 
-// capture specific window only
-ssf.system.captureWindow(windowId);
-// same as
-var window = ...
+// Capture specific window (this goes throught the window API)
+var window = ssf.windows.current;
 window.capture();
 ```
 

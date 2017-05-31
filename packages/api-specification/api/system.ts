@@ -22,13 +22,6 @@ export interface SystemAPI {
     captureAllDisplays: (options?: CaptureOptions) => Promise<DisplayImageData>;
 
     /**
-     * Capture specific window
-     * @param windowId
-     * @param options
-     */
-    captureWindow: (windowId: string, options?: CaptureOptions) => Promise<WindowImageData>;
-
-    /**
      * Capture all windows in a separate images
      * @param options
      */

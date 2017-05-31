@@ -395,6 +395,11 @@ declare namespace ssf {
     static unsubscribe(windowId: string, topic :string, listener: Function): void;
   }
 
+  interface Interop{
+
+
+  }
+
   class ScreenSnippet {
     capture(): Promise<string>;
   }
