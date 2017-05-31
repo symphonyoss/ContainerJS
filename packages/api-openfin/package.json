@@ -2,9 +2,16 @@
   "name": "containerjs-api-openfin",
   "version": "0.0.1",
   "description": "",
-  "main": "lib/index.js",
+  "main": "build/lib/index.js",
+  "module": "build/es/index.js",
+  "jsnext:main": "build/es/index.js",
+  "browser": "build/dist/containerjs-api.js",
   "scripts": {
-    "build": "rimraf dist lib && tsc && copyfiles -f src/notification.html dist && rollup -c",
+    "clean": "rimraf build",
+    "build": "npm run clean && npm run build:cjs && npm run build:es && rollup -c && copyfiles -f src/notification.html ./build/dist",
+    "build:es": "rimraf build/es && tsc -p tsconfig.json -m ES2015 --outdir ./build/es && copyfiles -f src/notification.html ./build/es",
+    "build:cjs": "rimraf build/lib && tsc -p tsconfig.json -m CommonJS --outdir ./build/lib && copyfiles -f src/notification.html ./build/lib",
+    "build:umd": "rimraf build/dist && npm run build:es && rollup -c && copyfiles -f src/notification.html ./build/dist",
     "test": "npm run build"
   },
   "author": "",

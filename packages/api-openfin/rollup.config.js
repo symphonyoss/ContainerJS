@@ -1,6 +1,6 @@
 export default {
-  entry: 'lib/index.js',
+  entry: 'build/es/index.js',
   format: 'umd',
   moduleName: 'ssf',
-  dest: 'dist/containerjs-api.js'
+  dest: 'build/dist/containerjs-api.js'
 };

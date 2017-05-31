@@ -7,7 +7,7 @@
     "serve": "live-server --port=5000 --no-browser src/",
     "launch": "openfin --launch --config ./src/app.json",
     "start": "npm-run-all --parallel serve launch",
-    "postinstall": "rimraf src && copyfiles -f \"node_modules/containerjs-api-specification/src/**\" src && copyfiles -f \"node_modules/containerjs-api-openfin/dist/**\" src && copyfiles -f \"../../docs/docs/**\" src",
+    "postinstall": "rimraf src && copyfiles -f \"node_modules/containerjs-api-specification/src/**\" src && copyfiles -f \"node_modules/containerjs-api-openfin/build/dist/**\" src && copyfiles -f \"../../docs/docs/**\" src",
     "test": "exit 0"
   },
   "author": "",

@@ -65,8 +65,7 @@ npm
 /packages/api-openfin-demo/src/
 /packages/api-tests/src/
 /packages/api-specification/src/bootstrap.min.css
-dist/
-lib/
+build/
 
 # Test output
 /packages/api-tests/coverage/
@@ -75,7 +74,6 @@ lib/
 /packages/api-specification/test-report.json
 /packages/api-specification/type-info.json
 /packages/api-specification/docs
-
 
 # Visual Studio Code
 .vscode
