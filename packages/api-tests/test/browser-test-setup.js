@@ -3,7 +3,10 @@ const selenium = require('selenium-standalone');
 
 const options = {
   desiredCapabilities: {
-    browserName: 'chrome'
+    browserName: 'chrome',
+    chromeOptions: {
+      args: ['disable-infobars']
+    }
   }
 };
 

@@ -198,22 +198,10 @@ declare namespace ssf {
     isMaximizable(): Promise<boolean>;
 
     /**
-     * Check if the window is currently maximized.
-     * @returns A promise that resolves to a boolean stating if the window is maximized.
-     */
-    isMaximized(): Promise<boolean>;
-
-    /**
      * Check if the window can be minimized.
      * @returns A promise that resolves to a boolean stating if the window can be minimized.
      */
     isMinimizable(): Promise<boolean>;
-
-    /**
-     * Check if the window is currently minimized.
-     * @returns A promise that resolves to a boolean stating if the window is minimized.
-     */
-    isMinimized(): Promise<boolean>;
 
     /**
      * Check if the window can be resized.
@@ -329,6 +317,18 @@ declare namespace ssf {
      * @returns A promise that resolves to a boolean stating if the window is always on top.
      */
     isAlwaysOnTop(): Promise<boolean>;
+
+    /**
+     * Check if the window is currently maximized.
+     * @returns {Promise<boolean>} A promise that resolves to a boolean stating if the window is maximized.
+     */
+    isMaximized(): Promise<boolean>;
+
+    /**
+     * Check if the window is currently minimized.
+     * @returns {Promise<boolean>} A promise that resolves to a boolean stating if the window is minimized.
+     */
+    isMinimized(): Promise<boolean>;
 
     /**
      * Restores the window to the previous state.

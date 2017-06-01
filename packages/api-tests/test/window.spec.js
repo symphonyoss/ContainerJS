@@ -13,7 +13,9 @@ let app;
 const getWindowOptions = (options) => Object.assign({
   url: 'http://localhost:5000/index.html',
   show: true,
-  child: true
+  child: true,
+  width: 200,
+  height: 200
 }, options);
 
 const setupWindowSteps = (windowOptions) => [
@@ -34,7 +36,7 @@ const retrieveWebUrl = () => {
 
 const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
-describe.only('Window API', function(done) {
+describe('Window API', function(done) {
   const timeout = 60000;
   this.timeout(timeout);
 
@@ -112,7 +114,7 @@ describe.only('Window API', function(done) {
 
     });
 
-    it('Should get the bounds of the window #ssf.Window.getBounds', function() {
+    it('Should get the bounds of the window @no-browser #ssf.Window.getBounds', function() {
       const windowTitle = 'windownamegetbounds';
       const x = 50;
       const y = 50;
@@ -182,7 +184,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should return the maximum width #ssf.Window.getMaximumSize', function() {
+    it('Should return the maximum width @no-browser #ssf.Window.getMaximumSize', function() {
       const windowTitle = 'windownamemaxwidth';
       const maxWidth = 500;
       const maxHeight = 600;
@@ -201,7 +203,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should return the maximum height #ssf.Window.getMaximumSize', function() {
+    it('Should return the maximum height @no-browser #ssf.Window.getMaximumSize', function() {
       const windowTitle = 'windownamemaxheight';
       const maxWidth = 500;
       const maxHeight = 600;
@@ -221,7 +223,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should return the minimum width #ssf.Window.getMinimumSize', function() {
+    it('Should return the minimum width @no-browser #ssf.Window.getMinimumSize', function() {
       const windowTitle = 'windownameminwidth';
       const minWidth = 500;
       const minHeight = 600;
@@ -240,7 +242,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should return the minimum height #ssf.Window.getMinimumSize', function() {
+    it('Should return the minimum height @no-browser #ssf.Window.getMinimumSize', function() {
       const windowTitle = 'windownameminheight';
       const minWidth = 500;
       const minHeight = 600;
@@ -293,14 +295,7 @@ describe.only('Window API', function(done) {
     });
 
     it('Should return null if there is no parent window #ssf.Window.getParentWindow', function() {
-      const windowTitle = 'windownamegetparentnull';
-      const windowOptions = getWindowOptions({
-        name: windowTitle,
-        child: false
-      });
-
       const steps = [
-        ...setupWindowSteps(windowOptions),
         () => callAsyncWindowMethod('getParentWindow'),
         (result) => assert.equal(result.value, null),
         () => callAsyncWindowMethod('close')
@@ -347,10 +342,12 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should return the width #ssf.Window.getSize', function() {
+    it('Should return the width @no-browser #ssf.Window.getSize', function() {
       const windowTitle = 'windownamesizewidth';
       const windowOptions = getWindowOptions({
-        name: windowTitle
+        name: windowTitle,
+        width: undefined,
+        height: undefined
       });
 
       const steps = [
@@ -362,10 +359,12 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should return the height #ssf.Window.getSize', function() {
+    it('Should return the height @no-browser #ssf.Window.getSize', function() {
       const windowTitle = 'windownamesizeheight';
       const windowOptions = getWindowOptions({
-        name: windowTitle
+        name: windowTitle,
+        width: undefined,
+        height: undefined
       });
 
       const steps = [
@@ -392,7 +391,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should return if the window has a shadow #ssf.Window.hasShadow', function() {
+    it('Should return if the window has a shadow @no-browser #ssf.Window.hasShadow', function() {
       const windowTitle = 'windownamehasshadow';
       const hasShadow = true;
       const windowOptions = getWindowOptions({
@@ -413,7 +412,7 @@ describe.only('Window API', function(done) {
 
     });
 
-    it('Should return a boolean stating if the window is alwaysOnTop #ssf.Window.isAlwaysOnTop', function() {
+    it('Should return a boolean stating if the window is alwaysOnTop @no-browser #ssf.Window.isAlwaysOnTop', function() {
       const windowTitle = 'windownameminimized';
       const alwaysOnTop = true;
       const windowOptions = getWindowOptions({
@@ -445,7 +444,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should return a boolean stating if the window is maximized #ssf.Window.isMaximized', function() {
+    it('Should return a boolean stating if the window is maximized @no-browser #ssf.Window.isMaximized', function() {
       const windowTitle = 'windownamemaximized';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -475,7 +474,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should return a boolean stating if the window is minimized #ssf.Window.isMinimized', function() {
+    it('Should return a boolean stating if the window is minimized @no-browser #ssf.Window.isMinimized', function() {
       const windowTitle = 'windownameminimized';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -505,7 +504,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should return a boolean stating if the window is visible #ssf.Window.isVisible', function() {
+    it('Should return a boolean stating if the window is visible @no-browser #ssf.Window.isVisible', function() {
       const windowTitle = 'windownameminimized';
       const show = false;
       const windowOptions = getWindowOptions({
@@ -555,7 +554,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should maximize the window #ssf.Window.maximize', function() {
+    it('Should maximize the window @no-browser #ssf.Window.maximize', function() {
       const windowTitle = 'windownamemaximize';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -571,7 +570,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should minimize the window #ssf.Window.minimize', function() {
+    it('Should minimize the window @no-browser #ssf.Window.minimize', function() {
       const windowTitle = 'windownameminimize';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -591,7 +590,7 @@ describe.only('Window API', function(done) {
 
     });
 
-    it('Should restore the window from maximized #ssf.Window.maximized', function() {
+    it('Should restore the window from maximized @no-browser #ssf.Window.maximized', function() {
       const windowTitle = 'windownamerestoremax';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -608,7 +607,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should restore the window from minimized #ssf.Window.restore', function() {
+    it('Should restore the window from minimized @no-browser #ssf.Window.restore', function() {
       const windowTitle = 'windownamerestoremin';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -625,7 +624,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should set alwaysOnTop #ssf.Window.setAlwaysOnTop', function() {
+    it('Should set alwaysOnTop @no-browser #ssf.Window.setAlwaysOnTop', function() {
       const windowTitle = 'windownamesetalwaysontop';
       const alwaysOnTop = true;
       const windowOptions = getWindowOptions({
@@ -664,7 +663,7 @@ describe.only('Window API', function(done) {
 
     });
 
-    it('Should not throw an error when a url is passed to setIcon #ssf.Window.setIcon', function() {
+    it('Should not throw an error when a url is passed to setIcon @no-browser #ssf.Window.setIcon', function() {
       const imageUrl = 'http://localhost:5000/test-image.png';
       const steps = [
         () => callAsyncWindowMethod('setIcon', imageUrl),
@@ -674,7 +673,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should set if the window is maximizable #ssf.Window.setMaximizable', function() {
+    it('Should set if the window is maximizable @no-browser #ssf.Window.setMaximizable', function() {
       const windowTitle = 'windownamesetismaximizable';
       const maximizable = true;
       const windowOptions = getWindowOptions({
@@ -692,7 +691,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should set the windows maximum width #ssf.Window.setMaximumSize', function() {
+    it('Should set the windows maximum width @no-browser #ssf.Window.setMaximumSize', function() {
       const windowTitle = 'windownamesetmaxwidth';
       const maxWidth = 777;
       const maxHeight = 780;
@@ -710,7 +709,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should set the windows maximum height #ssf.Window.setMaximumSize', function() {
+    it('Should set the windows maximum height @no-browser #ssf.Window.setMaximumSize', function() {
       const windowTitle = 'windownamesetmaxheight';
       const maxWidth = 777;
       const maxHeight = 780;
@@ -730,7 +729,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should set if the window is minimizable #ssf.Window.setMinimizable', function() {
+    it('Should set if the window is minimizable @no-browser #ssf.Window.setMinimizable', function() {
       const windowTitle = 'windownamesetisminimizable';
       const minimizable = true;
       const windowOptions = getWindowOptions({
@@ -748,7 +747,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should set the windows minimum width #ssf.Window.setMinimumSize', function() {
+    it('Should set the windows minimum width @no-browser #ssf.Window.setMinimumSize', function() {
       const windowTitle = 'windownamesetminwidth';
       const minWidth = 777;
       const minHeight = 780;
@@ -766,7 +765,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should set the windows minimum height #ssf.Window.setMinimumSize', function() {
+    it('Should set the windows minimum height @no-browser #ssf.Window.setMinimumSize', function() {
       const windowTitle = 'windownamesetminheight';
       const minWidth = 777;
       const minHeight = 780;
@@ -807,7 +806,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should set if the window is resizable #ssf.Window.setResizable', function() {
+    it('Should set if the window is resizable @no-browser #ssf.Window.setResizable', function() {
       const windowTitle = 'windownamesetisresizable';
       const resizable = true;
       const windowOptions = getWindowOptions({
@@ -830,9 +829,7 @@ describe.only('Window API', function(done) {
       const newWidth = 400;
       const newHeight = 450;
       const windowOptions = getWindowOptions({
-        name: windowTitle,
-        width: 300,
-        height: 250
+        name: windowTitle
       });
 
       const steps = [
@@ -856,7 +853,7 @@ describe.only('Window API', function(done) {
 
     });
 
-    it('Should unmaximize the window from maximized #ssf.Window.unmaximize', function() {
+    it('Should unmaximize the window from maximized @no-browser #ssf.Window.unmaximize', function() {
       const windowTitle = 'windownameunmaximize';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -903,6 +900,24 @@ describe.only('Window API', function(done) {
           () => selectWindow(app.client, 1),
           () => callWindowMethod('getId'),
           (result) => assert.equal(result.value, `ssf-desktop-api-openfin-demo:${windowTitle}`)
+        ];
+
+        return chainPromises(steps);
+      });
+    }
+
+    if (process.env.MOCHA_CONTAINER === 'browser') {
+      it('Should return the id of the window #ssf.Window.getId', function() {
+        const windowTitle = 'windownameid';
+        const windowOptions = getWindowOptions({
+          name: windowTitle
+        });
+
+        const steps = [
+          ...setupWindowSteps(windowOptions),
+          () => selectWindow(app.client, 1),
+          () => callWindowMethod('getId'),
+          (result) => assert.equal(result.value, windowTitle)
         ];
 
         return chainPromises(steps);
@@ -955,7 +970,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should be created with added frame size to max height #ssf.Window(maxHeight)', function() {
+    it('Should be created with added frame size to max height @no-browser #ssf.Window(maxHeight)', function() {
       const windowTitle = 'windownamemaxheight';
       const maxWidth = 500;
       const maxHeight = 600;
@@ -976,7 +991,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should be created with added frame size to min height #ssf.Window(minHeight)', function() {
+    it('Should be created with added frame size to min height @no-browser #ssf.Window(minHeight)', function() {
       const windowTitle = 'windownamemaxheight';
       const minWidth = 500;
       const minHeight = 600;
@@ -997,7 +1012,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should be created in the center if no x and y #ssf.Window(center)', function() {
+    it('Should be created in the center if no x and y @no-browser #ssf.Window(center)', function() {
       const windowTitle = 'windownamecenter';
       let targetX;
       let targetY;
@@ -1083,7 +1098,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should emit the move event #ssf.WindowEvent.move', function() {
+    it('Should emit the move event @no-browser #ssf.WindowEvent.move', function() {
       const windowTitle = 'windoweventmove';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -1103,7 +1118,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should emit the resize event #ssf.WindowEvent.resize', function() {
+    it('Should emit the resize event @no-browser #ssf.WindowEvent.resize', function() {
       const windowTitle = 'windoweventresize';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -1142,7 +1157,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should emit the focus event #ssf.WindowEvent.focus', function() {
+    it('Should emit the focus event @no-browser #ssf.WindowEvent.focus', function() {
       const windowTitle = 'windoweventfocus';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -1163,7 +1178,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should emit the hide event #ssf.WindowEvent.hide', function() {
+    it('Should emit the hide event @no-browser #ssf.WindowEvent.hide', function() {
       const windowTitle = 'windoweventhide';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -1183,7 +1198,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should emit the maximize event #ssf.WindowEvent.maximize', function() {
+    it('Should emit the maximize event @no-browser #ssf.WindowEvent.maximize', function() {
       const windowTitle = 'windoweventmaximize';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -1203,7 +1218,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should emit the minimize event #ssf.WindowEvent.minimize', function() {
+    it('Should emit the minimize event @no-browser #ssf.WindowEvent.minimize', function() {
       const windowTitle = 'windoweventminimize';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -1223,7 +1238,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should emit the restore event when minimized #ssf.WindowEvent.restore', function() {
+    it('Should emit the restore event when minimized @no-browser #ssf.WindowEvent.restore', function() {
       const windowTitle = 'windoweventrestoremin';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -1244,7 +1259,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it.skip('Should not emit the restore event from maximized #ssf.WindowEvent.restore', function() {
+    it.skip('Should not emit the restore event from maximized @no-browser #ssf.WindowEvent.restore', function() {
       // Electron doesn't emit the event but OpenFin does
       const windowTitle = 'windoweventrestoremax';
       const windowOptions = getWindowOptions({
@@ -1266,7 +1281,7 @@ describe.only('Window API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should emit the show event #ssf.WindowEvent.show', function() {
+    it('Should emit the show event @no-browser #ssf.WindowEvent.show', function() {
       const windowTitle = 'windoweventshow';
       const windowOptions = getWindowOptions({
         name: windowTitle

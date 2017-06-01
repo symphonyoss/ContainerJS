@@ -5,6 +5,12 @@ import {
 
 let currentWindow = null;
 
+function getCenterCoordinates() {
+    var x = (window.innerWidth / 2) + window.screenLeft;
+    var y = (window.innerHeight / 2) + window.screenTop;
+    return [x, y];
+}
+
 class Window implements ssf.WindowCore {
   children: any;
   innerWindow: any;
@@ -25,6 +31,8 @@ class Window implements ssf.WindowCore {
     } else {
       this.innerWindow = window.open(options.url, options.name, objectToFeaturesString(options));
       this.id = this.innerWindow.name;
+      const [x, y] = getCenterCoordinates();
+      this.setPosition(options.x || x, options.y || y);
       this.innerWindow.onclose = () => {
         removeAccessibleWindow(this.innerWindow.name);
       };
@@ -72,7 +80,7 @@ class Window implements ssf.WindowCore {
   }
 
   getParentWindow() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       let newWin = null;
       if (window.opener) {
         newWin = new Window(null);
@@ -93,7 +101,7 @@ class Window implements ssf.WindowCore {
   }
 
   getTitle() {
-    return this.asPromise<string>(() => this.innerWindow.document.title);
+    return this.asPromise<string>(() => this.innerWindow.name || this.innerWindow.document.title);
   }
 
   // Cannot be anything but true for browser
