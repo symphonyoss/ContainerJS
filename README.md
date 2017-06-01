@@ -18,7 +18,7 @@ The first step is to install all of the dependencies of this project. From the r
 npm install
 ```
 
-Now you can start creating your app. From within an empty folder, add a minimal HTML file called `index.js`:
+Now you can start creating your app. From within an empty folder, add a minimal HTML file called `index.html`:
 
 ```html
 <!doctype html>
@@ -26,7 +26,7 @@ Now you can start creating your app. From within an empty folder, add a minimal 
 <body>
   <h1>Hello World!</h1>
 
-  <script src="containerjs-api.js"></script>
+  <script src="containerjs-bundle.js"></script>
 
   <script>
     ssf.app.ready()
@@ -70,7 +70,7 @@ This starts a server on port 5000.
 
 ### Running with OpenFin
 
-First copy the contents of the `packages/api-openfin/build/dist` folder contents into the folder where your app is located. This provides the client-side API to your app.
+First copy the contents of the `packages/api-bundle/build` folder and the `notification.html` file from `packages/api-openfin/build/dist` into the folder where your app is located. This provides the client-side API to your app.
 
 Next, install the OpenFin CLI tool:
 
