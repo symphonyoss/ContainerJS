@@ -297,8 +297,7 @@ describe('Window API', function(done) {
     it('Should return null if there is no parent window #ssf.Window.getParentWindow', function() {
       const steps = [
         () => callAsyncWindowMethod('getParentWindow'),
-        (result) => assert.equal(result.value, null),
-        () => callAsyncWindowMethod('close')
+        (result) => assert.equal(result.value, null)
       ];
 
       return chainPromises(steps);

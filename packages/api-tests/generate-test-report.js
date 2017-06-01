@@ -2,10 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const electronTestOutput = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'coverage', 'electron.json')));
 const openfinTestOutput = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'coverage', 'openfin.json')));
+const browserTestOutput = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'coverage', 'browser.json')));
 
 const testTable = {
   electron: {},
-  openfin: {}
+  openfin: {},
+  browser: {}
 };
 
 // Read as 10% or less, 25% or less etc
@@ -75,23 +77,34 @@ openfinTestOutput.forEach((test) => {
   test.tags.forEach((tag) => passCount(testTable.openfin, tag, test));
 });
 
+browserTestOutput.forEach((test) => {
+  test.tags.forEach((tag) => passCount(testTable.browser, tag, test));
+});
+
 generateTotals(electronTestOutput);
 generateTotals(openfinTestOutput);
+generateTotals(browserTestOutput);
 
 const sortedTags = Object.keys(tagCount).sort();
 
 const outputJson = {};
 
-let markdownString = '| Method | Electron | OpenFin |\n|:---|:---:|:---:|\n';
+let markdownString = '| Method | Electron | OpenFin | Browser |\n|:---|:---:|:---:|:---:|\n';
+
+const createColumn = (color, passed, total) => {
+  return `<span style="background-color:${color}; display: block;">${passed}/${total}</span>`;
+};
 
 sortedTags.forEach((tag) => {
-  const electronPassed = testTable.electron[tag];
-  const openfinPassed = testTable.openfin[tag];
+  const electronPassed = testTable.electron[tag] || 0;
+  const openfinPassed = testTable.openfin[tag] || 0;
+  const browserPassed = testTable.browser[tag] || 0;
   const total = tagCount[tag];
   const label = tag.substring(1); // Removes the # from the front of the tag
   const electronColor = total > 0 ? getColorCode((electronPassed / total) * 100) : '';
   const openfinColor = total > 0 ? getColorCode((openfinPassed / total) * 100) : '';
-  markdownString += `|${label}|<span style="background-color:${electronColor}; display: block;">${electronPassed}/${total}</span>|<span style="background-color:${openfinColor}; display: block;">${openfinPassed}/${total}</span>|\n`;
+  const browserColor = total > 0 ? getColorCode((browserPassed / total) * 100) : '';
+  markdownString += `|${label}|${createColumn(electronColor, electronPassed, total)}|${createColumn(openfinColor, openfinPassed, total)}|${createColumn(browserColor, browserPassed, total)}|\n`;
   outputJson[label] = {
     electron: {
       passed: electronPassed,
@@ -99,6 +112,10 @@ sortedTags.forEach((tag) => {
     },
     openfin: {
       passed: openfinPassed,
+      total
+    },
+    browser: {
+      passed: browserPassed,
       total
     }
   };

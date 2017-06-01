@@ -4,8 +4,8 @@
   "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
-    "test:ui": "npm run test:electron && npm run test:openfin",
-    "test:ci": "npm run test:electron -- --reporter reporter.js && npm run test:openfin -- --reporter reporter.js && copyfiles -f \"test-report.json\" \"../api-specification\"",
+    "test:ui": "npm run test:electron && npm run test:openfin && npm run test:browser",
+    "test:ci": "npm run test:electron -- --reporter reporter.js && npm run test:openfin -- --reporter reporter.js && npm run test:browser -- --reporter reporter.js && copyfiles -f \"test-report.json\" \"../api-specification\"",
     "test:electron": "rimraf src && copyfiles -f \"demo/**\" src && cross-env MOCHA_CONTAINER=electron mocha test/*.js",
     "test:openfin": "rimraf src && copyfiles -f \"demo/**\" src && copyfiles -f \"node_modules/containerjs-api-openfin/build/dist/**\" src && cross-env MOCHA_CONTAINER=openfin mocha test/*.js",
     "test:browser": "rimraf src && copyfiles -f \"demo/**\" src && copyfiles -f \"node_modules/containerjs-api-browser/build/dist/**\" src && cross-env MOCHA_CONTAINER=browser mocha test/*.js --grep \"@no-browser\" --invert"
