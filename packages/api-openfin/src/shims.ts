@@ -1,16 +1,18 @@
-window.Notification = function(title, options) {
-  if (!options) {
-    options = {};
-  }
+if ('fin' in window) {
+  window.Notification = function(title, options) {
+    if (!options) {
+      options = {};
+    }
 
-  const message = {
-    title: title,
-    text: options.body
+    const message = {
+      title: title,
+      text: options.body
+    };
+
+    // eslint-disable-next-line no-new
+    new fin.desktop.Notification({
+      url: 'notification.html',
+      message: message
+    });
   };
-
-  // eslint-disable-next-line no-new
-  new fin.desktop.Notification({
-    url: 'notification.html',
-    message: message
-  });
-};
+}
