@@ -34,7 +34,7 @@ const retrieveWebUrl = () => {
 
 const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
-describe('Window API', function(done) {
+describe.only('Window API', function(done) {
   const timeout = 60000;
   this.timeout(timeout);
 

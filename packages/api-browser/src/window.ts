@@ -72,7 +72,7 @@ class Window implements ssf.WindowCore {
   }
 
   getParentWindow() {
-    return this.asPromise<ssf.Window>(() => {
+    return new Promise((resolve, reject) => {
       let newWin = null;
       if (window.opener) {
         newWin = new Window(null);
@@ -80,7 +80,7 @@ class Window implements ssf.WindowCore {
         newWin.id = window.opener.name;
       }
 
-      return newWin;
+      resolve(newWin);
     });
   }
 
@@ -93,7 +93,7 @@ class Window implements ssf.WindowCore {
   }
 
   getTitle() {
-    return this.asPromise<string>(resolve => resolve(this.innerWindow.document.title));
+    return this.asPromise<string>(() => this.innerWindow.document.title);
   }
 
   // Cannot be anything but true for browser
@@ -102,17 +102,7 @@ class Window implements ssf.WindowCore {
   }
 
   // Cannot be anything but true for browser
-  isMaximized() {
-    return this.asPromise<boolean>(() => true);
-  }
-
-  // Cannot be anything but true for browser
   isMinimizable() {
-    return this.asPromise<boolean>(() => true);
-  }
-
-  // Cannot be anything but true for browser
-  isMinimized() {
     return this.asPromise<boolean>(() => true);
   }
 
@@ -189,7 +179,7 @@ class Window implements ssf.WindowCore {
   asPromise<T>(fn): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       if (this.innerWindow) {
-        resolve(fn);
+        resolve(fn());
       } else {
         reject(new Error('The window does not exist or the window has been closed'));
       }
