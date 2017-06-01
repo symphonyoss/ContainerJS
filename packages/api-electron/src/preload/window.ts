@@ -10,7 +10,7 @@ import { IpcMessages } from '../common/constants';
 let currentWindow = null;
 
 class Window implements ssf.Window {
-  innerWindow: any;
+  innerWindow: Electron.BrowserWindow;
   id: string;
 
   constructor(options: ssf.WindowOptions, callback, errorCallback) {
@@ -21,7 +21,7 @@ class Window implements ssf.Window {
 
     if (!options) {
       this.innerWindow = remote.getCurrentWindow();
-      this.id = this.innerWindow.id;
+      this.id = String(this.innerWindow.id);
       if (callback) {
         callback(this);
       }
@@ -75,11 +75,11 @@ class Window implements ssf.Window {
   }
 
   getParentWindow() {
-    return this.asPromise<Window>(this.innerWindow.getParentWindow).then((win) => {
+    return this.asPromise<Electron.BrowserWindow>(this.innerWindow.getParentWindow).then((win) => {
       if (win) {
         const parentWin = new Window(null, null, null);
         parentWin.innerWindow = win;
-        parentWin.id = win.id;
+        parentWin.id = String(win.id);
         return parentWin;
       }
       return null;

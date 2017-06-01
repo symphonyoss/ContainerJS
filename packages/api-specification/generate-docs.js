@@ -21,9 +21,16 @@ const getBadgeColor = (percent) => {
   return badgeColors[Object.keys(badgeColors).find((col) => percent <= col)];
 };
 
+const isIgnored = (obj) => {
+  if (obj.comment && obj.comment.tags) {
+    return obj.comment.tags.find(t => t.tag === 'ignore') !== undefined;
+  }
+  return false;
+};
+
 // === Markdown Generation Methods ===
 const generateModule = (moduleObj) => {
-  if (moduleObj.children) {
+  if (moduleObj.children && !isIgnored(moduleObj)) {
     moduleObj.children.forEach((child) => {
       render(child);
     });
@@ -31,82 +38,94 @@ const generateModule = (moduleObj) => {
 };
 
 const generateClass = (classObj) => {
-  mdObject[classObj.name] = `# ${classObj.name}  \n`;
-  if (classObj.children) {
-    classObj.children.forEach((child) => {
-      render(child, classObj.name);
-    });
+  if (!isIgnored(classObj)) {
+    mdObject[classObj.name] = `# ${classObj.name}  \n`;
+    if (classObj.children) {
+      classObj.children.forEach((child) => {
+        render(child, classObj.name);
+      });
+    }
   }
 };
 
 const generateMethod = (methodObj, className) => {
-  const methodData = methodObj.flags.isStatic ? ' (static)' : '';
+  if (!isIgnored(methodObj)) {
+    const methodData = methodObj.flags.isStatic ? ' (static)' : '';
 
-  let badgeString = `![${methodObj.name}](https://img.shields.io/badge/Electron-no_test_data-lightgrey.svg) ![${methodObj.name}](https://img.shields.io/badge/OpenFin-no_test_data-lightgrey.svg)`;
-  if (testMatrixJson && testMatrixJson[`ssf.${className}.${methodObj.name}`]) {
-    const testResults = testMatrixJson[`ssf.${className}.${methodObj.name}`];
-    const electronBadgeColor = testResults.electron.total > 0 ? getBadgeColor((testResults.electron.passed / testResults.electron.total) * 100) : 'lightgrey';
-    const openfinBadgeColor = testResults.openfin.total > 0 ? getBadgeColor((testResults.openfin.passed / testResults.openfin.total) * 100) : 'lightgrey';
-    badgeString = `![${methodObj.name}](https://img.shields.io/badge/Electron-${testResults.electron.passed}%2F${testResults.electron.total}-${electronBadgeColor}.svg) ![${methodObj.name}](https://img.shields.io/badge/OpenFin-${testResults.openfin.passed}%2F${testResults.openfin.total}-${openfinBadgeColor}.svg)`;
-  }
+    let badgeString = `![${methodObj.name}](https://img.shields.io/badge/Electron-no_test_data-lightgrey.svg) ![${methodObj.name}](https://img.shields.io/badge/OpenFin-no_test_data-lightgrey.svg)`;
+    if (testMatrixJson && testMatrixJson[`ssf.${className}.${methodObj.name}`]) {
+      const testResults = testMatrixJson[`ssf.${className}.${methodObj.name}`];
+      const electronBadgeColor = testResults.electron.total > 0 ? getBadgeColor((testResults.electron.passed / testResults.electron.total) * 100) : 'lightgrey';
+      const openfinBadgeColor = testResults.openfin.total > 0 ? getBadgeColor((testResults.openfin.passed / testResults.openfin.total) * 100) : 'lightgrey';
+      badgeString = `![${methodObj.name}](https://img.shields.io/badge/Electron-${testResults.electron.passed}%2F${testResults.electron.total}-${electronBadgeColor}.svg) ![${methodObj.name}](https://img.shields.io/badge/OpenFin-${testResults.openfin.passed}%2F${testResults.openfin.total}-${openfinBadgeColor}.svg)`;
+    }
 
-  mdObject[className] += `#### ${methodObj.name}${methodData}  ${badgeString}\n`;
-  if (methodObj.signatures) {
-    methodObj.signatures.forEach((sig) => {
-      generateCallSignature(sig, className);
-    });
+    mdObject[className] += `#### ${methodObj.name}${methodData}  ${badgeString}\n`;
+    if (methodObj.signatures) {
+      methodObj.signatures.forEach((sig) => {
+        generateCallSignature(sig, className);
+      });
+    }
   }
 };
 
 const generateInterface = (interfaceObj) => {
-  mdObject['I' + interfaceObj.name] = `# ${interfaceObj.name} (Interface)  \n`;
-  if (interfaceObj.children) {
-    interfaceObj.children.forEach((child) => {
-      render(child, 'I' + interfaceObj.name);
-    });
+  if (!isIgnored(interfaceObj)) {
+    mdObject['I' + interfaceObj.name] = `# ${interfaceObj.name} (Interface)  \n`;
+    if (interfaceObj.children) {
+      interfaceObj.children.forEach((child) => {
+        render(child, 'I' + interfaceObj.name);
+      });
+    }
   }
 };
 
 const generateProperty = (prop, className) => {
-  const typeArgsString = getType(prop.type);
-  mdObject[className] += `**${prop.name}${prop.flags.isOptional ? '?' : ''}**: \`${typeArgsString}\`  \n`;
-  const comment = prop.comment;
-  if (comment) {
-    if (comment.shortText) {
-      mdObject[className] += `${comment.shortText}  \n`;
+  if (!isIgnored(prop)) {
+    const typeArgsString = getType(prop.type);
+    mdObject[className] += `**${prop.name}${prop.flags.isOptional ? '?' : ''}**: \`${typeArgsString}\`  \n`;
+    const comment = prop.comment;
+    if (comment) {
+      if (comment.shortText) {
+        mdObject[className] += `${comment.shortText}  \n`;
+      }
     }
   }
 };
 
 const generateCallSignature = (sig, className) => {
-  const returnTypeString = getType(sig.type);
-  const paramString = getParamList(sig.parameters).join(', ');
-  mdObject[className] += `\`${sig.name}(${paramString}) => ${returnTypeString}\`  \n`;
-  const comment = sig.comment;
-  if (comment) {
-    if (comment.shortText) {
-      mdObject[className] += `${comment.shortText}  \n`;
-    }
-    if (comment.returns) {
-      mdObject[className] += `**Returns:** \`${returnTypeString}\` - ${comment.returns}  \n`;
+  if (!isIgnored(sig)) {
+    const returnTypeString = getType(sig.type);
+    const paramString = getParamList(sig.parameters).join(', ');
+    mdObject[className] += `\`${sig.name}(${paramString}) => ${returnTypeString}\`  \n`;
+    const comment = sig.comment;
+    if (comment) {
+      if (comment.shortText) {
+        mdObject[className] += `${comment.shortText}  \n`;
+      }
+      if (comment.returns) {
+        mdObject[className] += `**Returns:** \`${returnTypeString}\` - ${comment.returns}  \n`;
+      }
     }
   }
 };
 
 const generateConstructor = (constructorObj, className) => {
-  let badgeString = `![${constructorObj.name}](https://img.shields.io/badge/Electron-no_test_data-lightgrey.svg) ![${constructorObj.name}](https://img.shields.io/badge/OpenFin-no_test_data-lightgrey.svg)`;
-  if (testMatrixJson && testMatrixJson[`ssf.${className}()`]) {
-    const testResults = testMatrixJson[`ssf.${className}()`];
-    const electronBadgeColor = testResults.electron.total > 0 ? getBadgeColor((testResults.electron.passed / testResults.electron.total) * 100) : 'lightgrey';
-    const openfinBadgeColor = testResults.openfin.total > 0 ? getBadgeColor((testResults.openfin.passed / testResults.openfin.total) * 100) : 'lightgrey';
-    badgeString = `![${constructorObj.name}](https://img.shields.io/badge/Electron-${testResults.electron.passed}%2F${testResults.electron.total}-${electronBadgeColor}.svg) ![${constructorObj.name}](https://img.shields.io/badge/OpenFin-${testResults.openfin.passed}%2F${testResults.openfin.total}-${openfinBadgeColor}.svg)`;
-  }
+  if (!isIgnored(constructorObj)) {
+    let badgeString = `![${constructorObj.name}](https://img.shields.io/badge/Electron-no_test_data-lightgrey.svg) ![${constructorObj.name}](https://img.shields.io/badge/OpenFin-no_test_data-lightgrey.svg)`;
+    if (testMatrixJson && testMatrixJson[`ssf.${className}()`]) {
+      const testResults = testMatrixJson[`ssf.${className}()`];
+      const electronBadgeColor = testResults.electron.total > 0 ? getBadgeColor((testResults.electron.passed / testResults.electron.total) * 100) : 'lightgrey';
+      const openfinBadgeColor = testResults.openfin.total > 0 ? getBadgeColor((testResults.openfin.passed / testResults.openfin.total) * 100) : 'lightgrey';
+      badgeString = `![${constructorObj.name}](https://img.shields.io/badge/Electron-${testResults.electron.passed}%2F${testResults.electron.total}-${electronBadgeColor}.svg) ![${constructorObj.name}](https://img.shields.io/badge/OpenFin-${testResults.openfin.passed}%2F${testResults.openfin.total}-${openfinBadgeColor}.svg)`;
+    }
 
-  mdObject[className] += `#### ${constructorObj.name}  ${badgeString}\n`;
-  if (constructorObj.signatures) {
-    constructorObj.signatures.forEach((sig) => {
-      generateCallSignature(sig, className);
-    });
+    mdObject[className] += `#### ${constructorObj.name}  ${badgeString}\n`;
+    if (constructorObj.signatures) {
+      constructorObj.signatures.forEach((sig) => {
+        generateCallSignature(sig, className);
+      });
+    }
   }
 };
 
