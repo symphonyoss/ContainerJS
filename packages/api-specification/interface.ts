@@ -138,7 +138,7 @@ declare namespace ssf {
     blur(): Promise<void>;
 
     /**
-     * Closes the window. Only works on new windows.
+     * Closes the window. Only works on windows created via the ContainerJS API in the browser.
      * @returns A promise which resolves to nothing when the function has completed.
      */
     close(): Promise<void>;
@@ -223,14 +223,14 @@ declare namespace ssf {
     reload(): Promise<void>;
 
     /**
-     * Sets the window to always be on top of other windows. Only works for new windows.
+     * Sets the window to always be on top of other windows. Only works on windows created via the ContainerJS API in the browser.
      * @param bounds - Sets the bounds of the window.
      * @returns A promise that resolves to nothing when the option is set.
      */
     setBounds(bounds: Rectangle): Promise<void>;
 
     /**
-     * Sets the windows position. Only works for new windows.
+     * Sets the windows position. Only works on windows created via the ContainerJS API in the browser.
      * @param x - The x position of the window.
      * @param y - The y position of the window.
      * @returns A promise that resolves to nothing when the option has been set.
@@ -238,7 +238,7 @@ declare namespace ssf {
     setPosition(x: number, y: number): Promise<void>;
 
     /**
-     * Sets the width and height of the window. Only works for new windows.
+     * Sets the width and height of the window. Only works on windows created via the ContainerJS API in the browser.
      * @param width - The width of the window.
      * @param height - The height of the window.
      * @returns A promise that resolves to nothing when the option has been set.
