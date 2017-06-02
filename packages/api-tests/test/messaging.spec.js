@@ -20,7 +20,7 @@ const defaultWindowOptions = {
 let secondWindowId = '';
 
 describe('Messaging API', function(done) {
-  const timeout = 60000;
+  const timeout = 90000;
   this.timeout(timeout);
 
   beforeEach(() => {

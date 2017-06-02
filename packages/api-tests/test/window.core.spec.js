@@ -37,7 +37,7 @@ const retrieveWebUrl = () => {
 const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
 describe('WindowCore API', function(done) {
-  const timeout = 60000;
+  const timeout = 90000;
   this.timeout(timeout);
 
   beforeEach(() => {

@@ -29,7 +29,7 @@ const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
 if (process.env.MOCHA_CONTAINER !== 'browser') {
   describe('Window API', function(done) {
-    const timeout = 60000;
+    const timeout = 90000;
     this.timeout(timeout);
 
     beforeEach(() => {
