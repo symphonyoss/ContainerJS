@@ -35,7 +35,7 @@ class Application {
               this.running = true;
               this.driver = child;
               // Start chrome at index.html
-              this.client = webdriverio.remote(options).init().url('localhost:5000/index.html');
+              this.client = webdriverio.remote(options).init().url('http://localhost:5000/index.html');
               this.client.timeouts('script', 60000);
               // Implements the spectron helper method
               this.client.getWindowCount = () => {
