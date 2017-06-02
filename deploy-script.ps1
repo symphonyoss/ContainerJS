@@ -8,6 +8,9 @@ IF ($env:APPVEYOR_REPO_BRANCH -eq "master" -And (-Not (Test-Path Env:\APPVEYOR_P
   git commit -m "Update gh-pages: $env:APPVEYOR_REPO_COMMIT_MESSAGE"
   git subtree split --prefix docs -b gh-pages
   git push -f origin gh-pages:gh-pages
+  IF ($error) {
+    Write-Warning -Message 'Deploy Failed'
+  }
 }
 Else {
   Write-Host "Not on branch 'master', not publishing docs"
@@ -15,3 +18,4 @@ Else {
 
 # Fail if the tests failed
 exit [Environment]::GetEnvironmentVariable("TestResult", "User")
+
