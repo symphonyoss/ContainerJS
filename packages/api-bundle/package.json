@@ -1,5 +1,5 @@
 {
-  "name": "api-bundle",
+  "name": "containerjs-api-bundle",
   "version": "0.0.1",
   "description": "A bundle of containerJS APIs",
   "main": "dist/index.js",
