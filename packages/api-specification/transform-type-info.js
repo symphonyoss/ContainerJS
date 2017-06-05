@@ -52,17 +52,21 @@ const typeInfo = JSON.parse(fs.readFileSync(program.infile));
 
 // add the test report information to the type information
 if (program.testfile) {
-  const testReport = JSON.parse(fs.readFileSync(program.testfile));
-  Object.keys(testReport).forEach((testMethod) => {
-    const results = testReport[testMethod];
-    const [, className, methodName] = testMethod.split('.');
-    const method = jspath.apply(`..{.kindString === "Class" && .name === "${className}"}.children{.kindString === "Method" && .name === "${methodName}"}`, typeInfo);
-    if (method.length > 0) {
-      method[0].results = results;
-    } else {
-      console.warn(`unable to find the method ${testMethod} within the typescript documentation`);
-    }
-  });
+  if (fs.existsSync(program.testfile)) {
+    const testReport = JSON.parse(fs.readFileSync(program.testfile));
+    Object.keys(testReport).forEach((testMethod) => {
+      const results = testReport[testMethod];
+      const [, className, methodName] = testMethod.split('.');
+      const method = jspath.apply(`..{.kindString === "Class" && .name === "${className}"}.children{.kindString === "Method" && .name === "${methodName}"}`, typeInfo);
+      if (method.length > 0) {
+        method[0].results = results;
+      } else {
+        console.warn(`unable to find the method ${testMethod} within the typescript documentation`);
+      }
+    });
+  } else {
+    console.warn('Could not find test report, generating documentation without test data');
+  }
 }
 
 const formatType = (type) => {
@@ -145,6 +149,10 @@ const documentClass = (className) => {
     sectionid: 'docs',
     class: className
   });
+
+  if (!fs.existsSync(outpath)) {
+    fs.mkdirSync(outpath);
+  }
   fs.writeFileSync(`${outpath}/${className}.html`, yml);
 };
 
