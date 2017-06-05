@@ -18,4 +18,3 @@ Else {
 
 # Fail if the tests failed
 exit [Environment]::GetEnvironmentVariable("TestResult", "User")
-
