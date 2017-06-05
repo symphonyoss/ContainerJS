@@ -73,12 +73,9 @@ build/
 # Docs output
 /packages/api-specification/test-report.json
 /packages/api-specification/type-info.json
-/packages/api-specification/docs
 
 # Visual Studio Code
 .vscode
 
-#gh-pages
-/docs/_site
 
 .idea/

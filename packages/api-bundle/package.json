@@ -1,0 +1,29 @@
+{
+  "name": "api-bundle",
+  "version": "0.0.1",
+  "description": "A bundle of containerJS APIs",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\"",
+    "build": "rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/symphonyoss/ContainerJS.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/symphonyoss/ContainerJS/issues"
+  },
+  "homepage": "https://github.com/symphonyoss/ContainerJS#readme",
+  "dependencies": {
+    "containerjs-api-openfin": "0.0.2",
+    "containerjs-api-browser": "0.0.1"
+  },
+  "devDependencies": {
+    "rollup": "^0.41.6",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0"
+  }
+}
