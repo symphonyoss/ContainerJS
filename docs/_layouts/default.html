@@ -10,10 +10,30 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/9.11.0/styles/default.min.css">
   <script src="https://cdn.jsdelivr.net/highlight.js/9.11.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
+  <link rel="stylesheet" href="/ContainerJS/styles/main.css">
 </head>
-<body>
+<body data-spy="scroll" data-target="#docs-menu" data-offset="150">
   <div class="container">
     {% include navigation.html %}
+    {% if page.id == 'home' %}
+      <div class="jumbotron">
+        <div class="row flex-column-reverse flex-xl-row">
+          <div class="container col-xl-6">
+            <h1 class="display-4">Web apps don't just run in browsers.</h1>
+            <p class="lead">
+              Target OpenFin, Electron and other containers from a single codebase. This project contains the current work-in-progress
+              symphony Desktop Wrapper. The goal of this project is to provifde a common API across multiple HTML5 containers.
+            </p>
+          </div>
+          <div class="container col-xl-6">
+            <img id="main-image" src="img/containerjs-logo.png" />
+          </div>
+        </div>
+      </div>
+
+      <hr/>
+    {% endif %}
+
     {{ content }}
   </div>
 </body>

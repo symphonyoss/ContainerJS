@@ -4,15 +4,11 @@ layout: default
 sectionid: home
 ---
 
-# Symphony Desktop Wrapper
-
-This project contains the current work-in-progress Symphony Desktop Wrapper. The goal of this project is to provide a common API across multiple HTML5 containers. For more details, refer to the [confluence page](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/Working+Group+-+Desktop+Wrapper+API) for this working group.
-
 ## Getting Started
 
 The following describes how to create a simple 'Hello World' application and run it with OpenFin and Electron. The current setup process is not very tidy, expect this to improve over time!
 
-### Creating the Hello World app
+#### Creating the Hello World app
 
 The first step is to install all of the dependencies of this project. From the root folder, run the following:
 
@@ -59,7 +55,7 @@ Within the same folder, add the following `app.json` manifest file:
 
 The manifest tells the container which URL to load initially.
 
-### Starting a local server
+#### Starting a local server
 
 The container loads HTML applications over HTTP, so in order to run this demo application you need to start a local server. If you don't already have a preferred tool, you can use the node `http-server` package:
 
@@ -70,7 +66,7 @@ http-server -p 5000
 
 This starts a server on port 5000.
 
-### Running with OpenFin
+#### Running with OpenFin
 
 First copy the contents of the `packages/api-openfin/build/dist` folder contents into the folder where your app is located. This provides the client-side API to your app.
 
@@ -88,7 +84,7 @@ openfin --launch --config app.json
 
 You should now see the Hello World application!
 
-### Running with Electron
+#### Running with Electron
 
 In order to run the same application with Electron, you need to install the CLI tool which is part of this project. From within the `packages/api-electron` folder, run the following:
 
@@ -106,11 +102,11 @@ ssf-electron app.json
 
 You should now see exactly the same app running within Electron.
 
-## Roadmap
+#### Roadmap
 
 For details on the progress and roadmap, see the [wiki pages](https://github.com/symphonyoss/ContainerJS/wiki)
 
-## Development
+#### Development
 
 This project is a mono-repo, i.e. multiple distinct projects within the same Git repository. This project uses [Lerna](https://github.com/lerna/lerna) to manage the dependencies between these projects and their release process.
 

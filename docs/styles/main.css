@@ -1,0 +1,106 @@
+body {
+  background-color: #FCFCFC;
+  padding-top: 65px;
+  position: relative;
+  overflow: visible;
+}
+
+h1, h2 {
+  color: #5A5886;
+}
+
+h1 {
+  padding: 10px 0px;
+}
+
+h2 {
+  padding: 5px 0px;
+}
+
+.code {
+  font-family: monospace;
+  white-space: pre;
+  background-color: #F3F3F3;
+  display: inline-block;
+  padding: 5px;
+}
+
+.method {
+  padding: 15px 0px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: #5A5886;
+}
+
+.navbar-light .navbar-brand, .navbar-light .navbar-toggler {
+  color: #5A5886;
+}
+
+.jumbotron {
+  background-color: transparent;
+  padding: 64px 0px;
+}
+
+#main-image {
+  width: 100%;
+}
+
+.navbar {
+  background-color: #FCFCFC;
+  position: fixed !important;
+  top: 0px;
+  width: inherit;
+  padding: 8px 0px !important;
+  z-index: 1000;
+  clear: both;
+}
+
+#nav-container {
+  margin: 0px;
+  padding: 0px;
+}
+
+.list-item {
+  display: block;
+  margin: 10px;
+  padding: 3px;
+  padding-left: 10px;
+  border-left: 3px solid transparent;
+}
+
+.nav-link {
+  color: #AAA6A6;
+}
+
+.nav-link.active {
+  color: #5A5886;
+  border-left: 3px solid #5A5886;
+}
+
+#docs-menu {
+  position: fixed;
+  top: 64px;
+}
+
+ul {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.jumptarget:before {
+  content:"";
+  display: block;
+  height: 64px;
+  margin: -64px 0 0;
+}
+
+div > section {
+  border-bottom: solid 1px #e2e2e2;
+  margin-bottom: 10px;
+}
+
+section.methods, section.contructors, section.properties {
+  padding-bottom: 20px;
+}

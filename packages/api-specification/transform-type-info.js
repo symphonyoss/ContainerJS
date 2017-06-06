@@ -10,16 +10,21 @@ program
   .option('-i, --infile [filename]', 'Input type definitions file', 'type-info.json')
   .option('-t, --testfile [filename]', 'Input test report file')
   .option('-o, --outpath [folder]', 'Folder to place generated docs', '.')
+  .option('-n, --navigation [folder]', 'Folder to place navigation json file', '.')
   .parse(process.argv);
 
 const outpath = path.resolve(process.cwd(), program.outpath);
 console.log(outpath);
 
+const outpathData = path.resolve(process.cwd(), program.navigation);
+console.log(outpathData);
+
 const flatten = (arr) => arr.reduce((a, b) => a.concat(b), []);
 
 // html elements are a bit complex, this simplifies their construction
-const element = (tag, child) => ({
+const element = (tag, child, attr) => ({
   node: 'element',
+  attr,
   tag,
   // if child is not an array, turn it into one - also, filter out any undefined children
   child: (Array.isArray(child) ? child : [child]).filter(d => d)
@@ -33,9 +38,9 @@ const text = (text) => ({
 
 // there are a number of elements that just host a single text node, this
 // simplifies their construction
-const textElement = (tag) => (body) => element(tag, text(body));
+const textElement = (tag) => (body, attr) => element(tag, text(body), attr);
+const h5 = textElement('h5');
 const h4 = textElement('h4');
-const h1 = textElement('h1');
 const h3 = textElement('h3');
 const h2 = textElement('h2');
 const p = textElement('p');
@@ -44,7 +49,7 @@ const dd = textElement('dd');
 
 // there are a number of elements that host multiple children, this
 // simplifies their construction
-const parentElement = (tag) => (children) => element(tag, children);
+const parentElement = (tag) => (children, attr) => element(tag, children, attr);
 const section = parentElement('section');
 const dl = parentElement('dl');
 
@@ -94,15 +99,15 @@ const documentClass = (className) => {
     jsont.pathRule(
       '.{.kindString === "Class"}', d =>
         section([
-          h1(d.match.name),
+          h2(d.match.name),
           // create the various sections by filtering the children based on their 'kind'
-          h2('Constructors'),
-          section(d.runner(jspath.apply('.{.kindString === "Constructor"}', d.match.children))),
-          h2('Properties'),
-          section(d.runner(jspath.apply('.{.kindString === "Property"}', d.match.children))),
-          h2('Methods'),
-          section(d.runner(jspath.apply('.{.kindString === "Method"}', d.match.children)))
-        ])
+          jspath.apply('.{.kindString === "Constructor"}', d.match.children).length !== 0 ? h3('Constructors') : undefined,
+          section(d.runner(jspath.apply('.{.kindString === "Constructor"}', d.match.children)), {class: 'constructors'}),
+          jspath.apply('.{.kindString === "Property"}', d.match.children).length !== 0 ? h3('Properties') : undefined,
+          section(d.runner(jspath.apply('.{.kindString === "Property"}', d.match.children)), {class: 'properties'}),
+          jspath.apply('.{.kindString === "Method"}', d.match.children).length !== 0 ? h3('Methods') : undefined,
+          section(d.runner(jspath.apply('.{.kindString === "Method"}', d.match.children)), {class: 'methods'})
+        ], {id: className, class: 'jumptarget'})
     ),
     jsont.pathRule(
       '.{.kindString === "Method" || .kindString === "Constructor"}', d =>
@@ -110,33 +115,33 @@ const documentClass = (className) => {
         // sure when there might be multiple signatures?!
         section([
           d.runner(d.match.signatures[0]),
-          h4('test results'),
-          p(JSON.stringify(d.match.results))
-        ])
+          d.match.results ? h5('test results') : undefined,
+          d.match.results ? p(JSON.stringify(d.match.results)) : undefined
+        ], {class: 'method'})
     ),
     jsont.pathRule(
       '.{.kindString === "Property"}', d =>
         section([
-          h4(d.match.name),
+          h5(d.match.name, {class: 'code'}),
           p(d.match.comment ? d.match.comment.shortText : '')
         ])
     ),
     jsont.pathRule(
       '.{.kindString === "Call signature" || .kindString === "Constructor signature"}', d =>
         section([
-          h3(d.match.name),
+          h4(d.match.name, {class: 'code'}),
           p(d.match.comment ? d.match.comment.shortText : ''),
-          h4('Returns'),
-          p(formatType(d.match.type)),
-          d.match.parameters ? h4('Arguments') : undefined,
+          d.match.parameters ? h5('Arguments') : undefined,
           // NOTE: we flatten because each parameter returns an array of dt / dd, we want to
           // flatten from [[dt, dd], [dt, dd]] to [dt, dd, dt, dd]
-          d.match.parameters ? dl(flatten(d.runner(d.match.parameters))) : undefined
+          d.match.parameters ? dl(flatten(d.runner(d.match.parameters))) : undefined,
+          h5('Returns'),
+          p(formatType(d.match.type), {class: 'code'})
         ])
     ),
     jsont.pathRule(
       '.{.kindString === "Parameter"}', d => [
-        dt(`${d.match.name} [${formatType(d.match.type)}]`),
+        dt(`${d.match.name} [${formatType(d.match.type)}]`, {class: 'code'}),
         dd(d.match.comment ? d.match.comment.text : '')
       ]
     )
@@ -144,22 +149,26 @@ const documentClass = (className) => {
 
   const json = jsont.transform(typeInfo, rules);
   const html = json2html(json);
-  const yml = matter.stringify(html, {
-    layout: 'api',
-    sectionid: 'docs',
-    class: className
-  });
 
   if (!fs.existsSync(outpath)) {
     fs.mkdirSync(outpath);
   }
-  fs.writeFileSync(`${outpath}/${className}.html`, yml);
+  fs.appendFileSync(`${outpath}/docs.html`, html);
 };
 
-// find the list of classes - these are generated as separate documentation pages
+// find the list of classes
 const classes = jsont.transform(typeInfo, [
   jsont.pathRule('..children{.kindString === "Class"}', d => d.runner()),
   jsont.pathRule('.{.kindString === "Class"}', d => d.match.name)
 ]);
+
+const yml = matter.stringify('', {
+  layout: 'api',
+  sectionid: 'docs',
+  class: 'docs'
+});
+
+fs.writeFileSync(`${outpath}/Docs.html`, yml);
+fs.writeFileSync(`${outpathData}/navigation.json`, JSON.stringify(classes));
 
 classes.forEach(documentClass);
