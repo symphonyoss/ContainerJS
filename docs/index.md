@@ -1,7 +1,5 @@
 ---
 id: home
-title: README
-permalink: index.html
 layout: default
 sectionid: home
 ---
