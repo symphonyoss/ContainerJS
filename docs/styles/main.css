@@ -144,7 +144,7 @@ ul {
   margin: 0px;
 }
 
-.jumptarget:before {
+.docs-title:before {
   content:"";
   display: block;
   height: 32px;
@@ -161,11 +161,12 @@ section.methods, section.contructors, section.properties {
 
 .test-results {
   float: right;
-  padding-top: 4px;
 }
 
-.test-results > p {
+.test-result-title {
   display: inline-block;
+  font-weight: 500;
+  padding: 0px;
 }
 
 .test-result {

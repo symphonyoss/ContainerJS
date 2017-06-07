@@ -50,6 +50,7 @@ const h2 = textElement('h2');
 const p = textElement('p');
 const dt = textElement('dt');
 const dd = textElement('dd');
+const span = textElement('span');
 
 // there are a number of elements that host multiple children, this
 // simplifies their construction
@@ -90,6 +91,13 @@ const formatType = (type) => {
   return 'UNKNOWN';
 };
 
+const testResults = (title, results) => {
+  return [
+    h5(title, {class: 'test-result-title'}),
+    span(`${results.passed}/${results.total}`, {class: 'test-result ' + testResultPercentage(results.passed, results.total)})
+  ];
+};
+
 const documentClass = (className) => {
   const rules = [
     // perform a 'deep' match to find any class declarations, then recursively
@@ -111,7 +119,7 @@ const documentClass = (className) => {
           jspath.apply('.{.kindString === "Property"}', d.match.children).length !== 0 ? section(d.runner(jspath.apply('.{.kindString === "Property"}', d.match.children)), {class: 'properties'}) : undefined,
           jspath.apply('.{.kindString === "Method"}', d.match.children).length !== 0 ? h3('Methods') : undefined,
           jspath.apply('.{.kindString === "Method"}', d.match.children).length !== 0 ? section(d.runner(jspath.apply('.{.kindString === "Method"}', d.match.children)), {class: 'methods'}) : undefined
-        ], {id: className, class: 'jumptarget'})
+        ], {id: className, class: 'docs-title'})
     ),
     jsont.pathRule(
       '.{.kindString === "Method" || .kindString === "Constructor"}', d =>
@@ -133,12 +141,9 @@ const documentClass = (className) => {
         section([
           h4(d.match.name, {class: 'method-name', id: `${className}-${d.match.name}`}),
           d.match.results ? section([
-            p('Electron'),
-            p(`${d.match.results.electron.passed}/${d.match.results.electron.total}`, {class: 'test-result ' + testResultPercentage(d.match.results.electron.passed, d.match.results.electron.total)}),
-            p('OpenFin'),
-            p(`${d.match.results.openfin.passed}/${d.match.results.openfin.total}`, {class: 'test-result ' + testResultPercentage(d.match.results.openfin.passed, d.match.results.openfin.total)}),
-            p('Browser'),
-            p(`${d.match.results.browser.passed}/${d.match.results.browser.total}`, {class: 'test-result ' + testResultPercentage(d.match.results.browser.passed, d.match.results.browser.total)})
+            ...testResults('Electron', d.match.results.electron),
+            ...testResults('OpenFin', d.match.results.openfin),
+            ...testResults('Browser', d.match.results.browser)
           ], {class: 'test-results'}) : undefined,
           p(d.match.comment ? d.match.comment.shortText : ''),
           d.match.parameters ? h5('Arguments') : undefined,
@@ -163,7 +168,7 @@ const documentClass = (className) => {
   if (!fs.existsSync(outpath)) {
     fs.mkdirSync(outpath);
   }
-  fs.appendFileSync(`${outpath}/docs.html`, html);
+  fs.appendFileSync(`${outpath}/Docs.html`, html);
 };
 
 // find the list of classes
@@ -179,6 +184,4 @@ const yml = matter.stringify('', {
 });
 
 fs.writeFileSync(`${outpath}/Docs.html`, yml);
-fs.writeFileSync(`${outpathData}/navigation.json`, JSON.stringify(classes));
-
 classes.forEach(documentClass);
