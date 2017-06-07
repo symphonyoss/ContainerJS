@@ -3,47 +3,98 @@ body {
   padding-top: 65px;
   position: relative;
   overflow: visible;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
 }
 
 h1, h2 {
   color: #5A5886;
+  font-weight: 700;
 }
 
 h1 {
-  padding: 10px 0px;
+  padding: 0px;
+  margin: 0px;
 }
 
 h2 {
-  padding: 5px 0px;
+  padding: 0px;
+  margin: 24px 0px;
+  font-size: 28px;
+}
+
+h3 {
+  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+h4 {
+  margin-top: 32px;
+}
+
+section > h4 {
+  margin: 0px;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+h5 {
+  padding: 10px 0px;;
+  margin: 0px;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+p {
+  margin-bottom: 5px;
+}
+
+.lead {
+  margin-top: 12px;
 }
 
 .code {
   font-family: monospace;
   white-space: pre;
-  background-color: #F3F3F3;
+  background-color: #eee;
   display: inline-block;
   padding: 5px;
+  font-weight: 500;
 }
 
 .method {
-  padding: 15px 0px;
+  padding-bottom: 64px;
 }
 
-.navbar-light .navbar-nav .nav-link {
+.method:last-child {
+  padding-bottom: 32px;
+}
+
+.property {
+  padding-bottom: 32px;
+}
+
+.navbar-light .navbar-nav .nav-link, .tagline-header, .navbar-light .navbar-brand, .navbar-light .navbar-toggler {
   color: #5A5886;
 }
 
-.navbar-light .navbar-brand, .navbar-light .navbar-toggler {
-  color: #5A5886;
+.navbar-brand {
+  font-weight: 800;
+  font-size: 20px;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .jumbotron {
   background-color: transparent;
-  padding: 64px 0px;
+  padding: 32px 0px;
 }
 
 #main-image {
   width: 100%;
+  padding: 20px;
+  margin-top: 20px;
 }
 
 .navbar {
@@ -73,6 +124,10 @@ h2 {
   color: #AAA6A6;
 }
 
+.nav-link:hover {
+  color: #5A5886;
+}
+
 .nav-link.active {
   color: #5A5886;
   border-left: 3px solid #5A5886;
@@ -92,15 +147,94 @@ ul {
 .jumptarget:before {
   content:"";
   display: block;
-  height: 64px;
-  margin: -64px 0 0;
+  height: 32px;
+  margin: -8px 0 0;
 }
 
 div > section {
   border-bottom: solid 1px #e2e2e2;
-  margin-bottom: 10px;
 }
 
 section.methods, section.contructors, section.properties {
-  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.test-results {
+  float: right;
+  padding-top: 4px;
+}
+
+.test-results > p {
+  display: inline-block;
+}
+
+.test-result {
+  background-color: #bebebe;
+  padding: 2px 5px;
+  margin: 0px 5px;
+  color: #F8FCFA;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+.test-result.test-color-0 {
+  background-color: #ba5050;
+}
+.test-result.test-color-10 {
+  background-color: #ba7a50;
+}
+.test-result.test-color-25 {
+  background-color: #ba9f50;
+}
+.test-result.test-color-50 {
+  background-color: #baba50;
+}
+.test-result.test-color-75 {
+  background-color: #93ba50;
+}
+.test-result.test-color-100 {
+  background-color: #50BB88;
+}
+
+/* Fix some issues on small screens */
+@media (max-width: 576px) {
+    .test-results {
+        float: none !important;
+    }
+
+    .navbar {
+      width: 95% !important;
+    }
+}
+
+.return-type, .return-text {
+  display: inline-block;
+}
+
+.return-text {
+  padding-right: 10px;
+  font-weight: 700;
+}
+
+section.row {
+  padding: 0px;
+}
+
+.secondary-image {
+  width: 160px;
+  height: 160px;
+  margin: 20px;
+}
+
+.tagline {
+  justify-content: center;
+  text-align: center;
+}
+
+.tagline-header {
+  font-size: 18px;
+}
+
+dd, dl {
+  margin-bottom: 5px;
 }

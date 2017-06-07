@@ -36,6 +36,10 @@ const text = (text) => ({
   text
 });
 
+const colorBoundaries = [0, 10, 25, 50, 75, 100];
+
+const testResultPercentage = (passed, total) => total > 0 ? `test-color-${colorBoundaries.filter((c) => c <= Math.round((passed / total) * 100)).slice(-1).pop()}` : '';
+
 // there are a number of elements that just host a single text node, this
 // simplifies their construction
 const textElement = (tag) => (body, attr) => element(tag, text(body), attr);
@@ -64,7 +68,7 @@ if (program.testfile) {
       const [, className, methodName] = testMethod.split('.');
       const method = jspath.apply(`..{.kindString === "Class" && .name === "${className}"}.children{.kindString === "Method" && .name === "${methodName}"}`, typeInfo);
       if (method.length > 0) {
-        method[0].results = results;
+        method[0].signatures[0].results = results;
       } else {
         console.warn(`unable to find the method ${testMethod} within the typescript documentation`);
       }
@@ -102,11 +106,11 @@ const documentClass = (className) => {
           h2(d.match.name),
           // create the various sections by filtering the children based on their 'kind'
           jspath.apply('.{.kindString === "Constructor"}', d.match.children).length !== 0 ? h3('Constructors') : undefined,
-          section(d.runner(jspath.apply('.{.kindString === "Constructor"}', d.match.children)), {class: 'constructors'}),
+          jspath.apply('.{.kindString === "Constructor"}', d.match.children).length !== 0 ? section(d.runner(jspath.apply('.{.kindString === "Constructor"}', d.match.children)), {class: 'constructors'}) : undefined,
           jspath.apply('.{.kindString === "Property"}', d.match.children).length !== 0 ? h3('Properties') : undefined,
-          section(d.runner(jspath.apply('.{.kindString === "Property"}', d.match.children)), {class: 'properties'}),
+          jspath.apply('.{.kindString === "Property"}', d.match.children).length !== 0 ? section(d.runner(jspath.apply('.{.kindString === "Property"}', d.match.children)), {class: 'properties'}) : undefined,
           jspath.apply('.{.kindString === "Method"}', d.match.children).length !== 0 ? h3('Methods') : undefined,
-          section(d.runner(jspath.apply('.{.kindString === "Method"}', d.match.children)), {class: 'methods'})
+          jspath.apply('.{.kindString === "Method"}', d.match.children).length !== 0 ? section(d.runner(jspath.apply('.{.kindString === "Method"}', d.match.children)), {class: 'methods'}) : undefined
         ], {id: className, class: 'jumptarget'})
     ),
     jsont.pathRule(
@@ -114,9 +118,7 @@ const documentClass = (className) => {
         // we take just the first signature as the definition of the method, not
         // sure when there might be multiple signatures?!
         section([
-          d.runner(d.match.signatures[0]),
-          d.match.results ? h5('test results') : undefined,
-          d.match.results ? p(JSON.stringify(d.match.results)) : undefined
+          d.runner(d.match.signatures[0])
         ], {class: 'method'})
     ),
     jsont.pathRule(
@@ -124,24 +126,32 @@ const documentClass = (className) => {
         section([
           h5(d.match.name, {class: 'code'}),
           p(d.match.comment ? d.match.comment.shortText : '')
-        ])
+        ], {class: 'property', id: d.match.name})
     ),
     jsont.pathRule(
       '.{.kindString === "Call signature" || .kindString === "Constructor signature"}', d =>
         section([
-          h4(d.match.name, {class: 'code'}),
+          h4(d.match.name, {class: 'method-name', id: `${className}-${d.match.name}`}),
+          d.match.results ? section([
+            p('Electron'),
+            p(`${d.match.results.electron.passed}/${d.match.results.electron.total}`, {class: 'test-result ' + testResultPercentage(d.match.results.electron.passed, d.match.results.electron.total)}),
+            p('OpenFin'),
+            p(`${d.match.results.openfin.passed}/${d.match.results.openfin.total}`, {class: 'test-result ' + testResultPercentage(d.match.results.openfin.passed, d.match.results.openfin.total)}),
+            p('Browser'),
+            p(`${d.match.results.browser.passed}/${d.match.results.browser.total}`, {class: 'test-result ' + testResultPercentage(d.match.results.browser.passed, d.match.results.browser.total)})
+          ], {class: 'test-results'}) : undefined,
           p(d.match.comment ? d.match.comment.shortText : ''),
           d.match.parameters ? h5('Arguments') : undefined,
           // NOTE: we flatten because each parameter returns an array of dt / dd, we want to
           // flatten from [[dt, dd], [dt, dd]] to [dt, dd, dt, dd]
           d.match.parameters ? dl(flatten(d.runner(d.match.parameters))) : undefined,
-          h5('Returns'),
-          p(formatType(d.match.type), {class: 'code'})
+          p('Returns:', {class: 'return-text'}),
+          p(formatType(d.match.type), {class: 'code return-type'})
         ])
     ),
     jsont.pathRule(
       '.{.kindString === "Parameter"}', d => [
-        dt(`${d.match.name} [${formatType(d.match.type)}]`, {class: 'code'}),
+        dt(`${d.match.name} [${formatType(d.match.type)}]`, {class: 'code argument'}),
         dd(d.match.comment ? d.match.comment.text : '')
       ]
     )
