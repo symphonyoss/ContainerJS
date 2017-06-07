@@ -4,7 +4,7 @@
   "description": "A bundle of containerJS APIs",
   "main": "src/index.js",
   "scripts": {
-    "serve:no-browser": "live-server --mount=/:src --mount=/scripts/containerjs-api-bundle:node_modules/containerjs-api-bundle/build/containerjs-bundle.js --no-browser",
+    "serve:no-browser": "npm run serve -- --no-browser",
     "serve": "live-server --mount=/:src --mount=/scripts/containerjs-api-bundle:node_modules/containerjs-api-bundle/build/containerjs-bundle.js",
     "launch:electron": "ssf-electron ./src/app.json",
     "electron": "npm-run-all --parallel launch:electron serve:no-browser",
