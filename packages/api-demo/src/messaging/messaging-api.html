@@ -1,0 +1,79 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<title>ContainerJS</title>
+<link rel="stylesheet" type="text/css" href="../bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="../style.css"></link>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="index.html">ContainerJS</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Messaging API</h1>
+  </div>
+
+  <h3>Try me</h3>
+
+  <hr/>
+
+  <h5>Window Id:</h5>
+  <p id="window-uuid"></p>
+
+  <hr/>
+
+  <h4>Create a window to send messages to:</h4>
+  <form class="form-inline">
+    <div class="form-group">
+      <label>Child</label>
+      <input type="checkbox" id="child">
+    </div>
+    <button type="button" class="btn btn-default" id="new-window">New Window</button>
+  </form>
+
+  <hr/>
+
+  <form class="form">
+    <div class="form-group">
+      <label>Window Id</label>
+      <input type="text" class="form-control" placeholder="Id" id="uuid">
+    </div>
+    <div class="form-group">
+      <label>Message</label>
+      <input type="text" class="form-control" placeholder="message" id="message">
+    </div>
+    <button type="button" id="send-message" class="btn btn-default">Send</button>
+  </form>
+
+  <hr/>
+
+  <h5>Subscribe and unsubscribe from the channel, default is unsubscribed</h5>
+
+  <form class="inline-form">
+    <button type="button" class="btn btn-default" id="subscribe-button">Subscribe</button>
+    <button type="button" class="btn btn-default" id="unsubscribe-button">Unsubscribe</button>
+  </form>
+
+  <hr/>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Latest Message</h3>
+    </div>
+    <div id="message-box" class="panel-body">
+    </div>
+  </div>
+
+  <hr/>
+
+<script src="/scripts/containerjs-api-bundle"></script>
+<script src="messaging-api-demo.js"></script>
+
+<!-- intentionally unclosed body to append markdown -->

@@ -7,20 +7,23 @@
     "start": "live-server src/",
     "postinstall": "rimraf src/bootstrap.min.css && copyfiles -f node_modules/bootstrap/dist/css/bootstrap.min.css src",
     "test": "echo \"No test specified\" && exit 0",
-    "docs": "typedoc --mode file --json type-info.json interface.ts && node generate-docs.js && copyfiles -f \"docs/docs.html\" \"../../docs/_layouts\" && copyfiles -f \"docs/**/*.md\" \"../../docs/docs/\" && rimraf docs"
+    "typedoc2html": "node transform-type-info.js --testfile test-report.json --outpath ../../docs/docs",
+    "typedoc": "typedoc --mode file --json type-info.json interface.ts",
+    "docs": "npm run typedoc && npm run typedoc2html"
   },
   "author": "",
   "license": "Apache-2.0",
-  "devDependencies": {
-    "copyfiles": "^1.2.0",
-    "live-server": "^1.2.0",
-    "rimraf": "^2.6.1",
-    "typedoc": "^0.7.0",
-    "typedoc-markdown-theme": "0.0.4"
-  },
   "dependencies": {
-    "bootstrap": "^3.3.7",
     "@types/electron": "^1.4.38",
-    "@types/openfin": "^17.0.2"
+    "@types/openfin": "^17.0.2",
+    "bootstrap": "^3.3.7",
+    "commander": "^2.9.0",
+    "copyfiles": "^1.2.0",
+    "gray-matter": "^2.1.1",
+    "html2json": "^1.0.2",
+    "json-transforms": "^1.1.2",
+    "jspath": "^0.3.4",
+    "rimraf": "^2.6.1",
+    "typedoc": "^0.7.0"
   }
 }

@@ -13,4 +13,5 @@ Else {
   Write-Host "Not on branch 'master', not publishing docs"
 }
 
-exit
+# Fail if the tests failed
+exit [Environment]::GetEnvironmentVariable("TestResult", "User")
