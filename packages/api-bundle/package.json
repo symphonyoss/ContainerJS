@@ -1,11 +1,12 @@
 {
   "name": "containerjs-api-bundle",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A bundle of containerJS APIs",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\"",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "prepublish": "copyfiles -f node_modules/containerjs-api-openfin/src/notification.html build"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "containerjs-api-browser": "0.0.1"
   },
   "devDependencies": {
+    "copyfiles": "^1.2.0",
     "rollup": "^0.41.6",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^3.0.0"
