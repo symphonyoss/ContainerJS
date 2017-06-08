@@ -10,14 +10,10 @@ program
   .option('-i, --infile [filename]', 'Input type definitions file', 'type-info.json')
   .option('-t, --testfile [filename]', 'Input test report file')
   .option('-o, --outpath [folder]', 'Folder to place generated docs', '.')
-  .option('-n, --navigation [folder]', 'Folder to place navigation json file', '.')
   .parse(process.argv);
 
 const outpath = path.resolve(process.cwd(), program.outpath);
 console.log(outpath);
-
-const outpathData = path.resolve(process.cwd(), program.navigation);
-console.log(outpathData);
 
 const flatten = (arr) => arr.reduce((a, b) => a.concat(b), []);
 
