@@ -4,13 +4,13 @@
   "description": "A bundle of containerJS APIs",
   "main": "src/index.js",
   "scripts": {
-    "serve": "node server.js",
+    "serve:no-browser": "npm run serve -- --no-browser",
+    "serve": "live-server --mount=/:src --mount=/scripts/containerjs-api-bundle:node_modules/containerjs-api-bundle/build/containerjs-bundle.js",
     "launch:electron": "ssf-electron ./src/app.json",
-    "electron": "npm-run-all --parallel launch:electron serve",
+    "electron": "npm-run-all --parallel launch:electron serve:no-browser",
     "launch:openfin": "openfin --launch --config ./src/app.json",
-    "openfin": "npm-run-all --parallel launch:openfin serve",
+    "openfin": "npm-run-all --parallel launch:openfin serve:no-browser",
     "browser": "npm run serve",
-    "start": "npm run serve",
     "test": "echo \"Error: no test specified\""
   },
   "repository": {
@@ -25,11 +25,11 @@
   "homepage": "https://github.com/symphonyoss/ContainerJS#readme",
   "dependencies": {
     "containerjs-api-bundle": "^0.0.1",
+    "containerjs-api-electron": "^0.0.1",
     "openfin-cli": "^1.1.5",
     "openfin-launcher": "^1.3.12"
   },
   "devDependencies": {
-    "express": "^4.15.3",
     "live-server": "^1.2.0",
     "npm-run-all": "^4.0.2"
   }
