@@ -19,7 +19,7 @@
     "@types/electron": "^1.4.37",
     "@types/electron-notify": "^0.1.3",
     "electron": "^1.6.6",
-    "containerjs-api-specification": "0.0.1",
+    "containerjs-api-specification": "0.0.2",
     "electron-notify": "^0.1.0"
   },
   "bin": {
