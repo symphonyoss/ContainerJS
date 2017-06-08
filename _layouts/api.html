@@ -2,17 +2,10 @@
 layout: default
 ---
 <div class="row">
-  <div class="list-group col-3">
-     {% for apiPage in site.pages %}
-       {% if apiPage.sectionid == 'docs' %}
-         <a class="list-group-item {% if apiPage.url == page.url %}active{% endif %}"
-            href="{{ site.baseurl }}{{ apiPage.url }}">
-           {{ apiPage.class }}
-         </a>
-       {% endif%}
-     {% endfor %}
-  </div>
-  <div class="col-9">
+  <ul id="docs-menu" class="hidden-md-down">
+  </ul>
+  <div class="offset-lg-3 col-lg-9">
+    <h1>Documentation</h1>
     {{ content }}
   </div>
 </div>
