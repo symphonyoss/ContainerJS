@@ -1,21 +1,20 @@
-<div class="nav-main">
-  <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+<div id="nav-container" class="nav-main container">
+  <nav class="navbar navbar-toggleable-md navbar-light">
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="navbar-brand">ContainerJS</div>
+    <a class="navbar-brand" href="/ContainerJS/">
+      ContainerJS
+    </a>
 
     <div class="collapse navbar-collapse" id="navbarToggler">
-      <ul class="navbar-nav mr-auto mt-2 mt-md-0">
-        <li {% if page.sectionid == 'home' %} class="nav-item active" {% else %} class="nav-item" {% endif %}>
-          <a class="nav-link" href="/ContainerJS">Home</a>
-        </li>
+      <ul class="navbar-nav ml-auto mt-2 mt-md-0">
         <li {% if page.sectionid == 'docs' %} class="nav-item active" {% else %} class="nav-item" {% endif %}>
-          <a class="nav-link" href="/ContainerJS/docs/App">Docs</a>
+          <a class="nav-link" href="/ContainerJS/docs/Docs">Documentation</a>
         </li>
       </ul>
       <a class="nav-link p-1" href="https://github.com/symphonyoss/ContainerJS">
-        <img class="nav-brand p-0" src="/ContainerJS/img/GitHub-Mark-Light-32px.png" width="32" height="32" />
+        <img class="nav-brand p-0" src="/ContainerJS/img/GitHub-Mark-32px.png" width="32" height="32" />
       </a>
     </div>
   </nav>
