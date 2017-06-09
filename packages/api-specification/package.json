@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
-    "typedoc2html": "node transform-type-info.js --testfile test-report.json --outpath ../../docs/docs",
+    "typedoc2html": "node transform-type-info.js --testfile test-report.json --outpath ../../docs",
     "typedoc": "typedoc --mode file --json type-info.json interface.ts",
     "docs": "npm run typedoc && npm run typedoc2html"
   },
