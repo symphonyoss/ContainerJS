@@ -17,6 +17,9 @@ install:
   - appveyor-retry npm install
 
 test_script:
+  - node --version
+  - npm --version
+  - npm test
   - ps: .\test-script.ps1
 
 
