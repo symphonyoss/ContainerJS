@@ -4,7 +4,7 @@
 [![Symphony Software Foundation - Incubating](https://cdn.rawgit.com/symphonyoss/contrib-toolbox/master/images/ssf-badge-incubating.svg)](https://symphonyoss.atlassian.net/wiki/display/FM/Incubating)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/ContainerJS/Lobby)
 
-Pleae visit the [ContainerJS website] for information on getting started, and end-user API documentation.
+Pleae visit the [ContainerJS website](https://symphonyoss.github.io/ContainerJS/) for information on getting started, and end-user API documentation.
 
 ## Development
 
