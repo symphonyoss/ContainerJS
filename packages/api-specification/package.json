@@ -12,7 +12,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "@types/electron": "^1.4.38",
+    "@types/electron": "1.4.37",
     "@types/openfin": "^17.0.2",
     "commander": "^2.9.0",
     "copyfiles": "^1.2.0",
