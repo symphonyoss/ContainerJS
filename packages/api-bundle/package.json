@@ -4,7 +4,6 @@
   "description": "A bundle of containerJS APIs",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\"",
     "build": "rollup -c",
     "prepublish": "copyfiles -f node_modules/containerjs-api-openfin/src/notification.html build"
   },

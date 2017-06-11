@@ -10,8 +10,7 @@
     "clean": "rimraf build",
     "build": "npm run clean && npm run build:es && rollup -c",
     "build:es": "rimraf build/es && tsc",
-    "build:umd": "rimraf build/dist && npm run build:es && rollup -c",
-    "test": "npm run build"
+    "build:umd": "rimraf build/dist && npm run build:es && rollup -c"
   },
   "author": "",
   "license": "Apache-2.0",

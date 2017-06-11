@@ -9,7 +9,8 @@
     "postinstall": "npm run bootstrap",
     "test:ui": "cd packages/api-tests && npm run test:ui",
     "test:ci": "cd packages/api-tests && npm run test:ci && node generate-test-report.js",
-    "docs": "cd packages/api-specification && npm run docs"
+    "docs": "cd packages/api-specification && npm run docs",
+    "ci": "npm test && npm run build"
   },
   "license": "Apache-2.0",
   "repository": {
