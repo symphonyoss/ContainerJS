@@ -13,7 +13,7 @@ const openNewWindow = (client, options) => {
   const script = (options, callback) => {
     ssf.app.ready().then(() => {
       new ssf.Window(options, () => {
-        setTimeout(() => callback(), 500);
+        callback();
       });
     });
   };
