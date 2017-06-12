@@ -10,8 +10,7 @@
     "electron": "npm-run-all --parallel launch:electron serve:no-browser",
     "launch:openfin": "openfin --launch --config ./src/app.json",
     "openfin": "npm-run-all --parallel launch:openfin serve:no-browser",
-    "browser": "npm run serve",
-    "test": "echo \"Error: no test specified\""
+    "browser": "npm run serve"
   },
   "repository": {
     "type": "git",
