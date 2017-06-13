@@ -23,6 +23,7 @@ class Window {
   innerWindow: any;
   eventListeners: any;
   id: string;
+  globalWindow: any;
 
   constructor(options, callback, errorCallback) {
     this.children = [];
@@ -31,12 +32,14 @@ class Window {
 
     if (!options) {
       this.innerWindow = window;
+      this.globalWindow = this.innerWindow;
       this.id = window.name;
       if (callback) {
         callback();
       }
     } else {
       this.innerWindow = window.open(options.url, options.name, objectToFeaturesString(options));
+      this.globalWindow = this.innerWindow;
       this.id = this.innerWindow.name;
       this.innerWindow.onclose = () => {
         removeAccessibleWindow(this.innerWindow.name);

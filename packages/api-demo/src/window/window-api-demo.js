@@ -60,8 +60,8 @@ appReady.then(() => {
         addListItem('focus');
       });
 
-      win.addListener('close', () => {
-        addListItem('close');
+      win.addListener('closed', () => {
+        addListItem('closed');
       });
     });
   };

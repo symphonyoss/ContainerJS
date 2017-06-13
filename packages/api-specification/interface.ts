@@ -125,6 +125,11 @@ declare namespace ssf {
     innerWindow: Electron.BrowserWindow | fin.OpenFinWindow | BrowserWindow;
 
     /**
+     * The global window object for the referenced window.
+     */
+    globalWindow: any;
+
+    /**
 
      * Create a new window.
      * @param opts A window options object

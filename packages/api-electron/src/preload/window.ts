@@ -12,6 +12,7 @@ let currentWindow = null;
 class Window implements ssf.Window {
   innerWindow: Electron.BrowserWindow;
   id: string;
+  globalWindow: any;
 
   constructor(options: ssf.WindowOptions, callback, errorCallback) {
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
@@ -21,6 +22,7 @@ class Window implements ssf.Window {
 
     if (!options) {
       this.innerWindow = remote.getCurrentWindow();
+      this.globalWindow = window;
       this.id = String(this.innerWindow.id);
       if (callback) {
         callback(this);
@@ -29,13 +31,20 @@ class Window implements ssf.Window {
     }
 
     const features = Object.assign({}, options, { title: options.name });
+    // Object.keys(features).forEach(key => {
+    //   if (typeof features[key] === 'boolean') {
+    //     features[key] = features[key] ? 'yes' : 'no';
+    //   }
+    // });
 
-    this.id = ipc.sendSync(IpcMessages.IPC_SSF_NEW_WINDOW, {
-      url: features.url,
-      name: features.name,
-      features
-    });
-    this.innerWindow = BrowserWindow.fromId(parseInt(this.id));
+    // (features as any).left = features.x;
+    // delete features.x;
+    // (features as any).top = features.y;
+    // delete features.y;
+
+    const win = window.open(features.url, features.name, JSON.stringify(features));
+    this.innerWindow = (win as any).ssf.Window.getCurrentWindow().innerWindow;
+    this.globalWindow = win;
 
     if (callback) {
       callback(this);
