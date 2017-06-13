@@ -86,12 +86,10 @@ const formatType = (type) => {
   return 'UNKNOWN';
 };
 
-const testResults = (title, results) => {
-  return [
-    h5(title, {class: 'test-result-title'}),
-    span(`${results.passed}/${results.total}`, {class: 'test-result ' + testResultPercentage(results.passed, results.total)})
-  ];
-};
+const testResults = (title, results) => results ? [
+  h5(title, {class: 'test-result-title'}),
+  span(`${results.passed}/${results.total}`, {class: 'test-result ' + testResultPercentage(results.passed, results.total)})
+] : [];
 
 const documentClass = (className) => {
   const rules = [
