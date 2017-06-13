@@ -4,38 +4,42 @@ layout: default
 sectionid: home
 ---
 
+## Project Status
+
+ContainerJS is currently under active development, with frequent breaking changes!
+
 ## Getting Started
 
-The following describes how to create a simple 'Hello World' application and run it with OpenFin and Electron. The current setup process is not very tidy, expect this to improve over time!
+The following describes how to create a simple 'Hello World' application and run it with Electron, OpenFin and a Browser.
 
 #### Creating the Hello World app
 
-The first step is to install all of the dependencies of this project. From the root folder, run the following:
-
-```
-npm install
-```
-
-Now you can start creating your app. From within an empty folder, add a minimal HTML file called `index.js`:
+From within an empty folder, add a minimal HTML file called `index.html`:
 
 ```html
 <!doctype html>
 <meta charset="utf-8">
 <body>
   <h1>Hello World!</h1>
+  <div>
+    ContainerJS status: <span id="status">initialising</span>
+  </div>
 
-  <script src="containerjs-api.js"></script>
+  <script src="https://unpkg.com/containerjs-api-bundle@0.0.2/build/containerjs-bundle.js"></script>
 
   <script>
     ssf.app.ready()
       .then(() => {
-        new Notification('Hello World');
+        const status = document.getElementById('status')
+        status.innerText = 'ready';
       });
   </script>
 </body>
 ```
 
-This file uses the ssf API to handle the container `ready` promise, then creates a notification. Notice that it loads the `containerjs-api.js` script, which provides the client-side APIs (within OpenFin).
+The above displays a simple welcome message and indicates the status of the ContaunerJS APIs. The `containerjs-bundle.js` is the client-side bundle that detects the container that the page is running within (e.g. Electron, OpenFin) and provides the required API implementation. In the above code, this bundle is being downloaded from the `unpkg` CDN for simplicity.
+
+This file uses the ssf API to handle the container `ready` promise, updating the status text when this lifecycle event occurs..
 
 Within the same folder, add the following `app.json` manifest file:
 
@@ -43,7 +47,7 @@ Within the same folder, add the following `app.json` manifest file:
 {
   "startup_app": {
     "name": "Hello World",
-    "url": "http://localhost:5000/index.html",
+    "url": "http://localhost:8080/index.html",
     "uuid": "hello-world",
     "autoShow": true
   },
@@ -60,62 +64,44 @@ The manifest tells the container which URL to load initially.
 The container loads HTML applications over HTTP, so in order to run this demo application you need to start a local server. If you don't already have a preferred tool, you can use the node `http-server` package:
 
 ```
-npm install --global http-server
-http-server -p 5000
+$ npm install --global http-server
+$ http-server -p 8080
 ```
 
-This starts a server on port 5000.
+This starts a server on port 8080.
 
 #### Running with OpenFin
 
-First copy the contents of the `packages/api-openfin/build/dist` folder contents into the folder where your app is located. This provides the client-side API to your app.
-
-Next, install the OpenFin CLI tool:
+OpenFin has a command line tool for launching OpenFin applications. This can be installed as follows:
 
 ```
-npm install --global openfin-cli
+$ npm install --global openfin-cli
 ```
 
-Finally, launch the app:
+To run your simple 'Hello World' application from within an OpenFin container, execute the following:
 
 ```
-openfin --launch --config app.json
+$ openfin --launch --config app.json
 ```
 
-You should now see the Hello World application!
+You should now see the Hello World application, and see the status update to 'ready'
 
 #### Running with Electron
 
-In order to run the same application with Electron, you need to install the CLI tool which is part of this project. From within the `packages/api-electron` folder, run the following:
+The ContainerJS project provides an Electron-based command line tool, which can be installed as follows:
 
 ```
-npm install --global --ignore-scripts .
+$ npm install --global ssf-electron
 ```
 
-This installs the `ssf-electron` command line tool as a global npm package.
-
-You can now launch the app with the following command:
+From within your 'Hello World' folder, execute the following:
 
 ```
-ssf-electron app.json
+$ ssf-electron app.json
 ```
 
 You should now see exactly the same app running within Electron.
 
-#### Roadmap
+#### Browser
 
-For details on the progress and roadmap, see the [wiki pages](https://github.com/symphonyoss/ContainerJS/wiki)
-
-#### Development
-
-This project is a mono-repo, i.e. multiple distinct projects within the same Git repository. This project uses [Lerna](https://github.com/lerna/lerna) to manage the dependencies between these projects and their release process.
-
-To get started, run the following from the project root:
-
-```
-npm install
-```
-
-This will install Lerna and run `lerna bootstrap`, which runs `npm install` on all the sub-projects, and links any cross dependencies.
-
-For details on how to run each sub-project, refer to their README file.
+To run your app within a browser, simply navigate to the URL `http://localhost:8080/index.html`.

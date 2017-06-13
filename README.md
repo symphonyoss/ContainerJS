@@ -4,7 +4,7 @@
 [![Symphony Software Foundation - Incubating](https://cdn.rawgit.com/symphonyoss/contrib-toolbox/master/images/ssf-badge-incubating.svg)](https://symphonyoss.atlassian.net/wiki/display/FM/Incubating)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/ContainerJS/Lobby)
 
-Pleae visit the [ContainerJS website](https://symphonyoss.github.io/ContainerJS/) for information on getting started, and end-user API documentation.
+Please visit the [ContainerJS website](https://symphonyoss.github.io/ContainerJS/) for information on getting started, and end-user API documentation.
 
 ## Development
 
@@ -29,10 +29,10 @@ The ContainerJS repo contains the following:
  - `api-tests` - a common suite of UI automation tests that exercise the API.
  - `api-demo` - a ContainerJS demo application.
 
- ## Website Development
+## Website Development
 
- The website can be found in the `docs` folder. It is a Jekyll site, which is hosted via GitHub. The API documentation is generated from the TypeScript interfaces within the `api-specification` package. To run this build execute the following:
+The website can be found in the `docs` folder. It is a Jekyll site, which is hosted via GitHub. The API documentation is generated from the TypeScript interfaces within the `api-specification` package. To run this build execute the following:
 
- ```
- npm run docs
- ```
+```
+npm run docs
+```
