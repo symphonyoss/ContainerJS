@@ -145,8 +145,11 @@ const documentClass = (className) => {
           // NOTE: we flatten because each parameter returns an array of dt / dd, we want to
           // flatten from [[dt, dd], [dt, dd]] to [dt, dd, dt, dd]
           d.match.parameters ? dl(flatten(d.runner(d.match.parameters))) : undefined,
-          p('Returns:', {class: 'return-text'}),
-          p(formatType(d.match.type), {class: 'code return-type'})
+          h5('Returns'),
+          dl([
+            dt(formatType(d.match.type), {class: 'code return-value'}),
+            dd(d.match.comment && d.match.comment.returns ? d.match.comment.returns : '')
+          ])
         ])
     ),
     jsont.pathRule(

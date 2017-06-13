@@ -38,10 +38,11 @@ section > h4 {
   display: inline-block;
   font-weight: 700;
   font-size: 20px;
+  margin-bottom: 10px;
 }
 
 h5 {
-  padding: 10px 0px;;
+  padding: 10px 0px;
   margin: 0px;
   font-weight: 700;
   font-size: 16px;
@@ -56,11 +57,13 @@ p {
 }
 
 .code {
+  width: 100%;
   font-family: monospace;
   white-space: pre;
   background-color: #eee;
   display: inline-block;
-  padding: 5px;
+  padding: 10px 10px;
+  margin: 5px 0;
   font-weight: 500;
 }
 
@@ -208,15 +211,6 @@ section.methods, section.contructors, section.properties {
     }
 }
 
-.return-type, .return-text {
-  display: inline-block;
-}
-
-.return-text {
-  padding-right: 10px;
-  font-weight: 700;
-}
-
 section.row {
   padding: 0px;
 }
@@ -237,5 +231,9 @@ section.row {
 }
 
 dd, dl {
-  margin-bottom: 5px;
+  margin-bottom: 25px;
+}
+
+dl {
+  margin-left: 25px;
 }
