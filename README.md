@@ -28,3 +28,11 @@ The ContainerJS repo contains the following:
  - `api-bundle` - a bundle that contains the client-side code for all of the different ContainerJS implementations. This allows exactly the same application code to be run against each container.
  - `api-tests` - a common suite of UI automation tests that exercise the API.
  - `api-demo` - a ContainerJS demo application.
+
+ ## Website Development
+
+ The website can be found in the `docs` folder. It is a Jekyll site, which is hosted via GitHub. The API documentation is generated from the TypeScript interfaces within the `api-specification` package. To run this build execute the following:
+
+ ```
+ npm run docs
+ ```
