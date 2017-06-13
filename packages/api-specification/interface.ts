@@ -414,7 +414,7 @@ declare namespace ssf {
      * @param errorCallback - Function that is called when the window could not be created.
      * @returns The window.
      */
-    static getCurrentWindow(callback: Function, errorCallback: Function): Window;
+    static getCurrentWindow(callback?: Function, errorCallback?: Function): Window;
   }
 
   class MessageService {

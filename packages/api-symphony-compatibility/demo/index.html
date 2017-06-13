@@ -1,0 +1,53 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<title>ContainerJS</title>
+<link rel="stylesheet" type="text/css" href="../bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="../style.css"></link>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand">ContainerJS</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+<div class="page-header">
+  <h1>Compatibility API</h1>
+</div>
+
+<div>
+  <button class="btn btn-default" id="registerBoundsButton">registerBoundsChanged</button>
+</div>
+<hr/>
+<div>
+  <p>X: <span id="xPos">No data</span></p>
+  <p>Y: <span id="yPos">No data</span></p>
+  <p>Width: <span id="width">No data</span></p>
+  <p>Height: <span id="height">No data</span></p>
+</div>
+
+<script src="/scripts/containerjs-api-bundle"></script>
+<script src="/scripts/containerjs-compatibility-api"></script>
+<script>
+  const xPos = document.getElementById('xPos');
+  const yPos = document.getElementById('yPos');
+  const width = document.getElementById('width');
+  const height = document.getElementById('height');
+
+  document.getElementById('registerBoundsButton').onclick = () => {
+    ssf.registerBoundsChange((data) => {
+      xPos.innerText = data.x;
+      yPos.innerText = data.y;
+      width.innerText = data.width;
+      height.innerText = data.height;
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "module": "es2015",
+        "lib": [
+            "dom",
+            "es2015",
+            "dom.iterable",
+            "scripthost"
+        ],
+        "outDir": "./build/es",
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "target": "es5"
+    },
+    "include": [
+        "./index.ts",
+        "node_modules/containerjs-api-specification/interface.ts"
+    ]
+}
