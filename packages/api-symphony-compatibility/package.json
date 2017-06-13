@@ -1,0 +1,24 @@
+{
+  "name": "containerjs-compatibility-api",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "Apache-2.0",
+  "scripts": {
+    "clean": "rimraf build",
+    "build": "npm run clean && npm run build:cjs && npm run build:es && rollup -c && copyfiles -f src/notification.html ./build/dist",
+    "build:es": "rimraf build/es && tsc -p tsconfig.json -m ES2015 --outdir ./build/es && copyfiles -f src/notification.html ./build/es",
+    "build:cjs": "rimraf build/lib && tsc -p tsconfig.json -m CommonJS --outdir ./build/lib && copyfiles -f src/notification.html ./build/lib",
+    "build:umd": "rimraf build/dist && npm run build:es && rollup -c && copyfiles -f src/notification.html ./build/dist"
+  },
+  "dependencies": {
+    "containerjs-api-specification": "0.0.2"
+  },
+  "devDependencies": {
+    "copyfiles": "^1.2.0",
+    "rimraf": "^2.6.1",
+    "rollup": "^0.43.0",
+    "typescript": "^2.3.4"
+  }
+}
