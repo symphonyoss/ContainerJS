@@ -9,11 +9,10 @@ const path = require('path');
 program
   .option('-i, --infile [filename]', 'Input type definitions file', 'type-info.json')
   .option('-t, --testfile [filename]', 'Input test report file')
-  .option('-o, --outpath [folder]', 'Folder to place generated docs', '.')
+  .option('-o, --outfile [filename]', 'Output file for generated documentation', '.')
   .parse(process.argv);
 
-const outpath = path.resolve(process.cwd(), program.outpath);
-console.log(outpath);
+const outfile = path.resolve(process.cwd(), program.outfile);
 
 const flatten = (arr) => arr.reduce((a, b) => a.concat(b), []);
 
@@ -161,10 +160,7 @@ const documentClass = (className) => {
   const json = jsont.transform(typeInfo, rules);
   const html = json2html(json);
 
-  if (!fs.existsSync(outpath)) {
-    fs.mkdirSync(outpath);
-  }
-  fs.appendFileSync(`${outpath}/Docs.html`, html);
+  fs.appendFileSync(outfile, html);
 };
 
 // find the list of classes
@@ -179,5 +175,5 @@ const yml = matter.stringify('', {
   class: 'docs'
 });
 
-fs.writeFileSync(`${outpath}/Docs.html`, yml);
+fs.writeFileSync(outfile, yml);
 classes.forEach(documentClass);
