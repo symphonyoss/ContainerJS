@@ -37,9 +37,9 @@ From within an empty folder, add a minimal HTML file called `index.html`:
 </body>
 ```
 
-The above displays a simple welcome message and indicates the status of the ContaunerJS APIs. The `containerjs-bundle.js` is the client-side bundle that detects the container that the page is running within (e.g. Electron, OpenFin) and provides the required API implementation. In the above code, this bundle is being downloaded from the `unpkg` CDN for simplicity.
+The above displays a simple welcome message and indicates the status of the ContainerJS APIs. The `containerjs-bundle.js` is the client-side bundle that detects the container that the page is running within (e.g. Electron, OpenFin) and provides the required API implementation. In the above code, this bundle is being downloaded from the `unpkg` CDN for simplicity.
 
-This file uses the ssf API to handle the container `ready` promise, updating the status text when this lifecycle event occurs..
+This file uses the `ssf` API to handle the container `ready` promise, updating the status text when this lifecycle event occurs.
 
 Within the same folder, add the following `app.json` manifest file:
 
