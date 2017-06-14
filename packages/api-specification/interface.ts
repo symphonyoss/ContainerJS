@@ -279,6 +279,16 @@ declare namespace ssf {
     static getCurrentWindow(callback: Function, errorCallback: Function): Window;
   }
 
+  /**
+    * Creates and controls windows.
+    *
+    * Windows are created via a constructor which takes a configuration object
+    * that details the window's behaviour.
+    *
+    * <pre>
+    * const win = new Window({url: 'http://localhost/index.html'});
+    * </pre>
+    */
   class Window extends WindowCore {
 
     /**

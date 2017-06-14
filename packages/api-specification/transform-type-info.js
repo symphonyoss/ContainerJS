@@ -86,6 +86,9 @@ const formatType = (type) => {
   return 'UNKNOWN';
 };
 
+const formatComment = (comment) =>
+  comment && [comment.shortText, comment.text, comment.return].filter(d => d).join('<br/>');
+
 const testResults = (title, results) => results ? [
   h5(title, {class: 'test-result-title'}),
   span(`${results.passed}/${results.total}`, {class: 'test-result ' + testResultPercentage(results.passed, results.total)})
@@ -105,6 +108,7 @@ const documentClass = (className) => {
       '.{.kindString === "Class"}', d =>
         section([
           h2(d.match.name),
+          p(formatComment(d.match.comment)),
           // create the various sections by filtering the children based on their 'kind'
           jspath.apply('.{.kindString === "Constructor"}', d.match.children).length !== 0 ? h3('Constructors') : undefined,
           jspath.apply('.{.kindString === "Constructor"}', d.match.children).length !== 0 ? section(d.runner(jspath.apply('.{.kindString === "Constructor"}', d.match.children)), {class: 'constructors'}) : undefined,
@@ -126,7 +130,7 @@ const documentClass = (className) => {
       '.{.kindString === "Property"}', d =>
         section([
           h5(d.match.name, {class: 'code'}),
-          p(d.match.comment ? d.match.comment.shortText : '')
+          p(formatComment(d.match.comment))
         ], {class: 'property', id: d.match.name})
     ),
     jsont.pathRule(
@@ -138,7 +142,7 @@ const documentClass = (className) => {
             ...testResults('OpenFin', d.match.results.openfin),
             ...testResults('Browser', d.match.results.browser)
           ], {class: 'test-results'}) : undefined,
-          p(d.match.comment ? d.match.comment.shortText : ''),
+          p(formatComment(d.match.comment)),
           d.match.parameters ? h5('Arguments') : undefined,
           // NOTE: we flatten because each parameter returns an array of dt / dd, we want to
           // flatten from [[dt, dd], [dt, dd]] to [dt, dd, dt, dd]
@@ -146,14 +150,14 @@ const documentClass = (className) => {
           h5('Returns'),
           dl([
             dt(formatType(d.match.type), {class: 'code return-value'}),
-            dd(d.match.comment && d.match.comment.returns ? d.match.comment.returns : '')
+            dd(formatComment(d.match.comment))
           ])
         ])
     ),
     jsont.pathRule(
       '.{.kindString === "Parameter"}', d => [
         dt(`${d.match.name} [${formatType(d.match.type)}]`, {class: 'code argument'}),
-        dd(d.match.comment ? d.match.comment.text : '')
+        dd(formatComment(d.match.comment))
       ]
     )
   ];
