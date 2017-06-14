@@ -8,7 +8,7 @@ let currentWindow = null;
 const getCenterCoordinates = () => {
     var x = (window.innerWidth / 2) + window.screenLeft;
     var y = (window.innerHeight / 2) + window.screenTop;
-    return [x, y];
+    return [Math.floor(x), Math.floor(y)];
 }
 
 class Window implements ssf.WindowCore {
