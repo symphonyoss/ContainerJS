@@ -5,7 +5,7 @@ import {
 
 let currentWindow = null;
 
-function getCenterCoordinates() {
+const getCenterCoordinates = () => {
     var x = (window.innerWidth / 2) + window.screenLeft;
     var y = (window.innerHeight / 2) + window.screenTop;
     return [x, y];

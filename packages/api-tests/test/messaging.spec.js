@@ -30,7 +30,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
       return app.start();
     });
 
-    afterEach(function() {
+    afterEach(() => {
       if (app && app.isRunning()) {
         return app.stop();
       }

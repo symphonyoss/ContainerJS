@@ -20,11 +20,12 @@ const options = {
 
 // This is designed to replicate the Spectron Application object, apart from launching chrome instead of Electron.
 class Application {
-  constructor() {
+  constructor(timeout) {
     this.client = undefined;
     this.running = false;
     this.driver = undefined;
     this.installed = false;
+    this.timeout = timeout;
   }
 
   start() {
@@ -55,11 +56,11 @@ class Application {
         this.driver = child;
         // Start chrome at index.html
         this.client = webdriverio.remote(options).init().url('http://localhost:5000/index.html');
-        this.client.timeouts('script', 60000);
-        this.client.timeouts('implicit', 60000);
+        this.client.timeouts('script', this.timeout);
+        this.client.timeouts('implicit', this.timeout);
         // old type 'page load' needed for some browsers
-        this.client.timeouts('page load', 60000);
-        this.client.timeouts('pageLoad', 60000);
+        this.client.timeouts('page load', this.timeout);
+        this.client.timeouts('pageLoad', this.timeout);
         // Implements the spectron helper method
         this.client.getWindowCount = () => {
           return this.client.windowHandles().then(handles => handles.value.length);
@@ -85,6 +86,6 @@ class Application {
   }
 };
 
-module.exports = () => {
-  return new Application();
+module.exports = (timeout) => {
+  return new Application(timeout);
 };
