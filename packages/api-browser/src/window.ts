@@ -5,26 +5,19 @@ import {
 
 let currentWindow = null;
 
-const windowClosedError = new Error('The window does not exist or the window has been closed');
+const getCenterCoordinates = () => {
+    var x = (window.innerWidth / 2) + window.screenLeft;
+    var y = (window.innerHeight / 2) + window.screenTop;
+    return [Math.floor(x), Math.floor(y)];
+}
 
-const withInnerWindow = (win, fn) => {
-  return new Promise((resolve, reject) => {
-    if (win) {
-      fn(win);
-      resolve();
-    } else {
-      reject(windowClosedError);
-    }
-  });
-};
-
-class Window {
+class Window implements ssf.WindowCore {
   children: any;
   innerWindow: any;
   eventListeners: any;
   id: string;
 
-  constructor(options, callback, errorCallback) {
+  constructor(options, callback?, errorCallback?) {
     this.children = [];
 
     this.eventListeners = new Map();
@@ -33,11 +26,13 @@ class Window {
       this.innerWindow = window;
       this.id = window.name;
       if (callback) {
-        callback();
+        callback(this);
       }
     } else {
       this.innerWindow = window.open(options.url, options.name, objectToFeaturesString(options));
       this.id = this.innerWindow.name;
+      const [x, y] = getCenterCoordinates();
+      this.setPosition(options.x || x, options.y || y);
       this.innerWindow.onclose = () => {
         removeAccessibleWindow(this.innerWindow.name);
       };
@@ -55,33 +50,96 @@ class Window {
     });
 
     if (callback) {
-      callback();
+      callback(this);
     }
   }
 
   close() {
-    // Close only works on windows that were opened by the current window
-    return withInnerWindow(this.innerWindow, innerWindow => innerWindow.close());
-  }
-
-  show() {
-    // Unable to 'show' browser window
+    return this.asPromise<void>(() => this.innerWindow.close());
   }
 
   getId() {
-    return window.name;
-  }
-
-  hide() {
-    // Unable to 'hide' browser window
+    return this.id;
   }
 
   focus() {
-    return withInnerWindow(this.innerWindow, innerWindow => innerWindow.focus());
+    return this.asPromise<void>(() => this.innerWindow.focus());
   }
 
   blur() {
-    return withInnerWindow(this.innerWindow, innerWindow => innerWindow.blur());
+    return this.asPromise<void>(() => this.innerWindow.blur());
+  }
+
+  getBounds() {
+    return this.asPromise<ssf.Rectangle>(() => ({
+      x: this.innerWindow.screenX,
+      y: this.innerWindow.screenY,
+      width: this.innerWindow.outerWidth,
+      height: this.innerWindow.outerHeight
+    }));
+  }
+
+  getParentWindow() {
+    return new Promise(resolve => {
+      let newWin = null;
+      if (window.opener) {
+        newWin = new Window(null);
+        newWin.innerWindow = window.opener;
+        newWin.id = window.opener.name;
+      }
+
+      resolve(newWin);
+    });
+  }
+
+  getPosition() {
+    return this.asPromise<ReadonlyArray<number>>(() => [this.innerWindow.screenX, this.innerWindow.screenY]);
+  }
+
+  getSize() {
+    return this.asPromise<ReadonlyArray<number>>(() => [this.innerWindow.outerWidth, this.innerWindow.outerHeight]);
+  }
+
+  getTitle() {
+    return this.asPromise<string>(() => this.innerWindow.name || this.innerWindow.document.title);
+  }
+
+  // Cannot be anything but true for browser
+  isMaximizable() {
+    return this.asPromise<boolean>(() => true);
+  }
+
+  // Cannot be anything but true for browser
+  isMinimizable() {
+    return this.asPromise<boolean>(() => true);
+  }
+
+  // Cannot be anything but true for browser
+  isResizable() {
+    return this.asPromise<boolean>(() => true);
+  }
+
+  loadURL(url) {
+    return this.asPromise<void>(() => location.href = url);
+  }
+
+  reload() {
+    return this.asPromise<void>(() => location.reload());
+  }
+
+  setBounds(bounds) {
+    return this.asPromise<void>(() => {
+      this.innerWindow.moveTo(bounds.x, bounds.y);
+      this.innerWindow.resizeTo(bounds.width, bounds.height);
+    });
+  }
+
+  setPosition(x, y) {
+    return this.asPromise<void>(() => this.innerWindow.moveTo(x, y));
+  }
+
+  setSize(width, height) {
+     return this.asPromise<void>(() => this.innerWindow.resizeTo(width, height));
   }
 
   addListener(event, listener) {
@@ -124,6 +182,16 @@ class Window {
 
   getChildWindows() {
     return this.children;
+  }
+
+  asPromise<T>(fn): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      if (this.innerWindow) {
+        resolve(fn());
+      } else {
+        reject(new Error('The window does not exist or the window has been closed'));
+      }
+    });
   }
 
   static getCurrentWindow(callback?: any, errorCallback?: any) {

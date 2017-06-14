@@ -12,9 +12,11 @@ cache:
   - '%LOCALAPPDATA%\OpenFin\runtime'
 
 install:
+  - choco install googlechrome
   - ps: Install-Product node
   - set CI=true
   - appveyor-retry npm install
+  - npm build
 
 test_script:
   - node --version

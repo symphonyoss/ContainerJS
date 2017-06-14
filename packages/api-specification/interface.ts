@@ -112,8 +112,7 @@ declare namespace ssf {
     transparent: boolean;
   }
 
-  class Window {
-
+  class WindowCore {
     /**
      * The id that uniquely identifies the window
      */
@@ -139,19 +138,12 @@ declare namespace ssf {
     blur(): Promise<void>;
 
     /**
-     * Closes the window.
+     * Closes the window. Only works on windows created via the ContainerJS API in the browser.
      * @returns A promise which resolves to nothing when the function has completed.
      */
     close(): Promise<void>;
 
-    /**
-     * Flashes the window's frame and taskbar icon.
-     * @param flag - Flag to start or stop the window flashing.
-     * @returns A promise which resolves to nothing when the function has completed.
-     */
-    flashFrame(flag: boolean): Promise<void>;
-
-    /**
+     /**
      * Focuses the window.
      * @returns A promise which resolves to nothing when the function has completed.
      */
@@ -174,18 +166,6 @@ declare namespace ssf {
      * @returns The window id.
      */
     getId(): string;
-
-    /**
-     * Get the maximum size of the window.
-     * @returns A promise that resolves to an array containing the maximum width and height of the window.
-     */
-    getMaximumSize(): Promise<ReadonlyArray<number>>;
-
-    /**
-     * Get the minimum size of the window.
-     * @returns A promise that resolves to an array containing the minimum width and height of the window.
-     */
-    getMinimumSize(): Promise<ReadonlyArray<number>>;
 
     /**
      * Get the parent of the window. Null will be returned if the window has no parent.
@@ -212,46 +192,16 @@ declare namespace ssf {
     getTitle(): Promise<string>;
 
     /**
-     * Check if the window has a shadow.
-     * @returns A promise that resolves to a boolean stating if the window has a shadow.
-     */
-    hasShadow(): Promise<boolean>;
-
-    /**
-     * Hides the window.
-     * @returns A promise that resolves to nothing when the window has hidden.
-     */
-    hide(): Promise<void>;
-
-    /**
-     * Check if the window is always on top of all other windows.
-     * @returns A promise that resolves to a boolean stating if the window is always on top.
-     */
-    isAlwaysOnTop(): Promise<boolean>;
-
-    /**
      * Check if the window can be maximized.
      * @returns A promise that resolves to a boolean stating if the window can be maximized.
      */
     isMaximizable(): Promise<boolean>;
 
     /**
-     * Check if the window is currently maximized.
-     * @returns A promise that resolves to a boolean stating if the window is maximized.
-     */
-    isMaximized(): Promise<boolean>;
-
-    /**
      * Check if the window can be minimized.
      * @returns A promise that resolves to a boolean stating if the window can be minimized.
      */
     isMinimizable(): Promise<boolean>;
-
-    /**
-     * Check if the window is currently minimized.
-     * @returns A promise that resolves to a boolean stating if the window is minimized.
-     */
-    isMinimized(): Promise<boolean>;
 
     /**
      * Check if the window can be resized.
@@ -271,6 +221,114 @@ declare namespace ssf {
      * @returns A promise that resolves when the window method succeeds.
      */
     reload(): Promise<void>;
+
+    /**
+     * Sets the window to always be on top of other windows. Only works on windows created via the ContainerJS API in the browser.
+     * @param bounds - Sets the bounds of the window.
+     * @returns A promise that resolves to nothing when the option is set.
+     */
+    setBounds(bounds: Rectangle): Promise<void>;
+
+    /**
+     * Sets the windows position. Only works on windows created via the ContainerJS API in the browser.
+     * @param x - The x position of the window.
+     * @param y - The y position of the window.
+     * @returns A promise that resolves to nothing when the option has been set.
+     */
+    setPosition(x: number, y: number): Promise<void>;
+
+    /**
+     * Sets the width and height of the window. Only works on windows created via the ContainerJS API in the browser.
+     * @param width - The width of the window.
+     * @param height - The height of the window.
+     * @returns A promise that resolves to nothing when the option has been set.
+     */
+    setSize(width: number, height: number): Promise<void>;
+
+    /**
+     * Send a message to the window.
+     * @param message - The message to send to the window. Can be any serializable object.
+     */
+    postMessage(message: string | Object): void;
+
+    /**
+     * Adds a listener for a particular window event.
+     * @param event - The event to listen for.
+     * @param listener - The function to call when the event fires.
+     */
+    addListener(event: string, listener: Function): void;
+
+    /**
+     * Removes an event listener from the window. The listener must be the same function that was passed into addListener.
+     * @param event - The event the listener was listening for.
+     * @param listener - The original function that was passed to addListener.
+     */
+    removeListener(event: string, listener: Function): void;
+
+    /**
+     * Removes all listeners from all window events.
+     */
+    removeAllListeners(): void;
+
+    /**
+     * Gets the current window object.
+     * @param callback - Function that is called when the window is created successfully.
+     * @param errorCallback - Function that is called when the window could not be created.
+     * @returns The window.
+     */
+    static getCurrentWindow(callback: Function, errorCallback: Function): Window;
+  }
+
+  class Window extends WindowCore {
+
+    /**
+     * Flashes the window's frame and taskbar icon.
+     * @param flag - Flag to start or stop the window flashing.
+     * @returns A promise which resolves to nothing when the function has completed.
+     */
+    flashFrame(flag: boolean): Promise<void>;
+
+    /**
+     * Get the maximum size of the window.
+     * @returns A promise that resolves to an array containing the maximum width and height of the window.
+     */
+    getMaximumSize(): Promise<ReadonlyArray<number>>;
+
+    /**
+     * Get the minimum size of the window.
+     * @returns A promise that resolves to an array containing the minimum width and height of the window.
+     */
+    getMinimumSize(): Promise<ReadonlyArray<number>>;
+
+    /**
+     * Check if the window has a shadow.
+     * @returns A promise that resolves to a boolean stating if the window has a shadow.
+     */
+    hasShadow(): Promise<boolean>;
+
+    /**
+     * Hides the window.
+     * @returns A promise that resolves to nothing when the window has hidden.
+     */
+    hide(): Promise<void>;
+
+    /**
+     * Check if the window is always on top of all other windows.
+     * @returns A promise that resolves to a boolean stating if the window is always on top.
+     */
+    isAlwaysOnTop(): Promise<boolean>;
+
+    /**
+     * Check if the window is currently maximized.
+     * @returns {Promise<boolean>} A promise that resolves to a boolean stating if the window is maximized.
+     */
+    isMaximized(): Promise<boolean>;
+
+    /**
+     * Check if the window is currently minimized.
+     * @returns {Promise<boolean>} A promise that resolves to a boolean stating if the window is minimized.
+     */
+    isMinimized(): Promise<boolean>;
 
     /**
      * Restores the window to the previous state.
@@ -382,31 +440,6 @@ declare namespace ssf {
      * @returns A promise that resolves to nothing when the window has unmaximized.
      */
     unmaximize(): Promise<void>;
-
-    /**
-     * Adds a listener for a particular window event.
-     * @param event - The event to listen for.
-     * @param listener - The function to call when the event fires.
-     */
-    addListener(event: string, listener: Function): void;
-
-    /**
-     * Removes an event listener from the window. The listener must be the same function that was passed into addListener.
-     * @param event - The event the listener was listening for.
-     * @param listener - The original function that was passed to addListener.
-     */
-    removeListener(event: string, listener: Function): void;
-
-    /**
-     * Removes all listeners from all window events.
-     */
-    removeAllListeners(): void;
-
-    /**
-     * Send a message to the window.
-     * @param message - The message to send to the window. Can be any serializable object.
-     */
-    postMessage(message: string | Object): void;
 
     /**
      * Gets the current window object.

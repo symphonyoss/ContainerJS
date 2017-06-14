@@ -12,8 +12,9 @@ const selectWindow = (client, handle) => {
 const openNewWindow = (client, options) => {
   const script = (options, callback) => {
     ssf.app.ready().then(() => {
-      new ssf.Window(options);
-      setTimeout(() => callback(), 500);
+      new ssf.Window(options, () => {
+        callback();
+      });
     });
   };
   return executeAsyncJavascript(client, script, options)
