@@ -21,6 +21,8 @@ IF ($env:APPVEYOR_REPO_BRANCH -eq "master" -And (-Not (Test-Path Env:\APPVEYOR_P
     [Environment]::SetEnvironmentVariable("TestResult", "1", "User")
   }
 
+  npm run posttest
+
   cd ..\..
   npm run docs
 }

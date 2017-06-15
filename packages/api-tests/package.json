@@ -11,7 +11,7 @@
     "test:ci:openfin": "npm run test:openfin -- --reporter reporter.js",
     "test:browser": "rimraf src && copyfiles -f \"demo/**\" src && copyfiles -f \"node_modules/containerjs-api-browser/build/dist/**\" src && cross-env MOCHA_CONTAINER=browser mocha test/*.js",
     "test:ci:browser": "npm run test:browser -- --reporter reporter.js",
-    "posttest": "copyfiles -f \"test-report.json\" \"../api-specification\""
+    "posttest": "node generate-test-report.json && copyfiles -f \"test-report.json\" \"../api-specification\""
   },
   "dependencies": {
     "assert": "^1.4.1",
