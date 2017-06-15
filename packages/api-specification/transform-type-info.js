@@ -88,7 +88,7 @@ const formatType = (type) => {
 };
 
 const formatComment = (comment) =>
-  comment && [comment.shortText, comment.text, comment.return].filter(d => d).join('<br/>');
+  comment && [comment.shortText, comment.text].filter(d => d).join('<br/>');
 
 const testResults = (title, results) => results ? [
   h5(title, {class: 'test-result-title'}),
@@ -150,7 +150,7 @@ const documentClass = (className) => {
           h5('Returns'),
           dl([
             dt(formatType(d.match.type), {class: 'code return-value'}),
-            dd(formatComment(d.match.comment))
+            dd(d.match.comment ? d.match.comment.returns : '')
           ])
         ])
     ),

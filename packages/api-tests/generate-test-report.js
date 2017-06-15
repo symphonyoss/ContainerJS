@@ -11,25 +11,25 @@ const testTable = {
 };
 
 // Read as 10% or less, 25% or less etc
-// const percentageColors = {
-//   10: '#f45858',
-//   25: '#f2f23c',
-//   50: '#aeea3f',
-//   75: '#85ea4f',
-//   100: '#50ce5b'
-// };
+const percentageColors = {
+  10: '#f45858',
+  25: '#f2f23c',
+  50: '#aeea3f',
+  75: '#85ea4f',
+  100: '#50ce5b'
+};
 
-// const getColorCode = (percent) => {
-//   let colorCode = '';
-//   Object.keys(percentageColors).some((key) => {
-//     if (percent <= parseInt(key)) {
-//       colorCode = percentageColors[key];
-//       return true;
-//     }
-//     return false;
-//   });
-//   return colorCode;
-// };
+const getColorCode = (percent) => {
+  let colorCode = '';
+  Object.keys(percentageColors).some((key) => {
+    if (percent <= parseInt(key)) {
+      colorCode = percentageColors[key];
+      return true;
+    }
+    return false;
+  });
+  return colorCode;
+};
 
 const testStatus = {
   pass: 'pass',
@@ -89,11 +89,11 @@ const sortedTags = Object.keys(tagCount).sort();
 
 const outputJson = {};
 
-// let markdownString = '| Method | Electron | OpenFin | Browser |\n|:---|:---:|:---:|:---:|\n';
+let markdownString = '| Method | Electron | OpenFin | Browser |\n|:---|:---:|:---:|:---:|\n';
 
-// const createColumn = (color, passed, total) => {
-//   return `<span style="background-color:${color}; display: block;">${passed}/${total}</span>`;
-// };
+const createColumn = (color, passed, total) => {
+  return `<span style="background-color:${color}; display: block;">${passed}/${total}</span>`;
+};
 
 sortedTags.forEach((tag) => {
   const electronPassed = testTable.electron[tag] || 0;
@@ -101,10 +101,10 @@ sortedTags.forEach((tag) => {
   const browserPassed = testTable.browser[tag] || 0;
   const total = tagCount[tag];
   const label = tag.substring(1); // Removes the # from the front of the tag
-  // const electronColor = total > 0 ? getColorCode((electronPassed / total) * 100) : '';
-  // const openfinColor = total > 0 ? getColorCode((openfinPassed / total) * 100) : '';
-  // const browserColor = total > 0 ? getColorCode((browserPassed / total) * 100) : '';
-  // markdownString += `|${label}|${createColumn(electronColor, electronPassed, total)}|${createColumn(openfinColor, openfinPassed, total)}|${createColumn(browserColor, browserPassed, total)}|\n`;
+  const electronColor = total > 0 ? getColorCode((electronPassed / total) * 100) : '';
+  const openfinColor = total > 0 ? getColorCode((openfinPassed / total) * 100) : '';
+  const browserColor = total > 0 ? getColorCode((browserPassed / total) * 100) : '';
+  markdownString += `|${label}|${createColumn(electronColor, electronPassed, total)}|${createColumn(openfinColor, openfinPassed, total)}|${createColumn(browserColor, browserPassed, total)}|\n`;
   outputJson[label] = {
     electron: {
       passed: electronPassed,
@@ -121,21 +121,21 @@ sortedTags.forEach((tag) => {
   };
 });
 
-// const ghPagesMarkdown =
-// `---
-// id: testMatrix
-// title: Test Report
-// permalink: docs/test-matrix.html
-// layout: docs
-// sectionid: docs
-// ---\n
-// {: width="100%"}
-// `;
+const ghPagesMarkdown =
+`---
+id: testMatrix
+title: Test Report
+permalink: docs/test-matrix.html
+layout: docs
+sectionid: docs
+---\n
+{: width="100%"}
+`;
 
-// const docsPath = path.join(__dirname, '..', '..', 'docs', 'docs');
-// if (!fs.existsSync(docsPath)) {
-//   fs.mkdirSync(docsPath);
-// }
-// fs.writeFileSync(path.join(docsPath, 'test-matrix.md'), ghPagesMarkdown + markdownString);
+const docsPath = path.join(__dirname, '..', '..', 'docs');
+if (!fs.existsSync(docsPath)) {
+  fs.mkdirSync(docsPath);
+}
+fs.writeFileSync(path.join(docsPath, 'test-matrix.md'), ghPagesMarkdown + markdownString);
 
 fs.writeFileSync(path.join(__dirname, '..', 'api-specification', 'test-report.json'), JSON.stringify(outputJson));
