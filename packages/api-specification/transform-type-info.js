@@ -33,7 +33,8 @@ const text = (text) => ({
 
 const colorBoundaries = [0, 10, 25, 50, 75, 100];
 
-const testResultPercentage = (passed, total) => total > 0 ? `test-color-${colorBoundaries.filter((c) => c <= Math.round((passed / total) * 100)).slice(-1).pop()}` : '';
+const testResultPercentage = (passed, total) =>
+  total > 0 ? `test-color-${colorBoundaries.filter((c) => c <= Math.round((passed / total) * 100)).slice(-1).pop()}` : '';
 
 // there are a number of elements that just host a single text node, this
 // simplifies their construction
@@ -110,13 +111,12 @@ const documentClass = (className) => {
           h2(d.match.name),
           p(formatComment(d.match.comment)),
           // create the various sections by filtering the children based on their 'kind'
-          jspath.apply('.{.kindString === "Constructor"}', d.match.children).length !== 0 ? h3('Constructors') : undefined,
-          jspath.apply('.{.kindString === "Constructor"}', d.match.children).length !== 0 ? section(d.runner(jspath.apply('.{.kindString === "Constructor"}', d.match.children)), {class: 'constructors'}) : undefined,
-          jspath.apply('.{.kindString === "Property"}', d.match.children).length !== 0 ? h3('Properties') : undefined,
-          jspath.apply('.{.kindString === "Property"}', d.match.children).length !== 0 ? section(d.runner(jspath.apply('.{.kindString === "Property"}', d.match.children)), {class: 'properties'}) : undefined,
-          jspath.apply('.{.kindString === "Method"}', d.match.children).length !== 0 ? h3('Methods') : undefined,
-          jspath.apply('.{.kindString === "Method"}', d.match.children).length !== 0 ? section(d.runner(jspath.apply('.{.kindString === "Method"}', d.match.children)), {class: 'methods'}) : undefined
-        ], {id: className, class: 'docs-title'})
+          jspath.apply('.{.kindString === "Constructor"}', d.match.children).length && h3('Constructors'),
+          jspath.apply('.{.kindString === "Constructor"}', d.match.children).length && section(d.runner(jspath.apply('.{.kindString === "Constructor"}', d.match.children)), {class: 'constructors'}),
+          jspath.apply('.{.kindString === "Property"}', d.match.children).length && h3('Properties'),
+          jspath.apply('.{.kindString === "Property"}', d.match.children).length && section(d.runner(jspath.apply('.{.kindString === "Property"}', d.match.children)), {class: 'properties'}),
+          jspath.apply('.{.kindString === "Method"}', d.match.children).length && h3('Methods'),
+          jspath.apply('.{.kindString === "Method"}', d.match.children).length && section(d.runner(jspath.apply('.{.kindString === "Method"}', d.match.children)), {class: 'methods'})], {id: className, class: 'docs-title'})
     ),
     jsont.pathRule(
       '.{.kindString === "Method" || .kindString === "Constructor"}', d =>
@@ -137,16 +137,16 @@ const documentClass = (className) => {
       '.{.kindString === "Call signature" || .kindString === "Constructor signature"}', d =>
         section([
           h4(d.match.name, {class: 'method-name', id: `${className}-${d.match.name}`}),
-          d.match.results ? section([
+          d.match.results && section([
             ...testResults('Electron', d.match.results.electron),
             ...testResults('OpenFin', d.match.results.openfin),
             ...testResults('Browser', d.match.results.browser)
-          ], {class: 'test-results'}) : undefined,
+          ], {class: 'test-results'}),
           p(formatComment(d.match.comment)),
-          d.match.parameters ? h5('Arguments') : undefined,
+          d.match.parameters && h5('Arguments'),
           // NOTE: we flatten because each parameter returns an array of dt / dd, we want to
           // flatten from [[dt, dd], [dt, dd]] to [dt, dd, dt, dd]
-          d.match.parameters ? dl(flatten(d.runner(d.match.parameters))) : undefined,
+          d.match.parameters && dl(flatten(d.runner(d.match.parameters))),
           h5('Returns'),
           dl([
             dt(formatType(d.match.type), {class: 'code return-value'}),
