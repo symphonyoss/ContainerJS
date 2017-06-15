@@ -63,7 +63,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
       return executeAsyncJavascript(app.client, script);
     });
 
-    describe('Send message', () => {
+    describe.only('Send message', () => {
       it('Should send string correctly #ssf.MessageService.send', function() {
         const message = 'message';
 

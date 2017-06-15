@@ -112,7 +112,9 @@ describe('WindowCore API', function(done) {
         /* eslint-disable no-undef */
         const script = (callback) => {
           var currentWin = ssf.Window.getCurrentWindow();
-          callback(currentWin.getChildWindows().length);
+          currentWin.getChildWindows().then((wins) => {
+            callback(wins.length);
+          });
         };
         /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script);
@@ -137,7 +139,7 @@ describe('WindowCore API', function(done) {
       const steps = [
         ...setupWindowSteps(windowOptions),
         () => selectWindow(app.client, 1),
-        () => callWindowMethod('getChildWindows'),
+        () => callAsyncWindowMethod('getChildWindows'),
         (result) => assert.equal(result.value.length, 0)
       ];
 

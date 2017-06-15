@@ -181,7 +181,7 @@ class Window implements ssf.WindowCore {
   }
 
   getChildWindows() {
-    return this.children;
+    return new Promise(resolve => resolve(this.children));
   }
 
   asPromise<T>(fn): Promise<T> {

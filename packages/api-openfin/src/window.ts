@@ -1,5 +1,6 @@
 let currentWindow = null;
 import MessageService from './message-service';
+import createMainProcess from './main-process';
 
 const eventMap = {
   'auth-requested': 'auth-requested',
@@ -128,14 +129,11 @@ const convertOptions = (options: ssf.WindowOptions) => {
 };
 
 class Window implements ssf.Window {
-  children: Array<any>;
   eventListeners: Map<any, any>;
   innerWindow: fin.OpenFinWindow;
   id: string;
 
   constructor(options: ssf.WindowOptions, callback?: any, errorCallback?: any) {
-    this.children = [];
-
     this.eventListeners = new Map();
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
       const event = 'message';
@@ -169,18 +167,9 @@ class Window implements ssf.Window {
       }
     }
 
-    if (openFinOptions.child) {
-      const currentWindow = Window.getCurrentWindow();
-      currentWindow.children.push(this);
-      this.innerWindow = new fin.desktop.Window(openFinOptions, () => {
-        this.id = `${this.innerWindow.uuid}:${this.innerWindow.name}`;
-        // We want to return our window, not the OpenFin window
-        if (callback) {
-          callback(this);
-        }
-      }, errorCallback);
-    } else {
-      const appOptions = {
+    fin.desktop.Window.getCurrent().getOptions((options) => {
+      openFinOptions.preload = options.preload;
+        const appOptions = {
         name: openFinOptions.name,
         url: openFinOptions.url,
         uuid: openFinOptions.name, // UUID must be the same as name
@@ -191,11 +180,17 @@ class Window implements ssf.Window {
         app.run();
         this.innerWindow = app.getWindow();
         this.id = `${this.innerWindow.uuid}:${this.innerWindow.name}`;
+
+        fin.desktop.InterApplicationBus.publish('ssf-new-window', {
+          windowName: this.innerWindow.uuid,
+          parentName: openFinOptions.child ? Window.getCurrentWindow().innerWindow.uuid : null
+        });
+
         if (callback) {
           callback(this);
         }
       }, errorCallback);
-    }
+    });
   }
 
   asPromise<T>(fn, ...args): Promise<T> {
@@ -213,8 +208,8 @@ class Window implements ssf.Window {
     return this.asPromise<void>('blur');
   }
 
-  close() {
-    return this.asPromise<void>('close', false)
+  close(force = false) {
+    return this.asPromise<void>('close', force)
       .then(() => {
         this.innerWindow = undefined;
       });
@@ -243,7 +238,21 @@ class Window implements ssf.Window {
   }
 
   getChildWindows() {
-    return this.children;
+    return new Promise(resolve => {
+      fin.desktop.InterApplicationBus.publish('ssf-get-child-windows', this.innerWindow.uuid);
+      fin.desktop.InterApplicationBus.subscribe('*' , 'ssf-child-windows', (names) => {
+        const children = [];
+        names.forEach((name) => {
+          const app = fin.desktop.Application.wrap(name);
+          const win = app.getWindow();
+          const childWin = new Window(undefined);
+          childWin.innerWindow = win;
+          childWin.id = win.uuid + ':' + win.name;
+          children.push(childWin);
+        });
+        resolve(children);
+      });
+    });
   }
 
   getId() {
@@ -266,18 +275,15 @@ class Window implements ssf.Window {
 
   getParentWindow() {
     return new Promise<Window>((resolve, reject) => {
-      if (this.innerWindow) {
-        let parent = null;
-        if (window.opener) {
-          const win = fin.desktop.Window.wrap(this.innerWindow.uuid, window.opener.name);
-          parent = new Window(null, null, null);
-          parent.innerWindow = win;
-        }
-
-        resolve(parent);
-      } else {
-        reject(new Error('The window does not exist or the window has been closed'));
-      }
+      fin.desktop.InterApplicationBus.publish('ssf-get-parent-window', this.innerWindow.uuid);
+      fin.desktop.InterApplicationBus.subscribe('*' , 'ssf-parent-window', (name) => {
+        const app = fin.desktop.Application.wrap(name);
+        const win = app.getWindow();
+        const parentWin = new Window(undefined);
+        parentWin.innerWindow = win;
+        parentWin.id = win.uuid + ':' + win.name;
+        resolve(parentWin);
+      });
     });
   }
 
@@ -466,5 +472,27 @@ class Window implements ssf.Window {
     return currentWindow;
   }
 }
+
+// Populate the current window variable
+Window.getCurrentWindow();
+
+currentWindow.innerWindow.addEventListener('close-requested', () => {
+  const promises = [];
+  currentWindow.getChildWindows().then((children) => {
+    children.forEach((child) => {
+      promises.push(child.close());
+    });
+    Promise.all(promises).then(() => {
+      fin.desktop.InterApplicationBus.publish('ssf-window-close', '');
+      currentWindow.innerWindow.close(true);
+    });
+  });
+});
+
+fin.desktop.InterApplicationBus.subscribe('*', 'ssf-close-all', () => {
+  fin.desktop.Window.getCurrent().close(true);
+});
+
+createMainProcess();
 
 export default Window;

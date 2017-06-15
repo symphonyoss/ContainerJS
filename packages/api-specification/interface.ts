@@ -11,6 +11,10 @@ declare namespace fin {
   interface OpenFinWindow {
     uuid: string;
   }
+
+  interface WindowOptions {
+    preload?: string;
+  }
 }
 
 declare namespace ssf {
@@ -191,7 +195,7 @@ declare namespace ssf {
      * Get the child windows of the window.
      * @returns A promise that resolves to an array of child windows.
      */
-    getChildWindows(): ReadonlyArray<any>;
+    getChildWindows(): Promise<ReadonlyArray<Window>>;
 
     /**
      * Gets the id of the window.

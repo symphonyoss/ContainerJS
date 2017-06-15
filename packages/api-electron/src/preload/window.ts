@@ -258,7 +258,7 @@ class Window implements ssf.Window {
   }
 
   getChildWindows() {
-    return this.innerWindow.getChildWindows();
+    return new Promise(resolve => resolve(this.innerWindow.getChildWindows()));
   }
 
   static getCurrentWindow(callback, errorCallback) {
