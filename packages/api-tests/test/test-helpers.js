@@ -17,8 +17,7 @@ const openNewWindow = (client, options) => {
       });
     });
   };
-  return executeAsyncJavascript(client, script, options)
-    .then(() => client.isVisible('.visible-check'));
+  return executeAsyncJavascript(client, script, options);
 };
 /* eslint-enable no-undef, no-new */
 

@@ -277,6 +277,11 @@ class Window implements ssf.Window {
     return new Promise<Window>((resolve, reject) => {
       fin.desktop.InterApplicationBus.publish('ssf-get-parent-window', this.innerWindow.uuid);
       fin.desktop.InterApplicationBus.subscribe('*' , 'ssf-parent-window', (name) => {
+        if (name === null) {
+          resolve(null);
+          return;
+        }
+
         const app = fin.desktop.Application.wrap(name);
         const win = app.getWindow();
         const parentWin = new Window(undefined);
@@ -476,23 +481,8 @@ class Window implements ssf.Window {
 // Populate the current window variable
 Window.getCurrentWindow();
 
-currentWindow.innerWindow.addEventListener('close-requested', () => {
-  const promises = [];
-  currentWindow.getChildWindows().then((children) => {
-    children.forEach((child) => {
-      promises.push(child.close());
-    });
-    Promise.all(promises).then(() => {
-      fin.desktop.InterApplicationBus.publish('ssf-window-close', '');
-      currentWindow.innerWindow.close(true);
-    });
-  });
-});
-
 fin.desktop.InterApplicationBus.subscribe('*', 'ssf-close-all', () => {
   fin.desktop.Window.getCurrent().close(true);
 });
-
-createMainProcess();
 
 export default Window;

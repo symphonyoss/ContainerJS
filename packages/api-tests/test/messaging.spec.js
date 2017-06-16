@@ -55,15 +55,17 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
     it('Should have ssf.MessageService available globally', () => {
       /* eslint-disable no-undef */
       const script = (callback) => {
-        if (ssf.MessageService !== undefined) {
-          callback();
-        }
+        ssf.app.ready().then(() => {
+          if (ssf.MessageService !== undefined) {
+            callback();
+          }
+        });
       };
       /* eslint-enable no-undef */
       return executeAsyncJavascript(app.client, script);
     });
 
-    describe.only('Send message', () => {
+    describe('Send message', () => {
       it('Should send string correctly #ssf.MessageService.send', function() {
         const message = 'message';
 

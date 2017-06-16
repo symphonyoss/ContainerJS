@@ -59,7 +59,25 @@ const mainWindowCode = () => {
     }
   };
 
+  const closeChildren = (uuid) => {
+    const childUuids = getChildWindows(uuid, childTree);
+    childUuids.forEach((child) => {
+      fin.desktop.Application.wrap(child).close(true);
+      closeChildren(child);
+    });
+  }
+
   fin.desktop.InterApplicationBus.subscribe('*', 'ssf-new-window', (data) => {
+    const app = fin.desktop.Application.wrap(data.windowName);
+    app.getWindow().addEventListener('closed', () => {
+      closeChildren(data.windowName);
+      deleteWindow(data.windowName, childTree);
+      // If that was the last window to close, force close this window too
+      if (childTree.length === 0) {
+        fin.desktop.Window.getCurrent().close();
+      }
+    });
+
     if (data.parentName === null) {
       childTree.push({
         name: data.windowName,
@@ -89,21 +107,13 @@ const mainWindowCode = () => {
     fin.desktop.InterApplicationBus.send(uuid, 'ssf-child-windows', children);
   });
 
-  fin.desktop.InterApplicationBus.subscribe('*', 'ssf-window-close', (message, uuid) => {
-    deleteWindow(uuid, childTree);
-    // If that was the last window to close, force close this window too
-    if (childTree.length === 0) {
-      fin.desktop.Window.getCurrent().close(true);
-    }
-  });
-
   fin.desktop.Window.getCurrent().addEventListener('close-requested', () => {
     fin.desktop.InterApplicationBus.publish('ssf-close-all', '');
     fin.desktop.Window.getCurrent().close(true);
   });
 };
 
-const createMainProcess = () => {
+const createMainProcess = (done) => {
   // Create the main window, if the window already exists, the success callback isn't ran
   // and the already open window is returned
   let mainWindow;
@@ -112,16 +122,24 @@ const createMainProcess = () => {
     name: 'mainWindow',
     uuid: 'mainWindow',
     mainWindowOptions: {
-      autoShow: true
+      autoShow: false
     }
   }, () => {
     app.run(() => {
       mainWindow = app.getWindow();
       // executeJavaScript only takes a string, but writing the code as a string means we lose typescript checking
       const body = mainWindowCode.toString().slice(mainWindowCode.toString().indexOf("{") + 1, mainWindowCode.toString().lastIndexOf("}"));
-      mainWindow.executeJavaScript(body);
+      mainWindow.executeJavaScript(body, () => {
+        // Tell the mainWindow about this window
+        const uuid = fin.desktop.Window.getCurrent().uuid;
+        fin.desktop.InterApplicationBus.publish('ssf-new-window', {
+          windowName: uuid,
+          parentName: null
+        });
+        done();
+      });
     });
-  });
+  }, (err) => done(err));
 }
 
 export default createMainProcess;
