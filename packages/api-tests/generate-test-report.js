@@ -132,7 +132,7 @@ sectionid: docs
 {: width="100%"}
 `;
 
-const docsPath = path.join(__dirname, '..', '..', 'docs', 'docs');
+const docsPath = path.join(__dirname, '..', '..', 'docs');
 if (!fs.existsSync(docsPath)) {
   fs.mkdirSync(docsPath);
 }
