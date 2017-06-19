@@ -112,6 +112,38 @@ declare namespace ssf {
     transparent: boolean;
   }
 
+  interface WindowEvent {
+    /** Fires when the window has been blurred */
+    blur: 'blur';
+
+    /** Fires when the window has closed */
+    closed: 'closed';
+
+    /** Fires when the window has been focused */
+    focus: 'focus';
+
+    /** Fires when the window has been hidden */
+    hide: 'hide';
+
+    /** Fires when the window has been maximized */
+    maximize: 'maximize';
+
+    /** Fires when the window has been minimized */
+    minimize: 'minimize';
+
+    /** Fires when the window has been moved */
+    move: 'move';
+
+    /** Fires when the window has been resized */
+    resize: 'resize';
+
+    /** Fires when the window has been restored */
+    restore: 'restore';
+
+    /** Fires when the window has been shown */
+    show: 'show';
+  }
+
   class WindowCore {
     /**
      * The id that uniquely identifies the window
@@ -330,15 +362,21 @@ declare namespace ssf {
 
     /**
      * Check if the window is currently maximized.
-     * @returns {Promise<boolean>} A promise that resolves to a boolean stating if the window is maximized.
+     * @returns A promise that resolves to a boolean stating if the window is maximized.
      */
     isMaximized(): Promise<boolean>;
 
     /**
      * Check if the window is currently minimized.
-     * @returns {Promise<boolean>} A promise that resolves to a boolean stating if the window is minimized.
+     * @returns A promise that resolves to a boolean stating if the window is minimized.
      */
     isMinimized(): Promise<boolean>;
+
+    /**
+     * Check is the window is currently visible
+     * @returns A promise that resolves to a boolean stating if the window is visible
+     */
+    isVisible(): Promise<boolean>;
 
     /**
      * Restores the window to the previous state.
