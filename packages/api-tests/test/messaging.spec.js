@@ -136,7 +136,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
     });
 
     describe('Receive message', () => {
-      it('Should call listener when subscribed to correct topic #ssf.MessageService.receive', function() {
+      it('Should call listener when subscribed to correct topic #ssf.MessageService.subscribe', function() {
         const message = 'message';
 
         const steps = [
@@ -154,7 +154,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         return chainPromises(steps);
       });
 
-      it.skip('Should not call listener when subscribed to wildcard topic #ssf.MessageService.receive', function() {
+      it.skip('Should not call listener when subscribed to wildcard topic #ssf.MessageService.subscribe', function() {
         const message = 'message';
 
         const steps = [
@@ -172,7 +172,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         return chainPromises(steps);
       });
 
-      it.skip('Should not receive message from wrong topic listener #ssf.MessageService.receive', function() {
+      it.skip('Should not receive message from wrong topic listener #ssf.MessageService.subscribe', function() {
         const message = 'message';
 
         const steps = [
@@ -190,7 +190,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         return chainPromises(steps);
       });
 
-      it('Should not receive message from wrong id #ssf.MessageService.receive', function() {
+      it('Should not receive message from wrong id #ssf.MessageService.subscribe', function() {
         const message = 'message';
 
         const steps = [

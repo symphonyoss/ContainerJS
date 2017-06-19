@@ -1,5 +1,5 @@
 (function() {
-  if (window.location.pathname.split('/').pop().toLowerCase() === 'docs') {
+  if (window.location.pathname.split('/').filter(x => x).pop().toLowerCase() === 'docs') {
     const menu = document.getElementById('docs-menu');
     const sections = document.getElementsByClassName('docs-title');
     for (let i = 0; i < sections.length; i++) {
