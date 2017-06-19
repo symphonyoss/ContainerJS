@@ -140,13 +140,13 @@ const documentClass = (className, classes) => {
     jsont.pathRule(
       '.{.kindString === "Interface"}', d =>
         section([
-          h2(d.match.name + ' (Interface)'),
+          h2(d.match.name),
           p(formatComment(d.match.comment)),
           // create the various sections by filtering the children based on their 'kind'
           jspath.apply('.{.kindString === "Property"}', d.match.children).length && h3('Properties'),
           jspath.apply('.{.kindString === "Property"}', d.match.children).length && section(d.runner(jspath.apply('.{.kindString === "Property"}', d.match.children)), {class: 'properties'}),
           jspath.apply('.{.kindString === "Method"}', d.match.children).length && h3('Methods'),
-          jspath.apply('.{.kindString === "Method"}', d.match.children).length && section(d.runner(jspath.apply('.{.kindString === "Method"}', d.match.children)), {class: 'methods'})], {id: 'I' + className, class: 'docs-title'})
+          jspath.apply('.{.kindString === "Method"}', d.match.children).length && section(d.runner(jspath.apply('.{.kindString === "Method"}', d.match.children)), {class: 'methods'})], {id: className + '-interface', class: 'docs-title'})
     ),
     jsont.pathRule(
       '.{.kindString === "Method" || .kindString === "Constructor"}', d =>
@@ -212,7 +212,7 @@ const yml = matter.stringify('', {
 
 fs.writeFileSync(outfile, yml);
 // Need to say if the name is a class or not because of the 'Window' class and 'Window' interface
-const mappedClasses = classes.map((name) => ({name, isClass: true}));
+const mappedClasses = classes.sort().map((name) => ({name, isClass: true}));
 
 // find the list of interfaces
 const interfaces = jsont.transform(typeInfo, [
@@ -220,6 +220,6 @@ const interfaces = jsont.transform(typeInfo, [
   jsont.pathRule('.{.kindString === "Interface"}', d => d.match.name)
 ]);
 
-const mappedInterfaces = interfaces.map((name) => ({name, isClass: false}));
-const allSections = mappedClasses.concat(mappedInterfaces).sort((a, b) => a.name.localeCompare(b.name));
+const mappedInterfaces = interfaces.sort().map((name) => ({name, isClass: false}));
+const allSections = mappedClasses.concat(mappedInterfaces);
 allSections.forEach((section) => documentClass(section.name, section.isClass));
