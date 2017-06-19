@@ -61,22 +61,24 @@ if (program.testfile) {
   if (fs.existsSync(program.testfile)) {
     const testReport = JSON.parse(fs.readFileSync(program.testfile));
     Object.keys(testReport).forEach((testMethod) => {
+      const getSelectionString = (type, name, childName) => `..{(.kindString === "Class" || .kindString === "Interface") && .name === "${name}"}.children{.kindString === "${type}"` + (childName ? `&& .name === "${childName}"}` : '}');
+
       const results = testReport[testMethod];
-      const [, className, methodName] = testMethod.split('.');
-      const method = jspath.apply(`..{(.kindString === "Class" || .kindString === "Interface") && .name === "${className}"}.children{.kindString === "Method" && .name === "${methodName}"}`, typeInfo);
+      const [, parentName, childName] = testMethod.split('.');
+      const method = jspath.apply(getSelectionString('Method', parentName, childName), typeInfo);
       if (method.length > 0) {
         method[0].signatures[0].results = results;
         return;
       }
-      const property = jspath.apply(`..{(.kindString === "Class" || .kindString === "Interface") && .name === "${className}"}.children{.kindString === "Property" && .name === "${methodName}"}`, typeInfo);
+      const property = jspath.apply(getSelectionString('Property', parentName, childName), typeInfo);
       if (property.length > 0) {
         property[0].results = results;
         return;
       }
 
-      const constructor = jspath.apply(`..{.kindString === "Class" && .name === "${className}"}.children{.kindString === "Constructor"}`, typeInfo);
+      const constructor = jspath.apply(getSelectionString('Constructor', parentName), typeInfo);
       // Got a constructor
-      if (!methodName && constructor.length) {
+      if (!childName && constructor.length) {
         constructor[0].results = results;
         return;
       }
@@ -108,18 +110,21 @@ const testResults = (title, results) => results ? [
   span(`${results.passed}/${results.total}`, {class: 'test-result ' + testResultPercentage(results.passed, results.total)})
 ] : [];
 
-const documentClass = (className, classes) => {
+const documentClass = (className, isClass) => {
+  const createElement = (d, singular, plural) => [
+    jspath.apply(`.{.kindString === "${singular}"}`, d.match.children).length && h3(plural),
+    jspath.apply(`.{.kindString === "${singular}"}`, d.match.children).length && section(d.runner(jspath.apply(`.{.kindString === "${singular}"}`, d.match.children)), {class: plural.toLowerCase()})
+  ];
+
+  const createConstructor = (d) => createElement(d, 'Constructor', 'Constructors');
+  const createProperties = (d) => createElement(d, 'Property', 'Properties');
+  const createMethods = (d) => createElement(d, 'Method', 'Methods');
+
   const rules = [
     // perform a 'deep' match to find any class declarations, then recursively
     // matches from this point onwards
     jsont.pathRule(
-      `..children{.kindString === "Class" && .name === "${className}" && ${classes} === true}`, d => ({
-        node: 'root',
-        child: [d.runner()]
-      })
-    ),
-    jsont.pathRule(
-      `..children{.kindString === "Interface" && .name === "${className}" && ${classes} === false}`, d => ({
+      `..children{.kindString === "${isClass ? 'Class' : 'Interface'}" && .name === "${className}"}`, d => ({
         node: 'root',
         child: [d.runner()]
       })
@@ -130,12 +135,9 @@ const documentClass = (className, classes) => {
           h2(d.match.name),
           p(formatComment(d.match.comment)),
           // create the various sections by filtering the children based on their 'kind'
-          jspath.apply('.{.kindString === "Constructor"}', d.match.children).length && h3('Constructors'),
-          jspath.apply('.{.kindString === "Constructor"}', d.match.children).length && section(d.runner(jspath.apply('.{.kindString === "Constructor"}', d.match.children)), {class: 'constructors'}),
-          jspath.apply('.{.kindString === "Property"}', d.match.children).length && h3('Properties'),
-          jspath.apply('.{.kindString === "Property"}', d.match.children).length && section(d.runner(jspath.apply('.{.kindString === "Property"}', d.match.children)), {class: 'properties'}),
-          jspath.apply('.{.kindString === "Method"}', d.match.children).length && h3('Methods'),
-          jspath.apply('.{.kindString === "Method"}', d.match.children).length && section(d.runner(jspath.apply('.{.kindString === "Method"}', d.match.children)), {class: 'methods'})], {id: className, class: 'docs-title'})
+          ...createConstructor(d),
+          ...createProperties(d),
+          ...createMethods(d)], {id: className, class: 'docs-title'})
     ),
     jsont.pathRule(
       '.{.kindString === "Interface"}', d =>
@@ -143,10 +145,8 @@ const documentClass = (className, classes) => {
           h2(d.match.name),
           p(formatComment(d.match.comment)),
           // create the various sections by filtering the children based on their 'kind'
-          jspath.apply('.{.kindString === "Property"}', d.match.children).length && h3('Properties'),
-          jspath.apply('.{.kindString === "Property"}', d.match.children).length && section(d.runner(jspath.apply('.{.kindString === "Property"}', d.match.children)), {class: 'properties'}),
-          jspath.apply('.{.kindString === "Method"}', d.match.children).length && h3('Methods'),
-          jspath.apply('.{.kindString === "Method"}', d.match.children).length && section(d.runner(jspath.apply('.{.kindString === "Method"}', d.match.children)), {class: 'methods'})], {id: className + '-interface', class: 'docs-title'})
+          ...createProperties(d),
+          ...createMethods(d)], {id: className + '-interface', class: 'docs-title'})
     ),
     jsont.pathRule(
       '.{.kindString === "Method" || .kindString === "Constructor"}', d =>
