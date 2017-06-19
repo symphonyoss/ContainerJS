@@ -116,7 +116,6 @@ const mainWindowCode = () => {
 const createMainProcess = (done) => {
   // Create the main window, if the window already exists, the success callback isn't ran
   // and the already open window is returned
-  let mainWindow;
   const app = new fin.desktop.Application({
     url: 'about:blank',
     name: 'mainWindow',
@@ -126,9 +125,9 @@ const createMainProcess = (done) => {
     }
   }, () => {
     app.run(() => {
-      mainWindow = app.getWindow();
       // executeJavaScript only takes a string, but writing the code as a string means we lose typescript checking
       const body = mainWindowCode.toString().slice(mainWindowCode.toString().indexOf("{") + 1, mainWindowCode.toString().lastIndexOf("}"));
+      const mainWindow = app.getWindow();
       mainWindow.executeJavaScript(body, () => {
         // Tell the mainWindow about this window
         const uuid = fin.desktop.Window.getCurrent().uuid;

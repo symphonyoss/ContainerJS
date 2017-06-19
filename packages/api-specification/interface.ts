@@ -10,6 +10,7 @@ type BrowserWindow = Window;
 declare namespace fin {
   interface OpenFinWindow {
     uuid: string;
+    executeJavaScript(code: string, callback?: Function, errorCallback?: Function): void;
   }
 
   interface WindowOptions {

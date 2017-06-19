@@ -153,7 +153,7 @@ describe('WindowCore API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should return the parent window #ssf.Window.getParentWindow #ssf.WindowCore.getParentWindow', function() {
+    it.skip('Should return the parent window #ssf.Window.getParentWindow #ssf.WindowCore.getParentWindow', function() {
       const windowTitle = 'windownamegetparent';
       const windowOptions = getWindowOptions({
         name: windowTitle,
