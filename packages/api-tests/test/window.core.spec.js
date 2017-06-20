@@ -92,8 +92,7 @@ describe('WindowCore API', function(done) {
   });
 
   describe('Methods', function() {
-    // In OpenFin, we need a way to ignore the mainProcess Window
-    it.skip('Should close the window #ssf.Window.close #ssf.WindowCore.close', function() {
+    it('Should close the window #ssf.Window.close #ssf.WindowCore.close', function() {
       const windowTitle = 'windownameclose';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -103,7 +102,14 @@ describe('WindowCore API', function(done) {
         ...setupWindowSteps(windowOptions),
         () => callAsyncWindowMethod('close'),
         () => app.client.getWindowCount(),
-        (result) => assert.equal(result, 1)
+        (result) => {
+          if (process.env.MOCHA_CONTAINER === 'openfin') {
+            // Hidden mainWindow is still there
+            assert.equal(result, 2);
+          } else {
+            assert.equal(result, 1);
+          }
+        }
       ];
 
       return chainPromises(steps);
@@ -442,10 +448,15 @@ describe('WindowCore API', function(done) {
   });
 
   describe('New Window', function() {
-    it.skip('Should open a new window #ssf.Window', function() {
+    it('Should open a new window #ssf.Window', function() {
       return openNewWindow(app.client, {url: 'about:blank', name: 'test', show: true, child: true}).then((result) => {
         return app.client.getWindowCount().then((count) => {
-          assert.equal(count, 2);
+          if (process.env.MOCHA_CONTAINER === 'openfin') {
+            // Hidden mainWindow is still there
+            assert.equal(count, 3);
+          } else {
+            assert.equal(count, 2);
+          }
         });
       });
     });
