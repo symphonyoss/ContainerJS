@@ -1,1 +1,2 @@
-bin/ssf-electron text eol=crlf
+# Needed for running the executable on mac/linux
+bin/ssf-electron text eol=lf
