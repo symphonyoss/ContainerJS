@@ -136,19 +136,6 @@ class Window implements ssf.Window {
   constructor(options: ssf.WindowOptions, callback?: any, errorCallback?: any) {
     this.children = [];
 
-    if (!isUrlPattern.test(options.url) && options.url !== 'about:blank') {
-      if (options.url.startsWith('/')) {
-        // File at root
-        options.url = location.origin + options.url;
-      } else {
-        // relative to current file
-        const pathSections = location.pathname.split('/').filter(x => x);
-        pathSections.splice(-1);
-        const currentPath = pathSections.join('/');
-        options.url = location.origin + '/' + currentPath + options.url;
-      }
-    }
-
     this.eventListeners = new Map();
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
       const event = 'message';
@@ -164,6 +151,19 @@ class Window implements ssf.Window {
         callback(this);
       }
       return this;
+    }
+
+    if (!isUrlPattern.test(options.url) && options.url !== 'about:blank') {
+      if (options.url.startsWith('/')) {
+        // File at root
+        options.url = location.origin + options.url;
+      } else {
+        // relative to current file
+        const pathSections = location.pathname.split('/').filter(x => x);
+        pathSections.splice(-1);
+        const currentPath = pathSections.join('/');
+        options.url = location.origin + '/' + currentPath + options.url;
+      }
     }
 
     const openFinOptions = convertOptions(options);
