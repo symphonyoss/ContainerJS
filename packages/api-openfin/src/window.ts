@@ -38,6 +38,8 @@ const windowStates = {
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 600;
 
+const isUrlPattern = /^https?:\/\//i;
+
 const guid = () => {
   const s4 = () => {
     return Math.floor((1 + Math.random()) * 0x10000)
@@ -133,6 +135,19 @@ class Window implements ssf.Window {
 
   constructor(options: ssf.WindowOptions, callback?: any, errorCallback?: any) {
     this.children = [];
+
+    if (!isUrlPattern.test(options.url) && options.url !== 'about:blank') {
+      if (options.url.startsWith('/')) {
+        // File at root
+        options.url = location.origin + options.url;
+      } else {
+        // relative to current file
+        const pathSections = location.pathname.split('/').filter(x => x);
+        pathSections.splice(-1);
+        const currentPath = pathSections.join('/');
+        options.url = location.origin + '/' + currentPath + options.url;
+      }
+    }
 
     this.eventListeners = new Map();
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
