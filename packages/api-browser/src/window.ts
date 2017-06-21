@@ -5,10 +5,10 @@ import {
 
 let currentWindow = null;
 
-const getCenterCoordinates = () => {
-    var x = (window.innerWidth / 2) + window.screenLeft;
-    var y = (window.innerHeight / 2) + window.screenTop;
-    return [Math.floor(x), Math.floor(y)];
+const getWindowOffsets = (win) => {
+    var xOffset = (win.outerWidth / 2);
+    var yOffset = (win.outerHeight / 2);
+    return [Math.floor(xOffset), Math.floor(yOffset)];
 }
 
 class Window implements ssf.WindowCore {
@@ -31,8 +31,8 @@ class Window implements ssf.WindowCore {
     } else {
       this.innerWindow = window.open(options.url, options.name, objectToFeaturesString(options));
       this.id = this.innerWindow.name;
-      const [x, y] = getCenterCoordinates();
-      this.setPosition(options.x || x, options.y || y);
+      const [xOffset, yOffset] = getWindowOffsets(this.innerWindow);
+      this.setPosition(options.x || (screen.width / 2) - xOffset, options.y || (screen.height / 2) - yOffset);
       this.innerWindow.onclose = () => {
         removeAccessibleWindow(this.innerWindow.name);
       };
