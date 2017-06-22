@@ -433,7 +433,7 @@ describe('WindowCore API', function(done) {
   });
 
   describe('New Window', function() {
-    it('Should open a new window #ssf.Window() #ssf.WindowCore()', function() {
+    it('Should open a new window #ssf.Window', function() {
       return openNewWindow(app.client, {url: 'about:blank', name: 'test', show: true, child: true}).then((result) => {
         return app.client.getWindowCount().then((count) => {
           assert.equal(count, 2);
@@ -441,7 +441,7 @@ describe('WindowCore API', function(done) {
       });
     });
 
-    it('Should be created with the correct x position #ssf.Window(x) #ssf.WindowCore(x)', function() {
+    it('Should be created with the correct x position #ssf.WindowOptions.x', function() {
       const windowTitle = 'windownamex';
       const xValue = 100;
       const windowOptions = getWindowOptions({
@@ -459,7 +459,7 @@ describe('WindowCore API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should be created with the correct y position #ssf.Window(y) #ssf.WindowCore(y)', function() {
+    it('Should be created with the correct y position #ssf.WindowOptions.y', function() {
       const windowTitle = 'windownamey';
       const yValue = 100;
       const windowOptions = getWindowOptions({

@@ -340,7 +340,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
 
       });
 
-      it('Should restore the window from maximized #ssf.Window.maximized', function() {
+      it('Should restore the window from maximized #ssf.Window.restore', function() {
         const windowTitle = 'windownamerestoremax';
         const windowOptions = getWindowOptions({
           name: windowTitle
@@ -561,7 +561,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
     });
 
     describe('New Window', function() {
-      it('Should be created with added frame size to max height #ssf.Window(maxHeight)', function() {
+      it('Should be created with added frame size to max height #ssf.WindowOptions.maxHeight', function() {
         const windowTitle = 'windownamemaxheight';
         const maxWidth = 500;
         const maxHeight = 600;
@@ -582,7 +582,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         return chainPromises(steps);
       });
 
-      it('Should be created with added frame size to min height #ssf.Window(minHeight)', function() {
+      it('Should be created with added frame size to min height #ssf.WindowOptions.minHeight', function() {
         const windowTitle = 'windownamemaxheight';
         const minWidth = 500;
         const minHeight = 600;
@@ -603,7 +603,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         return chainPromises(steps);
       });
 
-      it('Should be created in the center if no x and y #ssf.Window(center)', function() {
+      it('Should be created in the center if no x and y #ssf.WindowOptions.center', function() {
         const windowTitle = 'windownamecenter';
         let targetX;
         let targetY;
