@@ -2,7 +2,7 @@
   "name": "containerjs-api-bundle",
   "version": "0.0.2",
   "description": "A bundle of containerJS APIs",
-  "main": "dist/index.js",
+  "main": "build/containerjs-bundle.js",
   "scripts": {
     "build": "rollup -c",
     "prepublish": "copyfiles -f node_modules/containerjs-api-openfin/src/notification.html build"
