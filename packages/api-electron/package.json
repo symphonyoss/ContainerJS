@@ -2,14 +2,15 @@
   "name": "containerjs-api-electron",
   "version": "0.0.2",
   "description": "",
-  "main": "index.js",
+  "main": "build/lib/preload.js",
   "module": "build/es/preload.js",
   "jsnext:main": "build/es/preload.js",
   "browser": "build/dist/containerjs-api.js",
   "scripts": {
     "clean": "rimraf build",
-    "build": "npm run clean && npm run build:es && rollup -c",
-    "build:es": "rimraf build/es && tsc",
+    "build": "npm run clean && npm run build:cjs && npm run build:es && rollup -c",
+    "build:es": "rimraf build/es && tsc -p tsconfig.json -m ES2015 --outdir ./build/es",
+    "build:cjs": "rimraf build/lib && tsc -p tsconfig.json -m CommonJS --outdir ./build/lib",
     "build:umd": "rimraf build/dist && npm run build:es && rollup -c"
   },
   "author": "",
