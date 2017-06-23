@@ -275,8 +275,9 @@ class Window implements ssf.Window {
 
   getParentWindow() {
     return new Promise<Window>((resolve, reject) => {
-      fin.desktop.InterApplicationBus.publish('ssf-get-parent-window', this.innerWindow.uuid);
-      fin.desktop.InterApplicationBus.subscribe('*' , 'ssf-parent-window', (name) => {
+
+      const subscribeListener = (name) => {
+        fin.desktop.InterApplicationBus.unsubscribe('*', 'ssf-parent-window', subscribeListener);
         if (name === null) {
           resolve(null);
           return;
@@ -288,7 +289,10 @@ class Window implements ssf.Window {
         parentWin.innerWindow = win;
         parentWin.id = win.uuid + ':' + win.name;
         resolve(parentWin);
-      });
+      };
+
+      fin.desktop.InterApplicationBus.publish('ssf-get-parent-window', this.innerWindow.uuid);
+      fin.desktop.InterApplicationBus.subscribe('*' , 'ssf-parent-window', subscribeListener);
     });
   }
 
