@@ -153,20 +153,21 @@ class Window implements ssf.Window {
       return this;
     }
 
-    if (!isUrlPattern.test(options.url) && options.url !== 'about:blank') {
-      if (options.url.startsWith('/')) {
+    const openFinOptions = convertOptions(options);
+
+    // Allow relative urls (e.g. /index.html and demo/demo.html)
+    if (!isUrlPattern.test(options.url) && openFinOptions.url !== 'about:blank') {
+      if (openFinOptions.url.startsWith('/')) {
         // File at root
-        options.url = location.origin + options.url;
+        openFinOptions.url = location.origin + openFinOptions.url;
       } else {
         // relative to current file
         const pathSections = location.pathname.split('/').filter(x => x);
         pathSections.splice(-1);
         const currentPath = pathSections.join('/');
-        options.url = location.origin + '/' + currentPath + options.url;
+        openFinOptions.url = location.origin + '/' + currentPath + openFinOptions.url;
       }
     }
-
-    const openFinOptions = convertOptions(options);
 
     if (openFinOptions.child) {
       const currentWindow = Window.getCurrentWindow();
