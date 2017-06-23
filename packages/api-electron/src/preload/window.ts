@@ -8,6 +8,7 @@ import MessageService from './message-service';
 import { IpcMessages } from '../common/constants';
 
 let currentWindow = null;
+const isUrlPattern = /^https?:\/\//i;
 
 class Window implements ssf.Window {
   innerWindow: Electron.BrowserWindow;
@@ -28,7 +29,23 @@ class Window implements ssf.Window {
       return this;
     }
 
-    const features = Object.assign({}, options, { title: options.name });
+    const electronOptions = Object.assign({}, options);
+
+    // Allow relative urls (e.g. /index.html and demo/demo.html)
+    if (!isUrlPattern.test(electronOptions.url) && electronOptions.url !== 'about:blank') {
+      if (electronOptions.url.startsWith('/')) {
+        // File at root
+        electronOptions.url = location.origin + electronOptions.url;
+      } else {
+        // relative to current file
+        const pathSections = location.pathname.split('/').filter(x => x);
+        pathSections.splice(-1);
+        const currentPath = pathSections.join('/');
+        electronOptions.url = location.origin + '/' + currentPath + electronOptions.url;
+      }
+    }
+
+    const features = Object.assign({}, electronOptions, { title: electronOptions.name });
 
     this.id = ipc.sendSync(IpcMessages.IPC_SSF_NEW_WINDOW, {
       url: features.url,

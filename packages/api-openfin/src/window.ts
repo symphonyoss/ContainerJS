@@ -38,10 +38,26 @@ const windowStates = {
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 600;
 
+const isUrlPattern = /^https?:\/\//i;
+
+const guid = () => {
+  const s4 = () => {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+};
+
+const getDefaultOptions = () => ({
+  name: guid(),
+  autoShow: true
+});
 
 const convertOptions = (options: ssf.WindowOptions) => {
   const frameSize = navigator.appVersion.indexOf('Win') != -1 ? 20 : 25;
-  let clonedOptions: any = Object.assign({}, options);
+  let clonedOptions: any = Object.assign({}, getDefaultOptions(), options);
 
   const optionsMap = {
     'alwaysOnTop': 'alwaysOnTop',
@@ -138,6 +154,20 @@ class Window implements ssf.Window {
     }
 
     const openFinOptions = convertOptions(options);
+
+    // Allow relative urls (e.g. /index.html and demo/demo.html)
+    if (!isUrlPattern.test(options.url) && openFinOptions.url !== 'about:blank') {
+      if (openFinOptions.url.startsWith('/')) {
+        // File at root
+        openFinOptions.url = location.origin + openFinOptions.url;
+      } else {
+        // relative to current file
+        const pathSections = location.pathname.split('/').filter(x => x);
+        pathSections.splice(-1);
+        const currentPath = pathSections.join('/');
+        openFinOptions.url = location.origin + '/' + currentPath + openFinOptions.url;
+      }
+    }
 
     if (openFinOptions.child) {
       const currentWindow = Window.getCurrentWindow();
