@@ -238,9 +238,9 @@ class Window implements ssf.Window {
   }
 
   getChildWindows() {
-    return new Promise(resolve => {
-      fin.desktop.InterApplicationBus.publish('ssf-get-child-windows', this.innerWindow.uuid);
-      fin.desktop.InterApplicationBus.subscribe('*' , 'ssf-child-windows', (names) => {
+    return new Promise<Window[]>(resolve => {
+      const subscribeListener = (names) => {
+        fin.desktop.InterApplicationBus.unsubscribe('*' , 'ssf-child-windows', subscribeListener);
         const children = [];
         names.forEach((name) => {
           const app = fin.desktop.Application.wrap(name);
@@ -251,7 +251,10 @@ class Window implements ssf.Window {
           children.push(childWin);
         });
         resolve(children);
-      });
+      };
+
+      fin.desktop.InterApplicationBus.publish('ssf-get-child-windows', this.innerWindow.uuid);
+      fin.desktop.InterApplicationBus.subscribe('*' , 'ssf-child-windows', subscribeListener);
     });
   }
 
