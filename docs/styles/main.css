@@ -234,3 +234,7 @@ dd, dl {
 dl {
   margin-left: 25px;
 }
+
+.menu-heading {
+  color: #5A5886;
+}
