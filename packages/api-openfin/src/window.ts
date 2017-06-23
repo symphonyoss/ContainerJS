@@ -50,14 +50,14 @@ const guid = () => {
     s4() + '-' + s4() + s4() + s4();
 };
 
-const defaultOptions = {
+const getDefaultOptions = () => ({
   name: guid(),
   autoShow: true
-};
+});
 
 const convertOptions = (options: ssf.WindowOptions) => {
   const frameSize = navigator.appVersion.indexOf('Win') != -1 ? 20 : 25;
-  let clonedOptions: any = Object.assign({}, defaultOptions, options);
+  let clonedOptions: any = Object.assign({}, getDefaultOptions(), options);
 
   const optionsMap = {
     'alwaysOnTop': 'alwaysOnTop',
