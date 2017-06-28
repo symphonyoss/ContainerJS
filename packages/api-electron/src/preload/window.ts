@@ -243,14 +243,39 @@ class Window implements ssf.Window {
 
   addListener(event, listener) {
     this.innerWindow.addListener(event, listener);
+    return this;
+  }
+
+  on(event, listener) {
+    this.innerWindow.on(event, listener);
+    return this;
+  }
+
+  eventNames() {
+    return this.innerWindow.eventNames() as string[];
+  }
+
+  listenerCount(event) {
+    return this.innerWindow.listenerCount(event);
+  }
+
+  listeners(event) {
+    return this.innerWindow.listeners(event);;
+  }
+
+  once(event, listener) {
+    this.innerWindow.once(event, listener);
+    return this;
   }
 
   removeListener(event, listener) {
     this.innerWindow.removeListener(event, listener);
+    return this;
   }
 
-  removeAllListeners() {
-    this.innerWindow.removeAllListeners();
+  removeAllListeners(eventName) {
+    this.removeAllListeners(eventName);
+    return this;
   }
 
   postMessage(message) {
