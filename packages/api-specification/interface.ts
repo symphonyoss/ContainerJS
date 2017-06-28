@@ -117,6 +117,59 @@ declare namespace ssf {
     transparent?: boolean;
   }
 
+  class EventEmitter {
+    /**
+     * Adds a lister that runs when the specified event occurs. Alias for <span class="code">on()</span>.
+     * @param event The event to listen for.
+     * @param listener The function to run when the event occurs.
+     */
+    addListener(event: WindowEvent, listener: Function): EventEmitter;
+
+    /**
+     * Adds a lister that runs when the specified event occurs. Alias for <span class="code">addListener()</span>.
+     * @param event The event to listen for.
+     * @param listener The function to run when the event occurs.
+     */
+    on(event: WindowEvent, listener: Function): EventEmitter;
+
+    /**
+     * Adds a lister that runs once when the specified event occurs, then is removed.
+     * @param event The event to listen for.
+     * @param listener The function to run once when the event occurs.
+     */
+    once(event: WindowEvent, listener: Function): EventEmitter;
+
+    /**
+     * Get all event names with active listeners.
+     */
+    eventNames(): string[];
+
+    /**
+     * Get the number of listeners currently listening for an event.
+     * @param event The event to get the number of listeners for.
+     */
+    listenerCount(event: WindowEvent): number;
+
+    /**
+     * Get all listeners for an event.
+     * @param event The event to get the listeners for.
+     */
+    listeners(event: WindowEvent): Function[];
+
+    /**
+     * Remove a listener from an event.
+     * @param event The event to remove the listener from.
+     * @param listener The listener to remove. Must be the same object that was passed to <span class="code">addListener()</span>
+     */
+    removeListener(event: WindowEvent, listener: Function): EventEmitter;
+
+    /**
+     * Removes all listeners from a given event, or all events if no event is passed.
+     * @param event The event to remove the listeners from.
+     */
+    removeAllListeners(event?: WindowEvent): EventEmitter;
+  }
+
   interface WindowEvent {
     /** Fires when the window has been blurred */
     blur: 'blur';
@@ -149,7 +202,7 @@ declare namespace ssf {
     show: 'show';
   }
 
-  class WindowCore {
+  abstract class WindowCore extends EventEmitter {
     /**
      * The id that uniquely identifies the window
      */
@@ -287,25 +340,6 @@ declare namespace ssf {
      * @param message - The message to send to the window. Can be any serializable object.
      */
     postMessage(message: string | Object): void;
-
-    /**
-     * Adds a listener for a particular window event.
-     * @param event - The event to listen for.
-     * @param listener - The function to call when the event fires.
-     */
-    addListener(event: string, listener: Function): void;
-
-    /**
-     * Removes an event listener from the window. The listener must be the same function that was passed into addListener.
-     * @param event - The event the listener was listening for.
-     * @param listener - The original function that was passed to addListener.
-     */
-    removeListener(event: string, listener: Function): void;
-
-    /**
-     * Removes all listeners from all window events.
-     */
-    removeAllListeners(): void;
 
     /**
      * Gets the current window object.
