@@ -123,21 +123,21 @@ declare namespace ssf {
      * @param event The event to listen for.
      * @param listener The function to run when the event occurs.
      */
-    addListener(event: WindowEvent, listener: Function): EventEmitter;
+    addListener(event: string, listener: Function): EventEmitter;
 
     /**
      * Adds a lister that runs when the specified event occurs. Alias for <span class="code">addListener()</span>.
      * @param event The event to listen for.
      * @param listener The function to run when the event occurs.
      */
-    on(event: WindowEvent, listener: Function): EventEmitter;
+    on(event: string, listener: Function): EventEmitter;
 
     /**
      * Adds a lister that runs once when the specified event occurs, then is removed.
      * @param event The event to listen for.
      * @param listener The function to run once when the event occurs.
      */
-    once(event: WindowEvent, listener: Function): EventEmitter;
+    once(event: string, listener: Function): EventEmitter;
 
     /**
      * Get all event names with active listeners.
@@ -148,26 +148,26 @@ declare namespace ssf {
      * Get the number of listeners currently listening for an event.
      * @param event The event to get the number of listeners for.
      */
-    listenerCount(event: WindowEvent): number;
+    listenerCount(event: string): number;
 
     /**
      * Get all listeners for an event.
      * @param event The event to get the listeners for.
      */
-    listeners(event: WindowEvent): Function[];
+    listeners(event: string): Function[];
 
     /**
      * Remove a listener from an event.
      * @param event The event to remove the listener from.
      * @param listener The listener to remove. Must be the same object that was passed to <span class="code">addListener()</span>
      */
-    removeListener(event: WindowEvent, listener: Function): EventEmitter;
+    removeListener(event: string, listener: Function): EventEmitter;
 
     /**
      * Removes all listeners from a given event, or all events if no event is passed.
      * @param event The event to remove the listeners from.
      */
-    removeAllListeners(event?: WindowEvent): EventEmitter;
+    removeAllListeners(event?: string): EventEmitter;
   }
 
   interface WindowEvent {
