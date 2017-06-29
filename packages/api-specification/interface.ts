@@ -142,7 +142,7 @@ declare namespace ssf {
     /**
      * Get all event names with active listeners.
      */
-    eventNames(): string[];
+    eventNames(): (string|symbol)[];
 
     /**
      * Get the number of listeners currently listening for an event.

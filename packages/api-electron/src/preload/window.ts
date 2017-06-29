@@ -13,6 +13,7 @@ const isUrlPattern = /^https?:\/\//i;
 class Window implements ssf.Window {
   innerWindow: Electron.BrowserWindow;
   id: string;
+  eventListeners: Map<string, Function[]> = new Map();
 
   constructor(options: ssf.WindowOptions, callback, errorCallback) {
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
@@ -241,40 +242,118 @@ class Window implements ssf.Window {
     });
   }
 
+  // addListener(event, listener) {
+  //   this.innerWindow.addListener(event, listener);
+  //   return this;
+  // }
+
+  // on(event, listener) {
+  //   this.innerWindow.on(event, listener);
+  //   return this;
+  // }
+
+  // eventNames() {
+  //   // Use our own listeners array so we can remove the remoteFunction listeners
+  //   return this.innerWindow.eventNames().filter(name => this.listeners(name).length > 0);
+  // }
+
+  // listenerCount(event) {
+  //   // Use our own listeners array so we can remove the remoteFunction listeners
+  //   return this.listeners(event).length;
+  // }
+
+  // listeners(event) {
+  //   // Each electron event already has a handler associated with it due to the
+  //   // remote module. We dont want to expose this, so we filter it out
+  //   return this.innerWindow.listeners(event).filter(l => l.name !== 'remoteFunction');
+  // }
+
+  // once(event, listener) {
+  //   this.innerWindow.once(event, listener);
+  //   return this;
+  // }
+
+  // removeListener(event, listener) {
+  //   this.innerWindow.removeListener(event, listener);
+  //   return this;
+  // }
+
+  // removeAllListeners(eventName) {
+  //   this.innerWindow.removeAllListeners(eventName);
+  //   return this;
+  // }
+
   addListener(event, listener) {
+    if (this.eventListeners.has(event)) {
+      const temp = this.eventListeners.get(event);
+      temp.push(listener);
+      this.eventListeners.set(event, temp);
+    } else {
+      this.eventListeners.set(event, [listener]);
+    }
     this.innerWindow.addListener(event, listener);
     return this;
   }
 
   on(event, listener) {
-    this.innerWindow.on(event, listener);
-    return this;
+    return this.addListener(event, listener);
   }
 
   eventNames() {
-    return this.innerWindow.eventNames() as string[];
+    return Array.from(this.eventListeners.keys());
   }
 
   listenerCount(event) {
-    return this.innerWindow.listenerCount(event);
+    return this.eventListeners.has(event) ? this.eventListeners.get(event).length : 0;
   }
 
   listeners(event) {
-    return this.innerWindow.listeners(event);;
+    return this.eventListeners.get(event);
   }
 
   once(event, listener) {
-    this.innerWindow.once(event, listener);
+    // Remove the listener once it is called
+    const unsubscribeListener = () => {
+      this.removeListener(event, unsubscribeListener);
+      listener();
+    };
+
+    this.on(event, unsubscribeListener);
     return this;
   }
 
   removeListener(event, listener) {
+    if (this.eventListeners.has(event)) {
+      let listeners = this.eventListeners.get(event);
+      let index = listeners.indexOf(listener);
+      if (index >= 0) {
+        listeners.splice(index, 1);
+        listeners.length > 0
+          ? this.eventListeners.set(event, listeners)
+          : this.eventListeners.delete(event);
+      }
+    }
+
     this.innerWindow.removeListener(event, listener);
     return this;
   }
 
   removeAllListeners(eventName) {
-    this.removeAllListeners(eventName);
+    const removeAllListenersForEvent = (event) => {
+      if (this.eventListeners.has(event)) {
+        this.eventListeners.get(event).forEach((listener) => {
+          this.innerWindow.removeListener(event, listener);
+        });
+        this.eventListeners.delete(event);
+      }
+    };
+
+    if (eventName) {
+      removeAllListenersForEvent(eventName);
+    } else {
+      this.eventListeners.forEach((value, key) => removeAllListenersForEvent(key));
+    }
+
     return this;
   }
 

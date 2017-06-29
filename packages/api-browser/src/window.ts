@@ -164,7 +164,7 @@ class Window implements ssf.WindowCore {
 
   listenerCount(event) {
     return this.eventListeners.has(event) ? this.eventListeners.get(event).length : 0;
-  }n
+  }
 
   listeners(event) {
     return this.eventListeners.get(event);
@@ -177,14 +177,7 @@ class Window implements ssf.WindowCore {
       listener();
     };
 
-    if (this.eventListeners.has(event)) {
-      const temp = this.eventListeners.get(event);
-      temp.push(listener);
-      this.eventListeners.set(event, temp);
-    } else {
-      this.eventListeners.set(event, [unsubscribeListener]);
-    }
-    this.innerWindow.addEventListener(eventMap[event], unsubscribeListener);
+    this.on(event, unsubscribeListener);
     return this;
   }
 
