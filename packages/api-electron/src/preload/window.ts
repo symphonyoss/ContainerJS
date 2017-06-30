@@ -242,47 +242,6 @@ class Window implements ssf.Window {
     });
   }
 
-  // addListener(event, listener) {
-  //   this.innerWindow.addListener(event, listener);
-  //   return this;
-  // }
-
-  // on(event, listener) {
-  //   this.innerWindow.on(event, listener);
-  //   return this;
-  // }
-
-  // eventNames() {
-  //   // Use our own listeners array so we can remove the remoteFunction listeners
-  //   return this.innerWindow.eventNames().filter(name => this.listeners(name).length > 0);
-  // }
-
-  // listenerCount(event) {
-  //   // Use our own listeners array so we can remove the remoteFunction listeners
-  //   return this.listeners(event).length;
-  // }
-
-  // listeners(event) {
-  //   // Each electron event already has a handler associated with it due to the
-  //   // remote module. We dont want to expose this, so we filter it out
-  //   return this.innerWindow.listeners(event).filter(l => l.name !== 'remoteFunction');
-  // }
-
-  // once(event, listener) {
-  //   this.innerWindow.once(event, listener);
-  //   return this;
-  // }
-
-  // removeListener(event, listener) {
-  //   this.innerWindow.removeListener(event, listener);
-  //   return this;
-  // }
-
-  // removeAllListeners(eventName) {
-  //   this.innerWindow.removeAllListeners(eventName);
-  //   return this;
-  // }
-
   addListener(event, listener) {
     if (this.eventListeners.has(event)) {
       const temp = this.eventListeners.get(event);

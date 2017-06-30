@@ -202,7 +202,7 @@ declare namespace ssf {
     show: 'show';
   }
 
-  abstract class WindowCore extends EventEmitter {
+  class WindowCore extends EventEmitter {
     /**
      * The id that uniquely identifies the window
      */
