@@ -203,7 +203,7 @@ declare namespace ssf {
      * Get the parent of the window. Null will be returned if the window has no parent.
      * @returns The parent window.
      */
-    getParentWindow(): Promise<Window>;
+    getParentWindow(): Promise<Window|WindowCore>;
 
     /**
      * Get the position of the window.
