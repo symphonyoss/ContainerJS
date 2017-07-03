@@ -129,7 +129,7 @@ const convertOptions = (options: ssf.WindowOptions) => {
 };
 
 class Window implements ssf.Window {
-  eventListeners: Map<any, any>;
+  eventListeners: Map<string, ((...args: any[]) => void)[]> = new Map();
   innerWindow: fin.OpenFinWindow;
   id: string;
 

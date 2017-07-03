@@ -13,7 +13,7 @@ const isUrlPattern = /^https?:\/\//i;
 class Window implements ssf.Window {
   innerWindow: Electron.BrowserWindow;
   id: string;
-  eventListeners: Map<string, Function[]> = new Map();
+  eventListeners: Map<string, ((...args: any[]) => void)[]> = new Map();
 
   constructor(options: ssf.WindowOptions, callback, errorCallback) {
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {

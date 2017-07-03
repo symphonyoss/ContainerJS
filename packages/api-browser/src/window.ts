@@ -14,7 +14,7 @@ const getWindowOffsets = (win) => {
 class Window implements ssf.WindowCore {
   children: ssf.Window[];
   innerWindow: any;
-  eventListeners: any;
+  eventListeners: Map<string, ((...args: any[]) => void)[]> = new Map();
   id: string;
 
   constructor(options, callback?, errorCallback?) {
