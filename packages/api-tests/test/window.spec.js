@@ -58,9 +58,11 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
     it('Should have ssf.Window available globally', function() {
       /* eslint-disable no-undef */
       const script = (callback) => {
-        if (ssf.Window !== undefined) {
-          callback();
-        }
+        ssf.app.ready().then(() => {
+          if (ssf.Window !== undefined) {
+            callback();
+          }
+        });
       };
       /* eslint-enable no-undef */
       return executeAsyncJavascript(app.client, script);

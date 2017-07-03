@@ -10,6 +10,11 @@ type BrowserWindow = Window;
 declare namespace fin {
   interface OpenFinWindow {
     uuid: string;
+    executeJavaScript(code: string, callback?: Function, errorCallback?: Function): void;
+  }
+
+  interface WindowOptions {
+    preload?: string;
   }
 }
 
@@ -191,7 +196,7 @@ declare namespace ssf {
      * Get the child windows of the window.
      * @returns A promise that resolves to an array of child windows.
      */
-    getChildWindows(): ReadonlyArray<any>;
+    getChildWindows(): Promise<ReadonlyArray<Window>>;
 
     /**
      * Gets the id of the window.
@@ -203,7 +208,7 @@ declare namespace ssf {
      * Get the parent of the window. Null will be returned if the window has no parent.
      * @returns The parent window.
      */
-    getParentWindow(): Promise<Window>;
+    getParentWindow(): Promise<Window|WindowCore>;
 
     /**
      * Get the position of the window.
