@@ -119,21 +119,21 @@ declare namespace ssf {
 
   class EventEmitter {
     /**
-     * Adds a lister that runs when the specified event occurs. Alias for <span class="code">on()</span>.
+     * Adds a listener that runs when the specified event occurs. Alias for <span class="code">on()</span>.
      * @param event The event to listen for.
      * @param listener The function to run when the event occurs.
      */
     addListener(event: string, listener: Function): EventEmitter;
 
     /**
-     * Adds a lister that runs when the specified event occurs. Alias for <span class="code">addListener()</span>.
+     * Adds a listener that runs when the specified event occurs. Alias for <span class="code">addListener()</span>.
      * @param event The event to listen for.
      * @param listener The function to run when the event occurs.
      */
     on(event: string, listener: Function): EventEmitter;
 
     /**
-     * Adds a lister that runs once when the specified event occurs, then is removed.
+     * Adds a listener that runs once when the specified event occurs, then is removed.
      * @param event The event to listen for.
      * @param listener The function to run once when the event occurs.
      */
