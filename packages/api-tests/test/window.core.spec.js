@@ -54,9 +54,11 @@ describe('WindowCore API', function(done) {
   const callAsyncWindowMethod = (method, ...args) => {
     /* eslint-disable no-undef */
     const script = (method, args, callback) => {
-      var currentWin = ssf.Window.getCurrentWindow();
-      currentWin[method](...args).then((data) => {
-        callback(data);
+      ssf.app.ready().then(() => {
+        var currentWin = ssf.Window.getCurrentWindow();
+        currentWin[method](...args).then((data) => {
+          callback(data);
+        });
       });
     };
     /* eslint-enable no-undef */
@@ -66,8 +68,10 @@ describe('WindowCore API', function(done) {
   const callWindowMethod = (method, ...args) => {
     /* eslint-disable no-undef */
     const script = (method, args, callback) => {
-      var currentWin = ssf.Window.getCurrentWindow();
-      callback(currentWin[method](...args));
+      ssf.app.ready().then(() => {
+        var currentWin = ssf.Window.getCurrentWindow();
+        callback(currentWin[method](...args));
+      });
     };
 
     /* eslint-enable no-undef */
@@ -77,9 +81,11 @@ describe('WindowCore API', function(done) {
   it('Should have ssf.Window available globally', function() {
     /* eslint-disable no-undef */
     const script = (callback) => {
-      if (ssf.Window !== undefined) {
-        callback();
-      }
+      ssf.app.ready().then(() => {
+        if (ssf.Window !== undefined) {
+          callback();
+        }
+      });
     };
     /* eslint-enable no-undef */
     return executeAsyncJavascript(app.client, script);
@@ -96,7 +102,14 @@ describe('WindowCore API', function(done) {
         ...setupWindowSteps(windowOptions),
         () => callAsyncWindowMethod('close'),
         () => app.client.getWindowCount(),
-        (result) => assert.equal(result, 1)
+        (result) => {
+          if (process.env.MOCHA_CONTAINER === 'openfin') {
+            // Hidden mainWindow is still there
+            assert.equal(result, 2);
+          } else {
+            assert.equal(result, 1);
+          }
+        }
       ];
 
       return chainPromises(steps);
@@ -112,7 +125,9 @@ describe('WindowCore API', function(done) {
         /* eslint-disable no-undef */
         const script = (callback) => {
           var currentWin = ssf.Window.getCurrentWindow();
-          callback(currentWin.getChildWindows().length);
+          currentWin.getChildWindows().then((wins) => {
+            callback(wins.length);
+          });
         };
         /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script);
@@ -137,14 +152,14 @@ describe('WindowCore API', function(done) {
       const steps = [
         ...setupWindowSteps(windowOptions),
         () => selectWindow(app.client, 1),
-        () => callWindowMethod('getChildWindows'),
+        () => callAsyncWindowMethod('getChildWindows'),
         (result) => assert.equal(result.value.length, 0)
       ];
 
       return chainPromises(steps);
     });
 
-    it('Should return the parent window #ssf.Window.getParentWindow #ssf.WindowCore.getParentWindow', function() {
+    it.skip('Should return the parent window #ssf.Window.getParentWindow #ssf.WindowCore.getParentWindow', function() {
       const windowTitle = 'windownamegetparent';
       const windowOptions = getWindowOptions({
         name: windowTitle,
@@ -406,7 +421,7 @@ describe('WindowCore API', function(done) {
           ...setupWindowSteps(windowOptions),
           () => selectWindow(app.client, 1),
           () => callWindowMethod('getId'),
-          (result) => assert.equal(result.value, `ssf-desktop-api-openfin-demo:${windowTitle}`)
+          (result) => assert.equal(result.value, `${windowTitle}:${windowTitle}`)
         ];
 
         return chainPromises(steps);
@@ -436,7 +451,12 @@ describe('WindowCore API', function(done) {
     it('Should open a new window #ssf.Window', function() {
       return openNewWindow(app.client, {url: 'about:blank', name: 'test', show: true, child: true}).then((result) => {
         return app.client.getWindowCount().then((count) => {
-          assert.equal(count, 2);
+          if (process.env.MOCHA_CONTAINER === 'openfin') {
+            // Hidden mainWindow is still there
+            assert.equal(count, 3);
+          } else {
+            assert.equal(count, 2);
+          }
         });
       });
     });

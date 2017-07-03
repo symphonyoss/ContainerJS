@@ -4,7 +4,8 @@
         "name": "SSF Desktop Wrapper",
         "url": "http://localhost:8080/index.html",
         "uuid": "ssf-desktop-api-openfin-demo",
-        "autoShow": true
+        "autoShow": true,
+        "preload": "http://localhost:8080/scripts/containerjs-api-bundle.js"
     },
     "runtime": {
         "version": "stable"
