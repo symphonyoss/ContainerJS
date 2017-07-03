@@ -467,9 +467,9 @@ class Window implements ssf.Window {
 
   once(event, listener) {
     // Remove the listener once it is called
-    const unsubscribeListener = () => {
+    const unsubscribeListener = (evt) => {
       this.removeListener(event, unsubscribeListener);
-      listener();
+      listener(evt);
     };
 
     this.on(event, unsubscribeListener);
