@@ -258,7 +258,16 @@ class Window implements ssf.Window {
   }
 
   getChildWindows() {
-    return new Promise(resolve => resolve(this.innerWindow.getChildWindows()));
+    return new Promise<ReadonlyArray<Window>>(resolve => {
+      let children = [];
+      this.innerWindow.getChildWindows().forEach(win => {
+        const child = new Window(null, null, null);
+        child.innerWindow = win;
+        child.id = String(win.id);
+        children.push(child);
+      });
+      return children;
+    });
   }
 
   static getCurrentWindow(callback, errorCallback) {

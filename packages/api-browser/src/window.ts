@@ -12,7 +12,7 @@ const getWindowOffsets = (win) => {
 }
 
 class Window implements ssf.WindowCore {
-  children: any;
+  children: ssf.Window[];
   innerWindow: any;
   eventListeners: any;
   id: string;
@@ -181,7 +181,7 @@ class Window implements ssf.WindowCore {
   }
 
   getChildWindows() {
-    return new Promise(resolve => resolve(this.children));
+    return new Promise<ssf.Window[]>(resolve => resolve(this.children));
   }
 
   asPromise<T>(fn): Promise<T> {
