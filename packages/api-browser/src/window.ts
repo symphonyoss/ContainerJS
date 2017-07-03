@@ -80,7 +80,7 @@ class Window implements ssf.WindowCore {
   }
 
   getParentWindow() {
-    return new Promise(resolve => {
+    return new Promise<Window>(resolve => {
       let newWin = null;
       if (window.opener) {
         newWin = new Window(null);

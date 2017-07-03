@@ -265,7 +265,7 @@ class Window implements ssf.Window {
   }
 
   getParentWindow() {
-    return new Promise((resolve, reject) => {
+    return new Promise<Window>((resolve, reject) => {
       if (this.innerWindow) {
         let parent = null;
         if (window.opener) {
