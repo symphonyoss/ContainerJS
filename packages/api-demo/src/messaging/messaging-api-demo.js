@@ -16,12 +16,14 @@ appReady.then(() => {
 
     const isChild = document.getElementById('child').checked;
 
+    const path = location.href.substring(0, location.href.lastIndexOf('/'));
+
     // eslint-disable-next-line no-new
     new ssf.Window({
       child: isChild,
       name: id,
       show: true,
-      url: `http://localhost:${location.port}/messaging-api-test-window.html`
+      url: `${path}/messaging-api-test-window.html`
     });
   };
 
