@@ -13,6 +13,7 @@ const isUrlPattern = /^https?:\/\//i;
 class Window implements ssf.Window {
   innerWindow: Electron.BrowserWindow;
   id: string;
+  eventListeners: Map<string, ((...args: any[]) => void)[]> = new Map();
 
   constructor(options: ssf.WindowOptions, callback, errorCallback) {
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
@@ -242,15 +243,77 @@ class Window implements ssf.Window {
   }
 
   addListener(event, listener) {
+    if (this.eventListeners.has(event)) {
+      const temp = this.eventListeners.get(event);
+      temp.push(listener);
+      this.eventListeners.set(event, temp);
+    } else {
+      this.eventListeners.set(event, [listener]);
+    }
     this.innerWindow.addListener(event, listener);
+    return this;
+  }
+
+  on(event, listener) {
+    return this.addListener(event, listener);
+  }
+
+  eventNames() {
+    return Array.from(this.eventListeners.keys());
+  }
+
+  listenerCount(event) {
+    return this.eventListeners.has(event) ? this.eventListeners.get(event).length : 0;
+  }
+
+  listeners(event) {
+    return this.eventListeners.get(event);
+  }
+
+  once(event, listener) {
+    // Remove the listener once it is called
+    const unsubscribeListener = (evt) => {
+      this.removeListener(event, unsubscribeListener);
+      listener(evt);
+    };
+
+    this.on(event, unsubscribeListener);
+    return this;
   }
 
   removeListener(event, listener) {
+    if (this.eventListeners.has(event)) {
+      let listeners = this.eventListeners.get(event);
+      let index = listeners.indexOf(listener);
+      if (index >= 0) {
+        listeners.splice(index, 1);
+        listeners.length > 0
+          ? this.eventListeners.set(event, listeners)
+          : this.eventListeners.delete(event);
+      }
+    }
+
     this.innerWindow.removeListener(event, listener);
+    return this;
   }
 
-  removeAllListeners() {
-    this.innerWindow.removeAllListeners();
+  removeAllListeners(eventName) {
+    const removeAllListenersForEvent = (event) => {
+      if (this.eventListeners.has(event)) {
+        this.eventListeners.get(event).forEach((listener) => {
+          this.innerWindow.removeListener(event, listener);
+        });
+        this.eventListeners.delete(event);
+      }
+    };
+
+    if (eventName) {
+      removeAllListenersForEvent(eventName);
+    } else {
+      this.eventListeners.forEach((value, key) => removeAllListenersForEvent(key));
+    }
+
+    return this;
   }
 
   postMessage(message) {
@@ -266,7 +329,7 @@ class Window implements ssf.Window {
         child.id = String(win.id);
         children.push(child);
       });
-      return children;
+      resolve(children);
     });
   }
 

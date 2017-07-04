@@ -92,6 +92,33 @@ describe('WindowCore API', function(done) {
   });
 
   describe('Methods', function() {
+    it('Should add a listener to the window listeners #ssf.Window.addListener #ssf.WindowCore.addListener', function() {
+      const windowTitle = 'windownameaddlistener';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const addWindowListener = (event) => {
+        /* eslint-disable no-undef */
+        const script = (event, callback) => {
+          var currentWin = ssf.Window.getCurrentWindow();
+          currentWin.addListener(event, () => console.log(event));
+          callback();
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script, event);
+      };
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addWindowListener('blur'),
+        () => callWindowMethod('listenerCount', 'blur'),
+        (result) => assert.equal(result.value, 1)
+      ];
+
+      return chainPromises(steps);
+    });
+
     it('Should close the window #ssf.Window.close #ssf.WindowCore.close', function() {
       const windowTitle = 'windownameclose';
       const windowOptions = getWindowOptions({
@@ -326,6 +353,203 @@ describe('WindowCore API', function(done) {
         () => wait(2000),
         () => retrieveWebUrl(),
         (result) => assert.equal(result.value, url)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should add a listener to the window that persists after it has been called #ssf.Window.on #ssf.WindowCore.on', function() {
+      const windowTitle = 'windownameon';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const addWindowListener = (event) => {
+        /* eslint-disable no-undef */
+        const script = (event, callback) => {
+          var currentWin = ssf.Window.getCurrentWindow();
+          currentWin.on(event, () => console.log(event));
+          callback();
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script, event);
+      };
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addWindowListener('focus'),
+        () => callWindowMethod('listenerCount', 'focus'),
+        (result) => assert.equal(result.value, 1),
+        // Blur isn't working correctly in browser tests, so we need to switch windows instead
+        () => selectWindow(app.client, 0),
+        () => selectWindow(app.client, 1),
+        () => callAsyncWindowMethod('blur'),
+        () => callAsyncWindowMethod('focus'),
+        () => callWindowMethod('listenerCount', 'focus'),
+        (result) => assert.equal(result.value, 1)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should add a one-time listener to the window #ssf.Window.once #ssf.WindowCore.once', function() {
+      const windowTitle = 'windownameonce';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const addWindowListener = (event) => {
+        /* eslint-disable no-undef */
+        const script = (event, callback) => {
+          var currentWin = ssf.Window.getCurrentWindow();
+          currentWin.once(event, () => console.log(event));
+          callback();
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script, event);
+      };
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addWindowListener('focus'),
+        () => callWindowMethod('listenerCount', 'focus'),
+        (result) => assert.equal(result.value, 1),
+        // Blur isn't working correctly in browser tests, so we need to switch windows instead
+        () => selectWindow(app.client, 0),
+        () => selectWindow(app.client, 1),
+        () => callAsyncWindowMethod('blur'),
+        () => callAsyncWindowMethod('focus'),
+        () => callWindowMethod('listenerCount', 'focus'),
+        (result) => assert.equal(result.value, 0)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should remove a listener from the window #ssf.Window.removeListener #ssf.WindowCore.removeListener', function() {
+      const windowTitle = 'windownameremovelistener';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const addWindowListener = (event) => {
+        /* eslint-disable no-undef */
+        const script = (event, callback) => {
+          // We need to save the function, as we need to pass the same function object to removeListener
+          window.customListener = () => console.log(event);
+          var currentWin = ssf.Window.getCurrentWindow();
+          currentWin.addListener(event, window.customListener);
+          callback();
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script, event);
+      };
+
+      const removeWindowListener = (event) => {
+        /* eslint-disable no-undef */
+        const script = (event, callback) => {
+          var currentWin = ssf.Window.getCurrentWindow();
+          currentWin.removeListener(event, window.customListener);
+          callback();
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script, event);
+      };
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addWindowListener('blur'),
+        () => removeWindowListener('blur'),
+        () => callWindowMethod('listenerCount', 'blur'),
+        (result) => assert.equal(result.value, 0)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should remove all listeners from the window #ssf.Window.removeAllListeners #ssf.WindowCore.removeAllListeners', function() {
+      const windowTitle = 'windownameremovealllisteners';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const addWindowListener = (event, data) => {
+        /* eslint-disable no-undef */
+        const script = (event, data, callback) => {
+          // We need to save the function, as we need to pass the same function object to removeListener
+          var currentWin = ssf.Window.getCurrentWindow();
+          currentWin.addListener(event, () => console.log(event + data));
+          callback();
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script, event, data);
+      };
+
+      const removeWindowListeners = (event) => {
+        /* eslint-disable no-undef */
+        const script = (event, callback) => {
+          var currentWin = ssf.Window.getCurrentWindow();
+          currentWin.removeAllListeners(event);
+          callback();
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script, event);
+      };
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addWindowListener('blur', 'one'),
+        () => addWindowListener('blur', 'two'),
+        () => addWindowListener('focus', 'one'),
+        () => removeWindowListeners('blur'),
+        () => callWindowMethod('listenerCount', 'blur'),
+        (result) => assert.equal(result.value, 0),
+        () => callWindowMethod('listenerCount', 'focus'),
+        (result) => assert.equal(result.value, 1)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should remove all listeners from all events when passed no event #ssf.Window.removeAllListeners #ssf.WindowCore.removeAllListeners', function() {
+      const windowTitle = 'windownameremovealllistenersallevents';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const addWindowListener = (event, data) => {
+        /* eslint-disable no-undef */
+        const script = (event, data, callback) => {
+          // We need to save the function, as we need to pass the same function object to removeListener
+          var currentWin = ssf.Window.getCurrentWindow();
+          currentWin.addListener(event, () => console.log(event + data));
+          callback();
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script, event, data);
+      };
+
+      const removeWindowListeners = () => {
+        /* eslint-disable no-undef */
+        const script = (callback) => {
+          var currentWin = ssf.Window.getCurrentWindow();
+          currentWin.removeAllListeners();
+          callback();
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script);
+      };
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addWindowListener('blur', 'one'),
+        () => addWindowListener('blur', 'two'),
+        () => addWindowListener('focus', 'one'),
+        () => removeWindowListeners(),
+        () => callWindowMethod('listenerCount', 'blur'),
+        (result) => assert.equal(result.value, 0),
+        () => callWindowMethod('listenerCount', 'focus'),
+        (result) => assert.equal(result.value, 0)
       ];
 
       return chainPromises(steps);

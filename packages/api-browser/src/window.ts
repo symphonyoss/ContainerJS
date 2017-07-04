@@ -14,7 +14,7 @@ const getWindowOffsets = (win) => {
 class Window implements ssf.WindowCore {
   children: ssf.Window[];
   innerWindow: any;
-  eventListeners: any;
+  eventListeners: Map<string, ((...args: any[]) => void)[]> = new Map();
   id: string;
 
   constructor(options, callback?, errorCallback?) {
@@ -151,6 +151,34 @@ class Window implements ssf.WindowCore {
       this.eventListeners.set(event, [listener]);
     }
     this.innerWindow.addEventListener(eventMap[event], listener);
+    return this;
+  }
+
+  on(event, listener) {
+    return this.addListener(event, listener);
+  }
+
+  eventNames() {
+    return Array.from<string>(this.eventListeners.keys());
+  }
+
+  listenerCount(event) {
+    return this.eventListeners.has(event) ? this.eventListeners.get(event).length : 0;
+  }
+
+  listeners(event) {
+    return this.eventListeners.get(event);
+  }
+
+  once(event, listener) {
+    // Remove the listener once it is called
+    const unsubscribeListener = (evt) => {
+      this.removeListener(event, unsubscribeListener);
+      listener(evt);
+    };
+
+    this.on(event, unsubscribeListener);
+    return this;
   }
 
   removeListener(event, listener) {
@@ -159,21 +187,33 @@ class Window implements ssf.WindowCore {
       let index = listeners.indexOf(listener);
       if (index >= 0) {
         listeners.splice(index, 1);
-        this.eventListeners.set(listeners);
+        listeners.length > 0
+          ? this.eventListeners.set(event, listeners)
+          : this.eventListeners.delete(event);
       }
     }
 
     this.innerWindow.removeEventListener(eventMap[event], listener);
+    return this;
   }
 
-  removeAllListeners() {
-    this.eventListeners.forEach((value, key) => {
-      value.forEach((listener) => {
-        this.innerWindow.removeEventListener(eventMap[key], listener);
-      });
-    });
+  removeAllListeners(eventName) {
+    const removeAllListenersForEvent = (event) => {
+      if (this.eventListeners.has(event)) {
+        this.eventListeners.get(event).forEach((listener) => {
+          this.innerWindow.removeEventListener(eventMap[event], listener);
+        });
+        this.eventListeners.delete(event);
+      }
+    };
 
-    this.eventListeners.clear();
+    if (eventName) {
+      removeAllListenersForEvent(eventName);
+    } else {
+      this.eventListeners.forEach((value, key) => removeAllListenersForEvent(key));
+    }
+
+    return this;
   }
 
   postMessage(message) {
