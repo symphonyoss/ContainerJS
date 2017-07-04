@@ -12,7 +12,7 @@ const selectWindow = (client, handle) => {
 const openNewWindow = (client, options) => {
   const script = (options, callback) => {
     ssf.app.ready().then(() => {
-      new ssf.Window(options, () => {
+      window.newWin = new ssf.Window(options, () => {
         callback();
       });
     });
