@@ -134,7 +134,6 @@ class Window implements ssf.Window {
   id: string;
 
   constructor(options: ssf.WindowOptions, callback?: any, errorCallback?: any) {
-    this.eventListeners = new Map();
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
       const event = 'message';
       if (this.eventListeners.has(event)) {

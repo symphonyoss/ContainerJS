@@ -426,7 +426,7 @@ describe('WindowCore API', function(done) {
       return chainPromises(steps);
     });
 
-    it.only('Should remove a listener from the window #ssf.Window.removeListener #ssf.WindowCore.removeListener', function() {
+    it('Should remove a listener from the window #ssf.Window.removeListener #ssf.WindowCore.removeListener', function() {
       const windowTitle = 'windownameremovelistener';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -467,7 +467,7 @@ describe('WindowCore API', function(done) {
       return chainPromises(steps);
     });
 
-    it.only('Should remove all listeners from the window #ssf.Window.removeAllListeners #ssf.WindowCore.removeAllListeners', function() {
+    it('Should remove all listeners from the window #ssf.Window.removeAllListeners #ssf.WindowCore.removeAllListeners', function() {
       const windowTitle = 'windownameremovealllisteners';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -500,15 +500,18 @@ describe('WindowCore API', function(done) {
         ...setupWindowSteps(windowOptions),
         () => addWindowListener('blur', 'one'),
         () => addWindowListener('blur', 'two'),
+        () => addWindowListener('focus', 'one'),
         () => removeWindowListeners('blur'),
         () => callWindowMethod('listenerCount', 'blur'),
-        (result) => assert.equal(result.value, 0)
+        (result) => assert.equal(result.value, 0),
+        () => callWindowMethod('listenerCount', 'focus'),
+        (result) => assert.equal(result.value, 1)
       ];
 
       return chainPromises(steps);
     });
 
-    it.only('Should remove all listeners from all events when passed no event #ssf.Window.removeAllListeners #ssf.WindowCore.removeAllListeners', function() {
+    it('Should remove all listeners from all events when passed no event #ssf.Window.removeAllListeners #ssf.WindowCore.removeAllListeners', function() {
       const windowTitle = 'windownameremovealllistenersallevents';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -542,7 +545,7 @@ describe('WindowCore API', function(done) {
         () => addWindowListener('blur', 'one'),
         () => addWindowListener('blur', 'two'),
         () => addWindowListener('focus', 'one'),
-        () => removeWindowListeners('blur'),
+        () => removeWindowListeners(),
         () => callWindowMethod('listenerCount', 'blur'),
         (result) => assert.equal(result.value, 0),
         () => callWindowMethod('listenerCount', 'focus'),
