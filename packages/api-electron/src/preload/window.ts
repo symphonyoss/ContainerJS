@@ -266,7 +266,7 @@ class Window implements ssf.Window {
         child.id = String(win.id);
         children.push(child);
       });
-      return children;
+      resolve(children);
     });
   }
 
