@@ -16,9 +16,9 @@
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
+    "containerjs-api-specification": "0.0.2",
     "copyfiles": "^1.2.0",
     "rimraf": "^2.6.1",
-    "containerjs-api-specification": "0.0.2",
     "rollup": "^0.41.6",
     "typescript": "^2.3.2"
   },

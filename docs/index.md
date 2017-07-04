@@ -49,7 +49,8 @@ Within the same folder, add the following `app.json` manifest file:
     "name": "Hello World",
     "url": "http://localhost:8080/index.html",
     "uuid": "hello-world",
-    "autoShow": true
+    "autoShow": true,
+    "preload": "http://localhost:8080/scripts/containerjs-api-bundle.js"
   },
   "runtime": {
     "version": "stable"
