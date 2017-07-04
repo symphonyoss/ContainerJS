@@ -16,7 +16,7 @@ appReady.then(() => {
 
     const isChild = document.getElementById('child').checked;
 
-    const path = location.href.substring(0, location.href.lastIndexOf('/'))
+    const path = location.href.substring(0, location.href.lastIndexOf('/'));
 
     // eslint-disable-next-line no-new
     new ssf.Window({
