@@ -45,16 +45,11 @@ Within the same folder, add the following `app.json` manifest file:
 
 ```json
 {
-  "startup_app": {
-    "name": "Hello World",
-    "url": "http://localhost:8080/index.html",
-    "uuid": "hello-world",
-    "autoShow": true,
-    "preload": "http://localhost:8080/scripts/containerjs-api-bundle.js"
-  },
-  "runtime": {
-    "version": "stable"
-  }
+  "name": "Hello World",
+  "url": "http://localhost:8080/index.html",
+  "uuid": "hello-world",
+  "autoShow": true,
+  "preload": "http://localhost:8080/scripts/containerjs-api-bundle.js"
 }
 ```
 
@@ -73,16 +68,16 @@ This starts a server on port 8080.
 
 #### Running with OpenFin
 
-OpenFin has a command line tool for launching OpenFin applications. This can be installed as follows:
+The ContainerJS project provides an OpenFin-based command line tool, which can be installed as follows:
 
 ```
-$ npm install --global openfin-cli
+$ npm install --global containerjs-api-openfin
 ```
 
 To run your simple 'Hello World' application from within an OpenFin container, execute the following:
 
 ```
-$ openfin --launch --config app.json
+$ ssf-openfin --config app.json
 ```
 
 You should now see the Hello World application, and see the status update to 'ready'
@@ -92,7 +87,7 @@ You should now see the Hello World application, and see the status update to 're
 The ContainerJS project provides an Electron-based command line tool, which can be installed as follows:
 
 ```
-$ npm install --global ssf-electron
+$ npm install --global containerjs-api-electron
 ```
 
 From within your 'Hello World' folder, execute the following:
