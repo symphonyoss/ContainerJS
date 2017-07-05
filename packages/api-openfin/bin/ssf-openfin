@@ -1,0 +1,45 @@
+#!/usr/bin/env node
+
+const openfinLauncher = require('openfin-launcher');
+const fs = require('fs');
+const path = require('path');
+const program = require('commander');
+
+program
+  .option('-c, --config [filename]', 'ContainerJS config file', 'config.json')
+  .option('-o, --output-config [filename]', 'Where to output the OpenFin config file', 'app.json')
+  .option('-v, --version [filename]', 'Version of the OpenFin runtime to use, default is stable', 'stable')
+  .option('-u, --url [filename]', 'Url to read the new app.json file from to start OpenFin')
+  .parse(process.argv);
+
+const openfinConfigFile = path.join(process.cwd(), program.outputConfig);
+const configFile = path.join(process.cwd(), program.config);
+
+const fileError = (filename, err) => {
+  console.error('Error with file: ' + filename);
+  console.error(err);
+};
+
+const openfinConfig = {
+  'devtools_port': 9090,
+  'startup_app': {},
+  'runtime': {
+    'version': program.version
+  },
+  'shortcut': {}
+};
+
+if (fs.existsSync(configFile)) {
+  const parsedConfig = JSON.parse(fs.readFileSync(configFile));
+  openfinConfig.startup_app = parsedConfig;
+  fs.writeFileSync(openfinConfigFile, JSON.stringify(openfinConfig));
+
+  openfinLauncher.launchOpenFin({
+    configPath: program.url || openfinConfigFile
+  })
+  .fail(() => {
+    console.error('Failed to launch OpenFin');
+  });
+} else {
+  fileError(configFile, 'Config file does not exist');
+}
