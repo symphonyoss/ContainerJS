@@ -71,7 +71,7 @@ This starts a server on port 8080.
 The ContainerJS project provides an OpenFin-based command line tool, which can be installed as follows:
 
 ```
-$ npm install --global ssf-openfin
+$ npm install --global containerjs-api-openfin
 ```
 
 To run your simple 'Hello World' application from within an OpenFin container, execute the following:
@@ -87,7 +87,7 @@ You should now see the Hello World application, and see the status update to 're
 The ContainerJS project provides an Electron-based command line tool, which can be installed as follows:
 
 ```
-$ npm install --global ssf-electron
+$ npm install --global containerjs-api-electron
 ```
 
 From within your 'Hello World' folder, execute the following:
