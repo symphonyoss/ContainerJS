@@ -653,7 +653,8 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         /* eslint-disable no-undef */
         const script = (event, callback) => {
           const currentWindow = ssf.Window.getCurrentWindow();
-          callback(currentWindow.addListener(event, () => { window.listenEventResult = true; }));
+          currentWindow.addListener(event, () => { window.listenEventResult = true; });
+          callback();
         };
         /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, event);
