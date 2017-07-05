@@ -15,11 +15,6 @@ program
 const openfinConfigFile = path.join(process.cwd(), program.outputConfig);
 const configFile = path.join(process.cwd(), program.config);
 
-const fileCleanup = () => {
-  // Delete the new app.json file
-  fs.unlinkSync(openfinConfigFile);
-};
-
 const fileError = (filename, err) => {
   console.error('Error with file: ' + filename);
   console.error(err);
@@ -42,9 +37,7 @@ if (fs.existsSync(configFile)) {
   openfinLauncher.launchOpenFin({
     configPath: program.url || openfinConfigFile
   })
-  .then(fileCleanup)
   .fail(() => {
-    fileCleanup();
     console.error('Failed to launch OpenFin');
   });
 } else {
