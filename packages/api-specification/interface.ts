@@ -583,13 +583,17 @@ declare namespace ssf {
      */
     body?: string;
   }
-}
+  type NotificationPermission = "default" | "denied" | "granted";
 
-declare interface Window {
-  /**
-   * Create a notification
-   * @param title - The title text of the notification.
-   * @param options - The notification options.
-   */
-  Notification(title: string, options: ssf.NotificationOptions): void;
+  class Notification {
+    /**
+     * Create a notification
+     * @param title - The title text of the notification.
+     * @param options - The notification options.
+     */
+    constructor(title: string, options: NotificationOptions);
+
+    static requestPermission(): Promise<NotificationPermission>;
+  }
+
 }
