@@ -1,13 +1,23 @@
 const remote = require('electron').remote;
 const eNotify = remote.require('electron-notify');
+const PERMISSION_GRANTED = "granted";
 
-window.Notification = function(title, options) {
-  if (!options) {
-    options = {};
+class ElectronNotification implements ssf.Notification {
+  constructor(title: string, options: NotificationOptions) {
+    if (!options) {
+      options = {};
+    }
+
+    eNotify.notify({
+      title: title,
+      text: options.body
+    });
   }
+    
+  static permission: string = PERMISSION_GRANTED;
+  static requestPermission(callback: (NotificationPermissionCallback)) {
+    callback(PERMISSION_GRANTED);
+  }
+}
 
-  eNotify.notify({
-    title: title,
-    text: options.body
-  });
-};
+window.Notification = ElectronNotification;

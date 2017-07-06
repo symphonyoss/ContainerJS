@@ -4,23 +4,14 @@ var button = document.getElementById('notification-test');
 // before raising a notification, then do so!
 function withNotificationPermission() {
   return new Promise(function(resolve, reject) {
-    if (Notification.hasOwnProperty('permission')) {
-      // if permission already granted, we're good to go
-      if (Notification.permission === 'granted') {
+    // if permission already granted, we're good to go
+    Notification.requestPermission(function(permission) {
+      if (permission === 'granted') {
         resolve(true);
-      // if denied, request permission
-      } else if (Notification.permission !== 'denied') {
-        Notification.requestPermission(function(permission) {
-          if (permission === 'granted') {
-            resolve(true);
-          } else {
-            resolve(false);
-          }
-        });
+      } else {
+        resolve(false);
       }
-    } else {
-      resolve(true);
-    }
+    });
   });
 }
 

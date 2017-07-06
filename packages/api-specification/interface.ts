@@ -583,6 +583,23 @@ declare namespace ssf {
      */
     body?: string;
   }
+
+  interface NotificationPermissionCallback {
+    (permission: String): void;
+  }
+
+  class Notification {
+    /**
+     * Create a notification
+     * @param title - The title text of the notification.
+     * @param options - The notification options.
+     */
+    constructor(title: string, options: NotificationOptions);
+    
+    static permission: string;
+    static requestPermission(callback: (NotificationPermissionCallback));
+  }
+
 }
 
 declare interface Window {
@@ -591,5 +608,5 @@ declare interface Window {
    * @param title - The title text of the notification.
    * @param options - The notification options.
    */
-  Notification(title: string, options: ssf.NotificationOptions): void;
+  Notification: ssf.Notification;
 }
