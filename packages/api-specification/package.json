@@ -1,15 +1,23 @@
 {
   "name": "containerjs-api-specification",
   "version": "0.0.2",
-  "description": "",
+  "description": "The interface for the ContainerJS API",
   "main": "index.js",
   "scripts": {
     "typedoc2html": "node transform-type-info.js --testfile test-report.json --outfile ../../docs/Docs.html",
     "typedoc": "typedoc --mode file --json type-info.json interface",
     "docs": "npm run typedoc && npm run typedoc2html"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/symphonyoss/ContainerJS.git"
+  },
   "author": "",
   "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/symphonyoss/ContainerJS/issues"
+  },
+  "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "dependencies": {
     "@types/electron": "1.4.37",
     "@types/openfin": "^17.0.2",
