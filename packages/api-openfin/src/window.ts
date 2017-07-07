@@ -524,13 +524,4 @@ class Window implements ssf.Window {
   }
 }
 
-if ('fin' in window) {
-  // Populate the current window variable
-  Window.getCurrentWindow();
-
-  fin.desktop.InterApplicationBus.subscribe('*', 'ssf-close-all', () => {
-    fin.desktop.Window.getCurrent().close(true);
-  });
-}
-
 export default Window;
