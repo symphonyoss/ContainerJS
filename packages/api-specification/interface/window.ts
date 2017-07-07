@@ -128,7 +128,7 @@ declare namespace ssf {
     /**
      * Get all event names with active listeners.
      */
-    eventNames(): (string|symbol)[];
+    eventNames(): Array<string|symbol>;
 
     /**
      * Get the number of listeners currently listening for an event.
@@ -140,7 +140,7 @@ declare namespace ssf {
      * Get all listeners for an event.
      * @param event The event to get the listeners for.
      */
-    listeners(event: string): Function[];
+    listeners(event: string): Array<Function>;
 
     /**
      * Remove a listener from an event.

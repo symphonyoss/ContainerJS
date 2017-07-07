@@ -98,6 +98,9 @@ const formatType = (type) => {
         (type.typeArguments !== undefined ? '&lt;' + type.typeArguments.map(formatType).join(', ') + '&gt;' : '');
     case 'union':
       return type.types.map(formatType).join(' | ');
+    case 'reflection':
+      const parameters = type.declaration.signatures[0].parameters || [];
+      return '(' + parameters.map((param) => param.name + ': ' + formatType(param.type)).join(',') + ') => ' + formatType(type.declaration.signatures[0].type);
   }
   return 'UNKNOWN';
 };
