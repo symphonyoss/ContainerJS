@@ -1,5 +1,5 @@
 (function() {
-  if (window.location.pathname.split('/').filter(x => x).pop().toLowerCase() === 'docs') {
+  if (window.location.pathname.split('/').filter(x => x).pop().toLowerCase() === 'docs.html') {
     const classMenu = document.getElementById('class-menu');
     const interfaceMenu = document.getElementById('interface-menu');
     const classSections = document.getElementsByClassName('docs-title');

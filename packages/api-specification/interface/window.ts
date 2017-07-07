@@ -4,28 +4,11 @@
 // Needed to access the browsers window object
 type BrowserWindow = Window;
 
-/**
- * @ignore
- */
-declare namespace fin {
-  interface OpenFinWindow {
-    uuid: string;
-    executeJavaScript(code: string, callback?: Function, errorCallback?: Function): void;
-  }
-
-  interface WindowOptions {
-    preload?: string;
-  }
-}
-
 declare namespace ssf {
-  interface Rectangle {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  }
 
+  /**
+   * Options that can be passed to the window constructor
+   */
   interface WindowOptions {
     /**
      * Default window title.
@@ -117,59 +100,6 @@ declare namespace ssf {
     transparent?: boolean;
   }
 
-  class EventEmitter {
-    /**
-     * Adds a listener that runs when the specified event occurs. Alias for <span class="code">on()</span>.
-     * @param event The event to listen for.
-     * @param listener The function to run when the event occurs.
-     */
-    addListener(event: string, listener: Function): EventEmitter;
-
-    /**
-     * Adds a listener that runs when the specified event occurs. Alias for <span class="code">addListener()</span>.
-     * @param event The event to listen for.
-     * @param listener The function to run when the event occurs.
-     */
-    on(event: string, listener: Function): EventEmitter;
-
-    /**
-     * Adds a listener that runs once when the specified event occurs, then is removed.
-     * @param event The event to listen for.
-     * @param listener The function to run once when the event occurs.
-     */
-    once(event: string, listener: Function): EventEmitter;
-
-    /**
-     * Get all event names with active listeners.
-     */
-    eventNames(): (string|symbol)[];
-
-    /**
-     * Get the number of listeners currently listening for an event.
-     * @param event The event to get the number of listeners for.
-     */
-    listenerCount(event: string): number;
-
-    /**
-     * Get all listeners for an event.
-     * @param event The event to get the listeners for.
-     */
-    listeners(event: string): Function[];
-
-    /**
-     * Remove a listener from an event.
-     * @param event The event to remove the listener from.
-     * @param listener The listener to remove. Must be the same object that was passed to <span class="code">addListener()</span>
-     */
-    removeListener(event: string, listener: Function): EventEmitter;
-
-    /**
-     * Removes all listeners from a given event, or all events if no event is passed.
-     * @param event The event to remove the listeners from.
-     */
-    removeAllListeners(event?: string): EventEmitter;
-  }
-
   interface WindowEvent {
     /** Fires when the window has been blurred */
     blur: 'blur';
@@ -202,7 +132,7 @@ declare namespace ssf {
     show: 'show';
   }
 
-  class WindowCore extends EventEmitter {
+  export abstract class WindowCore extends ssf.EventEmitter {
     /**
      * The id that uniquely identifies the window
      */
@@ -214,13 +144,12 @@ declare namespace ssf {
     innerWindow: Electron.BrowserWindow | fin.OpenFinWindow | BrowserWindow;
 
     /**
-
      * Create a new window.
      * @param opts A window options object
      * @param callback A callback that is called if the window creation succeeds
      * @param errorCallback A callback that is called if window creation fails
      */
-    constructor(opts?: WindowOptions, callback?: Function, errorCallback?: Function);
+    constructor(opts?: WindowOptions, callback?: (window: Window) => void, errorCallback?: () => void);
 
     /**
      * Removes focus from the window.
@@ -233,7 +162,7 @@ declare namespace ssf {
      */
     close(): Promise<void>;
 
-     /**
+      /**
      * Focuses the window.
      * @returns A promise which resolves to nothing when the function has completed.
      */
@@ -243,7 +172,7 @@ declare namespace ssf {
      * Returns the bounds of the window.
      * @returns A promise that resolves to an object specifying the bounds of the window.
      */
-    getBounds(): Promise<Rectangle>;
+    getBounds(): Promise<ssf.Rectangle>;
 
     /**
      * Get the child windows of the window.
@@ -317,7 +246,7 @@ declare namespace ssf {
      * @param bounds - Sets the bounds of the window.
      * @returns A promise that resolves to nothing when the option is set.
      */
-    setBounds(bounds: Rectangle): Promise<void>;
+    setBounds(bounds: ssf.Rectangle): Promise<void>;
 
     /**
      * Sets the windows position. Only works on windows created via the ContainerJS API in the browser.
@@ -347,7 +276,7 @@ declare namespace ssf {
      * @param errorCallback - Function that is called when the window could not be created.
      * @returns The window.
      */
-    static getCurrentWindow(callback: Function, errorCallback: Function): Window;
+    static getCurrentWindow(callback?: () => void, errorCallback?: () => void): Window;
   }
 
   /**
@@ -360,8 +289,7 @@ declare namespace ssf {
     * const win = new Window({url: 'http://localhost/index.html'});
     * </pre>
     */
-  class Window extends WindowCore {
-
+  export class Window extends WindowCore {
     /**
      * Flashes the window's frame and taskbar icon.
      * @param flag - Flag to start or stop the window flashing.
@@ -435,7 +363,7 @@ declare namespace ssf {
      * @param bounds - Sets the bounds of the window.
      * @returns A promise that resolves to nothing when the option is set.
      */
-    setBounds(bounds: Rectangle): Promise<void>;
+    setBounds(bounds: ssf.Rectangle): Promise<void>;
 
     /**
      * Sets the window icon.
@@ -527,73 +455,5 @@ declare namespace ssf {
      * @returns A promise that resolves to nothing when the window has unmaximized.
      */
     unmaximize(): Promise<void>;
-
-    /**
-     * Gets the current window object.
-     * @param callback - Function that is called when the window is created successfully.
-     * @param errorCallback - Function that is called when the window could not be created.
-     * @returns The window.
-     */
-    static getCurrentWindow(callback?: Function, errorCallback?: Function): Window;
   }
-
-  class MessageService {
-    /**
-     * Send a message to a specific window
-     * @param windowId - The id of the window to send the message to.
-     * @param topic - The topic of the message.
-     * @param message - The message to send.
-     */
-    static send(windowId: string, topic :string, message: string|object): void;
-
-    /**
-     * Subscribe to message from a window/topic
-     * @param windowId - The id of the window to listen to messages fron. Can be a wildcard '*' to listen to all windows.
-     * @param topic - The topic to listen for.
-     * @param listener - The function to run when a message is received. The message is passed as a parameter to the function.
-     */
-    static subscribe(windowId: string, topic :string, listener: Function): void;
-
-    /**
-     * Unsubscribe from a window/topic
-     * @param windowId - The id of the window that the listener was subscribed to or the wildcard '*'.
-     * @param topic - The topic that was being listened to.
-     * @param listener - The function that was passed to subscribe. _Note:_ this must be the same function object.
-     */
-    static unsubscribe(windowId: string, topic :string, listener: Function): void;
-  }
-
-  class ScreenSnippet {
-    /**
-     * Captures the current visible screen. Returns the image as a base64 encoded png string.
-     */
-    capture(): Promise<string>;
-  }
-
-  class App {
-    /**
-     * A promise that resolves when the API has finished bootstrapping.
-     */
-    static ready(): Promise<any>;
-  }
-
-  class NotificationOptions {
-    /**
-     * The text to display underneath the title text.
-     */
-    body?: string;
-  }
-  type NotificationPermission = "default" | "denied" | "granted";
-
-  class Notification {
-    /**
-     * Create a notification
-     * @param title - The title text of the notification.
-     * @param options - The notification options.
-     */
-    constructor(title: string, options: NotificationOptions);
-
-    static requestPermission(): Promise<NotificationPermission>;
-  }
-
 }
