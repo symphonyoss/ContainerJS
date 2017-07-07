@@ -1,6 +1,6 @@
 {
   "name": "containerjs-api-bundle",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A bundle of ContainerJS APIs",
   "main": "build/containerjs-bundle.js",
   "scripts": {
@@ -18,8 +18,8 @@
   },
   "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "dependencies": {
-    "containerjs-api-openfin": "0.0.2",
-    "containerjs-api-browser": "0.0.1"
+    "containerjs-api-browser": "^0.0.2",
+    "containerjs-api-openfin": "^0.0.3"
   },
   "devDependencies": {
     "copyfiles": "^1.2.0",

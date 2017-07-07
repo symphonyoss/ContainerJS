@@ -1,6 +1,6 @@
 {
   "name": "containerjs-api-tests",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "Apache-2.0",
   "main": "index.js",
   "private": true,
@@ -16,9 +16,9 @@
   },
   "dependencies": {
     "assert": "^1.4.1",
-    "containerjs-api-electron": "0.0.2",
-    "containerjs-api-browser": "0.0.1",
-    "containerjs-api-openfin": "0.0.2",
+    "containerjs-api-browser": "^0.0.2",
+    "containerjs-api-electron": "^0.0.3",
+    "containerjs-api-openfin": "^0.0.3",
     "electron": "1.6.6",
     "live-server": "^1.2.0",
     "mocha": "^3.2.0",
