@@ -4,6 +4,14 @@ declare namespace ssf {
      * The text to display underneath the title text.
      */
     body?: string;
+    /**
+     * The URL of an icon to be displayed in the notification.
+     */
+    icon?: string;
+    /**
+     *  The URL of an image to be displayed in the notification.
+     */
+    image?: string;
   }
   type NotificationPermission = "default" | "denied" | "granted";
 

@@ -12,7 +12,9 @@ button.onclick = function() {
       var body = document.getElementById('body').value;
       // eslint-disable-next-line no-new
       new ssf.Notification(title, {
-        body: body
+        body: body,
+        icon: 'notification-icon.png',
+        image: 'notification-image.png'
       });
     });
 };
