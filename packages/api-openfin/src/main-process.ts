@@ -114,6 +114,13 @@ const mainWindowCode = () => {
 };
 
 const createMainProcess = (done) => {
+  // Populate the current window variable
+  ssf.Window.getCurrentWindow();
+
+  fin.desktop.InterApplicationBus.subscribe('*', 'ssf-close-all', () => {
+    fin.desktop.Window.getCurrent().close(true);
+  });
+
   // Create the main window, if the window already exists, the success callback isn't ran
   // and the already open window is returned
   const app = new fin.desktop.Application({
