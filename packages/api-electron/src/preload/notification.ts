@@ -11,7 +11,7 @@ const imageStyle = {
         bottom: 10
       };
 const HEIGHT_WITHOUT_IMAGE = 65;
-const HEIGHT_WITH_IMAGE = 175;
+const HEIGHT_WITH_IMAGE = 100;
 
 class Notification implements ssf.Notification {
   constructor(title: string, options: ssf.NotificationOptions) {
@@ -33,7 +33,7 @@ class Notification implements ssf.Notification {
   }
 
   getAbsoluteUrl(url) {
-    if (url && !url.startsWith('http:') && !url.startsWith('http:')) {
+    if (url && !url.startsWith('http:') && !url.startsWith('https:')) {
       const path = url.startsWith('/')
           ? location.origin
           : location.href.substring(0, location.href.lastIndexOf('/'));
