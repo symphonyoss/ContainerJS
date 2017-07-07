@@ -105,7 +105,7 @@ declare namespace ssf {
    */
   abstract class EventEmitter {
     /**
-     * Adds a listener that runs when the specified event occurs. Alias for <span class="code">on()</span>.
+     * Adds a listener that runs when the specified event occurs. Alias for <span class="code-small">on()</span>.
      * @param event The event to listen for.
      * @param listener The function to run when the event occurs.
      */
