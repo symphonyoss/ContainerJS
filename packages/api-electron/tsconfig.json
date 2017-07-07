@@ -15,6 +15,6 @@
     },
     "include": [
         "./preload.ts",
-        "node_modules/containerjs-api-specification/interface.ts"
+        "node_modules/containerjs-api-specification/interface/*.ts"
     ]
 }

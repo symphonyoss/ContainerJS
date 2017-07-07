@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "typedoc2html": "node transform-type-info.js --testfile test-report.json --outfile ../../docs/Docs.html",
-    "typedoc": "typedoc --mode file --json type-info.json interface.ts",
+    "typedoc": "typedoc --mode modules --module system --json type-info.json interface/index.ts",
+    "combine": "tsc --out interface-test.ts",
     "docs": "npm run typedoc && npm run typedoc2html"
   },
   "author": "",

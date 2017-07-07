@@ -1,0 +1,8 @@
+declare namespace ssf {
+  export interface Rectangle {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }
+}

@@ -15,7 +15,7 @@ class Window implements ssf.Window {
   id: string;
   eventListeners: Map<string, ((...args: any[]) => void)[]> = new Map();
 
-  constructor(options: ssf.WindowOptions, callback, errorCallback) {
+  constructor(options?: ssf.WindowOptions, callback?: (window: Window) => void, errorCallback?: () => void) {
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
       const event = 'message';
       this.innerWindow.emit(event, ...args);
