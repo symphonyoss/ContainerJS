@@ -1,7 +1,7 @@
 {
   "name": "containerjs-api-electron",
   "version": "0.0.2",
-  "description": "",
+  "description": "The ContainerJS Electron API",
   "main": "index.js",
   "module": "build/es/preload.js",
   "jsnext:main": "build/es/preload.js",
@@ -12,8 +12,16 @@
     "build:es": "rimraf build/es && tsc",
     "build:umd": "rimraf build/dist && npm run build:es && rollup -c"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/symphonyoss/ContainerJS.git"
+  },
   "author": "",
   "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/symphonyoss/ContainerJS/issues"
+  },
+  "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "dependencies": {
     "@types/electron": "1.4.37",
     "@types/electron-notify": "^0.1.3",
