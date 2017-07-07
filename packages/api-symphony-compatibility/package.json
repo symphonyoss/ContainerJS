@@ -1,10 +1,8 @@
 {
   "name": "containerjs-api-compatibility",
   "version": "0.0.1",
-  "description": "",
+  "description": "A compatibility layer between symphony electron and ContainerJS",
   "main": "index.js",
-  "author": "",
-  "license": "Apache-2.0",
   "scripts": {
     "clean": "rimraf build",
     "build": "npm run clean && npm run build:cjs && npm run build:es && rollup -c && copyfiles -f src/notification.html ./build/dist",
@@ -19,6 +17,16 @@
     "openfin": "npm-run-all --parallel launch:openfin serve:no-browser",
     "browser": "npm run serve"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/symphonyoss/ContainerJS.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/symphonyoss/ContainerJS/issues"
+  },
+  "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "dependencies": {
     "containerjs-api-bundle": "0.0.2",
     "containerjs-api-electron": "0.0.2",

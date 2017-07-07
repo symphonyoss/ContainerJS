@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "license": "Apache-2.0",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "test:ui": "npm run test:electron && npm run test:browser && npm run test:openfin",
     "test:electron": "rimraf src && copyfiles -f \"demo/**\" src && cross-env MOCHA_CONTAINER=electron mocha test/*.js",

@@ -1,7 +1,7 @@
 {
   "name": "containerjs-api-bundle",
   "version": "0.0.2",
-  "description": "A bundle of containerJS APIs",
+  "description": "A bundle of ContainerJS APIs",
   "main": "build/containerjs-bundle.js",
   "scripts": {
     "build": "rollup -c",
@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/symphonyoss/ContainerJS/issues"
   },
-  "homepage": "https://github.com/symphonyoss/ContainerJS#readme",
+  "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "dependencies": {
     "containerjs-api-openfin": "0.0.2",
     "containerjs-api-browser": "0.0.1"
