@@ -9,7 +9,7 @@
       top: 0px;
       left: 0px;
       right: 0px;
-      bottom: 0px;
+      height: 300px;
     }
 
     h4,
@@ -17,15 +17,43 @@
       padding: 0;
       margin: 0;
     }
+
+    div#content {
+      float: left;
+    }
+
+    img#icon {
+      float: left;
+      height: 40px;
+      width: 40px;
+      margin-right: 10px;
+    }
+
+    img#image {
+      clear: both;
+    }
   </style>
 </head>
 <body>
-  <h4 id="message"></h4>
-  <p id="body"></p>
+  <img id="icon" />
+  <div id="content">
+    <h4 id="message"></h4>
+    <p id="body"></p>
+  </div>
+  <img id="image" />
   <script>
+
+    function setImage(element, url) {
+      element.src = url;
+      element.style.display = url ? "block" : "none";
+    } 
+
     function onNotificationMessage(message) {
       document.getElementById('message').textContent = message.title;
       document.getElementById('body').textContent = message.text;
+
+      setImage(document.getElementById('icon'), message.icon);
+      setImage(document.getElementById('image'), message.image);
     }
   </script>
 </body>
