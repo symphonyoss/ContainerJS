@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A bundle of containerJS APIs",
   "main": "src/index.js",
+  "private": true,
   "scripts": {
     "serve:no-browser": "npm run serve -- --no-browser",
     "serve": "live-server --mount=/:src --mount=/scripts/containerjs-api-bundle:node_modules/containerjs-api-bundle/build/containerjs-bundle.js --mount=/notifications/notification.html:node_modules/containerjs-api-bundle/build/notification.html",
