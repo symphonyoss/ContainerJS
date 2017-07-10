@@ -242,9 +242,7 @@ class Window implements ssf.Window {
         fin.desktop.InterApplicationBus.unsubscribe('*' , 'ssf-child-windows', subscribeListener);
         const children = [];
         names.forEach((name) => {
-          const app = fin.desktop.Application.wrap(name);
-          const win = app.getWindow();
-          const childWin = Window.wrap(win);
+          const childWin = Window.getById(name);
           children.push(childWin);
         });
         resolve(children);
@@ -282,9 +280,7 @@ class Window implements ssf.Window {
           resolve(null);
           return;
         }
-        const app = fin.desktop.Application.wrap(name);
-        const win = app.getWindow();
-        const parentWin = Window.wrap(win);
+        const parentWin = Window.getById(name);
         resolve(parentWin);
       };
 
@@ -523,6 +519,25 @@ class Window implements ssf.Window {
     wrappedWin.innerWindow = win;
     wrappedWin.id = win.uuid + ':' + win.name;
     return wrappedWin;
+  }
+
+  static getById(id: string) {
+    const idRegex = '(' +    // Start group 1
+            '[\w\d-]+' +     // At least 1 word character, digit or dash
+            ')' +            // End group 1
+            ':' +            // colon
+            '\\1';            // Same string that was matched in group 1
+
+    let app = null;
+    if (id.match(new RegExp(idRegex))) {
+      app = fin.desktop.Application.wrap(id.split(':')[0]);
+    } else {
+      // Assume just app id was passed in
+      app = fin.desktop.Application.wrap(id);
+    }
+
+    const win = app.getWindow();
+    return Window.wrap(win);
   }
 }
 
