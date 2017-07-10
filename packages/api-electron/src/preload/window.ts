@@ -348,6 +348,13 @@ class Window implements ssf.Window {
     wrappedWindow.id = String(win.id);
     return wrappedWindow;
   }
+
+  static getById(id: string) {
+    if (!isNaN(parseInt(id))) {
+      return Window.wrap(BrowserWindow.fromId(parseInt(id)));
+    }
+    return null;
+  }
 }
 
 export default Window;
