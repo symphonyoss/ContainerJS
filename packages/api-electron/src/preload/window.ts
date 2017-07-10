@@ -359,6 +359,14 @@ class Window implements ssf.Window {
       resolve(null);
     });
   }
+
+  static getAll() {
+    return new Promise<Window[]>(resolve => {
+      const windows = [];
+      BrowserWindow.getAllWindows().forEach((win) => windows.push(Window.wrap(win)));
+      resolve(windows);
+    });
+  }
 }
 
 export default Window;
