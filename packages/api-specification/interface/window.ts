@@ -283,6 +283,11 @@ declare namespace ssf {
      * @param window The native window to wrap.
      */
     static wrap(window: Electron.BrowserWindow | fin.OpenFinWindow | BrowserWindow): Window;
+
+    /**
+     * Returns all of the current windows.
+     */
+    static getAll(): Array<Window>;
   }
 
    /**
