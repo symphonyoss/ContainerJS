@@ -1,0 +1,31 @@
+{
+  "name": "containerjs-api-utility",
+  "version": "0.0.1",
+  "description": "Utility classes and functions for ContainerJS",
+  "main": "build/lib/index.js",
+  "module": "build/es/index.js",
+  "jsnext:main": "build/es/index.js",
+  "typings": "build/lib/index",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/symphonyoss/ContainerJS.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/symphonyoss/ContainerJS/issues"
+  },
+  "scripts": {
+    "clean": "rimraf build",
+    "build": "npm run clean && npm run build:cjs && npm run build:es",
+    "build:es": "rimraf build/es && tsc -p tsconfig.json -m ES2015 --outdir ./build/es",
+    "build:cjs": "rimraf build/lib && tsc -p tsconfig.json -m CommonJS --outdir ./build/lib"
+  },
+  "homepage": "https://symphonyoss.github.io/ContainerJS/",
+  "devDependencies": {
+    "rimraf": "^2.6.1",
+    "typescript": "^2.3.2"
+  },
+  "dependencies": {
+  }
+}

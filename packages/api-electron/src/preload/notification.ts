@@ -1,5 +1,7 @@
 const remote = require('electron').remote;
 const eNotify = remote.require('electron-notify');
+import { Uri } from 'containerjs-api-utility';
+
 const PERMISSION_GRANTED: ssf.NotificationPermission = 'granted';
 
 // Image style moves the image below the icon and title/body,
@@ -20,7 +22,7 @@ class Notification implements ssf.Notification {
     }
 
     eNotify.setConfig({
-      appIcon: this.getAbsoluteUrl(options.icon),
+      appIcon: Uri.getAbsoluteUrl(options.icon),
       height: options.image ? HEIGHT_WITH_IMAGE : HEIGHT_WITHOUT_IMAGE,
       defaultStyleImage: imageStyle
     });
@@ -28,19 +30,8 @@ class Notification implements ssf.Notification {
     eNotify.notify({
       title: title,
       text: options.body,
-      image: this.getAbsoluteUrl(options.image)
+      image: Uri.getAbsoluteUrl(options.image)
     });
-  }
-
-  getAbsoluteUrl(url) {
-    if (url && !url.startsWith('http:') && !url.startsWith('https:')) {
-      const path = url.startsWith('/')
-          ? location.origin
-          : location.href.substring(0, location.href.lastIndexOf('/'));
-
-      return `${path}/${url}`
-    }
-    return url
   }
 
   static requestPermission(): Promise<ssf.NotificationPermission> {

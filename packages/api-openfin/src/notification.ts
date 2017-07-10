@@ -1,3 +1,4 @@
+import { Uri } from 'containerjs-api-utility';
 const PERMISSION_GRANTED: ssf.NotificationPermission = 'granted';
 
 class Notification implements ssf.Notification {
@@ -9,26 +10,15 @@ class Notification implements ssf.Notification {
     const message = {
       title: title,
       text: options.body,
-      image: this.getAbsoluteUrl(options.image),
-      icon: this.getAbsoluteUrl(options.icon)
+      image: Uri.getAbsoluteUrl(options.image),
+      icon: Uri.getAbsoluteUrl(options.icon)
      };
 
     // eslint-disable-next-line no-new
     new fin.desktop.Notification({
-      url: this.getAbsoluteUrl('notification.html'),
+      url: Uri.getAbsoluteUrl('notification.html'),
       message: message
     });
-  }
-
-  getAbsoluteUrl(url) {
-    if (url && !url.startsWith('http:') && !url.startsWith('http:')) {
-      const path = url.startsWith('/')
-          ? location.origin
-          : location.href.substring(0, location.href.lastIndexOf('/'));
-
-      return `${path}/${url}`
-    }
-    return url
   }
 
   static requestPermission(): Promise<ssf.NotificationPermission> {
