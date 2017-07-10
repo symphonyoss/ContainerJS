@@ -133,7 +133,7 @@ class Window implements ssf.Window {
   innerWindow: fin.OpenFinWindow;
   id: string;
 
-  constructor(options: ssf.WindowOptions, callback?: any, errorCallback?: any) {
+  constructor(options?: ssf.WindowOptions, callback?: any, errorCallback?: any) {
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
       const event = 'message';
       if (this.eventListeners.has(event)) {
@@ -244,9 +244,7 @@ class Window implements ssf.Window {
         names.forEach((name) => {
           const app = fin.desktop.Application.wrap(name);
           const win = app.getWindow();
-          const childWin = new Window(undefined);
-          childWin.innerWindow = win;
-          childWin.id = win.uuid + ':' + win.name;
+          const childWin = Window.wrap(win);
           children.push(childWin);
         });
         resolve(children);
@@ -284,12 +282,9 @@ class Window implements ssf.Window {
           resolve(null);
           return;
         }
-
         const app = fin.desktop.Application.wrap(name);
         const win = app.getWindow();
-        const parentWin = new Window(undefined);
-        parentWin.innerWindow = win;
-        parentWin.id = win.uuid + ':' + win.name;
+        const parentWin = Window.wrap(win);
         resolve(parentWin);
       };
 
@@ -521,6 +516,13 @@ class Window implements ssf.Window {
 
     currentWindow = new Window(null, callback, errorCallback);
     return currentWindow;
+  }
+
+  static wrap(win: fin.OpenFinWindow) {
+    const wrappedWin = new Window();
+    wrappedWin.innerWindow = win;
+    wrappedWin.id = win.uuid + ':' + win.name;
+    return wrappedWin;
   }
 }
 
