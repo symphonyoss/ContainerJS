@@ -277,18 +277,6 @@ declare namespace ssf {
      * @returns The window.
      */
     static getCurrentWindow(callback?: () => void, errorCallback?: () => void): Window;
-
-    /**
-     * Wraps a native container window with a ContainerJS window.
-     * @param window The native window to wrap.
-     */
-    static wrap(window: Electron.BrowserWindow | fin.OpenFinWindow | BrowserWindow): Window;
-
-    /**
-     * Get the window object with a particular id. Returns null if no window with that id exists.
-     * @param id The id of the window.
-     */
-    static getById(id: string): Window;
   }
 
   /**
@@ -467,5 +455,17 @@ declare namespace ssf {
      * @returns A promise that resolves to nothing when the window has unmaximized.
      */
     unmaximize(): Promise<void>;
+
+    /**
+     * Wraps a native container window with a ContainerJS window.
+     * @param window The native window to wrap.
+     */
+    static wrap(window: Electron.BrowserWindow | fin.OpenFinWindow | BrowserWindow): Window;
+
+    /**
+     * Get the window object with a particular id. Returns null if no window with that id exists.
+     * @param id The id of the window.
+     */
+    static getById(id: string): Window;
   }
 }
