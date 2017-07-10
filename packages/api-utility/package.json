@@ -1,0 +1,18 @@
+{
+  "name": "containerjs-api-utility",
+  "version": "0.0.1",
+  "description": "Utility classes and functions for ContainerJS",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/symphonyoss/ContainerJS.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/symphonyoss/ContainerJS/issues"
+  },
+  "homepage": "https://symphonyoss.github.io/ContainerJS/",
+  "dependencies": {
+  }
+}
