@@ -15,7 +15,12 @@ declare namespace ssf {
   }
   type NotificationPermission = "default" | "denied" | "granted";
 
-  class Notification {
+  interface NotificationEvent {
+    /** Fires when the notification is clicked */
+    click: 'click';
+  }
+
+  class Notification extends ssf.EventEmitter {
     /**
      * Create a notification
      * @param title - The title text of the notification.
