@@ -549,6 +549,25 @@ class Window implements ssf.Window {
       return null;
     });
   }
+
+  static getAll() {
+    return new Promise<Window[]>((resolve) => {
+      const subscribeListener = (appUuids) => {
+        fin.desktop.InterApplicationBus.unsubscribe('*', 'ssf-all-windows', subscribeListener);
+        const windows = [];
+        if (appUuids.length > 0) {
+          appUuids.forEach((uuid) => {
+            windows.push(Window.getById(uuid));
+          });
+        }
+
+        resolve(windows);
+      };
+
+      fin.desktop.InterApplicationBus.publish('ssf-get-all-windows', '');
+      fin.desktop.InterApplicationBus.subscribe('*' , 'ssf-all-windows', subscribeListener);
+    });
+  }
 }
 
 export default Window;

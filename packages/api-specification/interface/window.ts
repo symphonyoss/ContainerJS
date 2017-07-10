@@ -287,7 +287,7 @@ declare namespace ssf {
     /**
      * Returns all of the current windows.
      */
-    static getAll(): Array<Window>;
+    static getAll(): Promise<Array<Window>>;
   }
 
    /**

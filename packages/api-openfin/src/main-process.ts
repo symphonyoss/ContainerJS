@@ -67,6 +67,17 @@ const mainWindowCode = () => {
     });
   };
 
+  const getAllWindows = (node) => {
+    let windows = [];
+    node.forEach((win) => {
+      windows.push(win.name);
+      if (node.children) {
+        windows.concat(getAllWindows(node.children));
+      }
+    });
+    return windows;
+  };
+
   fin.desktop.InterApplicationBus.subscribe('*', 'ssf-new-window', (data) => {
     const app = fin.desktop.Application.wrap(data.windowName);
     app.getWindow().addEventListener('closed', () => {
@@ -105,6 +116,11 @@ const mainWindowCode = () => {
   fin.desktop.InterApplicationBus.subscribe('*', 'ssf-get-child-windows', (name, uuid) => {
     const children = getChildWindows(name, childTree);
     fin.desktop.InterApplicationBus.send(uuid, 'ssf-child-windows', children);
+  });
+
+  fin.desktop.InterApplicationBus.subscribe('*', 'ssf-get-all-windows', (data, uuid) => {
+    const windows = getAllWindows(childTree);
+    fin.desktop.InterApplicationBus.send(uuid, 'ssf-all-windows', windows);
   });
 
   fin.desktop.Window.getCurrent().addEventListener('close-requested', () => {
