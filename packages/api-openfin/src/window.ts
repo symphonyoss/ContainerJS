@@ -555,13 +555,16 @@ class Window implements ssf.Window {
       const subscribeListener = (appUuids) => {
         fin.desktop.InterApplicationBus.unsubscribe('*', 'ssf-all-windows', subscribeListener);
         const windows = [];
+        const promises = [];
         if (appUuids.length > 0) {
           appUuids.forEach((uuid) => {
-            windows.push(Window.getById(uuid));
+            promises.push(Window.getById(uuid).then((win) => windows.push(win)));
           });
         }
 
-        resolve(windows);
+        Promise.all(promises).then(() => {
+          resolve(windows);
+        });
       };
 
       fin.desktop.InterApplicationBus.publish('ssf-get-all-windows', '');

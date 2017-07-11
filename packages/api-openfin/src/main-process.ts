@@ -71,8 +71,8 @@ const mainWindowCode = () => {
     let windows = [];
     node.forEach((win) => {
       windows.push(win.name);
-      if (node.children) {
-        windows.concat(getAllWindows(node.children));
+      if (win.children) {
+        windows = windows.concat(getAllWindows(win.children));
       }
     });
     return windows;

@@ -466,7 +466,7 @@ declare namespace ssf {
      * Get the window object with a particular id. Returns null if no window with that id exists.
      * @param id The id of the window.
      */
-    static getById(id: string): Window;
+    static getById(id: string): Promise<Window>;
 
     /**
      * Returns all of the current windows.
