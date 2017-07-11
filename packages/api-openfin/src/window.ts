@@ -522,6 +522,14 @@ class Window implements ssf.Window {
   }
 
   static getById(id: string) {
+    const appExists = (uuid): Promise<boolean> => {
+      return new Promise<boolean>(resolve => {
+        fin.desktop.System.getAllApplications((apps) => {
+          resolve(apps.filter((app) => app.uuid === uuid).length === 1);
+        });
+      });
+    };
+
     const idRegex = '(' +    // Start group 1
             '[\w\d-]+' +     // At least 1 word character, digit or dash
             ')' +            // End group 1
@@ -529,15 +537,34 @@ class Window implements ssf.Window {
             '\\1';            // Same string that was matched in group 1
 
     let app = null;
+    let existsPromise: Promise<void>;
     if (id.match(new RegExp(idRegex))) {
-      app = fin.desktop.Application.wrap(id.split(':')[0]);
+      existsPromise = appExists(id.split(':')[0]).then((exists) => {
+        if (!exists) {
+          app = null;
+        } else {
+          app = fin.desktop.Application.wrap(id.split(':')[0]);
+        }
+      });
     } else {
       // Assume just app id was passed in
-      app = fin.desktop.Application.wrap(id);
+      existsPromise = appExists(id).then((exists) => {
+        if (!exists) {
+          app = null;
+        } else {
+          app = fin.desktop.Application.wrap(id);
+        }
+      });
     }
 
-    const win = app.getWindow();
-    return Window.wrap(win);
+    return existsPromise.then(() => {
+      if (app) {
+        const win = app.getWindow();
+        return Window.wrap(win);
+      }
+
+      return null;
+    })
   }
 }
 
