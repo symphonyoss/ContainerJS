@@ -456,7 +456,7 @@ declare namespace ssf {
      */
     unmaximize(): Promise<void>;
 
-        /**
+    /**
      * Wraps a native container window with a ContainerJS window.
      * @param window The native window to wrap.
      */
