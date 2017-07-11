@@ -560,31 +560,6 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
 
         return chainPromises(steps);
       });
-
-      it('Should wrap a native window in a containerjs window object #ssf.Window.wrap', function() {
-        const windowTitle = 'windownamewrap';
-        const windowOptions = getWindowOptions({
-          name: windowTitle
-        });
-
-        /* eslint-disable no-undef */
-        const wrapScript = (callback) => {
-          ssf.app.ready().then(() => {
-            const inner = ssf.Window.getCurrentWindow().innerWindow;
-            const win = ssf.Window.wrap(inner);
-            callback(win.innerWindow != null);
-          });
-        };
-        /* eslint-enable no-undef */
-
-        const steps = [
-          ...setupWindowSteps(windowOptions),
-          () => executeAsyncJavascript(app.client, wrapScript),
-          (result) => assert.equal(result.value, true)
-        ];
-
-        return chainPromises(steps);
-      });
     });
 
     describe('New Window', function() {
