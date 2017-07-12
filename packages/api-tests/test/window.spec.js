@@ -18,12 +18,28 @@ const getWindowOptions = (options) => Object.assign({
   height: 200
 }, options);
 
+const initialBounds = { x: 0, y: 0, width: 200, height: 200 };
+
 const setupWindowSteps = (windowOptions) => [
   () => app.client.isVisible('.visible-check'),
   () => openNewWindow(app.client, windowOptions),
   () => selectWindow(app.client, 1),
-  () => app.client.waitForVisible('.visible-check')
+  () => app.client.waitForVisible('.visible-check'),
+  () => callAsyncWindowMethod('restore'),
+  () => callAsyncWindowMethod('setBounds', initialBounds)
 ];
+
+const callAsyncWindowMethod = (method, ...args) => {
+  /* eslint-disable no-undef */
+  const script = (method, args, callback) => {
+    var currentWin = ssf.Window.getCurrentWindow();
+    currentWin[method](...args).then((data) => {
+      callback(data);
+    });
+  };
+  /* eslint-enable no-undef */
+  return executeAsyncJavascript(app.client, script, method, args);
+};
 
 const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
@@ -42,18 +58,6 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         return app.stop();
       }
     });
-
-    const callAsyncWindowMethod = (method, ...args) => {
-      /* eslint-disable no-undef */
-      const script = (method, args, callback) => {
-        var currentWin = ssf.Window.getCurrentWindow();
-        currentWin[method](...args).then((data) => {
-          callback(data);
-        });
-      };
-      /* eslint-enable no-undef */
-      return executeAsyncJavascript(app.client, script, method, args);
-    };
 
     it('Should have ssf.Window available globally', function() {
       /* eslint-disable no-undef */
