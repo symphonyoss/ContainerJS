@@ -27,5 +27,6 @@
     "typescript": "^2.3.2"
   },
   "dependencies": {
+    "containerjs-api-specification": "^0.0.3"
   }
 }
