@@ -277,6 +277,12 @@ declare namespace ssf {
      * @returns The window.
      */
     static getCurrentWindow(callback?: () => void, errorCallback?: () => void): Window;
+
+    /**
+     * Wraps a native container window with a ContainerJS window.
+     * @param window The native window to wrap.
+     */
+    static wrap(window: Electron.BrowserWindow | fin.OpenFinWindow | BrowserWindow): Window;
   }
 
   /**

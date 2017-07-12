@@ -17,7 +17,7 @@ class Window implements ssf.WindowCore {
   eventListeners: Map<string, ((...args: any[]) => void)[]> = new Map();
   id: string;
 
-  constructor(options, callback?, errorCallback?) {
+  constructor(options?, callback?, errorCallback?) {
     this.children = [];
 
     this.eventListeners = new Map();
@@ -83,9 +83,7 @@ class Window implements ssf.WindowCore {
     return new Promise<Window>(resolve => {
       let newWin = null;
       if (window.opener) {
-        newWin = new Window(null);
-        newWin.innerWindow = window.opener;
-        newWin.id = window.opener.name;
+        newWin = Window.wrap(window.opener);
       }
 
       resolve(newWin);
@@ -241,6 +239,13 @@ class Window implements ssf.WindowCore {
 
     currentWindow = new Window(null, callback, errorCallback);
     return currentWindow;
+  }
+
+  static wrap(win: BrowserWindow) {
+    const wrappedWindow = new Window();
+    wrappedWindow.innerWindow = win;
+    wrappedWindow.id = String(win.name);
+    return wrappedWindow;
   }
 }
 

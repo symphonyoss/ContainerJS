@@ -341,6 +341,13 @@ class Window implements ssf.Window {
     currentWindow = new Window(null, callback, errorCallback);
     return currentWindow;
   }
+
+  static wrap(win: Electron.BrowserWindow) {
+    const wrappedWindow = new Window();
+    wrappedWindow.innerWindow = win;
+    wrappedWindow.id = String(win.id);
+    return wrappedWindow;
+  }
 }
 
 export default Window;
