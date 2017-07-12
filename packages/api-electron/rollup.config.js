@@ -11,7 +11,7 @@ export default {
       jsnext: true,
       main: true
     }),
-    
+
     commonjs({
       ignore: ['electron']
     })
