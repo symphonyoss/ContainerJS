@@ -250,7 +250,7 @@ class Window extends Emitter implements ssf.Window {
   innerRemoveEventListener(event: string, listener: (...args: any[]) => void) {
     this.innerWindow.removeListener(event, listener);
   }
-  
+
   postMessage(message) {
     MessageService.send(this.innerWindow.id, 'ssf-window-message', message);
   }

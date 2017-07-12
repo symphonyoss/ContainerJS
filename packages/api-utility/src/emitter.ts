@@ -55,8 +55,8 @@ abstract class Emitter implements ssf.EventEmitter {
 
   removeListener(event, listener) {
     if (this.eventListeners.has(event)) {
-      let listeners = this.eventListeners.get(event);
-      let index = listeners.indexOf(listener);
+      const listeners = this.eventListeners.get(event);
+      const index = listeners.indexOf(listener);
       if (index >= 0) {
         listeners.splice(index, 1);
         listeners.length > 0
