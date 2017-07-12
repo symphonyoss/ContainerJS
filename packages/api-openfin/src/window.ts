@@ -1,4 +1,5 @@
 let currentWindow = null;
+import { Emitter } from 'containerjs-api-utility';
 import MessageService from './message-service';
 import createMainProcess from './main-process';
 
@@ -128,17 +129,15 @@ const convertOptions = (options: ssf.WindowOptions) => {
   return clonedOptions;
 };
 
-class Window implements ssf.Window {
-  eventListeners: Map<string, ((...args: any[]) => void)[]> = new Map();
+class Window extends Emitter implements ssf.Window {
   innerWindow: fin.OpenFinWindow;
   id: string;
 
   constructor(options?: ssf.WindowOptions, callback?: any, errorCallback?: any) {
+    super();
+
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
-      const event = 'message';
-      if (this.eventListeners.has(event)) {
-        this.eventListeners.get(event).forEach(listener => listener(...args));
-      }
+      this.emit('message', ...args);
     });
 
     if (!options) {
@@ -427,78 +426,12 @@ class Window implements ssf.Window {
     return this.asPromise<void>('updateOptions', options);
   }
 
-  addListener(event, listener) {
-    if (this.eventListeners.has(event)) {
-      const temp = this.eventListeners.get(event);
-      temp.push(listener);
-      this.eventListeners.set(event, temp);
-    } else {
-      this.eventListeners.set(event, [listener]);
-    }
+  innerAddEventListener(event: string, listener: (...args: any[]) => void) {
     this.innerWindow.addEventListener(eventMap[event], listener);
-    return this;
   }
 
-  on(event, listener) {
-    return this.addListener(event, listener);
-  }
-
-  eventNames() {
-    return Array.from(this.eventListeners.keys());
-  }
-
-  listenerCount(event) {
-    return this.eventListeners.has(event) ? this.eventListeners.get(event).length : 0;
-  }
-
-  listeners(event) {
-    return this.eventListeners.get(event);
-  }
-
-  once(event, listener) {
-    // Remove the listener once it is called
-    const unsubscribeListener = (evt) => {
-      this.removeListener(event, unsubscribeListener);
-      listener(evt);
-    };
-
-    this.on(event, unsubscribeListener);
-    return this;
-  }
-
-  removeListener(event, listener) {
-    if (this.eventListeners.has(event)) {
-      const listeners = this.eventListeners.get(event);
-      const index = listeners.indexOf(listener);
-      if (index >= 0) {
-        listeners.splice(index, 1);
-        listeners.length > 0
-          ? this.eventListeners.set(event, listeners)
-          : this.eventListeners.delete(event);
-      }
-    }
-
+  innerRemoveEventListener(event: string, listener: (...args: any[]) => void) {
     this.innerWindow.removeEventListener(eventMap[event], listener);
-    return this;
-  }
-
-  removeAllListeners(eventName) {
-    const removeAllListenersForEvent = (event) => {
-      if (this.eventListeners.has(event)) {
-        this.eventListeners.get(event).forEach((listener) => {
-          this.innerWindow.removeEventListener(eventMap[event], listener);
-        });
-        this.eventListeners.delete(event);
-      }
-    };
-
-    if (eventName) {
-      removeAllListenersForEvent(eventName);
-    } else {
-      this.eventListeners.forEach((value, key) => removeAllListenersForEvent(key));
-    }
-
-    return this;
   }
 
   postMessage(message) {

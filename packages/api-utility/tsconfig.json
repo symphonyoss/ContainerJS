@@ -13,6 +13,7 @@
         "declaration": true
     },
     "include": [
-        "./index.ts"
+        "./index.ts",
+        "node_modules/containerjs-api-specification/interface/*.ts"
     ]
 }

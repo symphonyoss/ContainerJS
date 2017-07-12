@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "containerjs-api-specification": "^0.0.3",
+    "containerjs-api-utility": "0.0.1",
     "copyfiles": "^1.2.0",
     "rimraf": "^2.6.1",
     "rollup": "^0.41.6",
