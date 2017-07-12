@@ -4,8 +4,9 @@
   "scripts": {
     "bootstrap": "if-env CI=true && lerna bootstrap --concurrency 1 || lerna bootstrap",
     "build": "lerna run build",
-    "test": "npm run lint && lerna run test",
-    "lint": "eslint --ignore-path .gitignore **/*.js",
+    "test": "npm run lint:js && npm run lint:ts && lerna run test",
+    "lint:js": "eslint --ignore-path .gitignore **/*.js",
+    "lint:ts": "tslint --exclude **/node_modules/**/*.* **/*.ts",
     "postinstall": "npm run bootstrap",
     "test:ui": "cd packages/api-tests && npm run test:ui",
     "test:ci": "cd packages/api-tests && npm run test:ci && node generate-test-report.js",
@@ -27,6 +28,8 @@
     "eslint-plugin-standard": "^2.1.1",
     "if-env": "^1.0.0",
     "lerna": "2.0.0-rc.3",
-    "marked": "^0.3.6"
+    "marked": "^0.3.6",
+    "tslint": "^5.5.0",
+    "typescript": "^2.4.1"
   }
 }

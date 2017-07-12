@@ -46,7 +46,7 @@ const guid = () => {
     return Math.floor((1 + Math.random()) * 0x10000)
       .toString(16)
       .substring(1);
-  }
+  };
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     s4() + '-' + s4() + s4() + s4();
 };
@@ -57,8 +57,8 @@ const getDefaultOptions = () => ({
 });
 
 const convertOptions = (options: ssf.WindowOptions) => {
-  const frameSize = navigator.appVersion.indexOf('Win') != -1 ? 20 : 25;
-  let clonedOptions: any = Object.assign({}, getDefaultOptions(), options);
+  const frameSize = navigator.appVersion.indexOf('Win') !== -1 ? 20 : 25;
+  const clonedOptions: any = Object.assign({}, getDefaultOptions(), options);
 
   const optionsMap = {
     'alwaysOnTop': 'alwaysOnTop',
@@ -468,8 +468,8 @@ class Window implements ssf.Window {
 
   removeListener(event, listener) {
     if (this.eventListeners.has(event)) {
-      let listeners = this.eventListeners.get(event);
-      let index = listeners.indexOf(listener);
+      const listeners = this.eventListeners.get(event);
+      const index = listeners.indexOf(listener);
       if (index >= 0) {
         listeners.splice(index, 1);
         listeners.length > 0
@@ -537,7 +537,6 @@ class Window implements ssf.Window {
             '\\1';            // Same string that was matched in group 1
 
     let app = null;
-    let existsPromise: Promise<void>;
     const uuid = id.match(new RegExp(idRegex)) ? id.split(':')[0] : id;
     return appExists(uuid).then((exists) => {
       app = exists ? fin.desktop.Application.wrap(uuid) : null;
@@ -548,7 +547,7 @@ class Window implements ssf.Window {
       }
 
       return null;
-    })
+    });
   }
 }
 

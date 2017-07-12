@@ -45,7 +45,7 @@ namespace map {
     static getVersionInfo() {
       // Not implemented in containerjs
       return new Promise((resolve, reject) => {
-        reject(new Error('Not currently implemented'))
+        reject(new Error('Not currently implemented'));
       });
     }
   }

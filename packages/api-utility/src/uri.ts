@@ -7,9 +7,9 @@ class Uri {
           ? location.origin
           : location.href.substring(0, location.href.lastIndexOf('/'));
 
-      return `${path}/${url}`
+      return `${path}/${url}`;
     }
-    return url
+    return url;
   }
 }
 

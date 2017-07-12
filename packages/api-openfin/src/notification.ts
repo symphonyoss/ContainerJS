@@ -8,7 +8,7 @@ class Notification implements ssf.Notification {
     }
 
     const message = {
-      title: title,
+      title,
       text: options.body,
       image: Uri.getAbsoluteUrl(options.image),
       icon: Uri.getAbsoluteUrl(options.icon)
@@ -17,7 +17,7 @@ class Notification implements ssf.Notification {
     // eslint-disable-next-line no-new
     new fin.desktop.Notification({
       url: Uri.getAbsoluteUrl('notification.html'),
-      message: message
+      message
     });
   }
 
