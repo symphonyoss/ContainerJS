@@ -8,7 +8,6 @@
             "spaces"
         ],
         "jsdoc-format": true,
-        "linebreak-style": [true, "CRLF"],
         "no-inferrable-types": true,
         "no-internal-module": true,
         "no-null-keyword": false,
