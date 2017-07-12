@@ -6,7 +6,7 @@ const mainWindowCode = () => {
   const childTree = [];
 
   const addParent = (parentName, windowName, tree) => {
-    let win = tree.find(w => w.name === parentName);
+    const win = tree.find(w => w.name === parentName);
     if (win) {
       win.children.push({
         name: windowName,
@@ -21,7 +21,7 @@ const mainWindowCode = () => {
   };
 
   const getParentWindow = (name, parentName, tree) => {
-    let win = tree.find(w => w.name === name);
+    const win = tree.find(w => w.name === name);
     if (win) {
       return parentName;
     } else {
@@ -35,7 +35,7 @@ const mainWindowCode = () => {
   };
 
   const getChildWindows = (name, tree) => {
-    let win = tree.find(w => w.name === name);
+    const win = tree.find(w => w.name === name);
     if (win) {
       return win.children.map(c => c.name);
     } else {
@@ -49,7 +49,7 @@ const mainWindowCode = () => {
   };
 
   const deleteWindow = (name, tree) => {
-    let index = tree.findIndex(w => w.name === name);
+    const index = tree.findIndex(w => w.name === name);
     if (index >= 0) {
       tree.splice(index, 1);
     } else {
@@ -65,7 +65,7 @@ const mainWindowCode = () => {
       fin.desktop.Application.wrap(child).close(true);
       closeChildren(child);
     });
-  }
+  };
 
   fin.desktop.InterApplicationBus.subscribe('*', 'ssf-new-window', (data) => {
     const app = fin.desktop.Application.wrap(data.windowName);
@@ -133,7 +133,7 @@ const createMainProcess = (done) => {
   }, () => {
     app.run(() => {
       // executeJavaScript only takes a string, but writing the code as a string means we lose typescript checking
-      const body = mainWindowCode.toString().slice(mainWindowCode.toString().indexOf("{") + 1, mainWindowCode.toString().lastIndexOf("}"));
+      const body = mainWindowCode.toString().slice(mainWindowCode.toString().indexOf('{') + 1, mainWindowCode.toString().lastIndexOf('}'));
       const mainWindow = app.getWindow();
       mainWindow.executeJavaScript(body, () => {
         // Tell the mainWindow about this window
@@ -146,6 +146,6 @@ const createMainProcess = (done) => {
       });
     });
   }, (err) => done(err));
-}
+};
 
 export default createMainProcess;

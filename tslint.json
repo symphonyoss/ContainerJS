@@ -1,6 +1,5 @@
 {
     "rules": {
-        "class-name": true,
         "comment-format": [true,
             "check-space"
         ],
@@ -27,7 +26,7 @@
             "avoid-escape"
         ],
         "semicolon": [true, "always", "ignore-bound-class-methods"],
-        "triple-equals": true,
+        "triple-equals": [true, "allow-null-check"],
         "typedef-whitespace": [
             true,
             {

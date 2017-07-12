@@ -13,7 +13,7 @@ declare namespace ssf {
      */
     image?: string;
   }
-  type NotificationPermission = "default" | "denied" | "granted";
+  type NotificationPermission = 'default' | 'denied' | 'granted';
 
   class Notification {
     /**

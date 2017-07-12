@@ -283,8 +283,8 @@ class Window implements ssf.Window {
 
   removeListener(event, listener) {
     if (this.eventListeners.has(event)) {
-      let listeners = this.eventListeners.get(event);
-      let index = listeners.indexOf(listener);
+      const listeners = this.eventListeners.get(event);
+      const index = listeners.indexOf(listener);
       if (index >= 0) {
         listeners.splice(index, 1);
         listeners.length > 0
@@ -322,7 +322,7 @@ class Window implements ssf.Window {
 
   getChildWindows() {
     return new Promise<ReadonlyArray<Window>>(resolve => {
-      let children = [];
+      const children = [];
       this.innerWindow.getChildWindows().forEach(win => {
         const child = new Window(null, null, null);
         child.innerWindow = win;
@@ -352,7 +352,7 @@ class Window implements ssf.Window {
   static getById(id: string) {
     return new Promise<Window>(resolve => {
       if (!isNaN(parseInt(id))) {
-        const bw = BrowserWindow.fromId(parseInt(id))
+        const bw = BrowserWindow.fromId(parseInt(id));
         resolve(bw === null ? null : Window.wrap(bw));
         return;
       }

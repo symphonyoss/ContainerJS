@@ -6,10 +6,10 @@ import {
 let currentWindow = null;
 
 const getWindowOffsets = (win) => {
-    var xOffset = (win.outerWidth / 2);
-    var yOffset = (win.outerHeight / 2);
+    const xOffset = (win.outerWidth / 2);
+    const yOffset = (win.outerHeight / 2);
     return [Math.floor(xOffset), Math.floor(yOffset)];
-}
+};
 
 class Window implements ssf.WindowCore {
   children: ssf.Window[];
@@ -181,8 +181,8 @@ class Window implements ssf.WindowCore {
 
   removeListener(event, listener) {
     if (this.eventListeners.has(event)) {
-      let listeners = this.eventListeners.get(event);
-      let index = listeners.indexOf(listener);
+      const listeners = this.eventListeners.get(event);
+      const index = listeners.indexOf(listener);
       if (index >= 0) {
         listeners.splice(index, 1);
         listeners.length > 0

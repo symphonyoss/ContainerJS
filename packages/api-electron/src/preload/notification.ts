@@ -7,8 +7,8 @@ const PERMISSION_GRANTED: ssf.NotificationPermission = 'granted';
 // Image style moves the image below the icon and title/body,
 // to match the style of native notifications
 const imageStyle = {
-        overflow: 'hidden',
-        display: 'block',
+        overflow:  'hidden',
+        display:  'block',
         position: 'absolute',
         bottom: 10
       };
@@ -23,12 +23,12 @@ class Notification implements ssf.Notification {
 
     eNotify.setConfig({
       appIcon: Uri.getAbsoluteUrl(options.icon),
-      height: options.image ? HEIGHT_WITH_IMAGE : HEIGHT_WITHOUT_IMAGE,
-      defaultStyleImage: imageStyle
+      height:  options.image ? HEIGHT_WITH_IMAGE : HEIGHT_WITHOUT_IMAGE,
+      defaultStyleImage:  imageStyle
     });
 
     eNotify.notify({
-      title: title,
+      title,
       text: options.body,
       image: Uri.getAbsoluteUrl(options.image)
     });

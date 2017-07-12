@@ -85,7 +85,7 @@ declare namespace ssf {
     /**
      * Whether window is resizable. Default is true.
      */
-    resizable?: boolean
+    resizable?: boolean;
     /**
      * Whether window should be shown when created. Default is true.
      */
@@ -136,7 +136,7 @@ declare namespace ssf {
     /**
      * The id that uniquely identifies the window
      */
-    id: string
+    id: string;
 
     /**
      * The native window for the platform the API is running on.
@@ -162,7 +162,7 @@ declare namespace ssf {
      */
     close(): Promise<void>;
 
-      /**
+    /**
      * Focuses the window.
      * @returns A promise which resolves to nothing when the function has completed.
      */
@@ -285,7 +285,7 @@ declare namespace ssf {
     static wrap(window: Electron.BrowserWindow | fin.OpenFinWindow | BrowserWindow): Window;
   }
 
-  /**
+   /**
     * Creates and controls windows.
     *
     * Windows are created via a constructor which takes a configuration object
