@@ -242,9 +242,7 @@ class Window implements ssf.Window {
         fin.desktop.InterApplicationBus.unsubscribe('*' , 'ssf-child-windows', subscribeListener);
         const children = [];
         names.forEach((name) => {
-          const app = fin.desktop.Application.wrap(name);
-          const win = app.getWindow();
-          const childWin = Window.wrap(win);
+          const childWin = Window.getById(name);
           children.push(childWin);
         });
         resolve(children);
@@ -282,9 +280,7 @@ class Window implements ssf.Window {
           resolve(null);
           return;
         }
-        const app = fin.desktop.Application.wrap(name);
-        const win = app.getWindow();
-        const parentWin = Window.wrap(win);
+        const parentWin = Window.getById(name);
         resolve(parentWin);
       };
 
@@ -523,6 +519,36 @@ class Window implements ssf.Window {
     wrappedWin.innerWindow = win;
     wrappedWin.id = win.uuid + ':' + win.name;
     return wrappedWin;
+  }
+
+  static getById(id: string) {
+    const appExists = (uuid): Promise<boolean> => {
+      return new Promise<boolean>(resolve => {
+        fin.desktop.System.getAllApplications((apps) => {
+          resolve(apps.filter((app) => app.uuid === uuid).length === 1);
+        });
+      });
+    };
+
+    const idRegex = '(' +    // Start group 1
+            '[\w\d-]+' +     // At least 1 word character, digit or dash
+            ')' +            // End group 1
+            ':' +            // colon
+            '\\1';            // Same string that was matched in group 1
+
+    let app = null;
+    let existsPromise: Promise<void>;
+    const uuid = id.match(new RegExp(idRegex)) ? id.split(':')[0] : id;
+    return appExists(uuid).then((exists) => {
+      app = exists ? fin.desktop.Application.wrap(uuid) : null;
+    }).then(() => {
+      if (app) {
+        const win = app.getWindow();
+        return Window.wrap(win);
+      }
+
+      return null;
+    })
   }
 }
 

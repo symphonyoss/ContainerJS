@@ -616,7 +616,7 @@ describe('WindowCore API', function(done) {
       return chainPromises(steps);
     });
 
-    it.only('Should wrap a native window in a containerjs window object #ssf.Window.wrap', function() {
+    it('Should wrap a native window in a containerjs window object #ssf.Window.wrap', function() {
       const windowTitle = 'windownamewrap';
       const windowOptions = getWindowOptions({
         name: windowTitle

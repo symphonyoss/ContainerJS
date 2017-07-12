@@ -348,6 +348,17 @@ class Window implements ssf.Window {
     wrappedWindow.id = String(win.id);
     return wrappedWindow;
   }
+
+  static getById(id: string) {
+    return new Promise<Window>(resolve => {
+      if (!isNaN(parseInt(id))) {
+        const bw = BrowserWindow.fromId(parseInt(id))
+        resolve(bw === null ? null : Window.wrap(bw));
+        return;
+      }
+      resolve(null);
+    });
+  }
 }
 
 export default Window;

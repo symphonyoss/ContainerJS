@@ -109,6 +109,58 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         return chainPromises(steps);
       });
 
+      it('Should get a window by its id #ssf.Window.getById', function() {
+        const windowTitle = 'windownamegetbyid';
+        const windowOptions = getWindowOptions({
+          name: windowTitle
+        });
+
+        /* eslint-disable no-undef */
+        const idScript = (callback) => {
+          ssf.app.ready().then(() => {
+            const id = window.newWin.getId();
+            const win = ssf.Window.getById(id);
+            callback(win !== null);
+          });
+        };
+        /* eslint-enable no-undef */
+
+        const steps = [
+          ...setupWindowSteps(windowOptions),
+          () => selectWindow(app.client, 0),
+          () => executeAsyncJavascript(app.client, idScript),
+          (result) => assert.equal(result.value, true)
+        ];
+
+        return chainPromises(steps);
+      });
+
+      it('Should return null if no window with id exists #ssf.Window.getById', function() {
+        const windowTitle = 'windownamegetbyidwrong';
+        const windowOptions = getWindowOptions({
+          name: windowTitle
+        });
+
+        /* eslint-disable no-undef */
+        const idScript = (callback) => {
+          ssf.app.ready().then(() => {
+            ssf.Window.getById('thisiswrong').then(win => {
+              callback(win === null);
+            });
+          });
+        };
+        /* eslint-enable no-undef */
+
+        const steps = [
+          ...setupWindowSteps(windowOptions),
+          () => selectWindow(app.client, 0),
+          () => executeAsyncJavascript(app.client, idScript),
+          (result) => assert.equal(result.value, true)
+        ];
+
+        return chainPromises(steps);
+      });
+
       it('Should return the maximum width #ssf.Window.getMaximumSize', function() {
         const windowTitle = 'windownamemaxwidth';
         const maxWidth = 500;

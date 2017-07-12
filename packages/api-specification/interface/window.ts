@@ -461,5 +461,11 @@ declare namespace ssf {
      * @returns A promise that resolves to nothing when the window has unmaximized.
      */
     unmaximize(): Promise<void>;
+
+    /**
+     * Get the window object with a particular id. Returns null if no window with that id exists.
+     * @param id The id of the window.
+     */
+    static getById(id: string): Promise<Window>;
   }
 }
