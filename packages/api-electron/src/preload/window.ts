@@ -294,6 +294,10 @@ class Window extends Emitter implements ssf.Window {
       resolve(null);
     });
   }
+
+  static getAll() {
+    return new Promise<Window[]>(resolve => resolve(BrowserWindow.getAllWindows().map(Window.wrap)));
+  }
 }
 
 export default Window;

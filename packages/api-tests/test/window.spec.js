@@ -81,6 +81,31 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
 
       });
 
+      it('Should get all open windows #ssf.Window.getAll', function() {
+        const windowTitle = 'windownamegetall';
+        const windowOptions = getWindowOptions({
+          name: windowTitle
+        });
+
+        /* eslint-disable no-undef */
+        const allScript = (callback) => {
+          ssf.app.ready().then(() => {
+            ssf.Window.getAll().then((windows) => {
+              callback(windows.length);
+            });
+          });
+        };
+        /* eslint-enable no-undef */
+
+        const steps = [
+          ...setupWindowSteps(windowOptions),
+          () => executeAsyncJavascript(app.client, allScript),
+          (result) => assert.equal(result.value, 2)
+        ];
+
+        return chainPromises(steps);
+      });
+
       it('Should get the bounds of the window #ssf.Window.getBounds', function() {
         const windowTitle = 'windownamegetbounds';
         const x = 50;

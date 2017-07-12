@@ -467,5 +467,10 @@ declare namespace ssf {
      * @param id The id of the window.
      */
     static getById(id: string): Promise<Window>;
+
+    /**
+     * Returns all of the current windows.
+     */
+    static getAll(): Promise<Array<Window>>;
   }
 }
