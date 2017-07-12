@@ -538,26 +538,10 @@ class Window implements ssf.Window {
 
     let app = null;
     let existsPromise: Promise<void>;
-    if (id.match(new RegExp(idRegex))) {
-      existsPromise = appExists(id.split(':')[0]).then((exists) => {
-        if (!exists) {
-          app = null;
-        } else {
-          app = fin.desktop.Application.wrap(id.split(':')[0]);
-        }
-      });
-    } else {
-      // Assume just app id was passed in
-      existsPromise = appExists(id).then((exists) => {
-        if (!exists) {
-          app = null;
-        } else {
-          app = fin.desktop.Application.wrap(id);
-        }
-      });
-    }
-
-    return existsPromise.then(() => {
+    const uuid = id.match(new RegExp(idRegex)) ? id.split(':')[0] : id;
+    return appExists(uuid).then((exists) => {
+      app = exists ? fin.desktop.Application.wrap(uuid) : null;
+    }).then(() => {
       if (app) {
         const win = app.getWindow();
         return Window.wrap(win);
