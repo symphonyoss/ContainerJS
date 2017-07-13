@@ -1,6 +1,6 @@
 const remote = require('electron').remote;
 const eNotify = remote.require('electron-notify');
-import { Uri } from 'containerjs-api-utility';
+import { Uri, Emitter } from 'containerjs-api-utility';
 
 const PERMISSION_GRANTED: ssf.NotificationPermission = 'granted';
 
@@ -15,8 +15,10 @@ const imageStyle = {
 const HEIGHT_WITHOUT_IMAGE = 65;
 const HEIGHT_WITH_IMAGE = 100;
 
-class Notification implements ssf.Notification {
+class Notification extends Emitter implements ssf.Notification {
   constructor(title: string, options: ssf.NotificationOptions) {
+    super();
+
     if (!options) {
       options = {};
     }
@@ -30,7 +32,8 @@ class Notification implements ssf.Notification {
     eNotify.notify({
       title,
       text: options.body,
-      image: Uri.getAbsoluteUrl(options.image)
+      image: Uri.getAbsoluteUrl(options.image),
+      onClickFunc: data => this.emit('click', data)
     });
   }
 

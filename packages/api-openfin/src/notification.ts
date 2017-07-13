@@ -1,8 +1,10 @@
-import { Uri } from 'containerjs-api-utility';
+import { Uri, Emitter } from 'containerjs-api-utility';
 const PERMISSION_GRANTED: ssf.NotificationPermission = 'granted';
 
-class Notification implements ssf.Notification {
+class Notification extends Emitter implements ssf.Notification {
   constructor(title: string, options: ssf.NotificationOptions) {
+    super();
+
     if (!options) {
       options = {};
     }
@@ -17,7 +19,8 @@ class Notification implements ssf.Notification {
     // eslint-disable-next-line no-new
     new fin.desktop.Notification({
       url: Uri.getAbsoluteUrl('notification.html'),
-      message
+      message,
+      onClick: data => this.emit('click', data)
     });
   }
 

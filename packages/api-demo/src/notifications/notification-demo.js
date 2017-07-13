@@ -10,11 +10,17 @@ button.onclick = function() {
 
       var title = document.getElementById('title').value;
       var body = document.getElementById('body').value;
+      var eventlistElement = document.getElementById('eventlist');
+
       // eslint-disable-next-line no-new
-      new ssf.Notification(title, {
+      const notification = new ssf.Notification(title, {
         body: body,
         icon: 'notification-icon.png',
         image: 'notification-image.png'
+      });
+
+      notification.on('click', () => {
+        eventlistElement.innerHTML = eventlistElement.innerHTML + '<br />click fired';
       });
     });
 };
