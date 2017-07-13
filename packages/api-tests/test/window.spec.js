@@ -27,7 +27,7 @@ const setupWindowSteps = (windowOptions) => [
   () => app.client.waitForVisible('.visible-check')
 ];
 
-const initialisePositionSteps = [
+const initialisePositionSteps = () => [
   () => callAsyncWindowMethod('restore'),
   () => callAsyncWindowMethod('setBounds', initialBounds)
 ];
