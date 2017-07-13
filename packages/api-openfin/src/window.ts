@@ -1,7 +1,8 @@
-let currentWindow = null;
 import { Emitter } from 'containerjs-api-utility';
 import MessageService from './message-service';
 import createMainProcess from './main-process';
+
+let currentWindow: Window = null;
 
 const eventMap = {
   'auth-requested': 'auth-requested',
@@ -31,7 +32,9 @@ const eventMap = {
   'show': 'shown'
 };
 
-const windowStates = {
+type WindowState = 'maximized' | 'minimized' | 'restored';
+
+const WindowStates = {
   MAXIMIZED: 'maximized',
   MINIMIZED: 'minimized',
   RESTORED: 'restored'
@@ -42,8 +45,8 @@ const DEFAULT_HEIGHT = 600;
 
 const isUrlPattern = /^https?:\/\//i;
 
-const guid = () => {
-  const s4 = () => {
+const guid = (): string => {
+  const s4 = (): string => {
     return Math.floor((1 + Math.random()) * 0x10000)
       .toString(16)
       .substring(1);
@@ -57,7 +60,7 @@ const getDefaultOptions = () => ({
   autoShow: true
 });
 
-const convertOptions = (options: ssf.WindowOptions) => {
+const convertOptions = (options: ssf.WindowOptions): fin.WindowOptions => {
   const frameSize = navigator.appVersion.indexOf('Win') !== -1 ? 20 : 25;
   const clonedOptions: any = Object.assign({}, getDefaultOptions(), options);
 
@@ -133,9 +136,8 @@ class Window extends Emitter implements ssf.Window {
   innerWindow: fin.OpenFinWindow;
   id: string;
 
-  constructor(options?: ssf.WindowOptions, callback?: any, errorCallback?: any) {
+  constructor(options?: ssf.WindowOptions, callback?: (win: Window) => void, errorCallback?: (err?: any) => void) {
     super();
-
     MessageService.subscribe('*', 'ssf-window-message', (...args) => {
       this.emit('message', ...args);
     });
@@ -165,8 +167,8 @@ class Window extends Emitter implements ssf.Window {
       }
     }
 
-    fin.desktop.Window.getCurrent().getOptions((options) => {
-      openFinOptions.preload = options.preload;
+    fin.desktop.Window.getCurrent().getOptions((windowOptions) => {
+      openFinOptions.preload = windowOptions.preload;
         const appOptions = {
         name: openFinOptions.name,
         url: openFinOptions.url,
@@ -181,7 +183,7 @@ class Window extends Emitter implements ssf.Window {
 
         fin.desktop.InterApplicationBus.publish('ssf-new-window', {
           windowName: this.innerWindow.uuid,
-          parentName: openFinOptions.child ? Window.getCurrentWindow().innerWindow.uuid : null
+          parentName: options.child ? Window.getCurrentWindow().innerWindow.uuid : null
         });
 
         if (callback) {
@@ -191,7 +193,7 @@ class Window extends Emitter implements ssf.Window {
     });
   }
 
-  asPromise<T>(fn, ...args): Promise<T> {
+  asPromise<T>(fn: string, ...args): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       if (this.innerWindow) {
         const openFinFunction = this.innerWindow[fn];
@@ -213,7 +215,7 @@ class Window extends Emitter implements ssf.Window {
       });
   }
 
-  flashFrame(flag) {
+  flashFrame(flag: boolean) {
     if (flag) {
       return this.asPromise<void>('flash', {});
     } else {
@@ -227,7 +229,7 @@ class Window extends Emitter implements ssf.Window {
 
   getBounds() {
     return this.asPromise<ssf.Rectangle>('getBounds')
-      .then((bounds: any) => ({
+      .then((bounds: fin.WindowBounds) => ({
         x: bounds.left,
         y: bounds.top,
         width: bounds.width,
@@ -237,7 +239,7 @@ class Window extends Emitter implements ssf.Window {
 
   getChildWindows() {
     return new Promise<Window[]>(resolve => {
-      const subscribeListener = (names) => {
+      const subscribeListener = (names: string[]) => {
         fin.desktop.InterApplicationBus.unsubscribe('*' , 'ssf-child-windows', subscribeListener);
         const children = [];
         names.forEach((name) => {
@@ -258,29 +260,27 @@ class Window extends Emitter implements ssf.Window {
 
   getMaximumSize() {
     return this.getOptions()
-      .then((options: any) => [options.maxWidth, options.maxHeight]);
+      .then((options: fin.WindowOptions) => [options.maxWidth, options.maxHeight]);
   }
 
   getMinimumSize() {
     return this.getOptions()
-      .then((options: any) => [options.minWidth, options.minHeight]);
+      .then((options: fin.WindowOptions) => [options.minWidth, options.minHeight]);
   }
 
   getOptions() {
-    return this.asPromise<any>('getOptions');
+    return this.asPromise<fin.WindowOptions>('getOptions');
   }
 
   getParentWindow() {
     return new Promise<Window>((resolve, reject) => {
-
-      const subscribeListener = (name) => {
+      const subscribeListener = (name: string) => {
         fin.desktop.InterApplicationBus.unsubscribe('*', 'ssf-parent-window', subscribeListener);
         if (name === null) {
           resolve(null);
           return;
         }
-        const parentWin = Window.getById(name);
-        resolve(parentWin);
+        Window.getById(name).then(parentWin => resolve(parentWin));
       };
 
       fin.desktop.InterApplicationBus.publish('ssf-get-parent-window', this.innerWindow.uuid);
@@ -290,26 +290,26 @@ class Window extends Emitter implements ssf.Window {
 
   getPosition() {
     return this.getBounds()
-      .then((bounds: any) => [bounds.x, bounds.y]);
+      .then((bounds: ssf.Rectangle) => [bounds.x, bounds.y]);
   }
 
   getSize() {
     return this.getBounds()
-      .then((bounds: any) => [bounds.width, bounds.height]);
+      .then((bounds: ssf.Rectangle) => [bounds.width, bounds.height]);
   }
 
   getTitle() {
     return this.getOptions()
-      .then((options: any) => options.title);
+      .then((options: fin.WindowOptions) => options.title);
   }
 
   getState() {
-    return this.asPromise<any>('getState');
+    return this.asPromise<WindowState>('getState');
   }
 
   hasShadow() {
     return this.getOptions()
-      .then((options: any) => options.shadow);
+      .then((options: fin.WindowOptions) => options.shadow);
   }
 
   hide() {
@@ -318,32 +318,32 @@ class Window extends Emitter implements ssf.Window {
 
   isAlwaysOnTop() {
     return this.getOptions()
-      .then((options: any) => options.alwaysOnTop);
+      .then((options: fin.WindowOptions) => options.alwaysOnTop);
   }
 
   isMaximizable() {
     return this.getOptions()
-      .then((options: any) => options.maximizable);
+      .then((options: fin.WindowOptions) => options.maximizable);
   }
 
   isMaximized() {
     return this.getState()
-      .then((state: any) => state === windowStates.MAXIMIZED);
+      .then((state: WindowState) => state === WindowStates.MAXIMIZED);
   }
 
   isMinimizable() {
     return this.getOptions()
-      .then((options: any) => options.minimizable);
+      .then((options: fin.WindowOptions) => options.minimizable);
   }
 
   isMinimized() {
     return this.getState()
-      .then((state: any) => state === windowStates.MINIMIZED);
+      .then((state: WindowState) => state === WindowStates.MINIMIZED);
   }
 
   isResizable() {
     return this.getOptions()
-      .then((options: any) => options.resizable);
+      .then((options: fin.WindowOptions) => options.resizable);
   }
 
   isVisible() {
@@ -362,47 +362,47 @@ class Window extends Emitter implements ssf.Window {
     return this.asPromise<void>('restore');
   }
 
-  setAlwaysOnTop(alwaysOnTop) {
+  setAlwaysOnTop(alwaysOnTop: boolean) {
     return this.updateOptions({ alwaysOnTop });
   }
 
-  setBounds(bounds) {
+  setBounds(bounds: ssf.Rectangle) {
     return this.asPromise<void>('setBounds', bounds.x, bounds.y, bounds.width, bounds.height);
   }
 
-  setIcon(icon) {
+  setIcon(icon: string) {
     return this.updateOptions({ icon });
   }
 
-  setMaximizable(maximizable) {
+  setMaximizable(maximizable: boolean) {
     return this.updateOptions({ maximizable });
   }
 
-  setMaximumSize(maxWidth, maxHeight) {
+  setMaximumSize(maxWidth: number, maxHeight: number) {
     return this.updateOptions({ maxWidth, maxHeight });
   }
 
-  setMinimizable(minimizable) {
+  setMinimizable(minimizable: boolean) {
     return this.updateOptions({ minimizable });
   }
 
-  setMinimumSize(minWidth, minHeight) {
+  setMinimumSize(minWidth: number, minHeight: number) {
     return this.updateOptions({ minWidth, minHeight });
   }
 
-  setPosition(x, y) {
+  setPosition(x: number, y: number) {
     return this.asPromise<void>('moveTo', x, y);
   }
 
-  setResizable(resizable) {
+  setResizable(resizable: boolean) {
     return this.updateOptions({ resizable });
   }
 
-  setSize(width, height) {
+  setSize(width: number, height: number) {
     return this.asPromise<void>('resizeTo', width, height, 'top-left');
   }
 
-  setSkipTaskbar(skipTaskbar) {
+  setSkipTaskbar(skipTaskbar: boolean) {
     return this.updateOptions({ showTaskbarIcon: !skipTaskbar });
   }
 
@@ -422,7 +422,7 @@ class Window extends Emitter implements ssf.Window {
     return this.restore();
   }
 
-  updateOptions(options) {
+  updateOptions(options: fin.WindowOptions) {
     return this.asPromise<void>('updateOptions', options);
   }
 
@@ -434,11 +434,11 @@ class Window extends Emitter implements ssf.Window {
     this.innerWindow.removeEventListener(eventMap[event], listener);
   }
 
-  postMessage(message) {
+  postMessage(message: string | object | any[]) {
     MessageService.send(`${this.innerWindow.uuid}:${this.innerWindow.name}`, 'ssf-window-message', message);
   }
 
-  static getCurrentWindow(callback?: any, errorCallback?: any) {
+  static getCurrentWindow(callback?: (win: Window) => void, errorCallback?: (err?: any) => void) {
     if (currentWindow) {
       return currentWindow;
     }
@@ -467,7 +467,7 @@ class Window extends Emitter implements ssf.Window {
             '[\w\d-]+' +     // At least 1 word character, digit or dash
             ')' +            // End group 1
             ':' +            // colon
-            '\\1';            // Same string that was matched in group 1
+            '\\1';           // Same string that was matched in group 1
 
     let app = null;
     const uuid = id.match(new RegExp(idRegex)) ? id.split(':')[0] : id;
