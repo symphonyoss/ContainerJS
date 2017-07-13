@@ -3,7 +3,7 @@ import MessageService from './src/preload/message-service';
 import ScreenSnippet from './src/preload/screen-snippet';
 import Window from './src/preload/window';
 import Notification from './src/preload/notification';
-import System from './src/preload/system';
+import Screen from './src/preload/screen';
 
 export {
   app,
@@ -11,5 +11,5 @@ export {
   ScreenSnippet,
   Window,
   Notification,
-  System
+  Screen
 };

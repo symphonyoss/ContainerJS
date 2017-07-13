@@ -16,7 +16,7 @@ const electronDisplayMap = (display: Electron.Display, primary: boolean): ssf.Di
   };
 };
 
-class System implements ssf.SystemAPI {
+class Screen implements ssf.Screen {
   static getDisplays() {
     return new Promise<ssf.Display[]>(resolve => {
       const primaryDisplay = electronDisplayMap(ElectronScreen.getPrimaryDisplay(), true);
@@ -29,4 +29,4 @@ class System implements ssf.SystemAPI {
   }
 }
 
-export default System;
+export default Screen;

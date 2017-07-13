@@ -1,5 +1,5 @@
 declare namespace ssf {
-  export abstract class SystemAPI {
+  export abstract class Screen {
     static getDisplays(): Promise<Array<Display>>;
   }
 

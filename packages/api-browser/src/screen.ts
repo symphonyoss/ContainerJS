@@ -1,4 +1,6 @@
-const browserDisplayMap = (display: Screen, primary: boolean): ssf.Display => {
+import { BrowserScreen } from './browser-screen';
+
+const browserDisplayMap = (display: BrowserScreen, primary: boolean): ssf.Display => {
   return {
     id: 'primary',
     rotation: 0,
@@ -13,7 +15,7 @@ const browserDisplayMap = (display: Screen, primary: boolean): ssf.Display => {
   };
 };
 
-class System implements ssf.SystemAPI {
+class Screen implements ssf.Screen {
   static getDisplays() {
     return new Promise<ssf.Display[]>(resolve => {
       resolve([browserDisplayMap(window.screen, true)]);
@@ -21,4 +23,4 @@ class System implements ssf.SystemAPI {
   }
 }
 
-export default System;
+export default Screen;
