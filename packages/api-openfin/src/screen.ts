@@ -1,8 +1,8 @@
 const ofDisplayMap = (display: fin.MonitorInfoDetail, primary: boolean): ssf.Display => {
   return {
     id: display.deviceId,
-    rotation: 0, // TODO: Remove
-    scaleFactor: 1, // TODO: Remove
+    rotation: window.screen.orientation.angle,
+    scaleFactor: window.devicePixelRatio,
     primary,
     bounds: display.availableRect
   };
