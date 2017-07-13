@@ -5,8 +5,12 @@ abstract class Emitter implements ssf.EventEmitter {
     this.eventListeners = new Map();
   }
 
-  abstract innerAddEventListener(event: string, listener: (...args: any[]) => void);
-  abstract innerRemoveEventListener(event: string, listener: (...args: any[]) => void);
+  innerAddEventListener(event: string, listener: (...args: any[]) => void) {
+    // no-op default implementation to be overridden if required
+  }
+  innerRemoveEventListener(event: string, listener: (...args: any[]) => void) {
+    // no-op default implementation to be overridden if required
+  }
 
   emit(event: string, data?: any) {
     if (this.eventListeners.has(event)) {

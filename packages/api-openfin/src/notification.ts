@@ -24,12 +24,6 @@ class Notification extends Emitter implements ssf.Notification {
     });
   }
 
-  innerAddEventListener(eventName: string, handler: (...args: any[]) => void) {
-  }
-
-  innerRemoveEventListener(eventName: string, handler: (...args: any[]) => void) {
-  }
-
   static requestPermission(): Promise<ssf.NotificationPermission> {
     return Promise.resolve(PERMISSION_GRANTED);
   }
