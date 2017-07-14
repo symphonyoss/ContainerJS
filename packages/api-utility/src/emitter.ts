@@ -18,7 +18,7 @@ abstract class Emitter implements ssf.EventEmitter {
     }
   }
 
-  addListener(event, listener) {
+  addListener(event: string, listener: (...args: any[]) => void) {
     if (this.eventListeners.has(event)) {
       const temp = this.eventListeners.get(event);
       temp.push(listener);
@@ -30,7 +30,7 @@ abstract class Emitter implements ssf.EventEmitter {
     return this;
   }
 
-  on(event, listener) {
+  on(event: string, listener: (...args: any[]) => void) {
     return this.addListener(event, listener);
   }
 
@@ -38,15 +38,15 @@ abstract class Emitter implements ssf.EventEmitter {
     return Array.from<string>(this.eventListeners.keys());
   }
 
-  listenerCount(event) {
+  listenerCount(event: string) {
     return this.eventListeners.has(event) ? this.eventListeners.get(event).length : 0;
   }
 
-  listeners(event) {
+  listeners(event: string) {
     return this.eventListeners.get(event);
   }
 
-  once(event, listener) {
+  once(event: string, listener: (...args: any[]) => void) {
     // Remove the listener once it is called
     const unsubscribeListener = (evt) => {
       this.removeListener(event, unsubscribeListener);
@@ -57,7 +57,7 @@ abstract class Emitter implements ssf.EventEmitter {
     return this;
   }
 
-  removeListener(event, listener) {
+  removeListener(event: string, listener: (...args: any[]) => void) {
     if (this.eventListeners.has(event)) {
       const listeners = this.eventListeners.get(event);
       const index = listeners.indexOf(listener);
@@ -73,7 +73,7 @@ abstract class Emitter implements ssf.EventEmitter {
     return this;
   }
 
-  removeAllListeners(eventName) {
+  removeAllListeners(eventName: string) {
     const removeAllListenersForEvent = (event) => {
       if (this.eventListeners.has(event)) {
         this.eventListeners.get(event).forEach((listener) => {
