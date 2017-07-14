@@ -434,7 +434,7 @@ class Window extends Emitter implements ssf.Window {
     this.innerWindow.removeEventListener(eventMap[event], listener);
   }
 
-  postMessage(message: string | object | any[]) {
+  postMessage(message: any) {
     MessageService.send(`${this.innerWindow.uuid}:${this.innerWindow.name}`, 'ssf-window-message', message);
   }
 
