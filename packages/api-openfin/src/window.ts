@@ -193,7 +193,7 @@ class Window extends Emitter implements ssf.Window {
     });
   }
 
-  asPromise<T>(fn: string, ...args): Promise<T> {
+  asPromise<T>(fn: string, ...args: any[]): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       if (this.innerWindow) {
         const openFinFunction = this.innerWindow[fn];
@@ -208,7 +208,7 @@ class Window extends Emitter implements ssf.Window {
     return this.asPromise<void>('blur');
   }
 
-  close(force = false) {
+  close(force: boolean = false) {
     return this.asPromise<void>('close', force)
       .then(() => {
         this.innerWindow = undefined;
@@ -350,7 +350,7 @@ class Window extends Emitter implements ssf.Window {
     return this.asPromise<boolean>('isShowing');
   }
 
-  loadURL(url) {
+  loadURL(url: string) {
     return this.asPromise<void>('executeJavaScript', `window.location = '${url}'`);
   }
 

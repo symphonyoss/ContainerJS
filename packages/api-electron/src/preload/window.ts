@@ -69,7 +69,7 @@ class Window extends Emitter implements ssf.Window {
     return this.asPromise<void>(this.innerWindow.close);
   }
 
-  flashFrame(flag) {
+  flashFrame(flag: boolean) {
     return this.asPromise<void>(this.innerWindow.flashFrame, flag);
   }
 
@@ -153,7 +153,7 @@ class Window extends Emitter implements ssf.Window {
     return this.asPromise<boolean>(this.innerWindow.isVisible);
   }
 
-  loadURL(url) {
+  loadURL(url: string) {
     return this.asPromise<void>(this.innerWindow.loadURL, url);
   }
 
@@ -173,15 +173,15 @@ class Window extends Emitter implements ssf.Window {
     return this.asPromise<void>(this.innerWindow.restore);
   }
 
-  setAlwaysOnTop(alwaysOnTop) {
+  setAlwaysOnTop(alwaysOnTop: boolean) {
     return this.asPromise<void>(this.innerWindow.setAlwaysOnTop, alwaysOnTop);
   }
 
-  setBounds(bounds) {
+  setBounds(bounds: ssf.Rectangle) {
     return this.asPromise<void>(this.innerWindow.setBounds, bounds);
   }
 
-  setIcon(icon) {
+  setIcon(icon: string) {
     const req = request.defaults({ encoding: null });
     return new Promise<void>((resolve, reject) => {
         req.get(icon, (err, res, body) => {
@@ -197,35 +197,35 @@ class Window extends Emitter implements ssf.Window {
     });
   }
 
-  setMaximizable(maximizable) {
+  setMaximizable(maximizable: boolean) {
     return this.asPromise<void>(this.innerWindow.setMaximizable, maximizable);
   }
 
-  setMaximumSize(width, height) {
+  setMaximumSize(width: number, height: number) {
     return this.asPromise<void>(this.innerWindow.setMaximumSize, width, height);
   }
 
-  setMinimizable(minimizable) {
+  setMinimizable(minimizable: boolean) {
     return this.asPromise<void>(this.innerWindow.setMinimizable, minimizable);
   }
 
-  setMinimumSize(width, height) {
+  setMinimumSize(width: number, height: number) {
     return this.asPromise<void>(this.innerWindow.setMinimumSize, width, height);
   }
 
-  setPosition(x, y) {
+  setPosition(x: number, y: number) {
     return this.asPromise<void>(this.innerWindow.setPosition, x, y);
   }
 
-  setResizable(resizable) {
+  setResizable(resizable: boolean) {
     return this.asPromise<void>(this.innerWindow.setResizable, resizable);
   }
 
-  setSize(width, height) {
+  setSize(width: number, height: number) {
     return this.asPromise<void>(this.innerWindow.setSize, width, height);
   }
 
-  setSkipTaskbar(skipTaskbar) {
+  setSkipTaskbar(skipTaskbar: boolean) {
     return this.asPromise<void>(this.innerWindow.setSkipTaskbar, skipTaskbar);
   }
 
@@ -237,7 +237,7 @@ class Window extends Emitter implements ssf.Window {
     return this.asPromise<void>(this.innerWindow.unmaximize);
   }
 
-  asPromise<T>(windowFunction, ...args): Promise<T> {
+  asPromise<T>(windowFunction: (...args: any[]) => any, ...args: any[]): Promise<T> {
     return new Promise<T>((resolve) => {
       resolve(windowFunction(...args));
     });
@@ -251,7 +251,7 @@ class Window extends Emitter implements ssf.Window {
     this.innerWindow.removeListener(event, listener);
   }
 
-  postMessage(message) {
+  postMessage(message: any) {
     MessageService.send(this.innerWindow.id, 'ssf-window-message', message);
   }
 
@@ -268,7 +268,7 @@ class Window extends Emitter implements ssf.Window {
     });
   }
 
-  static getCurrentWindow(callback, errorCallback) {
+  static getCurrentWindow(callback: (win: Window) => void, errorCallback: (err?: any) => void) {
     if (currentWindow) {
       return currentWindow;
     }
