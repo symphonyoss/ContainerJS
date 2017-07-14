@@ -4,7 +4,12 @@ const ofDisplayMap = (display: fin.MonitorInfoDetail, primary: boolean): ssf.Dis
     rotation: window.screen.orientation.angle,
     scaleFactor: window.devicePixelRatio,
     primary,
-    bounds: display.availableRect
+    bounds: {
+      x: display.availableRect.left,
+      y: display.availableRect.top,
+      width: display.availableRect.right - display.availableRect.left,
+      height: display.availableRect.bottom - display.availableRect.top
+    }
   };
 };
 

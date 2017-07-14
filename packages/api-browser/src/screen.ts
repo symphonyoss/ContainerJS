@@ -6,10 +6,10 @@ const browserDisplayMap = (display: BrowserScreen, primary: boolean): ssf.Displa
     rotation: display.orientation.angle,
     scaleFactor: window.devicePixelRatio,
     bounds: {
-      left: 0,
-      right: display.width,
-      top: 0,
-      bottom: display.height
+      x: screenX,
+      width: display.width,
+      y: screenY,
+      height: display.height
     },
     primary
   };

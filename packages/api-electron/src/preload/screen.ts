@@ -6,12 +6,7 @@ const electronDisplayMap = (display: Electron.Display, primary: boolean): ssf.Di
     id: display.id.toString(),
     rotation: display.rotation,
     scaleFactor: display.scaleFactor,
-    bounds: {
-      left: display.bounds.x,
-      right: display.bounds.x + display.bounds.width,
-      top: display.bounds.y,
-      bottom: display.bounds.y + display.bounds.height
-    },
+    bounds: display.bounds,
     primary
   };
 };
