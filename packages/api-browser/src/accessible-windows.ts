@@ -9,12 +9,12 @@ if (window.opener) {
 }
 
 export const getAccessibleWindows = () => accessibleWindows;
-export const getAccessibleWindow = (name) => accessibleWindows[name];
+export const getAccessibleWindow = (name: string) => accessibleWindows[name];
 
-export const addAccessibleWindow = (name, win) => {
+export const addAccessibleWindow = (name: string, win: Window) => {
   accessibleWindows[name] = win;
 };
 
-export const removeAccessibleWindow = (name) => {
+export const removeAccessibleWindow = (name: string) => {
   delete accessibleWindows[name];
 };
