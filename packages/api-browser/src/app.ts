@@ -1,5 +1,5 @@
-const ready = () => Promise.resolve();
-
-export default {
-  ready
-};
+export class app {
+  static ready() {
+    return Promise.resolve();
+  }
+}

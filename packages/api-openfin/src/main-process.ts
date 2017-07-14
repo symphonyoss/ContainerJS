@@ -10,7 +10,7 @@ type NewWindowMessage = {
   parentName: string
 };
 // Code that is "evaled" when the main window has been opened, sets up
-// all the InterApplicationBus listeners for window events to keep track of state
+// All the InterApplicationBus listeners for window events to keep track of state
 const mainWindowCode = () => {
   const childTree: ChildTree[] = [];
 
@@ -138,7 +138,7 @@ const mainWindowCode = () => {
   });
 };
 
-const createMainProcess = (done: (err?: any) => void) => {
+export const createMainProcess = (done: (err?: any) => void) => {
   // Populate the current window variable
   ssf.Window.getCurrentWindow();
 
@@ -147,7 +147,7 @@ const createMainProcess = (done: (err?: any) => void) => {
   });
 
   // Create the main window, if the window already exists, the success callback isn't ran
-  // and the already open window is returned
+  // And the already open window is returned
   const app = new fin.desktop.Application({
     url: 'about:blank',
     name: 'mainWindow',
@@ -157,7 +157,7 @@ const createMainProcess = (done: (err?: any) => void) => {
     }
   }, () => {
     app.run(() => {
-      // executeJavaScript only takes a string, but writing the code as a string means we lose typescript checking
+      // Method executeJavaScript only takes a string, but writing the code as a string means we lose typescript checking
       const body = mainWindowCode.toString().slice(mainWindowCode.toString().indexOf('{') + 1, mainWindowCode.toString().lastIndexOf('}'));
       const mainWindow = app.getWindow();
       mainWindow.executeJavaScript(body, () => {
@@ -172,5 +172,3 @@ const createMainProcess = (done: (err?: any) => void) => {
     });
   }, (err) => done(err));
 };
-
-export default createMainProcess;

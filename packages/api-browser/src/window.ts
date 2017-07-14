@@ -12,7 +12,7 @@ const getWindowOffsets = (win) => {
     return [Math.floor(xOffset), Math.floor(yOffset)];
 };
 
-class Window extends Emitter implements ssf.WindowCore {
+export class Window extends Emitter implements ssf.WindowCore {
   children: ssf.Window[];
   innerWindow: any;
   id: string;
@@ -205,5 +205,3 @@ const eventMap = {
   'message': 'message',
   'show': 'load'
 };
-
-export default Window;

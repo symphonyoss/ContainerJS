@@ -1,6 +1,6 @@
 import { Emitter } from 'containerjs-api-utility';
-import MessageService from './message-service';
-import createMainProcess from './main-process';
+import { MessageService } from './message-service';
+import { createMainProcess } from './main-process';
 
 let currentWindow: Window = null;
 
@@ -132,7 +132,7 @@ const convertOptions = (options: ssf.WindowOptions): fin.WindowOptions => {
   return clonedOptions;
 };
 
-class Window extends Emitter implements ssf.Window {
+export class Window extends Emitter implements ssf.Window {
   innerWindow: fin.OpenFinWindow;
   id: string;
 
@@ -159,7 +159,7 @@ class Window extends Emitter implements ssf.Window {
         // File at root
         openFinOptions.url = location.origin + openFinOptions.url;
       } else {
-        // relative to current file
+        // Relative to current file
         const pathSections = location.pathname.split('/').filter(x => x);
         pathSections.splice(-1);
         const currentPath = pathSections.join('/');
@@ -466,7 +466,7 @@ class Window extends Emitter implements ssf.Window {
     const idRegex = '(' +    // Start group 1
             '[\w\d-]+' +     // At least 1 word character, digit or dash
             ')' +            // End group 1
-            ':' +            // colon
+            ':' +            // Colon
             '\\1';           // Same string that was matched in group 1
 
     let app = null;
@@ -505,5 +505,3 @@ class Window extends Emitter implements ssf.Window {
     });
   }
 }
-
-export default Window;

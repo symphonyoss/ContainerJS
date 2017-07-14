@@ -1,13 +1,17 @@
 {
     "rules": {
+        "arrow-return-shorthand": true,
         "comment-format": [true,
-            "check-space"
+            "check-space",
+            "check-uppercase"
         ],
-        "curly":[true, "ignore-same-line"],
+        "curly":[true],
+        "eofline": true,
         "indent": [true,
             "spaces"
         ],
         "jsdoc-format": true,
+        "no-default-export": true,
         "no-internal-module": true,
         "no-null-keyword": false,
         "no-switch-case-fall-through": true,
@@ -17,6 +21,9 @@
         "one-line": [true,
             "check-open-brace",
             "check-whitespace"
+        ],
+        "only-arrow-functions": [
+            true
         ],
         "prefer-const": true,
         "quotemark": [true,

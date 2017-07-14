@@ -1,4 +1,4 @@
-abstract class Emitter implements ssf.EventEmitter {
+export abstract class Emitter implements ssf.EventEmitter {
   eventListeners: Map<string, ((...args: any[]) => void)[]> = new Map();
 
   constructor() {
@@ -6,10 +6,10 @@ abstract class Emitter implements ssf.EventEmitter {
   }
 
   innerAddEventListener(event: string, listener: (...args: any[]) => void) {
-    // no-op default implementation to be overridden if required
+    // No-op default implementation to be overridden if required
   }
   innerRemoveEventListener(event: string, listener: (...args: any[]) => void) {
-    // no-op default implementation to be overridden if required
+    // No-op default implementation to be overridden if required
   }
 
   emit(event: string, data?: any) {
@@ -92,5 +92,3 @@ abstract class Emitter implements ssf.EventEmitter {
     return this;
   }
 }
-
-export default Emitter;

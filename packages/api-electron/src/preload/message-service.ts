@@ -3,7 +3,7 @@ import { IpcMessages } from '../common/constants';
 
 const listenerMap = new Map();
 
-class MessageService implements ssf.MessageService {
+export class MessageService implements ssf.MessageService {
   static send(windowId: string, topic: string, message: any) {
     ipc.send(IpcMessages.IPC_SSF_SEND_MESSAGE, {
       windowId,
@@ -34,7 +34,7 @@ class MessageService implements ssf.MessageService {
     let deleteKey = null;
 
     // We cant use listenerMap.has() here because reconstructing the key from the arguments is a different object
-    // i.e. {} !== {}
+    // I.e. {} !== {}
     listenerMap.forEach((value, key) => {
       if (key.windowId === windowId && key.topic === topic && key.listener === listener) {
         ipc.removeListener(`${IpcMessages.IPC_SSF_SEND_MESSAGE}-${topic}`, value);
@@ -45,5 +45,3 @@ class MessageService implements ssf.MessageService {
     listenerMap.delete(deleteKey);
   }
 }
-
-export default MessageService;

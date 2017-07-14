@@ -1,4 +1,4 @@
-class ScreenSnippet implements ssf.ScreenSnippet {
+export class ScreenSnippet implements ssf.ScreenSnippet {
   capture() {
     return new Promise<string>((resolve, reject) => {
       fin.desktop.Window.getCurrent()
@@ -6,5 +6,3 @@ class ScreenSnippet implements ssf.ScreenSnippet {
     });
   }
 }
-
-export default ScreenSnippet;

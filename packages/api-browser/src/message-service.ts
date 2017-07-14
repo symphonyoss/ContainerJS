@@ -1,9 +1,9 @@
-import Window from './window';
+import { Window } from './window';
 import { getAccessibleWindow } from './accessible-windows';
 
 const listenerMap = new Map();
 
-class MessageService implements ssf.MessageService {
+export class MessageService implements ssf.MessageService {
   static send(windowId: string, topic: string, message: any) {
     const win = getAccessibleWindow(windowId);
     const senderId = Window.getCurrentWindow().getId();
@@ -37,7 +37,7 @@ class MessageService implements ssf.MessageService {
     let deleteKey = null;
 
     // We cant use listenerMap.has() here because reconstructing the key from the arguments is a different object
-    // i.e. {} !== {}
+    // I.e. {} !== {}
     listenerMap.forEach((value, key) => {
       if (key.windowId === windowId && key.topic === topic && key.listener === listener) {
         window.removeEventListener('message', listener);
@@ -48,5 +48,3 @@ class MessageService implements ssf.MessageService {
     listenerMap.delete(deleteKey);
   }
 }
-
-export default MessageService;

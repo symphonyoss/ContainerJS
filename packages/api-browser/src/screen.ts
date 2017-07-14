@@ -15,12 +15,10 @@ const browserDisplayMap = (display: BrowserScreen, primary: boolean): ssf.Displa
   };
 };
 
-class Screen implements ssf.Screen {
+export class Screen implements ssf.Screen {
   static getDisplays() {
     return new Promise<ssf.Display[]>(resolve => {
       resolve([browserDisplayMap(window.screen, true)]);
     });
   }
 }
-
-export default Screen;

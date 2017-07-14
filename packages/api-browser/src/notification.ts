@@ -1,6 +1,6 @@
 import { Emitter } from 'containerjs-api-utility';
 
-class BrowserNotification extends Emitter implements ssf.Notification {
+export class BrowserNotification extends Emitter implements ssf.Notification {
   innerNotification: Notification;
 
   constructor(title: string, options: ssf.NotificationOptions) {
@@ -20,5 +20,3 @@ class BrowserNotification extends Emitter implements ssf.Notification {
     return Notification.requestPermission();
   }
 }
-
-export default BrowserNotification;

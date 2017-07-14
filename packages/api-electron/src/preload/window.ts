@@ -5,13 +5,13 @@ const {
 const { BrowserWindow, nativeImage } = remote;
 const request = remote.require('request');
 import { Emitter } from 'containerjs-api-utility';
-import MessageService from './message-service';
+import { MessageService } from './message-service';
 import { IpcMessages } from '../common/constants';
 
 let currentWindow = null;
 const isUrlPattern = /^https?:\/\//i;
 
-class Window extends Emitter implements ssf.Window {
+export class Window extends Emitter implements ssf.Window {
   innerWindow: Electron.BrowserWindow;
   id: string;
 
@@ -39,7 +39,7 @@ class Window extends Emitter implements ssf.Window {
         // File at root
         electronOptions.url = location.origin + electronOptions.url;
       } else {
-        // relative to current file
+        // Relative to current file
         const pathSections = location.pathname.split('/').filter(x => x);
         pathSections.splice(-1);
         const currentPath = pathSections.join('/');
@@ -252,7 +252,7 @@ class Window extends Emitter implements ssf.Window {
   }
 
   postMessage(message: any) {
-    MessageService.send(this.innerWindow.id, 'ssf-window-message', message);
+    MessageService.send(this.id, 'ssf-window-message', message);
   }
 
   getChildWindows() {
@@ -299,5 +299,3 @@ class Window extends Emitter implements ssf.Window {
     return new Promise<Window[]>(resolve => resolve(BrowserWindow.getAllWindows().map(Window.wrap)));
   }
 }
-
-export default Window;
