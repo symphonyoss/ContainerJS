@@ -5,9 +5,9 @@ export class Uri {
     if (url && !isUrlPattern.test(url)) {
       const path = url.startsWith('/')
           ? location.origin
-          : location.href.substring(0, location.href.lastIndexOf('/'));
+          : location.href.substring(0, location.href.lastIndexOf('/') + 1);
 
-      return `${path}/${url}`;
+      return `${path}${url}`;
     }
     return url;
   }
