@@ -76,8 +76,32 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
     });
 
     describe('Methods', function() {
-      it.skip('Should blur the window #ssf.Window.blur', function() {
+      it('Should blur the window #ssf.Window.blur', function() {
+        const windowTitle = 'windownameblur';
+        const windowOptions = getWindowOptions({
+          name: windowTitle
+        });
 
+        const checkWindowBlurred = () => {
+          /* eslint-disable no-undef */
+          const script = (callback) => {
+            callback(!document.hasFocus());
+          };
+          /* eslint-enable no-undef */
+          return executeAsyncJavascript(app.client, script);
+        };
+
+        const steps = [
+          ...setupWindowSteps(windowOptions),
+          () => callAsyncWindowMethod('focus'),
+          () => checkWindowBlurred(),
+          (result) => assert.equal(result.value, false),
+          () => callAsyncWindowMethod('blur'),
+          () => checkWindowBlurred(),
+          (result) => assert.equal(result.value, true)
+        ];
+
+        return chainPromises(steps);
       });
 
       it.skip('Should flash the window frame #ssf.Window.flashFrame', function() {
@@ -755,9 +779,8 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
 
       const retrieveDelay = 500;
 
-      it.skip('Should emit the blur event #ssf.WindowEvent.blur', function() {
-        // Electron works but OpenFin doesnt seem to set the value
-        const windowTitle = 'windoweventhide';
+      it('Should emit the blur event #ssf.WindowEvent.blur', function() {
+        const windowTitle = 'windoweventblur';
         const windowOptions = getWindowOptions({
           name: windowTitle
         });
@@ -767,6 +790,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         const steps = [
           ...setupWindowSteps(windowOptions),
           () => addListener(event),
+          () => callAsyncWindowMethod('focus'),
           () => callAsyncWindowMethod(event),
           () => wait(retrieveDelay),
           () => retrieveListenerResult(),
