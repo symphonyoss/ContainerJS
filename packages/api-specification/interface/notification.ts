@@ -48,13 +48,13 @@ declare namespace ssf {
    *   }
    * })
    * </pre>
-   * 
+   *
    * OpenFin requires a template html file to render the notification.
    * A template (notification.html) is included with the containerjs bundle,
    * and by default ssf.Notification will try to find it in the same location
    * as the current URL. To specify a different URL for the template, set the
    * template setting in NotificationOptions
-   * 
+   *
    * <pre>
    *     const notification = new Notification(
    *       'My Title',
@@ -63,7 +63,6 @@ declare namespace ssf {
    *         template: '/resource/notification.html'
    *       });
    * </pre>
-   * 
    */
   class Notification extends ssf.EventEmitter {
     /**
