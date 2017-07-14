@@ -1,5 +1,5 @@
-import Uri from './src/uri';
-import Emitter from './src/emitter';
+import { Uri } from './src/uri';
+import { Emitter } from './src/emitter';
 
 export {
   Uri,

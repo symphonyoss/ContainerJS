@@ -1,6 +1,6 @@
 const containerjsSsf = ssf;
 
-namespace map {
+export namespace map {
   export class ssf {
     /** API defined at https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/Activate+API */
     static activate(windowName: string) {
@@ -59,5 +59,3 @@ namespace map {
     }
   }
 }
-
-export default map.ssf;

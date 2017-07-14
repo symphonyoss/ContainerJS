@@ -5,7 +5,7 @@ import { Uri, Emitter } from 'containerjs-api-utility';
 const PERMISSION_GRANTED: ssf.NotificationPermission = 'granted';
 
 // Image style moves the image below the icon and title/body,
-// to match the style of native notifications
+// To match the style of native notifications
 const imageStyle = {
         overflow:  'hidden',
         display:  'block',
@@ -15,7 +15,7 @@ const imageStyle = {
 const HEIGHT_WITHOUT_IMAGE = 65;
 const HEIGHT_WITH_IMAGE = 100;
 
-class Notification extends Emitter implements ssf.Notification {
+export class Notification extends Emitter implements ssf.Notification {
   constructor(title: string, options: ssf.NotificationOptions) {
     super();
 
@@ -41,5 +41,3 @@ class Notification extends Emitter implements ssf.Notification {
     return Promise.resolve(PERMISSION_GRANTED);
   }
 }
-
-export default Notification;

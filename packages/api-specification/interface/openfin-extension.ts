@@ -9,5 +9,7 @@ declare namespace fin {
 
   interface WindowOptions {
     preload?: string;
+    title?: string;
+    shadow?: boolean;
   }
 }

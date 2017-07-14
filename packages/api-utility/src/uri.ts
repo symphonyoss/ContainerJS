@@ -1,6 +1,6 @@
 const isUrlPattern = /^https?:\/\//i;
 
-class Uri {
+export class Uri {
   static getAbsoluteUrl(url: string): string {
     if (url && !isUrlPattern.test(url)) {
       const path = url.startsWith('/')
@@ -12,5 +12,3 @@ class Uri {
     return url;
   }
 }
-
-export default Uri;

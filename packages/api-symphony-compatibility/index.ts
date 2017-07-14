@@ -1,3 +1,3 @@
-import ssf from './src/mapping';
+import { map } from './src/mapping';
 
-export default ssf;
+export const ssf = map.ssf;

@@ -12,12 +12,12 @@ const getWindowOffsets = (win) => {
     return [Math.floor(xOffset), Math.floor(yOffset)];
 };
 
-class Window extends Emitter implements ssf.WindowCore {
+export class Window extends Emitter implements ssf.WindowCore {
   children: ssf.Window[];
   innerWindow: any;
   id: string;
 
-  constructor(options?, callback?, errorCallback?) {
+  constructor(options?: ssf.WindowOptions, callback?: (win: Window) => void, errorCallback?: (err?: any) => void) {
     super();
     this.children = [];
 
@@ -115,7 +115,7 @@ class Window extends Emitter implements ssf.WindowCore {
     return this.asPromise<boolean>(() => true);
   }
 
-  loadURL(url) {
+  loadURL(url: string) {
     return this.asPromise<void>(() => location.href = url);
   }
 
@@ -123,18 +123,18 @@ class Window extends Emitter implements ssf.WindowCore {
     return this.asPromise<void>(() => location.reload());
   }
 
-  setBounds(bounds) {
+  setBounds(bounds: ssf.Rectangle) {
     return this.asPromise<void>(() => {
       this.innerWindow.moveTo(bounds.x, bounds.y);
       this.innerWindow.resizeTo(bounds.width, bounds.height);
     });
   }
 
-  setPosition(x, y) {
+  setPosition(x: number, y: number) {
     return this.asPromise<void>(() => this.innerWindow.moveTo(x, y));
   }
 
-  setSize(width, height) {
+  setSize(width: number, height: number) {
      return this.asPromise<void>(() => this.innerWindow.resizeTo(width, height));
   }
 
@@ -146,7 +146,7 @@ class Window extends Emitter implements ssf.WindowCore {
     this.innerWindow.removeEventListener(eventMap[event], listener);
   }
 
-  postMessage(message) {
+  postMessage(message: any) {
     this.innerWindow.postMessage(message, '*');
   }
 
@@ -154,7 +154,7 @@ class Window extends Emitter implements ssf.WindowCore {
     return new Promise<ssf.Window[]>(resolve => resolve(this.children));
   }
 
-  asPromise<T>(fn): Promise<T> {
+  asPromise<T>(fn: (...args: any[]) => any): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       if (this.innerWindow) {
         resolve(fn());
@@ -164,7 +164,7 @@ class Window extends Emitter implements ssf.WindowCore {
     });
   }
 
-  static getCurrentWindow(callback?: any, errorCallback?: any) {
+  static getCurrentWindow(callback?: (win: Window) => void, errorCallback?: (err?: any) => void) {
     if (currentWindow) {
       return currentWindow;
     }
@@ -181,7 +181,7 @@ class Window extends Emitter implements ssf.WindowCore {
   }
 }
 
-const objectToFeaturesString = (features) => {
+const objectToFeaturesString = (features: ssf.WindowOptions) => {
   return Object.keys(features).map((key) => {
     let value = features[key];
 
@@ -205,5 +205,3 @@ const eventMap = {
   'message': 'message',
   'show': 'load'
 };
-
-export default Window;

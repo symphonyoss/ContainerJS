@@ -1,6 +1,6 @@
-class MessageService implements ssf.MessageService {
+export class MessageService implements ssf.MessageService {
   // Window ID should be in the form 'application-uuid:window-name'
-  static send(windowId, topic, message) {
+  static send(windowId: string, topic: string, message: any) {
     const [appId, windowName] = windowId.split(':');
 
     if (appId && windowName) {
@@ -10,7 +10,7 @@ class MessageService implements ssf.MessageService {
     }
   }
 
-  static subscribe(windowId, topic, listener) {
+  static subscribe(windowId: string, topic: string, listener: (...args: any[]) => void) {
     const [appId, windowName] = windowId.split(':');
 
     if (appId && windowName) {
@@ -20,7 +20,7 @@ class MessageService implements ssf.MessageService {
     }
   }
 
-  static unsubscribe(windowId, topic, listener) {
+  static unsubscribe(windowId: string, topic: string, listener: (...args: any[]) => void) {
     const [appId, windowName] = windowId.split(':');
 
     if (appId && windowName) {
@@ -30,5 +30,3 @@ class MessageService implements ssf.MessageService {
     }
   }
 }
-
-export default MessageService;

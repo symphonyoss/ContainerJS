@@ -13,7 +13,7 @@ const ofDisplayMap = (display: fin.MonitorInfoDetail, primary: boolean): ssf.Dis
   };
 };
 
-class Screen implements ssf.Screen {
+export class Screen implements ssf.Screen {
   static getDisplays() {
     return new Promise<ssf.Display[]>(resolve => {
       fin.desktop.System.getMonitorInfo((info) => {
@@ -25,5 +25,3 @@ class Screen implements ssf.Screen {
     });
   }
 }
-
-export default Screen;
