@@ -4,7 +4,7 @@ const {
 } = require('electron');
 const { BrowserWindow, nativeImage } = remote;
 const request = remote.require('request');
-import { Emitter } from 'containerjs-api-utility';
+import { Emitter, getPositionFromDisplay } from 'containerjs-api-utility';
 import { MessageService } from './message-service';
 import { IpcMessages } from '../common/constants';
 
@@ -33,32 +33,37 @@ export class Window extends Emitter implements ssf.Window {
 
     const electronOptions = Object.assign({}, options);
 
-    // Allow relative urls (e.g. /index.html and demo/demo.html)
-    if (!isUrlPattern.test(electronOptions.url) && electronOptions.url !== 'about:blank') {
-      if (electronOptions.url.startsWith('/')) {
-        // File at root
-        electronOptions.url = location.origin + electronOptions.url;
-      } else {
-        // Relative to current file
-        const pathSections = location.pathname.split('/').filter(x => x);
-        pathSections.splice(-1);
-        const currentPath = pathSections.join('/');
-        electronOptions.url = location.origin + '/' + currentPath + electronOptions.url;
+    getPositionFromDisplay(options.display, {x: options.x || 0, y: options.y || 0}).then(({x, y}) => {
+      electronOptions.x = x;
+      electronOptions.y = y;
+
+      // Allow relative urls (e.g. /index.html and demo/demo.html)
+      if (!isUrlPattern.test(electronOptions.url) && electronOptions.url !== 'about:blank') {
+        if (electronOptions.url.startsWith('/')) {
+          // File at root
+          electronOptions.url = location.origin + electronOptions.url;
+        } else {
+          // Relative to current file
+          const pathSections = location.pathname.split('/').filter(x => x);
+          pathSections.splice(-1);
+          const currentPath = pathSections.join('/');
+          electronOptions.url = location.origin + '/' + currentPath + electronOptions.url;
+        }
       }
-    }
 
-    const features = Object.assign({}, electronOptions, { title: electronOptions.name });
+      const features = Object.assign({}, electronOptions, { title: electronOptions.name });
 
-    this.id = ipc.sendSync(IpcMessages.IPC_SSF_NEW_WINDOW, {
-      url: features.url,
-      name: features.name,
-      features
+      this.id = ipc.sendSync(IpcMessages.IPC_SSF_NEW_WINDOW, {
+        url: features.url,
+        name: features.name,
+        features
+      });
+      this.innerWindow = BrowserWindow.fromId(parseInt(this.id));
+
+      if (callback) {
+        callback(this);
+      }
     });
-    this.innerWindow = BrowserWindow.fromId(parseInt(this.id));
-
-    if (callback) {
-      callback(this);
-    }
   }
 
   blur() {
