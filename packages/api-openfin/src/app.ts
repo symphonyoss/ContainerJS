@@ -8,6 +8,6 @@ export class app implements ssf.App {
   }
 
   static setBadgeCount(count: number) {
-    // openfin doesn't support badge count
+    // Openfin doesn't support badge count
   }
 }

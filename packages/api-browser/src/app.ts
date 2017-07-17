@@ -4,6 +4,6 @@ export class app {
   }
 
   static setBadgeCount(count: number) {
-    // browser doesn't support badge count
+    // Browser doesn't support badge count
   }
 }

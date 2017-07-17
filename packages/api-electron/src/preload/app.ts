@@ -1,7 +1,4 @@
-const {
-  remote
-} = require('electron');
-const electronApp = remote.app;
+const electronApp = require('electron').remote.app;
 
 export class app implements ssf.App {
   static ready() {
