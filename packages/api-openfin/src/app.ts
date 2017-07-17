@@ -6,4 +6,8 @@ export class app implements ssf.App {
       fin.desktop.main(() => createMainProcess(resolve));
     });
   }
+
+  static setBadgeCount(count: number) {
+    // openfin doesn't support badge count
+  }
 }
