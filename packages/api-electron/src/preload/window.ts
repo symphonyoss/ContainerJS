@@ -18,8 +18,8 @@ export class Window extends Emitter implements ssf.Window {
   constructor(options?: ssf.WindowOptions, callback?: (window: Window) => void, errorCallback?: () => void) {
     super();
 
-    MessageService.subscribe('*', 'ssf-window-message', (...args) => {
-      this.emit('message', ...args);
+    MessageService.subscribe('*', 'ssf-window-message', (data?: any) => {
+      this.emit('message', { data });
     });
 
     if (!options) {

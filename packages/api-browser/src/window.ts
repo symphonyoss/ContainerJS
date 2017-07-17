@@ -41,12 +41,6 @@ export class Window extends Emitter implements ssf.WindowCore {
       addAccessibleWindow(options.name, this.innerWindow);
     }
 
-    this.addListener('message', (e) => {
-      if (e.data) {
-        this.emit('message', e.data);
-      }
-    });
-
     if (callback) {
       callback(this);
     }

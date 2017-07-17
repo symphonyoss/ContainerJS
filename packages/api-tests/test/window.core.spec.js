@@ -694,6 +694,70 @@ describe('WindowCore API', function(done) {
         return chainPromises(steps);
       });
     }
+
+    it.only('Should emit a message event in the window #ssf.Window.postMessage #ssf.Window.postMessage', function() {
+      const windowTitle = 'windownamepostmessage';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      // Track calls and data passed to event listener in window[eventName]
+      const addWindowListener = (event) => {
+        /* eslint-disable no-undef */
+        const script = (event, callback) => {
+          // Track the calls to the event listener
+          var eventName = `evt_${event}_count`;
+          window[eventName] = [];
+          var currentWin = ssf.Window.getCurrentWindow();
+          
+          currentWin.addListener(event, evt => {
+            window[eventName].push(evt.data);
+            console.log(event);
+          });
+          callback();
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script, event);
+      };
+
+      // Call a ssf API method in the (not current) child window
+      const callMethodInNewWindow = (method, ...args) => {
+        /* eslint-disable no-undef */
+        const script = (method, args, callback) => {
+          ssf.app.ready().then(() => {
+            // window.newWin created by openNewWindow
+            callback(window.newWin[method](...args));
+          });
+        };
+
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script, method, args);
+      };
+
+      // Retrieve the calls and data tracked for the event listener
+      const getListenerCalls = (event) => {
+        /* eslint-disable no-undef */
+        const script = (event, callback) => {
+          var eventName = `evt_${event}_count`;
+          callback(window[eventName]);
+        };
+        /* eslint-enable no-undef */
+        return executeAsyncJavascript(app.client, script, event);
+      };
+      
+      let childWindowId;
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addWindowListener('message'),
+        () => selectWindow(app.client, 0),
+        () => callMethodInNewWindow('postMessage', 'test-message'),
+        () => selectWindow(app.client, 1),
+        () => getListenerCalls('message'),
+        (result) => assert.deepEqual(result.value, ['test-message'])
+      ];
+
+      return chainPromises(steps);
+    });
   });
 
   describe('New Window', function() {
