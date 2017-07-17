@@ -16,10 +16,22 @@
 </nav>
 
 <div class="container">
-<div class="page-header">
-  <h1>App API</h1>
+  <div class="page-header">
+    <h1>App API</h1>
+  </div>
+
+  <h2>setBadgeCount</h2>
+  <form class="form-inline">
+    <div class="form-group">
+      <label>Count</label>
+      <input type="number" class="form-control" placeholder="count" id="badge-count">
+    </div>
+    <button type="button" id="set-badge-count" class="btn btn-default">Set Badge Count</button>
+  </form>
 </div>
 
 <script src="/scripts/containerjs-api-bundle"></script>
+
+<script src="app-api-demo.js"></script>
 
 <!-- intentionally unclosed body to append markdown -->

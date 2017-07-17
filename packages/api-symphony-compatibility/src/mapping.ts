@@ -15,9 +15,8 @@ export namespace map {
     }
 
     /** API defined at https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/BadgeCount+API */
-    static setBadgeCount(Number: number) {
-      // Not implemented in containerjs
-      return;
+    static setBadgeCount(count: number) {
+      containerjsSsf.App.setBadgeCount(count);
     }
 
     /** API defined at https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/getMediaSources+API */
