@@ -16,6 +16,11 @@ declare namespace ssf {
      *  The URL of an image to be displayed in the notification.
      */
     image?: string;
+    /**
+     * The URL of the notification template for OpenFin. Can be
+     * relative to the current URL. Default: "template.html"
+     */
+    template?: string;
   }
   type NotificationPermission = 'default' | 'denied' | 'granted';
 
@@ -42,6 +47,21 @@ declare namespace ssf {
    *     });
    *   }
    * })
+   * </pre>
+   *
+   * OpenFin requires a template html file to render the notification.
+   * A template (notification.html) is included with the containerjs bundle,
+   * and by default ssf.Notification will try to find it in the same location
+   * as the current URL. To specify a different URL for the template, set the
+   * template setting in NotificationOptions
+   *
+   * <pre>
+   *     const notification = new Notification(
+   *       'My Title',
+   *       {
+   *         body: 'My body text',
+   *         template: '/resource/notification.html'
+   *       });
    * </pre>
    */
   class Notification extends ssf.EventEmitter {

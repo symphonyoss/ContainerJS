@@ -1,5 +1,6 @@
 import { Uri, Emitter } from 'containerjs-api-utility';
 const PERMISSION_GRANTED: ssf.NotificationPermission = 'granted';
+const DEFAULT_TEMPLATE: string = 'notification.html';
 
 export class Notification extends Emitter implements ssf.Notification {
   constructor(title: string, options: ssf.NotificationOptions) {
@@ -14,10 +15,12 @@ export class Notification extends Emitter implements ssf.Notification {
       text: options.body,
       image: Uri.getAbsoluteUrl(options.image),
       icon: Uri.getAbsoluteUrl(options.icon)
-     };
+    };
+
+    const template = options.template || DEFAULT_TEMPLATE;
 
     new fin.desktop.Notification({
-      url: Uri.getAbsoluteUrl('notification.html'),
+      url: Uri.getAbsoluteUrl(template),
       message,
       onClick: data => this.emit('click', data)
     });
