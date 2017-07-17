@@ -713,10 +713,8 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         return chainPromises(steps);
       });
 
-      it('Should be created in the center if no x and y #ssf.WindowOptions.center', function() {
-        const windowTitle = 'windownamecenter';
-        let targetX;
-        let targetY;
+      it('Should be created at 0,0 if no x and y #ssf.WindowOptions.center', function() {
+        const windowTitle = 'windownametopleft';
         const width = 500;
         const height = 500;
         const windowOptions = getWindowOptions({
@@ -726,30 +724,10 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
           height
         });
 
-        const frameSize = process.platform === 'win32' ? 20 : 25;
-
-        const getScreenSize = () => {
-          /* eslint-disable no-undef */
-          const script = (callback) => {
-            const width = screen.width;
-            const height = screen.height;
-            callback({ width, height });
-          };
-          /* eslint-enable no-undef */
-          return executeAsyncJavascript(app.client, script);
-        };
-
-        const calculateTargetPosition = (screenSize) => {
-          targetX = (screenSize.width / 2) - (width / 2);
-          targetY = (screenSize.height / 2) - (height / 2) - frameSize;
-        };
-
         const steps = [
           ...setupWindowSteps(windowOptions),
-          () => getScreenSize(),
-          (screenSizeObject) => calculateTargetPosition(screenSizeObject.value),
           () => callAsyncWindowMethod('getPosition'),
-          (result) => assert.deepEqual(result.value, [targetX, targetY])
+          (result) => assert.deepEqual(result.value, [0, 0])
         ];
 
         return chainPromises(steps);

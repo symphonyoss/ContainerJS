@@ -30,8 +30,7 @@ export class Window extends Emitter implements ssf.WindowCore {
     } else {
       this.innerWindow = window.open(options.url, options.name, objectToFeaturesString(options));
       this.id = this.innerWindow.name;
-      const [xOffset, yOffset] = getWindowOffsets(this.innerWindow);
-      this.setPosition(options.x || (screen.width / 2) - xOffset, options.y || (screen.height / 2) - yOffset);
+      this.setPosition(0, 0);
       this.innerWindow.onclose = () => {
         removeAccessibleWindow(this.innerWindow.name);
       };

@@ -8,10 +8,11 @@
     "test:ui": "npm run test:electron && npm run test:browser && npm run test:openfin",
     "test:electron": "rimraf src && copyfiles -f \"demo/**\" src && cross-env MOCHA_CONTAINER=electron mocha test/*.js",
     "test:ci:electron": "npm run test:electron -- --reporter reporter.js",
-    "test:openfin": "rimraf src && copyfiles -f \"demo/**\" src && copyfiles -f \"node_modules/containerjs-api-bundle/build/**\" src && cross-env MOCHA_CONTAINER=openfin mocha test/*.js",
+    "test:openfin": "npm run clean:cache && rimraf src && copyfiles -f \"demo/**\" src && copyfiles -f \"node_modules/containerjs-api-bundle/build/**\" src && cross-env MOCHA_CONTAINER=openfin mocha test/*.js",
     "test:ci:openfin": "npm run test:openfin -- --reporter reporter.js",
     "test:browser": "rimraf src && copyfiles -f \"demo/**\" src && copyfiles -f \"node_modules/containerjs-api-bundle/build/**\" src && cross-env MOCHA_CONTAINER=browser mocha test/*.js",
     "test:ci:browser": "npm run test:browser -- --reporter reporter.js",
+    "clean:cache": "rimraf %LOCALAPPDATA%/OpenFin/cache",
     "report": "node generate-test-report.js && copyfiles -f \"test-report.json\" \"../api-specification\""
   },
   "dependencies": {
