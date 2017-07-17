@@ -16,7 +16,8 @@ button.onclick = function() {
       const notification = new ssf.Notification(title, {
         body: body,
         icon: 'notification-icon.png',
-        image: 'notification-image.png'
+        image: 'notification-image.png',
+        template: '/resources/notification.html'
       });
 
       notification.on('click', () => {
