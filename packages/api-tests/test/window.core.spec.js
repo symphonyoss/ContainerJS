@@ -709,7 +709,7 @@ describe('WindowCore API', function(done) {
           var eventName = `evt_${event}_count`;
           window[eventName] = [];
           var currentWin = ssf.Window.getCurrentWindow();
-          
+
           currentWin.addListener(event, evt => {
             window[eventName].push(evt.data);
             console.log(event);
@@ -744,8 +744,7 @@ describe('WindowCore API', function(done) {
         /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, event);
       };
-      
-      let childWindowId;
+
       const steps = [
         ...setupWindowSteps(windowOptions),
         () => addWindowListener('message'),
