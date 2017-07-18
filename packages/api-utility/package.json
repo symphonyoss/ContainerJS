@@ -19,11 +19,20 @@
     "clean": "rimraf build",
     "build": "npm run clean && npm run build:cjs && npm run build:es",
     "build:es": "rimraf build/es && tsc -p tsconfig.json -m ES2015 --outdir ./build/es",
-    "build:cjs": "rimraf build/lib && tsc -p tsconfig.json -m CommonJS --outdir ./build/lib"
+    "build:cjs": "rimraf build/lib && tsc -p tsconfig.json -m CommonJS --outdir ./build/lib",
+    "test": "ts-node --project test node_modules/tape/bin/tape node_modules/containerjs-api-specification/interface/*.ts test/**/*.test.ts | tap-diff"
   },
   "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "devDependencies": {
+    "@types/proxyquire": "^1.3.27",
+    "@types/sinon": "^2.3.2",
+    "@types/tape": "^4.2.30",
+    "proxyquire": "^1.8.0",
     "rimraf": "^2.6.1",
+    "sinon": "^2.3.8",
+    "tap-diff": "^0.1.1",
+    "tape": "^4.7.0",
+    "ts-node": "^3.2.0",
     "typescript": "^2.4.1"
   },
   "dependencies": {
