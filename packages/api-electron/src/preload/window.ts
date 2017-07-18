@@ -4,7 +4,7 @@ const {
 } = require('electron');
 const { BrowserWindow, nativeImage } = remote;
 const request = remote.require('request');
-import { Emitter, getPositionFromDisplay } from 'containerjs-api-utility';
+import { Emitter, Display } from 'containerjs-api-utility';
 import { MessageService } from './message-service';
 import { IpcMessages } from '../common/constants';
 
@@ -33,7 +33,7 @@ export class Window extends Emitter implements ssf.Window {
 
     const electronOptions = Object.assign({}, options);
 
-    getPositionFromDisplay(options.display, {x: options.x || 0, y: options.y || 0}).then(({x, y}) => {
+    Display.getDisplayAlteredPosition(options.display, {x: options.x || 0, y: options.y || 0}).then(({x, y}) => {
       electronOptions.x = x;
       electronOptions.y = y;
 

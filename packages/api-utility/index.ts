@@ -1,9 +1,9 @@
 import { Uri } from './src/uri';
 import { Emitter } from './src/emitter';
-import { getPositionFromDisplay } from './src/position';
+import { Display } from './src/display';
 
 export {
   Uri,
   Emitter,
-  getPositionFromDisplay
+  Display
 };

@@ -1,4 +1,4 @@
-import { Emitter, getPositionFromDisplay } from 'containerjs-api-utility';
+import { Emitter, Display } from 'containerjs-api-utility';
 import { MessageService } from './message-service';
 import { createMainProcess } from './main-process';
 import { Screen } from './screen';
@@ -154,7 +154,7 @@ export class Window extends Emitter implements ssf.Window {
 
     const optionsCopy = Object.assign({}, options);
     const currentPosition: ssf.Position =  { x: optionsCopy.x || 0, y: optionsCopy.y || 0 };
-    getPositionFromDisplay(optionsCopy.display, currentPosition).then(({x, y}) => {
+    Display.getDisplayAlteredPosition(optionsCopy.display, currentPosition).then(({x, y}) => {
       optionsCopy.x = x;
       optionsCopy.y = y;
       const openFinOptions = convertOptions(optionsCopy);
