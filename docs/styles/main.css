@@ -139,6 +139,9 @@ p {
 #docs-menu {
   position: fixed;
   top: 64px;
+  bottom: 0px;
+  overflow-y: auto;
+  display: inline-block;
 }
 
 ul {

@@ -2,14 +2,16 @@
 layout: default
 ---
 <div class="row">
-  <ul id="docs-menu">
-    <h5 class="menu-heading">Classes</h5>
-    <ul id="class-menu" class="hidden-md-down">
+  <div id="docs-menu" class="hidden-md-down">
+    <ul>
+      <h5 class="menu-heading">Classes</h5>
+      <ul id="class-menu">
+      </ul>
+      <h5 class="menu-heading">Interfaces</h5>
+      <ul id="interface-menu">
+      </ul>
     </ul>
-    <h5 class="menu-heading">Interfaces</h5>
-    <ul id="interface-menu" class="hidden-md-down">
-    </ul>
-  </ul>
+  </div>
   <div class="offset-lg-3 col-lg-9">
     <h1>Documentation</h1>
     {{ content }}
