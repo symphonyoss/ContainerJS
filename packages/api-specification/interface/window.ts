@@ -98,6 +98,11 @@ declare namespace ssf {
      * Makes the window transparent. Default is false.
      */
     transparent?: boolean;
+    /**
+     * The id of the display to show the window on. If no id is passed in, the x and y position
+     * of the window is relative to the primary monitor.
+     */
+    display?: string;
   }
 
   interface WindowEvent {

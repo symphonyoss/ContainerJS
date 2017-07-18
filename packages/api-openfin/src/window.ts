@@ -1,6 +1,7 @@
-import { Emitter } from 'containerjs-api-utility';
+import { Emitter, Display } from 'containerjs-api-utility';
 import { MessageService } from './message-service';
 import { createMainProcess } from './main-process';
+import { Screen } from './screen';
 
 let currentWindow: Window = null;
 
@@ -151,45 +152,56 @@ export class Window extends Emitter implements ssf.Window {
       return this;
     }
 
-    const openFinOptions = convertOptions(options);
-
-    // Allow relative urls (e.g. /index.html and demo/demo.html)
-    if (!isUrlPattern.test(options.url) && openFinOptions.url !== 'about:blank') {
-      if (openFinOptions.url.startsWith('/')) {
-        // File at root
-        openFinOptions.url = location.origin + openFinOptions.url;
-      } else {
-        // Relative to current file
-        const pathSections = location.pathname.split('/').filter(x => x);
-        pathSections.splice(-1);
-        const currentPath = pathSections.join('/');
-        openFinOptions.url = location.origin + '/' + currentPath + openFinOptions.url;
+    const optionsCopy = Object.assign({}, options);
+    const currentPosition: ssf.Position =  { x: optionsCopy.x || 0, y: optionsCopy.y || 0 };
+    Display.getDisplayAlteredPosition(optionsCopy.display, currentPosition).then(({x, y}) => {
+      if (x !== undefined) {
+        optionsCopy.x = x;
       }
-    }
+      if (y !== undefined) {
+        optionsCopy.y = y;
+      }
 
-    fin.desktop.Window.getCurrent().getOptions((windowOptions) => {
-      openFinOptions.preload = windowOptions.preload;
-        const appOptions = {
-        name: openFinOptions.name,
-        url: openFinOptions.url,
-        uuid: openFinOptions.name, // UUID must be the same as name
-        mainWindowOptions: openFinOptions
-      };
+      const openFinOptions = convertOptions(optionsCopy);
 
-      const app = new fin.desktop.Application(appOptions, (successObject) => {
-        app.run();
-        this.innerWindow = app.getWindow();
-        this.id = `${this.innerWindow.uuid}:${this.innerWindow.name}`;
-
-        fin.desktop.InterApplicationBus.publish('ssf-new-window', {
-          windowName: this.innerWindow.uuid,
-          parentName: options.child ? Window.getCurrentWindow().innerWindow.uuid : null
-        });
-
-        if (callback) {
-          callback(this);
+      // Allow relative urls (e.g. /index.html and demo/demo.html)
+      if (!isUrlPattern.test(options.url) && openFinOptions.url !== 'about:blank') {
+        if (openFinOptions.url.startsWith('/')) {
+          // File at root
+          openFinOptions.url = location.origin + openFinOptions.url;
+        } else {
+          // Relative to current file
+          const pathSections = location.pathname.split('/').filter(x => x);
+          pathSections.splice(-1);
+          const currentPath = pathSections.join('/');
+          openFinOptions.url = location.origin + '/' + currentPath + openFinOptions.url;
         }
-      }, errorCallback);
+      }
+
+      fin.desktop.Window.getCurrent().getOptions((windowOptions) => {
+        openFinOptions.preload = windowOptions.preload;
+          const appOptions = {
+          name: openFinOptions.name,
+          url: openFinOptions.url,
+          uuid: openFinOptions.name, // UUID must be the same as name
+          mainWindowOptions: openFinOptions
+        };
+
+        const app = new fin.desktop.Application(appOptions, (successObject) => {
+          app.run();
+          this.innerWindow = app.getWindow();
+          this.id = `${this.innerWindow.uuid}:${this.innerWindow.name}`;
+
+          fin.desktop.InterApplicationBus.publish('ssf-new-window', {
+            windowName: this.innerWindow.uuid,
+            parentName: options.child ? Window.getCurrentWindow().innerWindow.uuid : null
+          });
+
+          if (callback) {
+            callback(this);
+          }
+        }, errorCallback);
+      });
     });
   }
 

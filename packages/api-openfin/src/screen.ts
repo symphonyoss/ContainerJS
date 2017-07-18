@@ -5,10 +5,10 @@ const ofDisplayMap = (display: fin.MonitorInfoDetail, primary: boolean): ssf.Dis
     scaleFactor: window.devicePixelRatio,
     primary,
     bounds: {
-      x: display.availableRect.left,
-      y: display.availableRect.top,
-      width: display.availableRect.right - display.availableRect.left,
-      height: display.availableRect.bottom - display.availableRect.top
+      x: display.monitorRect.left,
+      y: display.monitorRect.top,
+      width: display.monitorRect.right - display.monitorRect.left,
+      height: display.monitorRect.bottom - display.monitorRect.top
     }
   };
 };
