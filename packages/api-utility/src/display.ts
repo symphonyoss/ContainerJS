@@ -5,7 +5,7 @@
 export class Display {
   static getDisplayAlteredPosition(displayId: string, position: ssf.Position) {
     if (!displayId) {
-      return Promise.resolve(position);
+      return Promise.resolve({x: undefined, y: undefined});
     }
 
     return ssf.Screen.getDisplays().then((displays) => {

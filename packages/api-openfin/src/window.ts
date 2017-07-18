@@ -155,8 +155,13 @@ export class Window extends Emitter implements ssf.Window {
     const optionsCopy = Object.assign({}, options);
     const currentPosition: ssf.Position =  { x: optionsCopy.x || 0, y: optionsCopy.y || 0 };
     Display.getDisplayAlteredPosition(optionsCopy.display, currentPosition).then(({x, y}) => {
-      optionsCopy.x = x;
-      optionsCopy.y = y;
+      if (x !== undefined) {
+        optionsCopy.x = x;
+      }
+      if (y !== undefined) {
+        optionsCopy.y = y;
+      }
+
       const openFinOptions = convertOptions(optionsCopy);
 
       // Allow relative urls (e.g. /index.html and demo/demo.html)

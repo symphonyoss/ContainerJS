@@ -34,8 +34,12 @@ export class Window extends Emitter implements ssf.Window {
     const electronOptions = Object.assign({}, options);
 
     Display.getDisplayAlteredPosition(options.display, {x: options.x || 0, y: options.y || 0}).then(({x, y}) => {
-      electronOptions.x = x;
-      electronOptions.y = y;
+      if (x !== undefined) {
+        electronOptions.x = x;
+      }
+      if (y !== undefined) {
+        electronOptions.y = y;
+      }
 
       // Allow relative urls (e.g. /index.html and demo/demo.html)
       if (!isUrlPattern.test(electronOptions.url) && electronOptions.url !== 'about:blank') {

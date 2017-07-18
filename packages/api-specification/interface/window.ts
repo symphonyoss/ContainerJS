@@ -99,7 +99,8 @@ declare namespace ssf {
      */
     transparent?: boolean;
     /**
-     * The id of the display to show the window on.
+     * The id of the display to show the window on. If no id is passed in, the x and y position
+     * of the window is relative to the primary monitor.
      */
     display?: string;
   }
