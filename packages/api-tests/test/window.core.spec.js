@@ -695,7 +695,7 @@ describe('WindowCore API', function(done) {
       });
     }
 
-    it.only('Should emit a message event in the window #ssf.Window.postMessage #ssf.Window.postMessage', function() {
+    it('Should emit a message event in the window #ssf.Window.postMessage #ssf.WindowCore.postMessage', function() {
       const windowTitle = 'windownamepostmessage';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -712,7 +712,6 @@ describe('WindowCore API', function(done) {
 
           currentWin.addListener(event, evt => {
             window[eventName].push(evt.data);
-            console.log(event);
           });
           callback();
         };
