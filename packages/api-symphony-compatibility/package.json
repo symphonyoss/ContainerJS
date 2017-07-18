@@ -40,6 +40,6 @@
     "npm-run-all": "^4.0.2",
     "rimraf": "^2.6.1",
     "rollup": "^0.43.0",
-    "typescript": "^2.3.4"
+    "typescript": "^2.4.1"
   }
 }
