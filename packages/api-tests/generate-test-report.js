@@ -113,12 +113,17 @@ sortedTags.forEach((tag) => {
     openfin: {
       passed: openfinPassed,
       total
-    },
-    browser: {
-      passed: browserPassed,
-      total
     }
   };
+
+  // The browser doesn't implement all the methods that openfin and electron do.
+  // Only add the browser results if we actually have run any tests.
+  if (testTable.browser[tag]) {
+    outputJson[label].browser = {
+      passed: browserPassed,
+      total
+    };
+  }
 });
 
 const ghPagesMarkdown =
