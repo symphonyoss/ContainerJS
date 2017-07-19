@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "module": "commonjs",
+        "lib": [
+            "dom",
+            "es2015",
+            "dom.iterable"
+        ],
+        "target": "es5",
+        "declaration": true
+    }
+}
