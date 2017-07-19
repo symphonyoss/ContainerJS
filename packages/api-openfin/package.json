@@ -29,6 +29,7 @@
     "copyfiles": "^1.2.0",
     "rimraf": "^2.6.1",
     "rollup": "^0.41.6",
+    "rollup-plugin-node-resolve": "^3.0.0",
     "typescript": "^2.4.1"
   },
   "bin": {
@@ -37,6 +38,7 @@
   "dependencies": {
     "@types/openfin": "^17.0.2",
     "commander": "^2.10.0",
+    "fs-extra": "^4.0.0",
     "openfin-launcher": "^1.3.12"
   }
 }
