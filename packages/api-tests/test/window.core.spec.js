@@ -92,7 +92,7 @@ describe('WindowCore API', function(done) {
   });
 
   describe('Methods', function() {
-    it('Should add a listener to the window listeners #ssf.Window.addListener #ssf.WindowCore.addListener', function() {
+    it('Should add a listener to the window listeners #ssf.Window.addListener #ssf.WindowCore.addListener #ssf.EventEmitter.addListener #ssf.Notification.addListener', function() {
       const windowTitle = 'windownameaddlistener';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -358,7 +358,7 @@ describe('WindowCore API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should add a listener to the window that persists after it has been called #ssf.Window.on #ssf.WindowCore.on', function() {
+    it('Should add a listener to the window that persists after it has been called #ssf.Window.on #ssf.WindowCore.on #ssf.EventEmitter.on #ssf.Notification.on', function() {
       const windowTitle = 'windownameon';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -392,7 +392,7 @@ describe('WindowCore API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should add a one-time listener to the window #ssf.Window.once #ssf.WindowCore.once', function() {
+    it('Should add a one-time listener to the window #ssf.Window.once #ssf.WindowCore.once #ssf.EventEmitter.once #ssf.Notification.once', function() {
       const windowTitle = 'windownameonce';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -426,7 +426,7 @@ describe('WindowCore API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should remove a listener from the window #ssf.Window.removeListener #ssf.WindowCore.removeListener', function() {
+    it('Should remove a listener from the window #ssf.Window.removeListener #ssf.WindowCore.removeListener #ssf.EventEmitter.removeListener #ssf.Notification.removeListener', function() {
       const windowTitle = 'windownameremovelistener';
       const windowOptions = getWindowOptions({
         name: windowTitle
@@ -467,7 +467,7 @@ describe('WindowCore API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should remove all listeners from the window #ssf.Window.removeAllListeners #ssf.WindowCore.removeAllListeners', function() {
+    it('Should remove all listeners from the window #ssf.Window.removeAllListeners #ssf.WindowCore.removeAllListeners #ssf.EventEmitter.removeAllListeners #ssf.Notification.removeAllListeners', function() {
       const windowTitle = 'windownameremovealllisteners';
       const windowOptions = getWindowOptions({
         name: windowTitle
