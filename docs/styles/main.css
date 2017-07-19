@@ -142,6 +142,7 @@ p {
   bottom: 0px;
   overflow-y: auto;
   display: inline-block;
+  padding-bottom: 20px;
 }
 
 ul {
