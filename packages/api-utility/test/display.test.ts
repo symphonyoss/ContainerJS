@@ -12,7 +12,7 @@ const ssf = {
 
 test('Display getDisplayAlteredPosition without displayId returns undefined x/y', t => {
   globals({ ssf });
-  
+
   Display.getDisplayAlteredPosition(undefined, { x: 10, y: 50 }).then(result => {
     t.deepEqual(result, { x: undefined, y: undefined });
 
@@ -28,7 +28,7 @@ test('Display getDisplayAlteredPosition with known displayId returns x/y within 
     { id: 'screen-101', bounds: { x: 100, y: 100 } }
   ];
   getDisplaysStub.returns(Promise.resolve(displays));
-  
+
   Display.getDisplayAlteredPosition('screen-101', { x: 10, y: 50 }).then(result => {
     t.deepEqual(result, { x: 110, y: 150 });
 
