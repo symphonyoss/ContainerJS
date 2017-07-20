@@ -25,7 +25,7 @@ From within an empty folder, add a minimal HTML file called `index.html`:
     ContainerJS status: <span id="status">initialising</span>
   </div>
 
-  <script src="https://unpkg.com/containerjs-api-bundle@0.0.2/build/containerjs-bundle.js"></script>
+  <script src="/scripts/containerjs-api.js"></script>
 
   <script>
     ssf.app.ready()
@@ -37,7 +37,7 @@ From within an empty folder, add a minimal HTML file called `index.html`:
 </body>
 ```
 
-The above displays a simple welcome message and indicates the status of the ContainerJS APIs. The `containerjs-bundle.js` is the client-side bundle that detects the container that the page is running within (e.g. Electron, OpenFin) and provides the required API implementation. In the above code, this bundle is being downloaded from the `unpkg` CDN for simplicity.
+The above displays a simple welcome message and indicates the status of the ContainerJS APIs. The `containerjs-api.js` is the browser api, that will create the ContainerJS API if no API currently exists.
 
 This file uses the `ssf` API to handle the container `ready` promise, updating the status text when this lifecycle event occurs.
 
