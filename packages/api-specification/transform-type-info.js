@@ -163,6 +163,11 @@ const documentClass = (className, isClass) => {
       '.{.kindString === "Property"}', d =>
         section([
           h5(d.match.name, {class: 'code'}),
+          d.match.results && section([
+            ...testResults('Electron', d.match.results.electron),
+            ...testResults('OpenFin', d.match.results.openfin),
+            ...testResults('Browser', d.match.results.browser)
+          ], {class: 'test-results'}),
           p(formatComment(d.match.comment))
         ], {class: 'property', id: d.match.name})
     ),
