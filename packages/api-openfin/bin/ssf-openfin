@@ -1,19 +1,22 @@
 #!/usr/bin/env node
 
 const openfinLauncher = require('openfin-launcher');
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const program = require('commander');
 
 program
-  .option('-c, --config [filename]', 'ContainerJS config file', 'config.json')
-  .option('-o, --output-config [filename]', 'Where to output the OpenFin config file', 'app.json')
-  .option('-v, --version [filename]', 'Version of the OpenFin runtime to use, default is stable', 'stable')
-  .option('-u, --url [filename]', 'Url to read the new app.json file from to start OpenFin')
+  .option('-c, --config [filename]', 'ContainerJS config file', 'app.json')
+  .option('-o, --output-config [filename]', 'Where to output the OpenFin config file', 'openfinApp.json')
+  .option('-v, --version [version]', 'Version of the OpenFin runtime to use, default is stable', 'stable')
+  .option('-u, --url [url]', '(Optional) Url to read the new app.json file from to start OpenFin')
+  .option('-n, --notification [directory]', '(Optional) Generate an example notification file in the specified directory')
   .parse(process.argv);
 
 const openfinConfigFile = path.join(process.cwd(), program.outputConfig);
 const configFile = path.join(process.cwd(), program.config);
+const preloadFile = path.join(__dirname, '../build/dist/containerjs-api.js');
+const notificationFile = path.join(__dirname, '../build/dist/notification.html');
 
 const fileError = (filename, err) => {
   console.error('Error with file: ' + filename);
@@ -31,8 +34,12 @@ const openfinConfig = {
 
 if (fs.existsSync(configFile)) {
   const parsedConfig = JSON.parse(fs.readFileSync(configFile));
+  parsedConfig.preload = preloadFile;
   openfinConfig.startup_app = parsedConfig;
   fs.writeFileSync(openfinConfigFile, JSON.stringify(openfinConfig));
+  if (program.notification) {
+    fs.copySync(notificationFile, program.notification);
+  }
 
   openfinLauncher.launchOpenFin({
     configPath: program.url || openfinConfigFile
