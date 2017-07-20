@@ -37,7 +37,7 @@ From within an empty folder, add a minimal HTML file called `index.html`:
 </body>
 ```
 
-The above displays a simple welcome message and indicates the status of the ContainerJS APIs. The `containerjs-api.js` is the browser api, that will create the ContainerJS API if no API currently exists.
+The above displays a simple welcome message and indicates the status of the ContainerJS APIs. The `containerjs-api.js` is the browser API, that will create the ContainerJS API if no API currently exists.
 
 This file uses the `ssf` API to handle the container `ready` promise, updating the status text when this lifecycle event occurs.
 
