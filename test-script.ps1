@@ -6,17 +6,17 @@ IF ($env:APPVEYOR_REPO_BRANCH -eq "master" -And (-Not (Test-Path Env:\APPVEYOR_P
 
   # Run tests individually so we don't fail the build
   npm run test:ci:electron
-  IF ($error) {
+  IF ($LASTEXITCODE -ne "0") {
     Write-Warning -Message 'Electron Tests Failed'
     [Environment]::SetEnvironmentVariable("TestResult", "1", "User")
   }
   npm run test:ci:openfin
-  IF ($error) {
+  IF ($LASTEXITCODE -ne "0") {
     Write-Warning -Message 'OpenFin Tests Failed'
     [Environment]::SetEnvironmentVariable("TestResult", "1", "User")
   }
   npm run test:ci:browser
-  IF ($error) {
+  IF ($LASTEXITCODE -ne "0") {
     Write-Warning -Message 'Browser Tests Failed'
     [Environment]::SetEnvironmentVariable("TestResult", "1", "User")
   }
