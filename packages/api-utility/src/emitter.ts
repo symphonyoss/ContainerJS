@@ -73,7 +73,7 @@ export abstract class Emitter implements ssf.EventEmitter {
     return this;
   }
 
-  removeAllListeners(eventName: string) {
+  removeAllListeners(eventName?: string) {
     const removeAllListenersForEvent = (event) => {
       if (this.eventListeners.has(event)) {
         this.eventListeners.get(event).forEach((listener) => {
