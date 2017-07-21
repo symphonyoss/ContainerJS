@@ -1,6 +1,6 @@
 {
   "name": "containerjs-api-openfin",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "The ContainerJS OpenFin API",
   "main": "build/lib/index.js",
   "module": "build/es/index.js",
@@ -21,8 +21,8 @@
   },
   "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "devDependencies": {
-    "containerjs-api-specification": "^0.0.3",
-    "containerjs-api-utility": "0.0.1",
+    "containerjs-api-specification": "^0.0.4",
+    "containerjs-api-utility": "^0.0.2",
     "copyfiles": "^1.2.0",
     "rimraf": "^2.6.1",
     "rollup": "^0.41.6",
