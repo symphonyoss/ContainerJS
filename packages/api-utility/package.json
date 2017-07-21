@@ -2,10 +2,8 @@
   "name": "containerjs-api-utility",
   "version": "0.0.1",
   "description": "Utility classes and functions for ContainerJS",
-  "main": "build/lib/index.js",
-  "module": "build/es/index.js",
-  "jsnext:main": "build/es/index.js",
-  "typings": "build/lib/index",
+  "main": "build/es/index.js",
+  "typings": "build/es/index",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/symphonyoss/ContainerJS.git"
@@ -17,9 +15,7 @@
   },
   "scripts": {
     "clean": "rimraf build",
-    "build": "npm run clean && npm run build:cjs && npm run build:es",
-    "build:es": "rimraf build/es && tsc -p tsconfig.json -m ES2015 --outdir ./build/es",
-    "build:cjs": "rimraf build/lib && tsc -p tsconfig.json -m CommonJS --outdir ./build/lib",
+    "build": "npm run clean && tsc",
     "build:test": "rimraf build/test && tsc -p test/tsconfig.json -m CommonJS --outdir ./build/test",
     "test": "npm run build:test && tape build/test/test/**/*.test.js | tap-diff"
   },

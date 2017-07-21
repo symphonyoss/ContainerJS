@@ -8,10 +8,7 @@
   "browser": "build/dist/containerjs-api.js",
   "scripts": {
     "clean": "rimraf build",
-    "build": "npm run clean && npm run build:cjs && npm run build:es && rollup -c && copyfiles -f src/notification.html ./build/dist",
-    "build:es": "rimraf build/es && tsc -p tsconfig.json -m ES2015 --outdir ./build/es && copyfiles -f src/notification.html ./build/es",
-    "build:cjs": "rimraf build/lib && tsc -p tsconfig.json -m CommonJS --outdir ./build/lib && copyfiles -f src/notification.html ./build/lib",
-    "build:umd": "rimraf build/dist && npm run build:es && rollup -c && copyfiles -f src/notification.html ./build/dist"
+    "build": "npm run clean && tsc && rollup -c && copyfiles -f src/notification.html ./build/dist"
   },
   "repository": {
     "type": "git",

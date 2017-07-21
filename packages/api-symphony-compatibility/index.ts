@@ -1,3 +1,5 @@
 import { map } from './src/mapping';
 
-export const ssf = map.ssf;
+/* tslint:disable:no-default-export */
+export default map.ssf;
+/* tslint:enable:no-default-export */
