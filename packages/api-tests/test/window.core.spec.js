@@ -34,6 +34,20 @@ const retrieveWebUrl = () => {
   return executeAsyncJavascript(app.client, script);
 };
 
+const getChildWindowsCount = () => {
+  /* eslint-disable no-undef */
+  const script = (callback) => {
+    var currentWin = ssf.Window.getCurrentWindow();
+    currentWin.getChildWindows().then((wins) => {
+      callback(wins.length);
+    });
+  };
+  /* eslint-enable no-undef */
+  return executeAsyncJavascript(app.client, script);
+};
+const assertWindowsCount = expectedCount =>
+  getChildWindowsCount().then(result => assert.equal(result.value, expectedCount));
+
 const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
 describe('WindowCore API', function(done) {
@@ -148,23 +162,10 @@ describe('WindowCore API', function(done) {
         name: windowTitle
       });
 
-      const getChildWindowsCount = () => {
-        /* eslint-disable no-undef */
-        const script = (callback) => {
-          var currentWin = ssf.Window.getCurrentWindow();
-          currentWin.getChildWindows().then((wins) => {
-            callback(wins.length);
-          });
-        };
-        /* eslint-enable no-undef */
-        return executeAsyncJavascript(app.client, script);
-      };
-
       const steps = [
         ...setupWindowSteps(windowOptions),
         () => selectWindow(app.client, 0),
-        () => getChildWindowsCount(),
-        (result) => assert.equal(result.value, 1)
+        () => assertWindowsCount(1)
       ];
 
       return chainPromises(steps);
@@ -179,8 +180,30 @@ describe('WindowCore API', function(done) {
       const steps = [
         ...setupWindowSteps(windowOptions),
         () => selectWindow(app.client, 1),
-        () => callAsyncWindowMethod('getChildWindows'),
-        (result) => assert.equal(result.value.length, 0)
+        () => assertWindowsCount(0)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should not get child windows that have been closed #ssf.Window.getChildWindows #ssf.WindowCore.getChildWindows', function() {
+      const windowTitle = 'windownameclose';
+      const windowOptions1 = getWindowOptions({
+        name: `${windowTitle}1`, x: 800, y: 100
+      });
+      const windowOptions2 = getWindowOptions({
+        name: `${windowTitle}2`, x: 800, y: 300
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions1),
+        () => selectWindow(app.client, 0),
+        () => openNewWindow(app.client, windowOptions2),
+        () => assertWindowsCount(2),
+        () => selectWindow(app.client, 1),
+        () => callAsyncWindowMethod('close'),
+        () => selectWindow(app.client, 0),
+        () => assertWindowsCount(1)
       ];
 
       return chainPromises(steps);
@@ -803,6 +826,64 @@ describe('WindowCore API', function(done) {
         ...setupWindowSteps(windowOptions),
         () => callAsyncWindowMethod('getPosition'),
         (result) => assert.equal(result.value[1], yValue)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should be created with the correct width #ssf.WindowOptions.width', function() {
+      const windowTitle = 'windownamewidth';
+      const widthValue = 400;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        x: 0,
+        y: 0,
+        width: widthValue
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getSize'),
+        (result) => assert.equal(result.value[0], widthValue)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should be created with the correct height #ssf.WindowOptions.height', function() {
+      const windowTitle = 'windownameheight';
+      const heightValue = 300;
+      const windowOptions = getWindowOptions({
+        name: windowTitle,
+        x: 0,
+        y: 0,
+        height: heightValue
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getSize'),
+        (result) => assert.equal(result.value[1], heightValue)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should be created with a default width and height if none specified #ssf.Window', function() {
+      const windowTitle = 'windownamedefaultsize';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+      delete windowOptions.width;
+      delete windowOptions.height;
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('getSize'),
+        (result) => {
+          assert(result.value[0] > 200, 'Default width should be at least 200');
+          assert(result.value[1] > 200, 'Default height should be at least 200');
+        }
       ];
 
       return chainPromises(steps);

@@ -4,6 +4,11 @@ import {
 } from './accessible-windows';
 import { Emitter } from 'containerjs-api-utility';
 
+const DEFAULT_OPTIONS = {
+  width: 800,
+  height: 600
+};
+
 let currentWindow = null;
 
 const getWindowOffsets = (win) => {
@@ -28,13 +33,17 @@ export class Window extends Emitter implements ssf.WindowCore {
         callback(this);
       }
     } else {
-      this.innerWindow = window.open(options.url, options.name, objectToFeaturesString(options));
+      const winOptions = Object.assign({}, DEFAULT_OPTIONS, options);
+      this.innerWindow = window.open(options.url, options.name, objectToFeaturesString(winOptions));
       this.id = this.innerWindow.name;
       const [xOffset, yOffset] = getWindowOffsets(this.innerWindow);
       this.setPosition(options.x || (screen.width / 2) - xOffset, options.y || (screen.height / 2) - yOffset);
-      this.innerWindow.onclose = () => {
+
+      this.innerWindow.addEventListener('beforeunload', () => {
+        const index = currentWindow.children.indexOf(this);
+        currentWindow.children.splice(index, 1);
         removeAccessibleWindow(this.innerWindow.name);
-      };
+      });
 
       const currentWindow = Window.getCurrentWindow();
       currentWindow.children.push(this);
