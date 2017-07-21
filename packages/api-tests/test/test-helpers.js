@@ -12,8 +12,10 @@ const selectWindow = (client, handle) => {
 const openNewWindow = (client, options) => {
   const script = (options, callback) => {
     ssf.app.ready().then(() => {
-      window.newWin = new ssf.Window(options, () => {
-        callback();
+
+      new ssf.Window(options, (win) => {
+        window.newWin = win;
+        callback(win.getId());
       });
     });
   };
@@ -21,11 +23,24 @@ const openNewWindow = (client, options) => {
 };
 /* eslint-enable no-undef, no-new */
 
+const countWindows = (client) => {
+  return client.getWindowCount()
+    .then(result => {
+      if (process.env.MOCHA_CONTAINER === 'openfin') {
+        // Hidden mainWindow is still there
+        return result - 1;
+      } else {
+        return result;
+      }
+    });
+};
+
 const chainPromises = (promises) => promises.reduce((acc, cur) => acc.then(cur), Promise.resolve());
 
 module.exports = {
   executeAsyncJavascript,
   selectWindow,
   openNewWindow,
+  countWindows,
   chainPromises
 };

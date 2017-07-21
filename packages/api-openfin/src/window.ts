@@ -475,14 +475,11 @@ export class Window extends Emitter implements ssf.Window {
       });
     };
 
-    const idRegex = '(' +    // Start group 1
-            '[\w\d-]+' +     // At least 1 word character, digit or dash
-            ')' +            // End group 1
-            ':' +            // Colon
-            '\\1';           // Same string that was matched in group 1
+    // Group 1 - at least 1 word character, digit or dash, then repeat group 1
+    const idRegex = /([\w|\d|-]+):\1/;
 
     let app = null;
-    const uuid = id.match(new RegExp(idRegex)) ? id.split(':')[0] : id;
+    const uuid = id.match(idRegex) ? id.split(':')[0] : id;
     return appExists(uuid).then((exists) => {
       app = exists ? fin.desktop.Application.wrap(uuid) : null;
     }).then(() => {

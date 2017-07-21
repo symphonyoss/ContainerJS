@@ -39,14 +39,22 @@ export class Window extends Emitter implements ssf.WindowCore {
       const [xOffset, yOffset] = getWindowOffsets(this.innerWindow);
       this.setPosition(options.x || (screen.width / 2) - xOffset, options.y || (screen.height / 2) - yOffset);
 
+      const currentWindow = Window.getCurrentWindow();
+      const childClose = () => this.innerWindow.close();
+
       this.innerWindow.addEventListener('beforeunload', () => {
         const index = currentWindow.children.indexOf(this);
-        currentWindow.children.splice(index, 1);
+        if (index !== -1) {
+          currentWindow.children.splice(index, 1);
+          currentWindow.innerWindow.removeEventListener('beforeunload', childClose);
+        }
         removeAccessibleWindow(this.innerWindow.name);
       });
 
-      const currentWindow = Window.getCurrentWindow();
-      currentWindow.children.push(this);
+      if (options.child) {
+        currentWindow.children.push(this);
+        currentWindow.innerWindow.addEventListener('beforeunload', childClose);
+      }
       addAccessibleWindow(options.name, this.innerWindow);
     }
 

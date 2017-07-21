@@ -5,6 +5,7 @@ const {
   executeAsyncJavascript,
   selectWindow,
   openNewWindow,
+  countWindows,
   chainPromises
 } = require('./test-helpers');
 
@@ -50,7 +51,7 @@ const assertWindowsCount = expectedCount =>
 
 const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
-describe('WindowCore API', function(done) {
+describe.only('WindowCore API', function(done) {
   const timeout = 90000;
   this.timeout(timeout);
 
@@ -142,15 +143,64 @@ describe('WindowCore API', function(done) {
       const steps = [
         ...setupWindowSteps(windowOptions),
         () => callAsyncWindowMethod('close'),
-        () => app.client.getWindowCount(),
-        (result) => {
-          if (process.env.MOCHA_CONTAINER === 'openfin') {
-            // Hidden mainWindow is still there
-            assert.equal(result, 2);
-          } else {
-            assert.equal(result, 1);
-          }
+        () => countWindows(app.client),
+        (result) => assert.equal(result, 1)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should close the window\'s children #ssf.Window.close #ssf.WindowCore.close', function() {
+      const windowTitle = 'windownameclosechildren';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+      const windowOptionsChild = getWindowOptions({
+        name: `${windowTitle}child`
+      });
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => selectWindow(app.client, 1),
+        () => openNewWindow(app.client, windowOptionsChild),
+        () => selectWindow(app.client, 1),
+        () => callAsyncWindowMethod('close'),
+        () => countWindows(app.client),
+        (result) => assert.equal(result, 1)
+      ];
+
+      return chainPromises(steps);
+    });
+
+    it('Should not close the window\'s non-children #ssf.Window.close #ssf.WindowCore.close', function() {
+      const windowTitle = 'windownameclosechildren';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+      const windowOptionsFree = getWindowOptions({
+        name: `${windowTitle}free`,
+        child: false
+      });
+
+      let freeWinId;
+      const closeFreeWindow = () => {
+        const script = (winId) => {
+          ssf.Window.getById(winId).then(win => win.close(true));
         }
+        selectWindow(app.client, 0)
+          .then(() => app.client.execute(script, freeWinId));
+      };
+      
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => selectWindow(app.client, 1),
+        () => openNewWindow(app.client, windowOptionsFree),
+        (result) => freeWinId = result.value,
+        () => selectWindow(app.client, 1),
+        () => callAsyncWindowMethod('close'),
+        () => countWindows(app.client),
+        (result) => assert.equal(result, 2),
+        () => closeFreeWindow()
       ];
 
       return chainPromises(steps);
@@ -784,13 +834,8 @@ describe('WindowCore API', function(done) {
   describe('New Window', function() {
     it('Should open a new window #ssf.Window', function() {
       return openNewWindow(app.client, {url: 'about:blank', name: 'test', show: true, child: true}).then((result) => {
-        return app.client.getWindowCount().then((count) => {
-          if (process.env.MOCHA_CONTAINER === 'openfin') {
-            // Hidden mainWindow is still there
-            assert.equal(count, 3);
-          } else {
-            assert.equal(count, 2);
-          }
+        return countWindows(app.client).then((count) => {
+          assert.equal(count, 2);
         });
       });
     });
