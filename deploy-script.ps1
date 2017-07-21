@@ -8,7 +8,7 @@ IF ($env:APPVEYOR_REPO_BRANCH -eq "master" -And (-Not (Test-Path Env:\APPVEYOR_P
   git commit -m "Update gh-pages: $env:APPVEYOR_REPO_COMMIT_MESSAGE"
   git subtree split --prefix docs -b gh-pages
   git push -f origin gh-pages:gh-pages
-  IF ($error) {
+  IF ($LASTEXITCODE -ne "0") {
     Write-Warning -Message 'Deploy Failed'
   }
 }
