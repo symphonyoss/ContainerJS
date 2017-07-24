@@ -1,24 +1,31 @@
-import { Window } from './window';
-import { getAccessibleWindow } from './accessible-windows';
+import { distributeMessage } from './accessible-windows';
 
 const listenerMap = new Map();
 
+const currentWindowId = (): string => {
+  return ssf.Window.getCurrentWindow().getId();
+};
+
 export class MessageService implements ssf.MessageService {
   static send(windowId: string, topic: string, message: any) {
-    const win = getAccessibleWindow(windowId);
-    const senderId = Window.getCurrentWindow().getId();
-    if (win) {
-      win.postMessage({
-        senderId,
-        topic,
-        message
-      }, '*');
-    }
+    const senderId = currentWindowId();
+
+    distributeMessage({
+      senderId,
+      windowId,
+      topic,
+      message
+    });
   }
 
   static subscribe(windowId: string, topic: string, listener: (...args: any[]) => void) {
     const receiveMessage = (event) => {
-      if ((windowId === '*' || windowId === event.data.senderId) && topic === event.data.topic) {
+      const thisId = currentWindowId();
+      if ((windowId === '*' || windowId === event.data.senderId)
+          && (event.data.windowId === '*' || thisId === event.data.windowId)
+          && event.data.senderId !== thisId
+          && topic === event.data.topic) {
+        // Message intended for this window
         listener(event.data.message, event.data.senderId);
       }
     };
@@ -40,7 +47,7 @@ export class MessageService implements ssf.MessageService {
     // I.e. {} !== {}
     listenerMap.forEach((value, key) => {
       if (key.windowId === windowId && key.topic === topic && key.listener === listener) {
-        window.removeEventListener('message', listener);
+        window.removeEventListener('message', value);
         deleteKey = key;
       }
     });
