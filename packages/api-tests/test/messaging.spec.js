@@ -46,7 +46,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
     const unsubscribeScript = (id, topic, callback) => {
       ssf.MessageService.unsubscribe(id, topic, window.messageServiceFunction);
       callback();
-    }
+    };
     const sendMessageScript = (id, topic, message, callback) => {
       ssf.MessageService.send(id, topic, message);
       callback();
@@ -247,7 +247,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
 
       it('Should not receive message after unsubscribe #ssf.MessageService.unsubscribe', function() {
         const message = 'message';
-        
+
         const steps = [
           () => openNewWindow(app.client, defaultWindowOptions),
           () => selectWindow(app.client, 1),
