@@ -3,6 +3,7 @@ const sendButton = document.getElementById('send-message');
 const newWindowButton = document.getElementById('new-window');
 const subscribeButton = document.getElementById('subscribe-button');
 const unsubscribeButton = document.getElementById('unsubscribe-button');
+const subscribedPanel = document.getElementById('subscribed-panel');
 
 const appReady = ssf.app.ready();
 
@@ -23,11 +24,15 @@ appReady.then(() => {
       child: isChild,
       name: id,
       show: true,
-      url: `${path}/messaging-api-test-window.html`
+      url: `${path}/messaging-api.html`,
+      width: 800,
+      height: 920
     });
   };
 
-  sendButton.onclick = () => {
+  sendButton.onsubmit = e => {
+    e.preventDefault();
+
     const uuid = document.getElementById('uuid').value;
     const message = document.getElementById('message').value;
     ssf.MessageService.send(uuid, 'test', message);
@@ -39,9 +44,17 @@ appReady.then(() => {
 
   subscribeButton.onclick = () => {
     ssf.MessageService.subscribe('*', 'test', messageReceived);
+
+    subscribeButton.style.display = 'none';
+    unsubscribeButton.style.display = '';
+    subscribedPanel.style.display = '';
   };
 
   unsubscribeButton.onclick = () => {
     ssf.MessageService.unsubscribe('*', 'test', messageReceived);
+
+    subscribeButton.style.display = '';
+    unsubscribeButton.style.display = 'none';
+    subscribedPanel.style.display = 'none';
   };
 });

@@ -33,14 +33,14 @@
   <form class="form-inline">
     <div class="form-group">
       <label>Child</label>
-      <input type="checkbox" id="child">
+      <input type="checkbox" id="child" checked />
     </div>
     <button type="button" class="btn btn-default" id="new-window">New Window</button>
   </form>
 
   <hr/>
 
-  <form class="form">
+  <form class="form" id="send-message">
     <div class="form-group">
       <label>Window Id</label>
       <input type="text" class="form-control" placeholder="Id" id="uuid">
@@ -49,7 +49,7 @@
       <label>Message</label>
       <input type="text" class="form-control" placeholder="message" id="message">
     </div>
-    <button type="button" id="send-message" class="btn btn-default">Send</button>
+    <button type="submit" class="btn btn-default">Send</button>
   </form>
 
   <hr/>
@@ -58,12 +58,12 @@
 
   <form class="inline-form">
     <button type="button" class="btn btn-default" id="subscribe-button">Subscribe</button>
-    <button type="button" class="btn btn-default" id="unsubscribe-button">Unsubscribe</button>
+    <button type="button" class="btn btn-default" id="unsubscribe-button" style="display: none;">Unsubscribe</button>
   </form>
 
   <hr/>
 
-  <div class="panel panel-default">
+  <div id="subscribed-panel" class="panel panel-default" style="display: none;">
     <div class="panel-heading">
       <h3 class="panel-title">Latest Message</h3>
     </div>

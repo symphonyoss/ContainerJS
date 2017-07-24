@@ -33,14 +33,12 @@ const initialisePositionSteps = () => [
 ];
 
 const callAsyncWindowMethod = (method, ...args) => {
-  /* eslint-disable no-undef */
   const script = (method, args, callback) => {
     var currentWin = ssf.Window.getCurrentWindow();
     currentWin[method](...args).then((data) => {
       callback(data);
     });
   };
-  /* eslint-enable no-undef */
   return executeAsyncJavascript(app.client, script, method, args);
 };
 
@@ -63,7 +61,6 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
     });
 
     it('Should have ssf.Window available globally', function() {
-      /* eslint-disable no-undef */
       const script = (callback) => {
         ssf.app.ready().then(() => {
           if (ssf.Window !== undefined) {
@@ -71,7 +68,6 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
           }
         });
       };
-      /* eslint-enable no-undef */
       return executeAsyncJavascript(app.client, script);
     });
 
@@ -83,11 +79,9 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         });
 
         const checkWindowBlurred = () => {
-          /* eslint-disable no-undef */
           const script = (callback) => {
             callback(!document.hasFocus());
           };
-          /* eslint-enable no-undef */
           return executeAsyncJavascript(app.client, script);
         };
 
@@ -118,7 +112,6 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
           name: windowTitle
         });
 
-        /* eslint-disable no-undef */
         const allScript = (callback) => {
           ssf.app.ready().then(() => {
             ssf.Window.getAll().then((windows) => {
@@ -126,7 +119,6 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
             });
           });
         };
-        /* eslint-enable no-undef */
 
         const steps = [
           ...setupWindowSteps(windowOptions),
@@ -171,7 +163,6 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
           name: windowTitle
         });
 
-        /* eslint-disable no-undef */
         const idScript = (callback) => {
           ssf.app.ready().then(() => {
             const id = window.newWin.getId();
@@ -179,7 +170,6 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
             callback(win !== null);
           });
         };
-        /* eslint-enable no-undef */
 
         const steps = [
           ...setupWindowSteps(windowOptions),
@@ -197,7 +187,6 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
           name: windowTitle
         });
 
-        /* eslint-disable no-undef */
         const idScript = (callback) => {
           ssf.app.ready().then(() => {
             ssf.Window.getById('thisiswrong').then(win => {
@@ -205,7 +194,6 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
             });
           });
         };
-        /* eslint-enable no-undef */
 
         const steps = [
           ...setupWindowSteps(windowOptions),
@@ -729,13 +717,11 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         const frameSize = process.platform === 'win32' ? 20 : 25;
 
         const getScreenSize = () => {
-          /* eslint-disable no-undef */
           const script = (callback) => {
-            const width = screen.width;
-            const height = screen.height;
+            const width = window.screen.width;
+            const height = window.screen.height;
             callback({ width, height });
           };
-          /* eslint-enable no-undef */
           return executeAsyncJavascript(app.client, script);
         };
 
@@ -758,22 +744,18 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
 
     describe('Event Listeners', function() {
       const addListener = (event) => {
-        /* eslint-disable no-undef */
         const script = (event, callback) => {
           const currentWindow = ssf.Window.getCurrentWindow();
           currentWindow.addListener(event, () => { window.listenEventResult = true; });
           callback();
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, event);
       };
 
       const retrieveListenerResult = () => {
-        /* eslint-disable no-undef */
         const script = (callback) => {
           callback(window.listenEventResult);
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script);
       };
 

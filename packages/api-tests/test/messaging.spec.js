@@ -36,7 +36,6 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
       }
     });
 
-    /* eslint-disable no-undef */
     const setupScript = (id, topic, callback) => {
       ssf.MessageService.subscribe(id, topic, (message) => {
         window.testMessage = message;
@@ -50,10 +49,8 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
     const getMessageScript = (callback) => {
       callback(window.testMessage);
     };
-    /* eslint-enable no-undef */
 
     it('Should have ssf.MessageService available globally', () => {
-      /* eslint-disable no-undef */
       const script = (callback) => {
         ssf.app.ready().then(() => {
           if (ssf.MessageService !== undefined) {
@@ -61,7 +58,6 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
           }
         });
       };
-      /* eslint-enable no-undef */
       return executeAsyncJavascript(app.client, script);
     });
 
