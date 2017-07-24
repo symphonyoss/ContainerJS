@@ -36,3 +36,27 @@ The website can be found in the `docs` folder. It is a Jekyll site, which is hos
 ```
 npm run docs
 ```
+
+### Tests in Documentation
+
+The documentation also contains the results of the last test runs. To include the test output in the docs:
+
+Within the `api-test` package,
+```
+npm run test:ci
+```
+
+this will run the tests for the `browser`, `electron`, and `OpenFin`, and put the results into the `api-tests\coverage` folder.
+
+Next run
+```
+npm run report
+```
+
+This will generate the test files into the `api-specification` package. Now the test results will be built into the documentation with:
+
+```
+npm run docs
+```
+
+inside the `api-specification` package.

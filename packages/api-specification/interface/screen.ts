@@ -1,5 +1,15 @@
 declare namespace ssf {
+  /**
+   * Exposes methods that relate to the Screen and Display Monitors.
+   */
   export abstract class Screen {
+    /**
+     * Get all the monitor displays that are available.
+     *
+     * Note that the Browser API does not support multiple displays, so it
+     * assumes the display the browser is running in is the only display.
+     * @returns {Array<Display>}
+     */
     static getDisplays(): Promise<Array<Display>>;
   }
 
