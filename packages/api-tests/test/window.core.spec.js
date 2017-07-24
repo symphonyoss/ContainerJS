@@ -47,7 +47,7 @@ const assertWindowsCount = expectedCount =>
 
 const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
-describe.only('WindowCore API', function(done) {
+describe('WindowCore API', function(done) {
   const timeout = 90000;
   this.timeout(timeout);
 
