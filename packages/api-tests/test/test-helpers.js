@@ -12,7 +12,6 @@ const selectWindow = (client, handle) => {
 const openNewWindow = (client, options) => {
   const script = (options, callback) => {
     ssf.app.ready().then(() => {
-
       new ssf.Window(options, (win) => {
         window.newWin = win;
         callback(win.getId());

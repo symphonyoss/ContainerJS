@@ -27,23 +27,19 @@ const setupWindowSteps = (windowOptions) => [
 ];
 
 const retrieveWebUrl = () => {
-  /* eslint-disable no-undef */
   const script = (callback) => {
     callback(window.location.href);
   };
-  /* eslint-enable no-undef */
   return executeAsyncJavascript(app.client, script);
 };
 
 const getChildWindowsCount = () => {
-  /* eslint-disable no-undef */
   const script = (callback) => {
     var currentWin = ssf.Window.getCurrentWindow();
     currentWin.getChildWindows().then((wins) => {
       callback(wins.length);
     });
   };
-  /* eslint-enable no-undef */
   return executeAsyncJavascript(app.client, script);
 };
 const assertWindowsCount = expectedCount =>
@@ -67,7 +63,6 @@ describe.only('WindowCore API', function(done) {
   });
 
   const callAsyncWindowMethod = (method, ...args) => {
-    /* eslint-disable no-undef */
     const script = (method, args, callback) => {
       ssf.app.ready().then(() => {
         var currentWin = ssf.Window.getCurrentWindow();
@@ -76,12 +71,10 @@ describe.only('WindowCore API', function(done) {
         });
       });
     };
-    /* eslint-enable no-undef */
     return executeAsyncJavascript(app.client, script, method, args);
   };
 
   const callWindowMethod = (method, ...args) => {
-    /* eslint-disable no-undef */
     const script = (method, args, callback) => {
       ssf.app.ready().then(() => {
         var currentWin = ssf.Window.getCurrentWindow();
@@ -89,12 +82,10 @@ describe.only('WindowCore API', function(done) {
       });
     };
 
-    /* eslint-enable no-undef */
     return executeAsyncJavascript(app.client, script, method, args);
   };
 
   it('Should have ssf.Window available globally', function() {
-    /* eslint-disable no-undef */
     const script = (callback) => {
       ssf.app.ready().then(() => {
         if (ssf.Window !== undefined) {
@@ -102,7 +93,6 @@ describe.only('WindowCore API', function(done) {
         }
       });
     };
-    /* eslint-enable no-undef */
     return executeAsyncJavascript(app.client, script);
   });
 
@@ -114,13 +104,11 @@ describe.only('WindowCore API', function(done) {
       });
 
       const addWindowListener = (event) => {
-        /* eslint-disable no-undef */
         const script = (event, callback) => {
           var currentWin = ssf.Window.getCurrentWindow();
           currentWin.addListener(event, () => console.log(event));
           callback();
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, event);
       };
 
@@ -186,16 +174,16 @@ describe.only('WindowCore API', function(done) {
       const closeFreeWindow = () => {
         const script = (winId) => {
           ssf.Window.getById(winId).then(win => win.close(true));
-        }
+        };
         selectWindow(app.client, 0)
           .then(() => app.client.execute(script, freeWinId));
       };
-      
+
       const steps = [
         ...setupWindowSteps(windowOptions),
         () => selectWindow(app.client, 1),
         () => openNewWindow(app.client, windowOptionsFree),
-        (result) => freeWinId = result.value,
+        (result) => { freeWinId = result.value; },
         () => selectWindow(app.client, 1),
         () => callAsyncWindowMethod('close'),
         () => countWindows(app.client),
@@ -267,7 +255,6 @@ describe.only('WindowCore API', function(done) {
       });
 
       const getParentWindowTitle = () => {
-        /* eslint-disable no-undef */
         const script = (callback) => {
           var currentWin = ssf.Window.getCurrentWindow();
           currentWin.getParentWindow().then((parent) => {
@@ -407,7 +394,6 @@ describe.only('WindowCore API', function(done) {
 
       // We MUST run the callback before we call loadURL otherwise webdriver loses the context
       const executeLoadURL = (url) => {
-        /* eslint-disable no-undef */
         const script = (url, callback) => {
           var currentWin = ssf.Window.getCurrentWindow();
           setTimeout(() => {
@@ -415,7 +401,6 @@ describe.only('WindowCore API', function(done) {
           }, 100);
           callback();
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, url);
       };
 
@@ -438,13 +423,11 @@ describe.only('WindowCore API', function(done) {
       });
 
       const addWindowListener = (event) => {
-        /* eslint-disable no-undef */
         const script = (event, callback) => {
           var currentWin = ssf.Window.getCurrentWindow();
           currentWin.on(event, () => console.log(event));
           callback();
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, event);
       };
 
@@ -472,13 +455,11 @@ describe.only('WindowCore API', function(done) {
       });
 
       const addWindowListener = (event) => {
-        /* eslint-disable no-undef */
         const script = (event, callback) => {
           var currentWin = ssf.Window.getCurrentWindow();
           currentWin.once(event, () => console.log(event));
           callback();
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, event);
       };
 
@@ -506,7 +487,6 @@ describe.only('WindowCore API', function(done) {
       });
 
       const addWindowListener = (event) => {
-        /* eslint-disable no-undef */
         const script = (event, callback) => {
           // We need to save the function, as we need to pass the same function object to removeListener
           window.customListener = () => console.log(event);
@@ -514,18 +494,15 @@ describe.only('WindowCore API', function(done) {
           currentWin.addListener(event, window.customListener);
           callback();
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, event);
       };
 
       const removeWindowListener = (event) => {
-        /* eslint-disable no-undef */
         const script = (event, callback) => {
           var currentWin = ssf.Window.getCurrentWindow();
           currentWin.removeListener(event, window.customListener);
           callback();
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, event);
       };
 
@@ -547,25 +524,21 @@ describe.only('WindowCore API', function(done) {
       });
 
       const addWindowListener = (event, data) => {
-        /* eslint-disable no-undef */
         const script = (event, data, callback) => {
           // We need to save the function, as we need to pass the same function object to removeListener
           var currentWin = ssf.Window.getCurrentWindow();
           currentWin.addListener(event, () => console.log(event + data));
           callback();
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, event, data);
       };
 
       const removeWindowListeners = (event) => {
-        /* eslint-disable no-undef */
         const script = (event, callback) => {
           var currentWin = ssf.Window.getCurrentWindow();
           currentWin.removeAllListeners(event);
           callback();
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, event);
       };
 
@@ -591,25 +564,21 @@ describe.only('WindowCore API', function(done) {
       });
 
       const addWindowListener = (event, data) => {
-        /* eslint-disable no-undef */
         const script = (event, data, callback) => {
           // We need to save the function, as we need to pass the same function object to removeListener
           var currentWin = ssf.Window.getCurrentWindow();
           currentWin.addListener(event, () => console.log(event + data));
           callback();
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, event, data);
       };
 
       const removeWindowListeners = () => {
-        /* eslint-disable no-undef */
         const script = (callback) => {
           var currentWin = ssf.Window.getCurrentWindow();
           currentWin.removeAllListeners();
           callback();
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script);
       };
 
@@ -695,7 +664,6 @@ describe.only('WindowCore API', function(done) {
         name: windowTitle
       });
 
-      /* eslint-disable no-undef */
       const wrapScript = (callback) => {
         ssf.app.ready().then(() => {
           const inner = ssf.Window.getCurrentWindow().innerWindow;
@@ -703,7 +671,6 @@ describe.only('WindowCore API', function(done) {
           callback(win.innerWindow != null);
         });
       };
-      /* eslint-enable no-undef */
 
       const steps = [
         ...setupWindowSteps(windowOptions),
@@ -776,7 +743,6 @@ describe.only('WindowCore API', function(done) {
 
       // Track calls and data passed to event listener in window[eventName]
       const addWindowListener = (event) => {
-        /* eslint-disable no-undef */
         const script = (event, callback) => {
           // Track the calls to the event listener
           var eventName = `evt_${event}_count`;
@@ -788,13 +754,11 @@ describe.only('WindowCore API', function(done) {
           });
           callback();
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, event);
       };
 
       // Call a ssf API method in the (not current) child window
       const callMethodInNewWindow = (method, ...args) => {
-        /* eslint-disable no-undef */
         const script = (method, args, callback) => {
           ssf.app.ready().then(() => {
             // window.newWin created by openNewWindow
@@ -802,18 +766,15 @@ describe.only('WindowCore API', function(done) {
           });
         };
 
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, method, args);
       };
 
       // Retrieve the calls and data tracked for the event listener
       const getListenerCalls = (event) => {
-        /* eslint-disable no-undef */
         const script = (event, callback) => {
           var eventName = `evt_${event}_count`;
           callback(window[eventName]);
         };
-        /* eslint-enable no-undef */
         return executeAsyncJavascript(app.client, script, event);
       };
 
