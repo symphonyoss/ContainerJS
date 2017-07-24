@@ -43,21 +43,29 @@ module.exports = (appJson) => {
   });
 
   ipc.on(IpcMessages.IPC_SSF_SEND_MESSAGE, (e, msg) => {
-    const windowId = parseInt(msg.windowId, 10);
-
-    if (isNaN(windowId)) {
-      return;
-    }
-
-    const destinationWindow = BrowserWindow.fromId(windowId);
-
-    if (!destinationWindow) {
-      return;
-    }
-
     const senderId = e.sender.id;
+    const sendToWindow = win => {
+      // Don't send to self
+      if (win.id !== senderId) {
+        win.webContents.send(`${IpcMessages.IPC_SSF_SEND_MESSAGE}-${msg.topic}`, msg.message, senderId);
+      }
+    };
 
-    destinationWindow.webContents.send(`${IpcMessages.IPC_SSF_SEND_MESSAGE}-${msg.topic}`, msg.message, senderId);
+    if (msg.windowId === '*') {
+      BrowserWindow.getAllWindows().forEach(sendToWindow);
+    } else {
+      const windowId = parseInt(msg.windowId, 10);
+      if (isNaN(windowId)) {
+        return;
+      }
+
+      const destinationWindow = BrowserWindow.fromId(windowId);
+      if (!destinationWindow) {
+        return;
+      }
+
+      sendToWindow(destinationWindow);
+    }
   });
 
   createInitialHiddenWindow(appJson);

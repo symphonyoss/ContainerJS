@@ -36,12 +36,17 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
       }
     });
 
-    const setupScript = (id, topic, callback) => {
-      ssf.MessageService.subscribe(id, topic, (message) => {
+    const subscribeScript = (id, topic, callback) => {
+      window.messageServiceFunction = (message) => {
         window.testMessage = message;
-      });
+      };
+      ssf.MessageService.subscribe(id, topic, window.messageServiceFunction);
       callback(ssf.Window.getCurrentWindow().getId());
     };
+    const unsubscribeScript = (id, topic, callback) => {
+      ssf.MessageService.unsubscribe(id, topic, window.messageServiceFunction);
+      callback();
+    }
     const sendMessageScript = (id, topic, message, callback) => {
       ssf.MessageService.send(id, topic, message);
       callback();
@@ -68,7 +73,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         const steps = [
           () => openNewWindow(app.client, defaultWindowOptions),
           () => selectWindow(app.client, 1),
-          () => executeAsyncJavascript(app.client, setupScript, '*', 'topic'),
+          () => executeAsyncJavascript(app.client, subscribeScript, '*', 'topic'),
           (result) => { secondWindowId = result.value; },
           () => selectWindow(app.client, 0),
           () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
@@ -89,7 +94,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         const steps = [
           () => openNewWindow(app.client, defaultWindowOptions),
           () => selectWindow(app.client, 1),
-          () => executeAsyncJavascript(app.client, setupScript, '*', 'topic'),
+          () => executeAsyncJavascript(app.client, subscribeScript, '*', 'topic'),
           (result) => { secondWindowId = result.value; },
           () => selectWindow(app.client, 0),
           () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
@@ -101,7 +106,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         return chainPromises(steps);
       });
 
-      it('Should send message to the correct window #ssf.MessageService.send', function() {
+      it('Should send message with windowId to the correct window #ssf.MessageService.send', function() {
         const message = 'message';
 
         const thirdWindowOptions = {
@@ -115,16 +120,50 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
           () => openNewWindow(app.client, defaultWindowOptions),
           () => openNewWindow(app.client, thirdWindowOptions),
           () => selectWindow(app.client, 1),
-          () => executeAsyncJavascript(app.client, setupScript, '*', 'topic'),
+          () => executeAsyncJavascript(app.client, subscribeScript, '*', 'topic'),
           (result) => { secondWindowId = result.value; },
           () => selectWindow(app.client, 2),
-          () => executeAsyncJavascript(app.client, setupScript, '*', 'topic'),
+          () => executeAsyncJavascript(app.client, subscribeScript, '*', 'topic'),
           () => selectWindow(app.client, 0),
           () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
           () => selectWindow(app.client, 1),
           () => executeAsyncJavascript(app.client, getMessageScript),
           (result) => assert.equal(result.value, message),
           () => selectWindow(app.client, 2),
+          () => executeAsyncJavascript(app.client, getMessageScript),
+          (result) => assert.equal(result.value, undefined)
+        ];
+
+        return chainPromises(steps);
+      });
+
+      it('Should send message with wildcard to all windows excluding self #ssf.MessageService.send', function() {
+        const message = 'message';
+
+        const thirdWindowOptions = {
+          url: 'http://localhost:5000/index.html',
+          name: 'messagetest2',
+          show: true,
+          child: true
+        };
+
+        const steps = [
+          () => openNewWindow(app.client, defaultWindowOptions),
+          () => openNewWindow(app.client, thirdWindowOptions),
+          () => selectWindow(app.client, 1),
+          () => executeAsyncJavascript(app.client, subscribeScript, '*', 'topic'),
+          () => selectWindow(app.client, 2),
+          () => executeAsyncJavascript(app.client, subscribeScript, '*', 'topic'),
+          () => selectWindow(app.client, 0),
+          () => executeAsyncJavascript(app.client, subscribeScript, '*', 'topic'),
+          () => executeAsyncJavascript(app.client, sendMessageScript, '*', 'topic', message),
+          () => selectWindow(app.client, 1),
+          () => executeAsyncJavascript(app.client, getMessageScript),
+          (result) => assert.equal(result.value, message),
+          () => selectWindow(app.client, 2),
+          () => executeAsyncJavascript(app.client, getMessageScript),
+          (result) => assert.equal(result.value, message),
+          () => selectWindow(app.client, 0),
           () => executeAsyncJavascript(app.client, getMessageScript),
           (result) => assert.equal(result.value, undefined)
         ];
@@ -140,7 +179,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         const steps = [
           () => openNewWindow(app.client, defaultWindowOptions),
           () => selectWindow(app.client, 1),
-          () => executeAsyncJavascript(app.client, setupScript, '*', 'topic'),
+          () => executeAsyncJavascript(app.client, subscribeScript, '*', 'topic'),
           (result) => { secondWindowId = result.value; },
           () => selectWindow(app.client, 0),
           () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
@@ -152,13 +191,13 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         return chainPromises(steps);
       });
 
-      it.skip('Should not call listener when subscribed to wildcard topic #ssf.MessageService.subscribe', function() {
+      it('Should not call listener when subscribed to wildcard topic #ssf.MessageService.subscribe', function() {
         const message = 'message';
 
         const steps = [
           () => openNewWindow(app.client, defaultWindowOptions),
           () => selectWindow(app.client, 1),
-          () => executeAsyncJavascript(app.client, setupScript, '*', '*'),
+          () => executeAsyncJavascript(app.client, subscribeScript, '*', '*'),
           (result) => { secondWindowId = result.value; },
           () => selectWindow(app.client, 0),
           () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
@@ -170,13 +209,13 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         return chainPromises(steps);
       });
 
-      it.skip('Should not receive message from wrong topic listener #ssf.MessageService.subscribe', function() {
+      it('Should not receive message from wrong topic listener #ssf.MessageService.subscribe', function() {
         const message = 'message';
 
         const steps = [
           () => openNewWindow(app.client, defaultWindowOptions),
           () => selectWindow(app.client, 1),
-          () => executeAsyncJavascript(app.client, setupScript, '*', 'topic'),
+          () => executeAsyncJavascript(app.client, subscribeScript, '*', 'topic'),
           (result) => { secondWindowId = result.value; },
           () => selectWindow(app.client, 0),
           () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic2', message),
@@ -193,8 +232,28 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
 
         const steps = [
           () => openNewWindow(app.client, defaultWindowOptions),
-          () => executeAsyncJavascript(app.client, setupScript, 'wrong', 'topic'),
+          () => selectWindow(app.client, 1),
+          () => executeAsyncJavascript(app.client, subscribeScript, 'wrong', 'topic'),
           (result) => { secondWindowId = result.value; },
+          () => selectWindow(app.client, 0),
+          () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
+          () => selectWindow(app.client, 1),
+          () => executeAsyncJavascript(app.client, getMessageScript),
+          (result) => assert.equal(result.value, undefined)
+        ];
+
+        return chainPromises(steps);
+      });
+
+      it('Should not receive message after unsubscribe #ssf.MessageService.unsubscribe', function() {
+        const message = 'message';
+        
+        const steps = [
+          () => openNewWindow(app.client, defaultWindowOptions),
+          () => selectWindow(app.client, 1),
+          () => executeAsyncJavascript(app.client, subscribeScript, '*', 'topic'),
+          (result) => { secondWindowId = result.value; },
+          () => executeAsyncJavascript(app.client, unsubscribeScript, '*', 'topic'),
           () => selectWindow(app.client, 0),
           () => executeAsyncJavascript(app.client, sendMessageScript, secondWindowId, 'topic', message),
           () => selectWindow(app.client, 1),
