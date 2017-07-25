@@ -53,7 +53,7 @@ export namespace map {
     /** API defined at https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/ScreenSnippet+API */
     export class ScreenSnippet {
       capture() {
-        return new containerjsSsf.ScreenSnippet().capture();
+        return new containerjsSsf.Window().capture();
       }
     }
   }

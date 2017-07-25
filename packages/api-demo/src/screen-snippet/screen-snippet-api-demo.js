@@ -10,7 +10,7 @@ function updateErrorText(text) {
 }
 
 function appReady() {
-  var mySnippet = new ssf.ScreenSnippet();
+  var mySnippet = new ssf.WindowCore();
 
   button.onclick = function() {
     preview.src = '';

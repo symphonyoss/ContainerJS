@@ -790,6 +790,39 @@ describe('WindowCore API', function(done) {
 
       return chainPromises(steps);
     });
+
+    it('Should return a base64 string containing a png #ssf.WindowCore.capture', function() {
+      windowTitle = 'windownamecapture';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const assertIsDataURl = (value) => {
+        const dataPrefix = value.substring(0, 22);
+        assert.equal(dataPrefix, 'data:image/png;base64,');
+
+        return value;
+      };
+
+      const assertIsBase64Png = (value) => {
+        const pngHeader = Buffer.from('89504e470d0a1a0a', 'hex');
+
+        const base64Data = value.substring(22);
+        const decodedBase64Header = new Buffer(base64Data, 'base64').slice(0, 8);
+        assert.deepEqual(decodedBase64Header, pngHeader);
+
+        return value;
+      };
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => callAsyncWindowMethod('capture'),
+        (result) => assertIsDataURl(result.value),
+        (value) => assertIsBase64Png(value)
+      ];
+
+      return chainPromises(steps);
+    });
   });
 
   describe('New Window', function() {
