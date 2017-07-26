@@ -195,7 +195,7 @@ export class Window extends Emitter implements ssf.WindowCore {
   }
 
   capture() {
-    return html2canvas(document.body)
+    return html2canvas(this.innerWindow.document.documentElement)
       .then((canvas) => canvas.toDataURL());
   }
 }
@@ -223,5 +223,6 @@ const eventMap = {
   'hide': 'hidden',
   'message': 'message',
   'show': 'load',
-  'resize': 'resize'
+  'resize': 'resize',
+  'capture': 'capture'
 };

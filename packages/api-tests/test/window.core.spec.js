@@ -792,7 +792,7 @@ describe('WindowCore API', function(done) {
     });
 
     it('Should return a base64 string containing a png #ssf.WindowCore.capture', function() {
-      windowTitle = 'windownamecapture';
+      const windowTitle = 'windownamecapture';
       const windowOptions = getWindowOptions({
         name: windowTitle
       });
