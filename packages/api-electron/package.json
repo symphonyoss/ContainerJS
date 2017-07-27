@@ -19,7 +19,7 @@
   "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "dependencies": {
     "@types/electron": "1.4.37",
-    "@types/electron-notify": "^0.1.3",
+    "@types/electron-notify": "0.1.3",
     "containerjs-api-specification": "^0.0.4",
     "containerjs-api-utility": "^0.0.2",
     "electron": "1.6.6",
