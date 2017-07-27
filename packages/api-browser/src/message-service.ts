@@ -18,7 +18,7 @@ export class MessageService implements ssf.MessageService {
     });
   }
 
-  static subscribe(windowId: string, topic: string, listener: (...args: any[]) => void) {
+  static subscribe(windowId: string, topic: string, listener: (message: string|object, sender: string) => void) {
     const receiveMessage = (event) => {
       const thisId = currentWindowId();
       if ((windowId === '*' || windowId === event.data.senderId)
@@ -40,7 +40,7 @@ export class MessageService implements ssf.MessageService {
     }, receiveMessage);
   }
 
-  static unsubscribe(windowId: string, topic: string, listener: (...args: any[]) => void) {
+  static unsubscribe(windowId: string, topic: string, listener: (message: string|object, sender: string) => void) {
     let deleteKey = null;
 
     // We cant use listenerMap.has() here because reconstructing the key from the arguments is a different object

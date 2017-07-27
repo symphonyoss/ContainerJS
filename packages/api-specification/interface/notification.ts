@@ -37,7 +37,7 @@ declare namespace ssf {
    * A Notification emits click events when the user clicks on it
    *
    * <pre>
-   * Notification.requestPermission().then(result => {
+   * ssf.Notification.requestPermission().then(result => {
    *   if (result === 'granted') {
    *     const notification = new Notification('My Title', { body: 'My body text' });
    *
@@ -56,7 +56,7 @@ declare namespace ssf {
    * template setting in NotificationOptions
    *
    * <pre>
-   *     const notification = new Notification(
+   *     const notification = new ssf.Notification(
    *       'My Title',
    *       {
    *         body: 'My body text',
