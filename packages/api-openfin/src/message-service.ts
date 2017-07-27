@@ -12,7 +12,7 @@ export class MessageService implements ssf.MessageService {
     }
   }
 
-  static subscribe(windowId: string, topic: string, listener: (...args: any[]) => void) {
+  static subscribe(windowId: string, topic: string, listener: (message: string|object, sender: string) => void) {
     const thisWindowId = fin.desktop.Window.getCurrent().uuid;
     const receiveMessage = (message, senderId) => {
       // Don't send to self
@@ -37,7 +37,7 @@ export class MessageService implements ssf.MessageService {
     }
   }
 
-  static unsubscribe(windowId: string, topic: string, listener: (...args: any[]) => void) {
+  static unsubscribe(windowId: string, topic: string, listener: (message: string|object, sender: string) => void) {
     let deleteKey = null;
     let receiveMessage = null;
 
