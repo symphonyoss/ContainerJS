@@ -1,10 +1,14 @@
 import { createMainProcess } from './main-process';
 
+let initialisePromise = null;
 export class app implements ssf.App {
   static ready() {
-    return new Promise<void>((resolve) => {
-      fin.desktop.main(() => createMainProcess(resolve));
-    });
+    if (!initialisePromise) {
+      initialisePromise = new Promise<void>((resolve) => {
+        fin.desktop.main(() => createMainProcess(resolve));
+      });
+    }
+    return initialisePromise;
   }
 
   static setBadgeCount(count: number) {
