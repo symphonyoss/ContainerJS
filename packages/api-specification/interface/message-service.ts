@@ -4,7 +4,8 @@ declare namespace ssf {
    *
    * Messages can be sent between windows that are part of the same application.
    * Subscribe to messages based on a topic name, and either send messages
-   * from or to a particular window id, or else distribute to all listening windows
+   * from or to a particular window id, or else distribute to all listening windows.
+   * Messages are sent asynchronously.
    *
    * <pre>
    *   // Listen for messages from any window with the subject "test-subject"
