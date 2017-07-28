@@ -63,10 +63,10 @@ inside the `api-specification` package.
 
 ### Release
 
-To release the packages to npm, install lerna globally and run
+To release the packages to npm, run
 
 ```
-lerna publish --independent
+npm run publish
 ```
 
 and follow the instructions. This will create a publish commit, which can then be pushed and merged. To push the tags created by lerna, use
