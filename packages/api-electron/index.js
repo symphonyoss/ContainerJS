@@ -9,9 +9,11 @@ const { IpcMessages } = require('./src/common/constants');
 
 let win;
 const windows = [];
-const preloadPath = path.join(__dirname, 'build', 'dist', 'containerjs-api.js');
 
-module.exports = (appJson) => {
+module.exports = (appJson, useSymphony) => {
+  const preloadFile = useSymphony ? 'containerjs-api-symphony.js' : 'containerjs-api.js';
+  const preloadPath = path.join(__dirname, 'build', 'dist', preloadFile);
+
   ipc.on(IpcMessages.IPC_SSF_NEW_WINDOW, (e, msg) => {
     const options = Object.assign(
       {},
@@ -68,10 +70,10 @@ module.exports = (appJson) => {
     }
   });
 
-  createInitialHiddenWindow(appJson);
+  createInitialHiddenWindow(appJson, preloadPath);
 };
 
-const createInitialHiddenWindow = (appJson) => {
+const createInitialHiddenWindow = (appJson, preloadPath) => {
   // Create an invisible window to run the load script
   win = new BrowserWindow({
     width: 800,

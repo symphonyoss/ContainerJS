@@ -94,7 +94,7 @@ $ npm install --global containerjs-api-electron
 From within your 'Hello World' folder, execute the following:
 
 ```
-$ ssf-electron app.json
+$ ssf-electron --config app.json
 ```
 
 You should now see exactly the same app running within Electron.
