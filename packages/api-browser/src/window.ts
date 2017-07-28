@@ -214,5 +214,6 @@ const eventMap = {
   'focus': 'focus',
   'hide': 'hidden',
   'message': 'message',
-  'show': 'load'
+  'show': 'load',
+  'resize': 'resize'
 };
