@@ -11,11 +11,13 @@ program
   .option('-v, --version [version]', 'Version of the OpenFin runtime to use, default is stable', 'stable')
   .option('-u, --url [url]', '(Optional) Url to read the new app.json file from to start OpenFin')
   .option('-n, --notification [directory]', '(Optional) Generate an example notification file in the specified directory')
+  .option('-s, --symphony', '(Optional) Use Symphony compatibility layer', (v, val) => true, false)
   .parse(process.argv);
 
 const openfinConfigFile = path.join(process.cwd(), program.outputConfig);
 const configFile = path.join(process.cwd(), program.config);
-const preloadFile = path.join(__dirname, '../build/dist/containerjs-api.js');
+const preloadFile = program.symphony ? 'containerjs-api-symphony.js' : 'containerjs-api.js';
+const preloadPath = path.join(__dirname, `../build/dist/${preloadFile}`);
 const notificationFile = path.join(__dirname, '../build/dist/notification.html');
 
 const fileError = (filename, err) => {
@@ -34,7 +36,7 @@ const openfinConfig = {
 
 if (fs.existsSync(configFile)) {
   const parsedConfig = JSON.parse(fs.readFileSync(configFile));
-  parsedConfig.preload = preloadFile;
+  parsedConfig.preload = preloadPath;
   openfinConfig.startup_app = parsedConfig;
   fs.writeFileSync(openfinConfigFile, JSON.stringify(openfinConfig));
   if (program.notification) {

@@ -8,7 +8,8 @@
   "browser": "build/dist/containerjs-api.js",
   "scripts": {
     "clean": "rimraf build",
-    "build": "npm run clean && tsc && rollup -c && copyfiles -f src/notification.html ./build/dist"
+    "build": "npm run clean && tsc && rollup -c && copyfiles -f src/notification.html ./build/dist && npm run bundle",
+    "bundle": "concat -o build/dist/containerjs-api-symphony.js build/dist/containerjs-api.js node_modules/containerjs-api-compatibility/build/dist/containerjs-api-compatibility.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,8 @@
   },
   "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "devDependencies": {
+    "concat": "^1.0.3",
+    "containerjs-api-compatibility": "^0.0.3",
     "containerjs-api-specification": "^0.0.4",
     "containerjs-api-utility": "^0.0.2",
     "copyfiles": "^1.2.0",

@@ -5,7 +5,8 @@
   "main": "build/es/preload.js",
   "scripts": {
     "clean": "rimraf build",
-    "build": "npm run clean && tsc && rollup -c"
+    "build": "npm run clean && tsc && rollup -c && npm run bundle",
+    "bundle": "concat -o build/dist/containerjs-api-symphony.js build/dist/containerjs-api.js node_modules/containerjs-api-compatibility/build/dist/containerjs-api-compatibility.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,8 @@
   "dependencies": {
     "@types/electron": "1.4.37",
     "@types/electron-notify": "0.1.3",
+    "commander": "^2.11.0",
+    "containerjs-api-compatibility": "^0.0.3",
     "containerjs-api-specification": "^0.0.4",
     "containerjs-api-utility": "^0.0.2",
     "electron": "1.6.6",
@@ -29,6 +32,7 @@
     "ssf-electron": "./bin/ssf-electron"
   },
   "devDependencies": {
+    "concat": "^1.0.3",
     "copyfiles": "^1.2.0",
     "rimraf": "^2.6.1",
     "rollup": "^0.41.6",
