@@ -146,4 +146,21 @@ appReady.then(() => {
       console.log(error);
     });
   };
+
+  var captureWindow = document.getElementById('capture-window');
+  var capturePreview = document.getElementById('capture-preview');
+
+  captureWindow.onclick = () => {
+    capturePreview.src = '';
+    capturePreview.style.display = 'none';
+
+    win.capture()
+    .then((dataUri) => {
+      capturePreview.src = dataUri;
+      capturePreview.style.display = 'block';
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
 });
