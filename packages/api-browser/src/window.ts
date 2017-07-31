@@ -223,6 +223,5 @@ const eventMap = {
   'hide': 'hidden',
   'message': 'message',
   'show': 'load',
-  'resize': 'resize',
-  'capture': 'capture'
+  'resize': 'resize'
 };

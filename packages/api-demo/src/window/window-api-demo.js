@@ -63,10 +63,6 @@ appReady.then(() => {
       win.addListener('close', () => {
         addListItem('close');
       });
-
-      win.addListener('capture', () => {
-        addListItem('capture');
-      });
     });
   };
 
