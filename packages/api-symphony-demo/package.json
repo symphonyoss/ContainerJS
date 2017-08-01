@@ -3,13 +3,8 @@
   "version": "0.0.1",
   "description": "A demo project using the compatibility layer between ContainerJS and Symphony",
   "scripts": {
-    "serve:no-browser": "npm run serve -- --no-browser",
-    "serve": "live-server --mount=/:src --mount=/scripts/containerjs-api-symphony:node_modules/containerjs-api-browser/build/dist/containerjs-api-symphony.js",
-    "launch:electron": "ssf-electron -c ./src/app.json --symphony",
-    "electron": "npm-run-all --parallel launch:electron serve:no-browser",
-    "launch:openfin": "ssf-openfin -c ./src/app.json --symphony",
-    "openfin": "npm-run-all --parallel launch:openfin serve:no-browser",
-    "browser": "npm run serve"
+    "electron": "ssf-electron -c ./src/app.json --symphony",
+    "openfin": "ssf-openfin -c ./src/app.json --symphony"
   },
   "repository": {
     "type": "git",
@@ -22,12 +17,7 @@
   },
   "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "dependencies": {
-    "containerjs-api-browser": "^0.0.3",
     "containerjs-api-electron": "^0.0.4",
     "containerjs-api-openfin": "^0.0.4"
-  },
-  "devDependencies": {
-    "live-server": "^1.2.0",
-    "npm-run-all": "^4.0.2"
   }
 }
