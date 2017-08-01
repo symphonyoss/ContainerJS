@@ -60,3 +60,27 @@ npm run docs
 ```
 
 inside the `api-specification` package.
+
+### Release
+
+To release the packages to npm, run
+
+```
+npm run publish
+```
+
+and follow the instructions. This will create a publish commit, which can then be pushed and merged. To push the tags created by lerna, use
+
+```
+git push <remote> --tags
+```
+
+If lerna has errors about git tags, they may need to be deleted using this command.
+
+```
+git tag | xargs git tag -d
+```
+
+and rerun the publish command.
+
+_Note that you will need to be logged into npm on the command line, as well as having the required permission to push to the npm repository for publish to succeed._
