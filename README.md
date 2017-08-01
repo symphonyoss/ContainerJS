@@ -25,9 +25,10 @@ The ContainerJS repo contains the following:
 
  - `api-specification` - the ContainerJS API specified in TypeScript.
  - `api-browser`, `api-electron`, `api-openfin` - various container-specific implementations of this API.
- - `api-bundle` - a bundle that contains the client-side code for all of the different ContainerJS implementations. This allows exactly the same application code to be run against each container.
  - `api-tests` - a common suite of UI automation tests that exercise the API.
  - `api-demo` - a ContainerJS demo application.
+ - `api-utility` - utility code that is common to the various containers.
+ - `api-symphony-compatibility`, `api-symphony-demo` - an alternative ContainerJS API that is being debated via the [Symphony Foundation Desktop Wrapper Working Group](https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/Proposed+Standard+API+Specifications).
 
 ## Website Development
 
