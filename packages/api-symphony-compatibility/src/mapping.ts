@@ -16,7 +16,7 @@ export namespace map {
 
     /** API defined at https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/BadgeCount+API */
     static setBadgeCount(count: number) {
-      // see: https://github.com/symphonyoss/ContainerJS/issues/318
+      // See: https://github.com/symphonyoss/ContainerJS/issues/318
       (containerjsSsf as any).app.setBadgeCount(count);
     }
 
@@ -50,7 +50,7 @@ export namespace map {
     }
 
     static registerLogger() {
-      // we don't have any need to register a logger for the API layer
+      // We don't have any need to register a logger for the API layer
     }
   }
 
@@ -67,7 +67,7 @@ export namespace map {
         return new containerjsSsf.Notification(title, options);
       }
 
-      static permission = 'granted';
+      static permission: string = 'granted';
     }
   }
 }
