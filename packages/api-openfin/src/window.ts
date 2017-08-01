@@ -513,4 +513,10 @@ export class Window extends Emitter implements ssf.Window {
       fin.desktop.InterApplicationBus.subscribe('*' , 'ssf-all-windows', subscribeListener);
     });
   }
+
+  capture() {
+    return new Promise<string>((resolve, reject) => {
+      this.innerWindow.getSnapshot((snapshot) => { resolve('data:image/png;base64,' + snapshot); }, reject);
+    });
+  }
 }

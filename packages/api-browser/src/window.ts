@@ -3,6 +3,9 @@ import {
   removeAccessibleWindow
 } from './accessible-windows';
 import { Emitter } from 'containerjs-api-utility';
+import 'html2canvas';
+
+declare let html2canvas: any;
 
 const DEFAULT_OPTIONS = {
   width: 800,
@@ -190,6 +193,11 @@ export class Window extends Emitter implements ssf.WindowCore {
     wrappedWindow.id = String(win.name);
     return wrappedWindow;
   }
+
+  capture() {
+    return html2canvas(this.innerWindow.document.documentElement)
+      .then((canvas) => canvas.toDataURL());
+  }
 }
 
 const objectToFeaturesString = (features: ssf.WindowOptions) => {
@@ -214,5 +222,6 @@ const eventMap = {
   'focus': 'focus',
   'hide': 'hidden',
   'message': 'message',
-  'show': 'load'
+  'show': 'load',
+  'resize': 'resize'
 };

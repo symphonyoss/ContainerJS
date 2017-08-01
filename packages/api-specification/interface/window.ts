@@ -288,6 +288,13 @@ declare namespace ssf {
      * @param window The native window to wrap.
      */
     static wrap(window: Electron.BrowserWindow | fin.OpenFinWindow | BrowserWindow): Window;
+
+    /**
+     * Captures the current visible content for the given Window. Returns the image as a base64 encoded png string.
+     *
+     * Note: For the browser, this is limited by the usual cross-domain rules.
+     */
+    capture(): Promise<string>;
   }
 
    /**

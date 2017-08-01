@@ -33,7 +33,7 @@ export class Window extends Emitter implements ssf.Window {
 
     const electronOptions = Object.assign({}, options);
 
-    Display.getDisplayAlteredPosition(options.display, {x: options.x || 0, y: options.y || 0}).then(({x, y}) => {
+    Display.getDisplayAlteredPosition(options.display, { x: options.x || 0, y: options.y || 0 }).then(({ x, y }) => {
       if (x !== undefined) {
         electronOptions.x = x;
       }
@@ -193,15 +193,15 @@ export class Window extends Emitter implements ssf.Window {
   setIcon(icon: string) {
     const req = request.defaults({ encoding: null });
     return new Promise<void>((resolve, reject) => {
-        req.get(icon, (err, res, body) => {
-          const image = nativeImage.createFromBuffer(Buffer.from(body));
-          if (image.isEmpty()) {
-            reject(new Error('Image could not be created from the URL'));
-          }
-          this.asPromise<void>(this.innerWindow.setIcon, image).then(() => {
-            resolve();
-          });
+      req.get(icon, (err, res, body) => {
+        const image = nativeImage.createFromBuffer(Buffer.from(body));
+        if (image.isEmpty()) {
+          reject(new Error('Image could not be created from the URL'));
         }
+        this.asPromise<void>(this.innerWindow.setIcon, image).then(() => {
+          resolve();
+        });
+      }
       );
     });
   }
@@ -306,5 +306,14 @@ export class Window extends Emitter implements ssf.Window {
 
   static getAll() {
     return new Promise<Window[]>(resolve => resolve(BrowserWindow.getAllWindows().map(Window.wrap)));
+  }
+
+  capture() {
+    return new Promise<string>((resolve) => {
+      this.innerWindow.capturePage((image: any) => {
+        const dataUri = 'data:image/png;base64,' + image.toPng().toString('base64');
+        resolve(dataUri);
+      });
+    });
   }
 }

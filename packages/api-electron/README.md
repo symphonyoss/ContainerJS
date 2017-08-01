@@ -45,5 +45,5 @@ npm install --global containerjs-api-electron
 To run the application, do:
 
 ```
-ssf-electron ./path/to/app.json
+ssf-electron -c ./path/to/app.json
 ```
