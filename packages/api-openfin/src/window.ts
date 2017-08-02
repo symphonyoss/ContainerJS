@@ -30,7 +30,8 @@ const eventMap = {
   'navigation-rejected': 'navigation-rejected',
   'restore': 'restored',
   'show-requested': 'show-requested',
-  'show': 'shown'
+  'show': 'shown',
+  'capture': 'capture'
 };
 
 type WindowState = 'maximized' | 'minimized' | 'restored';
@@ -516,7 +517,10 @@ export class Window extends Emitter implements ssf.Window {
 
   capture() {
     return new Promise<string>((resolve, reject) => {
-      this.innerWindow.getSnapshot((snapshot) => { resolve('data:image/png;base64,' + snapshot); }, reject);
+      this.innerWindow.getSnapshot((snapshot) => {
+        this.emit('capture');
+        resolve('data:image/png;base64,' + snapshot);
+      }, reject);
     });
   }
 }

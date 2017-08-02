@@ -823,6 +823,44 @@ describe('WindowCore API', function(done) {
 
       return chainPromises(steps);
     });
+
+    it('Should emit a "capture" event #ssf.WindowCore.capture', function() {
+      const windowTitle = 'windoweventshow';
+      const windowOptions = getWindowOptions({
+        name: windowTitle
+      });
+
+      const event = 'capture';
+
+      const addListener = (event) => {
+        const script = (event, callback) => {
+          const currentWindow = ssf.Window.getCurrentWindow();
+          currentWindow.addListener(event, () => { window.listenEventResult = true; });
+          callback();
+        };
+        return executeAsyncJavascript(app.client, script, event);
+      };
+
+      const retrieveListenerResult = () => {
+        const script = (callback) => {
+          callback(window.listenEventResult);
+        };
+        return executeAsyncJavascript(app.client, script);
+      };
+
+      const retrieveDelay = 500;
+
+      const steps = [
+        ...setupWindowSteps(windowOptions),
+        () => addListener(event),
+        () => callAsyncWindowMethod(event),
+        () => wait(retrieveDelay),
+        () => retrieveListenerResult(),
+        (result) => assert.equal(result.value, true)
+      ];
+
+      return chainPromises(steps);
+    });
   });
 
   describe('New Window', function() {
