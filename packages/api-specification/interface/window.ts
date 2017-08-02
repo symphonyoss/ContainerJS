@@ -277,7 +277,7 @@ declare namespace ssf {
 
     /**
      * Gets the current window object.
-     * @param callback - Function that is called when the window is created successfully.
+     * @param callback - Function that is called when the window is created successfully and is ready to use.
      * @param errorCallback - Function that is called when the window could not be created.
      * @returns The window.
      */

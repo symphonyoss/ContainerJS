@@ -180,6 +180,7 @@ export class Window extends Emitter implements ssf.WindowCore {
 
   static getCurrentWindow(callback?: (win: Window) => void, errorCallback?: (err?: any) => void) {
     if (currentWindow) {
+      callback(currentWindow);
       return currentWindow;
     }
 
