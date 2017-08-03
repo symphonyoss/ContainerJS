@@ -1,5 +1,5 @@
 declare namespace ssf {
-  class App {
+  class app {
     /**
      * A promise that resolves when the API has finished bootstrapping.
      */
