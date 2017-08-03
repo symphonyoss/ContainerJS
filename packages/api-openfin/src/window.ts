@@ -192,14 +192,16 @@ export class Window extends Emitter implements ssf.Window {
           this.innerWindow = app.getWindow();
           this.id = `${this.innerWindow.uuid}:${this.innerWindow.name}`;
 
-          fin.desktop.InterApplicationBus.publish('ssf-new-window', {
-            windowName: this.innerWindow.uuid,
-            parentName: options.child ? Window.getCurrentWindow().innerWindow.uuid : null
-          });
+          Window.getCurrentWindow((win) => {
+            fin.desktop.InterApplicationBus.publish('ssf-new-window', {
+              windowName: this.innerWindow.uuid,
+              parentName: options.child ?  win.innerWindow.uuid : null
+            });
 
-          if (callback) {
-            callback(this);
-          }
+            if (callback) {
+              callback(this);
+            }
+          });
         }, errorCallback);
       });
     });
@@ -453,11 +455,13 @@ export class Window extends Emitter implements ssf.Window {
   static getCurrentWindow(callback?: (win: Window) => void, errorCallback?: (err?: any) => void) {
     if (currentWindow) {
       callback(currentWindow);
-      return currentWindow;
+      return;
     }
 
-    currentWindow = new Window(null, callback, errorCallback);
-    return currentWindow;
+    new Window(null, (win) => {
+      currentWindow = win;
+      callback(win);
+    }, errorCallback);
   }
 
   static wrap(win: fin.OpenFinWindow) {
