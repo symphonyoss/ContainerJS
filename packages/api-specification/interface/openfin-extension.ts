@@ -1,5 +1,6 @@
 /**
  * @ignore
+ * @hidden
  */
 declare namespace fin {
   interface OpenFinWindow {

@@ -7,6 +7,7 @@
 
 /**
  * @ignore
+ * @hidden
  */
 declare interface Screen {
   orientation: Orientation;
@@ -14,6 +15,7 @@ declare interface Screen {
 
 /**
  * @ignore
+ * @hidden
  */
 interface Orientation {
   angle: number;
