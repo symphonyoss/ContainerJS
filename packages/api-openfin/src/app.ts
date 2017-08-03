@@ -1,7 +1,7 @@
 import { createMainProcess } from './main-process';
 
 let initialisePromise = null;
-export class app implements ssf.App {
+export class app implements ssf.app {
   static ready() {
     if (!initialisePromise) {
       initialisePromise = new Promise<void>((resolve) => {

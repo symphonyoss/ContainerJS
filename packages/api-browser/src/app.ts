@@ -1,7 +1,7 @@
 import { initialise as initialiseWindows } from './accessible-windows';
 
 let initialised = false;
-export class app {
+export class app implements ssf.app {
   static ready() {
     if (!initialised) {
       initialised = true;
