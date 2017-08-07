@@ -2,6 +2,7 @@
   "name": "containerjs-api-symphony-demo",
   "version": "0.0.1",
   "description": "A demo project using the compatibility layer between ContainerJS and Symphony",
+  "private": true,
   "scripts": {
     "electron": "ssf-electron -c ./src/app.json --symphony",
     "openfin": "ssf-openfin -c ./src/app.json --symphony"
