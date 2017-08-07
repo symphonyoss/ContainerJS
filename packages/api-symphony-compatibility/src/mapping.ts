@@ -35,8 +35,6 @@ export namespace map {
             callback(bounds);
           });
         });
-      });
-      containerjsSsf.Window.getCurrentWindow(win => {
         win.addListener('move', () => {
           win.getBounds().then((bounds) => {
             callback(bounds);

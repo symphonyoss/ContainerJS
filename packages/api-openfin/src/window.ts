@@ -178,21 +178,21 @@ export class Window extends Emitter implements ssf.Window {
         }
       }
 
-      fin.desktop.Window.getCurrent().getOptions((windowOptions) => {
-        openFinOptions.preload = windowOptions.preload;
-          const appOptions = {
-          name: openFinOptions.name,
-          url: openFinOptions.url,
-          uuid: openFinOptions.name, // UUID must be the same as name
-          mainWindowOptions: openFinOptions
-        };
+      Window.getCurrentWindow((win) => {
+        win.innerWindow.getOptions((windowOptions) => {
+          openFinOptions.preload = windowOptions.preload;
+            const appOptions = {
+            name: openFinOptions.name,
+            url: openFinOptions.url,
+            uuid: openFinOptions.name, // UUID must be the same as name
+            mainWindowOptions: openFinOptions
+          };
 
-        const app = new fin.desktop.Application(appOptions, (successObject) => {
-          app.run();
-          this.innerWindow = app.getWindow();
-          this.id = `${this.innerWindow.uuid}:${this.innerWindow.name}`;
+          const app = new fin.desktop.Application(appOptions, (successObject) => {
+            app.run();
+            this.innerWindow = app.getWindow();
+            this.id = `${this.innerWindow.uuid}:${this.innerWindow.name}`;
 
-          Window.getCurrentWindow((win) => {
             fin.desktop.InterApplicationBus.publish('ssf-new-window', {
               windowName: this.innerWindow.uuid,
               parentName: options.child ?  win.innerWindow.uuid : null
@@ -201,8 +201,8 @@ export class Window extends Emitter implements ssf.Window {
             if (callback) {
               callback(this);
             }
-          });
-        }, errorCallback);
+          }, errorCallback);
+        });
       });
     });
   }
