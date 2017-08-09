@@ -2,7 +2,6 @@
   "name": "containerjs-api-utility",
   "version": "0.0.4",
   "description": "Utility classes and functions for ContainerJS",
-  "private": true,
   "main": "build/es/index.js",
   "typings": "build/es/index",
   "repository": {
