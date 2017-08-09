@@ -1,6 +1,6 @@
 {
   "name": "containerjs-api-compatibility",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "A compatibility layer between symphony electron and ContainerJS",
   "main": "build/es/index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "dependencies": {
-    "containerjs-api-specification": "^0.0.4"
+    "containerjs-api-specification": "^0.0.6"
   },
   "devDependencies": {
     "copyfiles": "^1.2.0",
