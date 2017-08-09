@@ -64,24 +64,37 @@ inside the `api-specification` package.
 
 ### Release
 
-To release the packages to npm, run
+To prepare for a release, you will need a fresh clone of the `master` branch of `symphonyoss/ContainerJS`.
 
+The release process itself is handled by [lerna](https://lernajs.io/), using the independent versioning setting.
+
+To build the packages in preparation for release:
+
+```shell-script
+npm install
+npm run build
 ```
+
+To actually release the packages to `npm`, you need an npm account that's a collaborator on the containerjs packages, logged into `npm` on the command line:
+
+```shell-script
+npm login
+```
+
+If you want to test the packages locally, before publishing, you can [npm pack](https://docs.npmjs.com/cli/pack) them, then [npm install](https://docs.npmjs.com/cli/install) into a project from the resulting archive file.
+
+To start the release process, run:
+
+```shell-script
 npm run publish
 ```
 
-and follow the instructions. This will create a publish commit, which can then be pushed and merged. To push the tags created by lerna, use
+and follow the instructions. This will publish each version to `npm`, and then create a commit with the commit message "Publish", tagged with each version that has been published. This commit _needs_ to be pushed directly to `master`, as this combination of commit and tags underpins `lerna`'s release process.
 
-```
+Check that the packages are showing correctly on `npm`, then push this commit and tags:
+
+```shell-script
 git push <remote> --tags
 ```
 
-If lerna has errors about git tags, they may need to be deleted using this command.
-
-```
-git tag | xargs git tag -d
-```
-
-and rerun the publish command.
-
-_Note that you will need to be logged into npm on the command line, as well as having the required permission to push to the npm repository for publish to succeed._
+Note that this is a _direct_ commit to `master`, not a PR. This is necessary for two reasons. Firstly because `lerna` relies on the tags that it generates to be reachable from `master`. As tags are not transferred by a PR, this leaves orphaned tags that cause `lerna` to fail. Secondly, by the time the commit has been made, the packages have already been published to `npm`, so a PR holds no real value, and can actually cause more problems with the release if it isn't merged in a timely manner. `master` is currently protected, so as a workaround it requires temporarily removing the admin restriction on pushing to allow a `git push` of the commit.
