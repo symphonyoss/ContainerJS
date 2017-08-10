@@ -29,14 +29,16 @@ export namespace map {
     /** API defined at https://symphonyoss.atlassian.net/wiki/display/WGDWAPI/RegisterBoundsChange+API */
     static registerBoundsChange(callback: Function) {
       // Not fully implemented in containerjs, only listens to the current window, not its children as well
-      containerjsSsf.Window.getCurrentWindow().addListener('resize', () => {
-        containerjsSsf.Window.getCurrentWindow().getBounds().then((bounds) => {
-          callback(bounds);
+      containerjsSsf.Window.getCurrentWindow(win => {
+        win.addListener('resize', () => {
+          win.getBounds().then((bounds) => {
+            callback(bounds);
+          });
         });
-      });
-      containerjsSsf.Window.getCurrentWindow().addListener('move', () => {
-        containerjsSsf.Window.getCurrentWindow().getBounds().then((bounds) => {
-          callback(bounds);
+        win.addListener('move', () => {
+          win.getBounds().then((bounds) => {
+            callback(bounds);
+          });
         });
       });
     }

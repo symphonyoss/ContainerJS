@@ -279,11 +279,14 @@ export class Window extends Emitter implements ssf.Window {
 
   static getCurrentWindow(callback: (win: Window) => void, errorCallback: (err?: any) => void) {
     if (currentWindow) {
-      return currentWindow;
+      callback(currentWindow);
+      return;
     }
 
-    currentWindow = new Window(null, callback, errorCallback);
-    return currentWindow;
+    new Window(null, (win) => {
+      currentWindow = win;
+      callback(win);
+    }, errorCallback);
   }
 
   static wrap(win: Electron.BrowserWindow) {
