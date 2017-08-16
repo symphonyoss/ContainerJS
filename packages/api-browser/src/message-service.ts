@@ -2,33 +2,32 @@ import { distributeMessage } from './accessible-windows';
 
 const listenerMap = new Map();
 
-const currentWindowId = (cb: (id: string) => void): void => {
-  ssf.Window.getCurrentWindow((win) => cb(win.id));
+const currentWindowId = (): string => {
+  return ssf.Window.getCurrentWindow().getId();
 };
 
 export class MessageService implements ssf.MessageService {
   static send(windowId: string, topic: string, message: any) {
-    currentWindowId((senderId) => {
-      distributeMessage({
-        senderId,
-        windowId,
-        topic,
-        message
-      });
+    const senderId = currentWindowId();
+
+    distributeMessage({
+      senderId,
+      windowId,
+      topic,
+      message
     });
   }
 
   static subscribe(windowId: string, topic: string, listener: (message: string|object, sender: string) => void) {
     const receiveMessage = (event) => {
-      currentWindowId(thisId => {
-        if ((windowId === '*' || windowId === event.data.senderId)
-            && (event.data.windowId === '*' || thisId === event.data.windowId)
-            && event.data.senderId !== thisId
-            && topic === event.data.topic) {
-          // Message intended for this window
-          listener(event.data.message, event.data.senderId);
-        }
-      });
+      const thisId = currentWindowId();
+      if ((windowId === '*' || windowId === event.data.senderId)
+          && (event.data.windowId === '*' || thisId === event.data.windowId)
+          && event.data.senderId !== thisId
+          && topic === event.data.topic) {
+        // Message intended for this window
+        listener(event.data.message, event.data.senderId);
+      }
     };
 
     window.addEventListener('message', receiveMessage, false);

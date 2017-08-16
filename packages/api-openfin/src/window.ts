@@ -178,31 +178,29 @@ export class Window extends Emitter implements ssf.Window {
         }
       }
 
-      Window.getCurrentWindow((win) => {
-        win.innerWindow.getOptions((windowOptions) => {
-          openFinOptions.preload = windowOptions.preload;
-            const appOptions = {
-            name: openFinOptions.name,
-            url: openFinOptions.url,
-            uuid: openFinOptions.name, // UUID must be the same as name
-            mainWindowOptions: openFinOptions
-          };
+      fin.desktop.Window.getCurrent().getOptions((windowOptions) => {
+        openFinOptions.preload = windowOptions.preload;
+          const appOptions = {
+          name: openFinOptions.name,
+          url: openFinOptions.url,
+          uuid: openFinOptions.name, // UUID must be the same as name
+          mainWindowOptions: openFinOptions
+        };
 
-          const app = new fin.desktop.Application(appOptions, (successObject) => {
-            app.run();
-            this.innerWindow = app.getWindow();
-            this.id = `${this.innerWindow.uuid}:${this.innerWindow.name}`;
+        const app = new fin.desktop.Application(appOptions, (successObject) => {
+          app.run();
+          this.innerWindow = app.getWindow();
+          this.id = `${this.innerWindow.uuid}:${this.innerWindow.name}`;
 
-            fin.desktop.InterApplicationBus.publish('ssf-new-window', {
-              windowName: this.innerWindow.uuid,
-              parentName: options.child ?  win.innerWindow.uuid : null
-            });
+          fin.desktop.InterApplicationBus.publish('ssf-new-window', {
+            windowName: this.innerWindow.uuid,
+            parentName: options.child ? Window.getCurrentWindow().innerWindow.uuid : null
+          });
 
-            if (callback) {
-              callback(this);
-            }
-          }, errorCallback);
-        });
+          if (callback) {
+            callback(this);
+          }
+        }, errorCallback);
       });
     });
   }
@@ -454,14 +452,11 @@ export class Window extends Emitter implements ssf.Window {
 
   static getCurrentWindow(callback?: (win: Window) => void, errorCallback?: (err?: any) => void) {
     if (currentWindow) {
-      callback(currentWindow);
-      return;
+      return currentWindow;
     }
 
-    new Window(null, (win) => {
-      currentWindow = win;
-      callback(win);
-    }, errorCallback);
+    currentWindow = new Window(null, callback, errorCallback);
+    return currentWindow;
   }
 
   static wrap(win: fin.OpenFinWindow) {
