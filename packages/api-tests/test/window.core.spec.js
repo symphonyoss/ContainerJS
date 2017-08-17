@@ -681,23 +681,6 @@ describe('WindowCore API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should call the success callback when getting the current window object #ssf.Window.getCurrentWindow', function() {
-      const getCurrentWindow = () => {
-        const script = (callback) => {
-          ssf.Window.getCurrentWindow(() => callback(true));
-        };
-        return executeAsyncJavascript(app.client, script);
-      };
-
-      const steps = [
-        () => getCurrentWindow(),
-        () => getCurrentWindow(), // Make sure the callback is called twice
-        (result) => assert.equal(result.value, true)
-      ];
-
-      return chainPromises(steps);
-    });
-
     if (process.env.MOCHA_CONTAINER === 'electron') {
       it('Should return the id of the window #ssf.Window.getId #ssf.WindowCore.getId', function() {
         const windowTitle = 'windownameid';

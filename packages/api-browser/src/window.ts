@@ -21,7 +21,7 @@ const getWindowOffsets = (win) => {
 };
 
 export class Window extends Emitter implements ssf.WindowCore {
-  children: Window[];
+  children: ssf.Window[];
   innerWindow: any;
   id: string;
 
@@ -42,24 +42,23 @@ export class Window extends Emitter implements ssf.WindowCore {
       const [xOffset, yOffset] = getWindowOffsets(this.innerWindow);
       this.setPosition(options.x || (screen.width / 2) - xOffset, options.y || (screen.height / 2) - yOffset);
 
-      Window.getCurrentWindow(currentWindow => {
-        const childClose = () => this.innerWindow.close();
+      const currentWindow = Window.getCurrentWindow();
+      const childClose = () => this.innerWindow.close();
 
-        this.innerWindow.addEventListener('beforeunload', () => {
-          const index = currentWindow.children.indexOf(this);
-          if (index !== -1) {
-            currentWindow.children.splice(index, 1);
-            currentWindow.innerWindow.removeEventListener('beforeunload', childClose);
-          }
-          removeAccessibleWindow(this.innerWindow.name);
-        });
-
-        if (options.child) {
-          currentWindow.children.push(this);
-          currentWindow.innerWindow.addEventListener('beforeunload', childClose);
+      this.innerWindow.addEventListener('beforeunload', () => {
+        const index = currentWindow.children.indexOf(this);
+        if (index !== -1) {
+          currentWindow.children.splice(index, 1);
+          currentWindow.innerWindow.removeEventListener('beforeunload', childClose);
         }
-        addAccessibleWindow(options.name, this.innerWindow);
+        removeAccessibleWindow(this.innerWindow.name);
       });
+
+      if (options.child) {
+        currentWindow.children.push(this);
+        currentWindow.innerWindow.addEventListener('beforeunload', childClose);
+      }
+      addAccessibleWindow(options.name, this.innerWindow);
     }
 
     if (callback) {
@@ -166,7 +165,7 @@ export class Window extends Emitter implements ssf.WindowCore {
   }
 
   getChildWindows() {
-    return new Promise<Window[]>(resolve => resolve(this.children));
+    return new Promise<ssf.Window[]>(resolve => resolve(this.children));
   }
 
   asPromise<T>(fn: (...args: any[]) => any): Promise<T> {
@@ -181,14 +180,11 @@ export class Window extends Emitter implements ssf.WindowCore {
 
   static getCurrentWindow(callback?: (win: Window) => void, errorCallback?: (err?: any) => void) {
     if (currentWindow) {
-      callback(currentWindow);
-      return;
+      return currentWindow;
     }
 
-    new Window(null, (win) => {
-      currentWindow = win;
-      callback(win);
-    }, errorCallback);
+    currentWindow = new Window(null, callback, errorCallback);
+    return currentWindow;
   }
 
   static wrap(win: BrowserWindow) {

@@ -183,7 +183,7 @@ declare namespace ssf {
      * Get the child windows of the window.
      * @returns A promise that resolves to an array of child windows.
      */
-    getChildWindows(): Promise<ReadonlyArray<Window|WindowCore>>;
+    getChildWindows(): Promise<ReadonlyArray<Window>>;
 
     /**
      * Gets the id of the window.
@@ -277,10 +277,11 @@ declare namespace ssf {
 
     /**
      * Gets the current window object.
-     * @param callback - Function that is called when the window is created successfully and is ready to use.
+     * @param callback - Function that is called when the window is created successfully.
      * @param errorCallback - Function that is called when the window could not be created.
+     * @returns The window.
      */
-    static getCurrentWindow(callback?: (win: Window) => void, errorCallback?: () => void): void;
+    static getCurrentWindow(callback?: () => void, errorCallback?: () => void): Window;
 
     /**
      * Wraps a native container window with a ContainerJS window.
