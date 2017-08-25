@@ -10,9 +10,15 @@ const { IpcMessages } = require('./src/common/constants');
 let win;
 const windows = [];
 
-module.exports = (appJson, useSymphony) => {
+module.exports = (appJson, useSymphony, showDeveloperMenu) => {
   const preloadFile = useSymphony ? 'containerjs-api-symphony.js' : 'containerjs-api.js';
   const preloadPath = path.join(__dirname, 'build', 'dist', preloadFile);
+
+  if (!showDeveloperMenu) {
+    app.on('browser-window-created', function(e, window) {
+      window.setMenu(null);
+    });
+  }
 
   ipc.on(IpcMessages.IPC_SSF_NEW_WINDOW, (e, msg) => {
     const options = Object.assign(
