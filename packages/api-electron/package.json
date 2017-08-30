@@ -1,6 +1,6 @@
 {
   "name": "containerjs-api-electron",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "The ContainerJS Electron API",
   "main": "build/es/preload.js",
   "scripts": {

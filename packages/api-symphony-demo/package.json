@@ -1,6 +1,6 @@
 {
   "name": "containerjs-api-symphony-demo",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A demo project using the compatibility layer between ContainerJS and Symphony",
   "private": true,
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "dependencies": {
-    "containerjs-api-electron": "^0.0.6",
-    "containerjs-api-openfin": "^0.0.6"
+    "containerjs-api-electron": "^0.0.7",
+    "containerjs-api-openfin": "^0.0.7"
   }
 }
