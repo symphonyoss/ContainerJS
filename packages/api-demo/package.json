@@ -1,6 +1,6 @@
 {
   "name": "containerjs-api-demo",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A bundle of containerJS APIs",
   "main": "src/index.js",
   "private": true,
@@ -24,9 +24,9 @@
   },
   "homepage": "https://github.com/symphonyoss/ContainerJS#readme",
   "dependencies": {
-    "containerjs-api-browser": "^0.0.6",
-    "containerjs-api-electron": "^0.0.7",
-    "containerjs-api-openfin": "^0.0.7",
+    "containerjs-api-browser": "^0.0.7",
+    "containerjs-api-electron": "^0.0.8",
+    "containerjs-api-openfin": "^0.0.8",
     "openfin-cli": "^1.1.5",
     "openfin-launcher": "^1.3.12"
   },

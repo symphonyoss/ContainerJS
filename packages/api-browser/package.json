@@ -1,6 +1,6 @@
 {
   "name": "containerjs-api-browser",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "The ContainerJS browser API",
   "main": "build/dist/containerjs-api.js",
   "scripts": {
