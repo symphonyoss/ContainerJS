@@ -63,6 +63,26 @@ appReady.then(() => {
       win.addListener('close', () => {
         addListItem('close');
       });
+
+      win.addListener('maximize', () => {
+        addListItem('maximize');
+      });
+
+      win.addListener('unmaximize', () => {
+        addListItem('unmaximize');
+      });
+
+      win.addListener('minimize', () => {
+        addListItem('minimize');
+      });
+
+      win.addListener('restore', () => {
+        addListItem('restore');
+      });
+
+      win.addListener('capture', () => {
+        addListItem('capture');
+      });
     });
   };
 

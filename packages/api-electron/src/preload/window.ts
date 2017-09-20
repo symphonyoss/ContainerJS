@@ -312,6 +312,7 @@ export class Window extends Emitter implements ssf.Window {
     return new Promise<string>((resolve) => {
       this.innerWindow.capturePage((image: any) => {
         const dataUri = 'data:image/png;base64,' + image.toPng().toString('base64');
+        this.emit('capture');
         resolve(dataUri);
       });
     });
