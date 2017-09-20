@@ -25,7 +25,7 @@ From within an empty folder, add a minimal HTML file called `index.html`:
     ContainerJS status: <span id="status">initialising</span>
   </div>
 
-  <script src="https://unpkg.com/containerjs-api-browser@0.0.3/build/dist/containerjs-api.js"></script>
+  <script src="https://unpkg.com/containerjs-api-browser/build/dist/containerjs-api.js"></script>
 
   <script>
     ssf.app.ready()
