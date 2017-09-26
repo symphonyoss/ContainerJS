@@ -62,8 +62,15 @@ if (program.testfile) {
     const testReport = JSON.parse(fs.readFileSync(program.testfile));
     Object.keys(testReport).forEach((testMethod) => {
       const getSelectionString = (type, name, childName) => `..{(.kindString === "Class" || .kindString === "Interface") && .name === "${name}"}.children{.kindString === "${type}"` + (childName ? `&& .name === "${childName}"}` : '}');
+      const getPassed = obj => obj ? obj.passed : 0;
+      const getTotal = obj => obj ? obj.total : 0;
 
       const results = testReport[testMethod];
+      results.combined = {
+        passed: getPassed(results.electron) + getPassed(results.openfin) + getPassed(results.browser),
+        total: getTotal(results.electron) + getTotal(results.openfin) + getTotal(results.browser)
+      };
+
       const [, parentName, childName] = testMethod.split('.');
       const method = jspath.apply(getSelectionString('Method', parentName, childName), typeInfo);
       if (method.length > 0) {
@@ -112,6 +119,24 @@ const testResults = (title, results) => results ? [
   h5(title, {class: 'test-result-title'}),
   span(`${results.passed}/${results.total}`, {class: 'test-result ' + testResultPercentage(results.passed, results.total)})
 ] : [];
+
+const testPip = (results) => results ? [
+  span('', {class: 'test-pip test-result ' + testResultPercentage(results.passed, results.total)})
+] : [];
+
+const testCombinedResults = results => section([
+  ...testResults('Tests', results.combined),
+  ...testPip(results.electron),
+  ...testPip(results.openfin),
+  ...testPip(results.browser),
+  section([
+    section([
+      ...testResults('Electron', results.electron),
+      ...testResults('OpenFin', results.openfin),
+      ...testResults('Browser', results.browser)
+    ], { class: 'test-content' })
+  ], { class: 'test-collapsible' })
+], {class: 'test-results'});
 
 const documentClass = (className, isClass) => {
   const createElement = (d, singular, plural) => [
@@ -162,12 +187,8 @@ const documentClass = (className, isClass) => {
     jsont.pathRule(
       '.{.kindString === "Property"}', d =>
         section([
-          h5(d.match.name, {class: 'code'}),
-          d.match.results && section([
-            ...testResults('Electron', d.match.results.electron),
-            ...testResults('OpenFin', d.match.results.openfin),
-            ...testResults('Browser', d.match.results.browser)
-          ], {class: 'test-results'}),
+          h4(d.match.name, {class: 'property-name'}),
+          d.match.results && testCombinedResults(d.match.results),
           p(formatComment(d.match.comment))
         ], {class: 'property', id: d.match.name})
     ),
@@ -175,11 +196,7 @@ const documentClass = (className, isClass) => {
       '.{.kindString === "Call signature" || .kindString === "Constructor signature"}', d =>
         section([
           h4(d.match.name, {class: 'method-name', id: `${className}-${d.match.name}`}),
-          d.match.results && section([
-            ...testResults('Electron', d.match.results.electron),
-            ...testResults('OpenFin', d.match.results.openfin),
-            ...testResults('Browser', d.match.results.browser)
-          ], {class: 'test-results'}),
+          d.match.results && testCombinedResults(d.match.results),
           p(formatComment(d.match.comment)),
           d.match.parameters && h5('Arguments'),
           // NOTE: we flatten because each parameter returns an array of dt / dd, we want to
