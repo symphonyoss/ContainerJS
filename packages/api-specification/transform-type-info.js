@@ -112,8 +112,10 @@ const formatType = (type) => {
   return 'UNKNOWN';
 };
 
+const breakText = (text) => text ? text.split(/\n\n/) : [];
 const formatComment = (comment) =>
-  comment && [comment.shortText, comment.text].filter(d => d).join('<br/>');
+  comment && [...breakText(comment.shortText), ...breakText(comment.text)]
+            .filter(d => d.trim().length > 0).join('<br/>');
 
 const testResults = (title, results) => results ? [
   h5(title, {class: 'test-result-title'}),

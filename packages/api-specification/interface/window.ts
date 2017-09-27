@@ -137,6 +137,20 @@ declare namespace ssf {
     show: 'show';
   }
 
+  /**
+    * Creates and controls windows.
+    *
+    * <i>WindowCore is implemented in the Browser, which offers a subset of the
+    * features available in OpenFin and Electron. For OpenFin and Electron
+    * specific behaviour, see <a href="#Window">Window</a> instead.</i>
+    *
+    * Windows are created via a constructor which takes a configuration object
+    * that details the window's behaviour.
+    *
+    * <pre>
+    * const win = new Window({url: 'http://localhost/index.html'});
+    * </pre>
+    */
   export abstract class WindowCore extends ssf.EventEmitter {
     /**
      * The id that uniquely identifies the window
@@ -299,6 +313,10 @@ declare namespace ssf {
 
    /**
     * Creates and controls windows.
+    *
+    * <i>The full Window interface is only available in OpenFin and Electron.
+    * For Browser and features available in all platforms,
+    * use <a href="#WindowCore">WindowCore</a> instead.</i>
     *
     * Windows are created via a constructor which takes a configuration object
     * that details the window's behaviour.
