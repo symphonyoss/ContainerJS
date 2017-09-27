@@ -146,14 +146,20 @@ const testCombinedResults = results => section([
 ], {class: 'test-results'});
 
 const documentClass = (className, isClass) => {
-  const createElement = (d, singular, plural) => [
-    jspath.apply(`.{.kindString === "${singular}"}`, d.match.children).length && h3(plural),
-    jspath.apply(`.{.kindString === "${singular}"}`, d.match.children).length && section(d.runner(jspath.apply(`.{.kindString === "${singular}"}`, d.match.children)), {class: plural.toLowerCase()})
-  ];
+  const createElement = (d, singular, plural, flags = {}) => {
+    const matchFlags = Object.keys(flags).map(key => ` && ${flags[key] ? '' : '!'}.flags.${key}`).join('');
+    const match = jspath.apply(`.{.kindString === "${singular}"${matchFlags}}`, d.match.children);
+console.log(matchFlags);
+    return [
+      match.length && h3(plural),
+      match.length && section(d.runner(match), {class: plural.toLowerCase()})
+    ];
+  }
 
   const createConstructor = (d) => createElement(d, 'Constructor', 'Constructors');
   const createProperties = (d) => createElement(d, 'Property', 'Properties');
-  const createMethods = (d) => createElement(d, 'Method', 'Methods');
+  const createStatic = (d) => createElement(d, 'Method', 'Static Methods', { isStatic: true });
+  const createMethods = (d) => createElement(d, 'Method', 'Methods', { isStatic: false });
 
   const rules = [
     // perform a 'deep' match to find any class declarations, then recursively
@@ -170,6 +176,7 @@ const documentClass = (className, isClass) => {
           h2(d.match.name),
           p(formatComment(d.match.comment)),
           // create the various sections by filtering the children based on their 'kind'
+          ...createStatic(d),
           ...createConstructor(d),
           ...createProperties(d),
           ...createMethods(d)], {id: className, class: 'docs-title'})
@@ -180,6 +187,7 @@ const documentClass = (className, isClass) => {
           h2(d.match.name),
           p(formatComment(d.match.comment)),
           // create the various sections by filtering the children based on their 'kind'
+          ...createStatic(d),
           ...createProperties(d),
           ...createMethods(d)], {id: className + '-interface', class: 'docs-title'})
     ),
