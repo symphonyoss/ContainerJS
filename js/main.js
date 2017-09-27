@@ -22,5 +22,17 @@
       li.appendChild(link);
       menu.appendChild(li);
     }
+
+    document.querySelectorAll('.test-results')
+      .forEach(testElement => {
+        testElement.addEventListener('click', () => {
+          const detailClass = 'test-detail';
+          if (testElement.classList.contains(detailClass)) {
+            testElement.classList.remove(detailClass);
+          } else {
+            testElement.classList.add(detailClass);
+          }
+        });
+      });
   }
 })();
