@@ -73,10 +73,12 @@ p {
 
 .method {
   padding-bottom: 32px;
+  position: relative;
 }
 
 .property {
   padding-bottom: 32px;
+  position: relative;
 }
 
 .navbar-light .navbar-nav .nav-link, .tagline-header, .navbar-light .navbar-brand, .navbar-light .navbar-toggler {
@@ -167,7 +169,47 @@ section.methods, section.contructors, section.properties {
 }
 
 .test-results {
-  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-align: right;
+  cursor: pointer;
+}
+.test-results::before {
+  content: '>';
+  display: inline-block;
+  font-weight: bold;
+  color: #bebebe;
+  vertical-align: bottom;
+  margin-right: 5px;
+  font-family: 'Courier';
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+  transition: transform 300ms, -webkit-transform 300ms, -ms-transform 300ms;
+}
+.test-results.test-detail:before {
+  -webkit-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+
+.test-collapsible {
+  position: relative;
+  overflow-y: hidden;
+  white-space: nowrap;
+  transition: height 300ms, margin-top 300ms;
+  height: 0;
+  width: 320px;
+  background-color: #eee;
+}
+.test-results.test-detail .test-collapsible {
+  height: 1.5em;
+}
+.test-collapsible .test-content {
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 
 .test-result-title {
@@ -202,6 +244,16 @@ section.methods, section.contructors, section.properties {
 }
 .test-result.test-color-100 {
   background-color: #50BB88;
+}
+
+.test-pip {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 2px;
+  padding: 0;
+  margin: 0 1px;
+  vertical-align: middle;
 }
 
 /* Fix some issues on small screens */
