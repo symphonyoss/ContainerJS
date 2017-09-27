@@ -137,7 +137,7 @@ declare namespace ssf {
     show: 'show';
   }
 
-  /**
+   /**
     * Creates and controls windows.
     *
     * <i>WindowCore is implemented in the Browser, which offers a subset of the
