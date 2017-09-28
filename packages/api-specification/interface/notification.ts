@@ -33,7 +33,8 @@ declare namespace ssf {
    * Creates a new Desktop Notification.
    *
    * Notifications are created via a constructor which takes a title and
-   * an options object with body text and additional view options
+   * an options object with body text and additional view options.
+   *
    * A Notification emits click events when the user clicks on it
    *
    * <pre>
