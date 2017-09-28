@@ -119,10 +119,38 @@ const formatType = (type) => {
   return 'UNKNOWN';
 };
 
-const breakText = (text) => text ? text.split(/\n\n/) : [];
+// Break comments into lines separated by <br/> and extra <pre> blocks
+// to pass into the javascript syntax highlighter
+const breakText = (text) => {
+  if (text) {
+    let formattedText = '';
+    let index = 0;
+    while(index < text.length) {
+      const codeStart = text.indexOf('<pre>', index);
+      const codeEnd = (codeStart !== -1) ? text.indexOf('</pre>', codeStart + 5) : -1;
+
+      const commentEnd = codeEnd !== -1 ? codeStart : text.length;
+      formattedText = formattedText + text.substring(index, commentEnd)
+            .split(/\n\n/)
+            .filter(t => t.trim().length > 0)
+            .join('<br/>');
+
+      if (codeEnd !== -1) {
+        // Javascript syntax highlighting of code
+        const code = text.substring(codeStart + 5, codeEnd);
+        formattedText = formattedText + `{% highlight javascript %}${code}{% endhighlight %}`;
+        index = codeEnd + 6;
+      } else {
+        index = commentEnd;
+      }
+    }
+    return formattedText;
+  }
+  return null;
+};
+
 const formatComment = (comment) =>
-  comment && [...breakText(comment.shortText), ...breakText(comment.text)]
-            .filter(d => d.trim().length > 0).join('<br/>');
+  comment && [breakText(comment.shortText), breakText(comment.text)];
 
 const testResults = (title, results) => results ? [
   h5(title, {class: 'test-result-title'}),
