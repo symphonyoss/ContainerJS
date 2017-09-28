@@ -156,7 +156,7 @@ const documentClass = (className, isClass) => {
       match.length && h3(plural),
       match.length && section(d.runner(match), {class: plural.toLowerCase()})
     ];
-  }
+  };
 
   const createConstructor = (d) => createElement(d, 'Constructor', 'Constructors');
   const createProperties = (d) => createElement(d, 'Property', 'Properties');
