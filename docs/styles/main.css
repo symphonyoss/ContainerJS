@@ -69,10 +69,24 @@ br {
   padding: 10px 10px;
   margin: 5px 0;
   font-weight: 500;
+  font-size: 90%;
 }
 
 .code, pre {
   width: 100%;
+}
+pre .hljs {
+  background-color: transparent;
+  padding: 0;
+}
+pre .hljs .nx {
+  color: #5A5886;
+}
+pre .hljs .hljs-built_in {
+  color: #A0A039;
+}
+pre .hljs .hljs-comment {
+  color: #39A000;
 }
 
 .method {
