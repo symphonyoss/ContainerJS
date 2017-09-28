@@ -97,12 +97,19 @@ if (program.testfile) {
   }
 }
 
+let documentedTypes = [];
+
 const formatType = (type) => {
   switch (type.type) {
     case 'intrinsic':
     case 'reference':
-      return type.name +
+      const typeName = type.name +
         (type.typeArguments !== undefined ? '&lt;' + type.typeArguments.map(formatType).join(', ') + '&gt;' : '');
+
+      const docType = documentedTypes.find(t => t.name === type.name);
+      return docType
+          ? `<a href="#${docType.name}${docType.isClass ? '' : '-interface'}">${typeName}</a>`
+          : typeName;
     case 'union':
       return type.types.map(formatType).join(' | ');
     case 'reflection':
@@ -247,4 +254,7 @@ const interfaces = jsont.transform(typeInfo, [
 
 const mappedInterfaces = interfaces.sort().map((name) => ({name, isClass: false}));
 const allSections = mappedClasses.concat(mappedInterfaces);
+
+documentedTypes = mappedClasses.concat(mappedInterfaces);
+
 allSections.forEach((section) => documentClass(section.name, section.isClass));
