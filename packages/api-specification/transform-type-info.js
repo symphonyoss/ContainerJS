@@ -125,7 +125,7 @@ const breakText = (text) => {
   if (text) {
     let formattedText = '';
     let index = 0;
-    while(index < text.length) {
+    while (index < text.length) {
       const codeStart = text.indexOf('<pre>', index);
       const codeEnd = (codeStart !== -1) ? text.indexOf('</pre>', codeStart + 5) : -1;
 
