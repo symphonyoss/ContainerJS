@@ -150,7 +150,8 @@ const breakText = (text) => {
 };
 
 const formatComment = (comment) =>
-  comment && [breakText(comment.shortText), breakText(comment.text)];
+  comment && [breakText(comment.shortText), breakText(comment.text)]
+        .filter(t => t).join('<br />');
 
 const testResults = (title, results) => results ? [
   h5(title, {class: 'test-result-title'}),
