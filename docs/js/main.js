@@ -2,6 +2,7 @@
   if (window.location.pathname.split('/').filter(x => x).pop().toLowerCase() === 'docs.html') {
     const classMenu = document.getElementById('class-menu');
     const interfaceMenu = document.getElementById('interface-menu');
+    const eventMenu = document.getElementById('event-menu');
     const classSections = document.getElementsByClassName('docs-title');
     for (let i = 0; i < classSections.length; i++) {
       const id = classSections[i].id;
@@ -9,6 +10,8 @@
       let menu = classMenu;
       if (id.includes('-interface')) {
         menu = interfaceMenu;
+      } else if (id.includes('-event')) {
+        menu = eventMenu;
       }
 
       const li = document.createElement('li');

@@ -3,7 +3,7 @@ declare namespace ssf {
   /**
    * Options that can be passed to the notification constructor
    */
-  class NotificationOptions {
+  interface NotificationOptions {
     /**
      * The text to display underneath the title text.
      */
@@ -24,6 +24,9 @@ declare namespace ssf {
   }
   type NotificationPermission = 'default' | 'denied' | 'granted';
 
+  /**
+   * Events that are fired by <a href="#Notification">Notification</a>
+   */
   interface NotificationEvent {
     /** Fires when the notification is clicked */
     click: 'click';
@@ -40,7 +43,11 @@ declare namespace ssf {
    * <pre>
    * ssf.Notification.requestPermission().then(result => {
    *   if (result === 'granted') {
-   *     const notification = new Notification('My Title', { body: 'My body text' });
+   *     const notification = new Notification(
+   *       'My Title',
+   *       {
+   *         body: 'My body text'
+   *       });
    *
    *     notification.on('click', () => {
    *       // Respond to click event
@@ -57,13 +64,16 @@ declare namespace ssf {
    * template setting in NotificationOptions
    *
    * <pre>
-   *     const notification = new ssf.Notification(
-   *       'My Title',
-   *       {
-   *         body: 'My body text',
-   *         template: '/resource/notification.html'
-   *       });
+   * const notification = new ssf.Notification(
+   *   'My Title',
+   *   {
+   *     body: 'My body text',
+   *     template: '/resource/notification.html'
+   *   });
    * </pre>
+   *
+   * Notification is an <a href="#EventEmitter">EventEmitter</a>.
+   * See <a href="#NotificationEvent-event">NotificationEvent</a> for a list of events.
    */
   class Notification extends ssf.EventEmitter {
     /**

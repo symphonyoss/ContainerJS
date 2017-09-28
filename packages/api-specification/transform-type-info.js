@@ -176,7 +176,7 @@ const testCombinedResults = results => section([
   ], { class: 'test-collapsible' })
 ], {class: 'test-results'});
 
-const documentClass = (className, isClass) => {
+const documentClass = (className, isClass, isEvent) => {
   const createElement = (d, singular, plural, flags = {}) => {
     const matchFlags = Object.keys(flags).map(key => ` && ${flags[key] ? '' : '!'}.flags.${key}`).join('');
     const match = jspath.apply(`.{.kindString === "${singular}"${matchFlags}}`, d.match.children);
@@ -188,7 +188,7 @@ const documentClass = (className, isClass) => {
   };
 
   const createConstructor = (d) => createElement(d, 'Constructor', 'Constructors');
-  const createProperties = (d) => createElement(d, 'Property', 'Properties');
+  const createProperties = (d) => createElement(d, 'Property', isEvent ? 'Events' : 'Properties');
   const createStatic = (d) => createElement(d, 'Method', 'Static Methods', { isStatic: true });
   const createMethods = (d) => createElement(d, 'Method', 'Methods', { isStatic: false });
 
@@ -220,7 +220,7 @@ const documentClass = (className, isClass) => {
           // create the various sections by filtering the children based on their 'kind'
           ...createStatic(d),
           ...createProperties(d),
-          ...createMethods(d)], {id: className + '-interface', class: 'docs-title'})
+          ...createMethods(d)], {id: className + (className.endsWith('Event') ? '-event' : '-interface'), class: 'docs-title'})
     ),
     jsont.pathRule(
       '.{.kindString === "Method" || .kindString === "Constructor"}', d =>
@@ -291,9 +291,14 @@ const interfaces = jsont.transform(typeInfo, [
   jsont.pathRule('.{.kindString === "Interface"}', d => d.match.name)
 ]);
 
-const mappedInterfaces = interfaces.sort().map((name) => ({name, isClass: false}));
-const allSections = mappedClasses.concat(mappedInterfaces);
+const mappedInterfaces = interfaces.sort()
+    .filter((name) => !name.endsWith('Event'))
+    .map((name) => ({name, isClass: false}));
 
-documentedTypes = mappedClasses.concat(mappedInterfaces);
+const mappedEvents = interfaces.sort()
+    .filter((name) => name.endsWith('Event'))
+    .map((name) => ({name, isClass: false, isEvent: true}));
 
-allSections.forEach((section) => documentClass(section.name, section.isClass));
+documentedTypes = mappedClasses.concat(mappedInterfaces).concat(mappedEvents);
+
+documentedTypes.forEach((section) => documentClass(section.name, section.isClass, section.isEvent));
