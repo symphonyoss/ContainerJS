@@ -105,9 +105,15 @@ declare namespace ssf {
     display?: string;
   }
 
+  /**
+   * Events that are fired by <a href="#Window">Window</a> or <a href="#WindowCore">WindowCore</a>
+   */
   interface WindowEvent {
     /** Fires when the window has been blurred */
     blur: 'blur';
+
+    /** Fires when the window is about to close */
+    close: 'close';
 
     /** Fires when the window has closed */
     closed: 'closed';
@@ -118,23 +124,29 @@ declare namespace ssf {
     /** Fires when the window has been hidden */
     hide: 'hide';
 
-    /** Fires when the window has been maximized */
+    /** Fires when the window has been maximized (not implemented in Browser) */
     maximize: 'maximize';
 
-    /** Fires when the window has been minimized */
+    /** Fires when the window has received a message from PostMessage */
+    message: 'message';
+
+    /** Fires when the window has been minimized (not implemented in Browser) */
     minimize: 'minimize';
 
-    /** Fires when the window has been moved */
+    /** Fires when the window has been moved (not implemented in Browser) */
     move: 'move';
 
     /** Fires when the window has been resized */
     resize: 'resize';
 
-    /** Fires when the window has been restored */
+    /** Fires when the window has been restored (not implemented in Browser) */
     restore: 'restore';
 
     /** Fires when the window has been shown */
     show: 'show';
+
+    /** Fires when a screenshot of the window has been captured */
+    capture: 'capture';
   }
 
    /**
@@ -148,8 +160,13 @@ declare namespace ssf {
     * that details the window's behaviour.
     *
     * <pre>
-    * const win = new Window({url: 'http://localhost/index.html'});
+    * const win = new Window({
+    *   url: 'http://localhost/index.html'
+    * });
     * </pre>
+    *
+    * WindowCore is an <a href="#EventEmitter">EventEmitter</a>.
+    * See <a href="#WindowEvent-event">WindowEvent</a> for a list of events.
     */
   export abstract class WindowCore extends ssf.EventEmitter {
     /**
@@ -167,6 +184,7 @@ declare namespace ssf {
      * @param opts A window options object
      * @param callback A callback that is called if the window creation succeeds
      * @param errorCallback A callback that is called if window creation fails
+     * @returns The window.
      */
     constructor(opts?: WindowOptions, callback?: (window: Window) => void, errorCallback?: () => void);
 
@@ -189,24 +207,57 @@ declare namespace ssf {
 
     /**
      * Returns the bounds of the window.
+     *
+     * <pre>
+     * window.getBounds().then(bounds => {
+     *   console.log(`window is ${bounds.width}px wide and ${bounds.height}px high`);
+     * });
+     * </pre>
+     *
      * @returns A promise that resolves to an object specifying the bounds of the window.
      */
     getBounds(): Promise<ssf.Rectangle>;
 
     /**
      * Get the child windows of the window.
+     *
+     * <pre>
+     * // Close all child windows
+     * window.getChildWindows().then(children => {
+     *   children.forEach(child => {
+     *     child.close();
+     *   });
+     * });
+     * </pre>
+     *
      * @returns A promise that resolves to an array of child windows.
      */
     getChildWindows(): Promise<ReadonlyArray<Window>>;
 
     /**
      * Gets the id of the window.
+     *
+     * <pre>
+     * // Send the child window a message
+     * const childId = childWindow.getId();
+     * ssf.MessageService.send(childId, 'greetings', 'Hello child window');
+     * </pre>
+     *
      * @returns The window id.
      */
     getId(): string;
 
     /**
      * Get the parent of the window. Null will be returned if the window has no parent.
+     *
+     * <pre>
+     * // Send the parent window a message
+     * window.getParentWindow().then(parent => {
+     *   const parentId = parent.getId();
+     *   ssf.MessageService.send(parentId, 'greetings', 'Hello parent window');
+     * });
+     * </pre>
+     *
      * @returns The parent window.
      */
     getParentWindow(): Promise<Window|WindowCore>;
@@ -249,6 +300,11 @@ declare namespace ssf {
 
     /**
      * Load a new URL in the window.
+     *
+     * <pre>
+     * window.loadUrl('show-results.html');
+     * </pre>
+     *
      * @param url - The URL to load in the window.
      * @returns A promise that resolves when the window method succeeds.
      */
@@ -285,14 +341,23 @@ declare namespace ssf {
 
     /**
      * Send a message to the window.
+     *
+     * The recipient window will get a `message` <a href="#WindowEvent-event">WindowEvent</a>
+     *
      * @param message - The message to send to the window. Can be any serializable object.
      */
     postMessage(message: string | Object): void;
 
     /**
      * Gets the current window object.
-     * @param callback - Function that is called when the window is created successfully.
-     * @param errorCallback - Function that is called when the window could not be created.
+     *
+     * <pre>
+     * // Close the current window
+     * ssf.Window.getCurrentWindow().close();
+     * </pre>
+     *
+     * @param callback - Function that is called when the window is ready to be used (if newly created).
+     * @param errorCallback - Function that is called when the window wrapper could not be created.
      * @returns The window.
      */
     static getCurrentWindow(callback?: () => void, errorCallback?: () => void): Window;
@@ -307,6 +372,15 @@ declare namespace ssf {
      * Captures the current visible content for the given Window. Returns the image as a base64 encoded png string.
      *
      * Note: For the browser, this is limited by the usual cross-domain rules.
+     *
+     * <pre>
+     * childWindow.capture().then(base64Png => {
+     *  document.querySelector('.screenshot').style.background
+     *      = `url(data:image/png;base64,${base64Png}`);
+     * });
+     * </pre>
+     *
+     * @returns A promise that resolves to a base64 encoded png
      */
     capture(): Promise<string>;
   }
@@ -322,8 +396,13 @@ declare namespace ssf {
     * that details the window's behaviour.
     *
     * <pre>
-    * const win = new Window({url: 'http://localhost/index.html'});
+    * const win = new Window({
+    *   url: 'http://localhost/index.html'
+    * });
     * </pre>
+    *
+    * Window is an <a href="#EventEmitter">EventEmitter</a>.
+    * See <a href="#WindowEvent-event">WindowEvent</a> for a list of events.
     */
   export class Window extends WindowCore {
     /**

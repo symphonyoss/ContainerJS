@@ -8,13 +8,13 @@ declare namespace ssf {
    * Messages are sent asynchronously.
    *
    * <pre>
-   *   // Listen for messages from any window with the subject "test-subject"
-   *   ssf.MessageService.subscribe('*', 'test-subject', (message, sender) => {
-   *     console.log(`${message} from ${sender}`);
-   *   });
+   * // Listen for messages from any window with the subject "test-subject"
+   * ssf.MessageService.subscribe('*', 'test-subject', (message, sender) => {
+   *   console.log(`${message} from ${sender}`);
+   * });
    *
-   *   // Send a message to all windows listening to "test-subject"
-   *   ssf.MessageService.send('*', 'test-subject', 'This is a test message');
+   * // Send a message to all windows listening to "test-subject"
+   * ssf.MessageService.send('*', 'test-subject', 'This is a test message');
    * </pre>
    */
   class MessageService {
@@ -38,7 +38,7 @@ declare namespace ssf {
      * Unsubscribe from a window/topic
      * @param windowId - The id of the window that the listener was subscribed to or the wildcard '*'.
      * @param topic - The topic that was being listened to.
-     * @param listener - The function that was passed to subscribe. _Note:_ this must be the same function object.
+     * @param listener - The function that was passed to subscribe. <i>Note: this must be the same function object.</i>
      */
     static unsubscribe(windowId: string, topic: string, listener: (message: string|object, sender: string) => void): void;
   }
