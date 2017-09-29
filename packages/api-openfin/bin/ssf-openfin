@@ -33,7 +33,7 @@ const openfinConfig = {
   'devtools_port': 9090,
   'startup_app': {},
   'runtime': {
-    'version': program.version
+    'version': program.openfinVersion
   },
   'shortcut': {}
 };
