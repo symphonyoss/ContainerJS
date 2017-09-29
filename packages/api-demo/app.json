@@ -1,1 +1,0 @@
-{"devtools_port":9090,"startup_app":{"url":"http://localhost:8080/index.html","name":"containerjs","uuid":"containerjs","autoShow":true,"preload":"http://localhost:8080/scripts/containerjs-api-bundle.js"},"runtime":{"version":"stable"},"shortcut":{}}
