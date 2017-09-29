@@ -145,6 +145,7 @@ pre .hljs .hljs-comment {
 
 .nav-link {
   color: #AAA6A6;
+  margin-left: 32px;
 }
 
 .nav-link:hover {
@@ -154,6 +155,11 @@ pre .hljs .hljs-comment {
 .nav-link.active {
   color: #5A5886;
   border-left: 3px solid #5A5886;
+}
+
+.nav-brand {
+  width: 25px;
+  height: 25px;
 }
 
 #docs-menu {
