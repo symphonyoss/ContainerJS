@@ -2,7 +2,6 @@ const { app } = require('electron');
 const ssfElectron = require('./index.js');
 const fs = require('fs');
 const program = require('commander');
-const chalk = require('chalk');
 const packageJson = require('./package.json');
 
 program
