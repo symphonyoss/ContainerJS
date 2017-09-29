@@ -3,13 +3,15 @@ const ssfElectron = require('./index.js');
 const fs = require('fs');
 const program = require('commander');
 const chalk = require('chalk');
+const packageJson = require('./package.json');
 
 program
+  .version(packageJson.version)
   .option('-u, --url [url]', 'Launch url for the application (can be specified in --config instead)', null)
   .option('-c, --config [filename]', '(Optional) ContainerJS config file', null)
   .option('-s, --symphony', '(Optional) Use Symphony compatibility layer', (v, val) => true, false)
   .option('-d, --developer', '(Optional) Show developer menu', (v, val) => true, false)
-  .parse(process.argv);
+  .parse(process.argv.filter(a => a !== '--enable-sandbox'));
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
