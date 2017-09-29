@@ -3,52 +3,132 @@
 const openfinLauncher = require('openfin-launcher');
 const fs = require('fs-extra');
 const path = require('path');
+const os = require('os');
 const program = require('commander');
+const packageJson = require('../package.json');
 
 program
-  .option('-c, --config [filename]', 'ContainerJS config file', 'app.json')
-  .option('-o, --output-config [filename]', 'Where to output the OpenFin config file', 'openfinApp.json')
-  .option('-v, --version [version]', 'Version of the OpenFin runtime to use, default is stable', 'stable')
-  .option('-u, --url [url]', '(Optional) Url to read the new app.json file from to start OpenFin')
-  .option('-n, --notification [directory]', '(Optional) Generate an example notification file in the specified directory')
+  .version(packageJson.version)
+  .option('-u, --url [url]', 'Launch url for the application (can be specified in --config instead)', null)
+  .option('-c, --config [filename]', '(Optional) ContainerJS config file', null)
   .option('-s, --symphony', '(Optional) Use Symphony compatibility layer', (v, val) => true, false)
+  .option('-o, --output-config [filename]', '(Optional) Where to output the OpenFin config file', null)
+  .option('-C, --config-url [url]', '(Optional) Url to read the new app.json file from to start OpenFin')
+  .option('-f, --openfin-version [version]', '(Optional) Version of the OpenFin runtime to use, default is stable', 'stable')
+  .option('-n, --notification [directory]', '(Optional) Generate an example notification file in the specified directory')
   .parse(process.argv);
 
-const openfinConfigFile = path.join(process.cwd(), program.outputConfig);
-const configFile = path.join(process.cwd(), program.config);
+const launchUrl = program.url;
+
+const openfinConfigFile = program.outputConfig
+      ? path.join(process.cwd(), program.outputConfig)
+      : path.join(os.tmpdir(), 'ssf-openfin-app-config.json');
+
+const configFile = program.config ? path.join(process.cwd(), program.config) : null;
 const preloadFile = program.symphony ? 'containerjs-api-symphony.js' : 'containerjs-api.js';
 const preloadPath = path.join(__dirname, `../build/dist/${preloadFile}`);
 const notificationFile = path.join(__dirname, '../build/dist/notification.html');
-
-const fileError = (filename, err) => {
-  console.error('Error with file: ' + filename);
-  console.error(err);
-};
 
 const openfinConfig = {
   'devtools_port': 9090,
   'startup_app': {},
   'runtime': {
-    'version': program.version
+    'version': program.openfinVersion
   },
   'shortcut': {}
 };
 
-if (fs.existsSync(configFile)) {
-  const parsedConfig = JSON.parse(fs.readFileSync(configFile));
-  parsedConfig.preload = preloadPath;
-  openfinConfig.startup_app = parsedConfig;
+const parsedConfig = loadConfig();
+if (parsedConfig) {
+  openfinConfig.startup_app = prepareConfig(parsedConfig);
+
   fs.writeFileSync(openfinConfigFile, JSON.stringify(openfinConfig));
   if (program.notification) {
     fs.copySync(notificationFile, program.notification);
   }
 
   openfinLauncher.launchOpenFin({
-    configPath: program.url || openfinConfigFile
+    configPath: program.configUrl || openfinConfigFile
   })
   .fail(() => {
-    console.error('Failed to launch OpenFin');
+    consoleError('Failed to launch OpenFin');
   });
-} else {
-  fileError(configFile, 'Config file does not exist');
+}
+
+function loadConfig() {
+  if (configFile) {
+    if (fs.existsSync(configFile)) {
+      const config = JSON.parse(fs.readFileSync(configFile));
+
+      if (launchUrl) {
+        // Overridden by parameter
+        config.url = launchUrl;
+      }
+
+      if (config.url) {
+        return config;
+      }
+    } else {
+      fileError(configFile, 'Config file does not exist');
+      return null;
+    }
+  } else {
+    if (launchUrl) {
+      return {
+        url: launchUrl
+      };
+    }
+  }
+
+  consoleError('You must specify an URL (--url) or a config file containing an url (--config)');
+  return null;
+}
+
+function prepareConfig(config) {
+  config.preload = preloadPath;
+
+  // Make it so that neither name or uuid are required properties
+  const appId = getAppId(config);
+  if (!config.name) {
+    config.name = appId;
+  }
+  if (!config.uuid) {
+    config.uuid = appId;
+  }
+
+  if (config.autoShow === undefined) {
+    // Default to autoShow if not specified
+    config.autoShow = true;
+  }
+
+  // Default size matches Electron config
+  if (!config.defaultWidth) {
+    config.defaultWidth = 800;
+  }
+  if (!config.defaultHeight) {
+    config.defaultHeight = 600;
+  }
+
+  return config;
+}
+
+function getAppId(config) {
+  const appId = config.uuid || config.name;
+
+  if (!appId) {
+    // Generate an app Id from the url
+    return config.url
+          .replace(/(http:\/\/|https:\/\/)/, '')
+          .replace(/(:|\/|\.)/g, '_')
+  }
+  return appId;
+}
+
+function fileError(filename, err) {
+  consoleError('Error with file: ' + filename);
+  consoleError(err);
+}
+
+function consoleError(err) {
+  console.error('\x1b[31m', err, '\x1b[37m');
 }

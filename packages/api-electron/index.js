@@ -76,15 +76,19 @@ module.exports = (appJson, useSymphony, showDeveloperMenu) => {
     }
   });
 
-  createInitialHiddenWindow(appJson, preloadPath);
+  createInitialWindow(appJson, preloadPath);
 };
 
-const createInitialHiddenWindow = (appJson, preloadPath) => {
+const createInitialWindow = (appJson, preloadPath) => {
   // Create an invisible window to run the load script
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    show: appJson.autoShow,
+    width: appJson.defaultWidth || 800,
+    height: appJson.defaultHeight || 600,
+    minWidth: appJson.minWidth,
+    minHeight: appJson.minHeight,
+    maxWidth: appJson.maxWidth,
+    maxHeight: appJson.maxHeight,
+    show: appJson.autoShow !== undefined ? appJson.autoShow : true,
     webPreferences: {
       sandbox: true,
       preload: preloadPath
