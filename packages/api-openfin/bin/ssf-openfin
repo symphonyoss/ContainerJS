@@ -87,7 +87,7 @@ function loadConfig() {
 function prepareConfig(config) {
   config.preload = preloadPath;
 
-  // Make it so that neithed name or uuid are required properties
+  // Make it so that neither name or uuid are required properties
   const appId = getAppId(config);
   if (!config.name) {
     config.name = appId;

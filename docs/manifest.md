@@ -13,7 +13,7 @@ initial application window using an application manifest file.
 
 Within the same folder as your website, add the following `app.json` manifest file:
 
-```{% highlight json %}```
+{% highlight json %}
 {
   "url": "http://localhost:8080/index.html",
   "defaultWidth": 600,
