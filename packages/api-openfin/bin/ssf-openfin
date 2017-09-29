@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const os = require('os');
 const program = require('commander');
+const download = require('download');
 const packageJson = require('../package.json');
 
 program
@@ -19,13 +20,10 @@ program
   .option('-n, --notification [directory]', '(Optional) Generate an example notification file in the specified directory')
   .parse(process.argv);
 
-const launchUrl = program.url;
-
 const openfinConfigFile = program.outputConfig
       ? path.join(process.cwd(), program.outputConfig)
       : path.join(os.tmpdir(), 'ssf-openfin-app-config.json');
 
-const configFile = program.config ? path.join(process.cwd(), program.config) : null;
 const preloadFile = program.symphony ? 'containerjs-api-symphony.js' : 'containerjs-api.js';
 const preloadPath = path.join(__dirname, `../build/dist/${preloadFile}`);
 const notificationFile = path.join(__dirname, '../build/dist/notification.html');
@@ -39,8 +37,7 @@ const openfinConfig = {
   'shortcut': {}
 };
 
-const parsedConfig = loadConfig();
-if (parsedConfig) {
+loadConfig().then(parsedConfig => {
   openfinConfig.startup_app = prepareConfig(parsedConfig);
 
   fs.writeFileSync(openfinConfigFile, JSON.stringify(openfinConfig));
@@ -54,35 +51,61 @@ if (parsedConfig) {
   .fail(() => {
     consoleError('Failed to launch OpenFin');
   });
-}
+}).catch(err => {
+  consoleError(err.message);
+  process.exit();
+});
 
 function loadConfig() {
-  if (configFile) {
-    if (fs.existsSync(configFile)) {
-      const config = JSON.parse(fs.readFileSync(configFile));
+  if (program.config) {
+    return readConfigFile()
+      .then(data => new Promise((resolve, reject) => {
+        const config = JSON.parse(data);
 
-      if (launchUrl) {
-        // Overridden by parameter
-        config.url = launchUrl;
-      }
+        if (program.url) {
+          // Overridden by parameter
+          config.url = program.url;
+        }
 
-      if (config.url) {
-        return config;
-      }
-    } else {
-      fileError(configFile, 'Config file does not exist');
-      return null;
-    }
+        if (config.url) {
+          resolve(config);
+        } else {
+          reject(new Error('You must specify an URL (--url) or a config file containing an url (--config)'));
+        }
+      }));
   } else {
-    if (launchUrl) {
-      return {
-        url: launchUrl
-      };
-    }
+    return new Promise((resolve, reject) => {
+      if (program.url) {
+        resolve({
+          url: program.url
+        });
+      } else {
+        reject(new Error('You must specify an URL (--url) or a config file containing an url (--config)'));
+      }
+    });
   }
+}
 
-  consoleError('You must specify an URL (--url) or a config file containing an url (--config)');
-  return null;
+function readConfigFile() {
+  const filePath = program.config;
+  if (filePath.toLowerCase().startsWith('http://') || filePath.toLowerCase().startsWith('https://')) {
+    return download(filePath);
+  } else {
+    return new Promise((resolve, reject) => {
+      const configFile = path.join(process.cwd(), program.config);
+      if (fs.existsSync(configFile)) {
+        fs.readFile(configFile, (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data);
+          }
+        });
+      } else {
+        reject(new Error(`Config file ${configFile} does not exist`));
+      }
+    });
+  }
 }
 
 function prepareConfig(config) {
@@ -124,11 +147,6 @@ function getAppId(config) {
           .replace(/(:|\/|\.)/g, '_')
   }
   return appId;
-}
-
-function fileError(filename, err) {
-  consoleError('Error with file: ' + filename);
-  consoleError(err);
 }
 
 function consoleError(err) {
