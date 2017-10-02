@@ -1,7 +1,7 @@
 [Environment]::SetEnvironmentVariable("TestResult", "0", "User")
 
 # Don't run tests on PRs
-IF ($env:APPVEYOR_REPO_BRANCH -eq "master" -And (-Not (Test-Path Env:\APPVEYOR_PULL_REQUEST_NUMBER))) {
+IF ($env:APPVEYOR_REPO_BRANCH -eq "ci-release" -And (-Not (Test-Path Env:\APPVEYOR_PULL_REQUEST_NUMBER))) {
   cd .\packages\api-tests
 
   # Run tests individually so we don't fail the build
