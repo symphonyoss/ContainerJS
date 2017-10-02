@@ -26,3 +26,6 @@ IF ($env:APPVEYOR_REPO_BRANCH -eq "master" -And (-Not (Test-Path Env:\APPVEYOR_P
   cd ..\..
   npm run docs
 }
+Else {
+  Write-Host "Not on branch 'master', not running tests"
+}
