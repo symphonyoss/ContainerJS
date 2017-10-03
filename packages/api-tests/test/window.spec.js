@@ -2,6 +2,7 @@ const assert = require('assert');
 const testContainer = process.env.MOCHA_CONTAINER;
 const setup = require(`./${testContainer}-test-setup`);
 const {
+  initialiseWindows,
   executeAsyncJavascript,
   selectWindow,
   openNewWindow,
@@ -51,7 +52,9 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
 
     beforeEach(() => {
       app = setup(timeout);
-      return app.start();
+      return app.start().then(
+        () => initialiseWindows(app.client)
+      );
     });
 
     afterEach(function() {

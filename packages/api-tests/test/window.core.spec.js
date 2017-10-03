@@ -3,6 +3,7 @@ const testContainer = process.env.MOCHA_CONTAINER;
 const setup = require(`./${testContainer}-test-setup`);
 const {
   executeAsyncJavascript,
+  initialiseWindows,
   selectWindow,
   openNewWindow,
   countWindows,
@@ -26,11 +27,39 @@ const setupWindowSteps = (windowOptions) => [
   () => app.client.waitForVisible('.visible-check')
 ];
 
+const closeWindowSteps = () => [
+  () => callAsyncWindowMethod('close'),
+  () => app.client.pause(100)
+];
+
 const retrieveWebUrl = () => {
   const script = (callback) => {
     callback(window.location.href);
   };
   return executeAsyncJavascript(app.client, script);
+};
+
+const callAsyncWindowMethod = (method, ...args) => {
+  const script = (method, args, callback) => {
+    ssf.app.ready().then(() => {
+      var currentWin = ssf.Window.getCurrentWindow();
+      currentWin[method](...args).then((data) => {
+        callback(data);
+      });
+    });
+  };
+  return executeAsyncJavascript(app.client, script, method, args);
+};
+
+const callWindowMethod = (method, ...args) => {
+  const script = (method, args, callback) => {
+    ssf.app.ready().then(() => {
+      var currentWin = ssf.Window.getCurrentWindow();
+      callback(currentWin[method](...args));
+    });
+  };
+
+  return executeAsyncJavascript(app.client, script, method, args);
 };
 
 const getChildWindowsCount = () => {
@@ -53,7 +82,9 @@ describe('WindowCore API', function(done) {
 
   beforeEach(() => {
     app = setup(timeout);
-    return app.start();
+    return app.start().then(
+      () => initialiseWindows(app.client)
+    );
   });
 
   afterEach(function() {
@@ -61,29 +92,6 @@ describe('WindowCore API', function(done) {
       return app.stop();
     }
   });
-
-  const callAsyncWindowMethod = (method, ...args) => {
-    const script = (method, args, callback) => {
-      ssf.app.ready().then(() => {
-        var currentWin = ssf.Window.getCurrentWindow();
-        currentWin[method](...args).then((data) => {
-          callback(data);
-        });
-      });
-    };
-    return executeAsyncJavascript(app.client, script, method, args);
-  };
-
-  const callWindowMethod = (method, ...args) => {
-    const script = (method, args, callback) => {
-      ssf.app.ready().then(() => {
-        var currentWin = ssf.Window.getCurrentWindow();
-        callback(currentWin[method](...args));
-      });
-    };
-
-    return executeAsyncJavascript(app.client, script, method, args);
-  };
 
   it('Should have ssf.Window available globally', function() {
     const script = (callback) => {
@@ -130,7 +138,7 @@ describe('WindowCore API', function(done) {
 
       const steps = [
         ...setupWindowSteps(windowOptions),
-        () => callAsyncWindowMethod('close'),
+        ...closeWindowSteps(),
         () => countWindows(app.client),
         (result) => assert.equal(result, 1)
       ];
@@ -152,7 +160,7 @@ describe('WindowCore API', function(done) {
         () => selectWindow(app.client, 1),
         () => openNewWindow(app.client, windowOptionsChild),
         () => selectWindow(app.client, 1),
-        () => callAsyncWindowMethod('close'),
+        ...closeWindowSteps(),
         () => countWindows(app.client),
         (result) => assert.equal(result, 1)
       ];
@@ -185,7 +193,7 @@ describe('WindowCore API', function(done) {
         () => openNewWindow(app.client, windowOptionsFree),
         (result) => { freeWinId = result.value; },
         () => selectWindow(app.client, 1),
-        () => callAsyncWindowMethod('close'),
+        ...closeWindowSteps(),
         () => countWindows(app.client),
         (result) => assert.equal(result, 2),
         () => closeFreeWindow()
@@ -239,7 +247,7 @@ describe('WindowCore API', function(done) {
         () => openNewWindow(app.client, windowOptions2),
         () => assertWindowsCount(2),
         () => selectWindow(app.client, 1),
-        () => callAsyncWindowMethod('close'),
+        ...closeWindowSteps(),
         () => selectWindow(app.client, 0),
         () => assertWindowsCount(1)
       ];
