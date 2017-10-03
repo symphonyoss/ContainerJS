@@ -1,13 +1,15 @@
 const Application = require('spectron').Application;
+const path = require('path');
 const spawn = require('child_process').spawn;
 
 module.exports = (timeout) => {
+  const openfinPath = path.join(__dirname, '..', 'node_modules', '.bin', 'ssf-openfin');
+  const commandLine = `${openfinPath} -u http://localhost:5000/index.html -o ./src/openfinapp.json -f 6.49.20.22 -C http://localhost:5000/openfinapp.json`;
+
   if (process.platform === 'win32') {
-    const args = ['/c', 'ssf-openfin -c app.json -o ./src/openfinapp.json -v 6.49.20.22 -u http://localhost:5000/openfinapp.json'];
-    spawn('cmd.exe', args);
+    spawn('cmd.exe', ['/c', commandLine]);
   } else {
-    const args = ['-c', 'openfin -l -c http://localhost:5000/app.json'];
-    spawn('/bin/bash', args);
+    spawn('/bin/bash', ['-c', commandLine]);
   }
 
   return new Application({
