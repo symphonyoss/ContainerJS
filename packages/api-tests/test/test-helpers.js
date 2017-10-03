@@ -4,9 +4,37 @@ const executeAsyncJavascript = (client, script, ...args) => {
   return client.executeAsync(script, ...args);
 };
 
-const selectWindow = (client, handle) => {
+let addedHandles = [];
+const initialiseWindows = (client) => {
+  const script = (callback) => {
+    if (window.ssf) {
+      ssf.app.ready().then(() => {
+        callback();
+      });
+    } else {
+      callback();
+    }
+  };
+
+  // Get a list of any extra window handles that get create during initialisation
+  return executeAsyncJavascript(client, script)
+      .then(() => client.windowHandles())
+      .then(handles => {
+        addedHandles = handles.value.splice(1);
+      });
+};
+
+// Get a list of window handles excluding windows added during initialisation
+const getWindowHandles = (client) => {
   return client.windowHandles()
-      .then((handles) => client.window(handles.value[handle]));
+      .then(result => {
+        return result.value.filter(h => addedHandles.indexOf(h) === -1);
+      });
+};
+
+const selectWindow = (client, index) => {
+  return getWindowHandles(client)
+      .then(handles => client.window(handles[index]));
 };
 
 const openNewWindow = (client, options) => {
@@ -23,21 +51,15 @@ const openNewWindow = (client, options) => {
 /* eslint-enable no-undef, no-new */
 
 const countWindows = (client) => {
-  return client.getWindowCount()
-    .then(result => {
-      if (process.env.MOCHA_CONTAINER === 'openfin') {
-        // Hidden mainWindow is still there
-        return result - 1;
-      } else {
-        return result;
-      }
-    });
+  return getWindowHandles(client)
+      .then(winHandles => winHandles.length);
 };
 
 const chainPromises = (promises) => promises.reduce((acc, cur) => acc.then(cur), Promise.resolve());
 
 module.exports = {
   executeAsyncJavascript,
+  initialiseWindows,
   selectWindow,
   openNewWindow,
   countWindows,
