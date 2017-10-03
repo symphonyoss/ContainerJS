@@ -659,7 +659,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
     });
 
     describe('New Window', function() {
-      it('Should be created with added frame size to max height #ssf.WindowOptions.maxHeight', function() {
+      it.skip('Should be created with added frame size to max height #ssf.WindowOptions.maxHeight', function() {
         const windowTitle = 'windownamemaxheight';
         const maxWidth = 500;
         const maxHeight = 600;
@@ -680,7 +680,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
         return chainPromises(steps);
       });
 
-      it('Should be created with added frame size to min height #ssf.WindowOptions.minHeight', function() {
+      it.skip('Should be created with added frame size to min height #ssf.WindowOptions.minHeight', function() {
         const windowTitle = 'windownamemaxheight';
         const minWidth = 500;
         const minHeight = 600;

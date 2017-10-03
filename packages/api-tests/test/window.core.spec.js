@@ -160,7 +160,7 @@ describe('WindowCore API', function(done) {
       return chainPromises(steps);
     });
 
-    it('Should not close the window\'s non-children #ssf.Window.close #ssf.WindowCore.close', function() {
+    it.skip('Should not close the window\'s non-children #ssf.Window.close #ssf.WindowCore.close', function() {
       const windowTitle = 'windownameclosechildren';
       const windowOptions = getWindowOptions({
         name: windowTitle
