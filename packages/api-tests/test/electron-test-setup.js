@@ -6,6 +6,6 @@ module.exports = (timeout) => {
   const extension = process.platform === 'win32' ? '.cmd' : '';
   return new Application({
     path: electronPath + extension,
-    args: ['app.json']
+    args: ['-c', 'app.json']
   });
 };
