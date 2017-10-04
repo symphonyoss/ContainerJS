@@ -25,9 +25,9 @@
     "containerjs-api-compatibility": "^0.0.5",
     "containerjs-api-specification": "^0.0.6",
     "containerjs-api-utility": "^0.0.4",
-    "download": "^6.2.5",
     "electron": "1.6.6",
     "electron-notify": "^0.1.0",
+    "node-fetch": "^1.7.3",
     "util.promisify": "^1.0.0"
   },
   "bin": {

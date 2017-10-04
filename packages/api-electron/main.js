@@ -3,9 +3,10 @@ const ssfElectron = require('./index.js');
 const fs = require('fs');
 const path = require('path');
 const program = require('commander');
-const download = require('download');
+const fetch = require('node-fetch');
 const packageJson = require('./package.json');
 const promisify = require('util.promisify');
+
 const readFileAsync = promisify(fs.readFile);
 
 program
@@ -32,9 +33,7 @@ function createWindow() {
 function loadConfig() {
   if (program.config) {
     return readConfigFile()
-      .then(data => {
-        const config = JSON.parse(data);
-
+      .then(config => {
         if (program.url) {
           // Overridden by parameter
           config.url = program.url;
@@ -60,11 +59,13 @@ function loadConfig() {
 function readConfigFile() {
   const filePath = program.config;
   if (filePath.toLowerCase().startsWith('http://') || filePath.toLowerCase().startsWith('https://')) {
-    return download(filePath);
+    return fetch(filePath)
+            .then(res => res.json());
   } else {
     const configFile = path.join(process.cwd(), program.config);
     if (fs.existsSync(configFile)) {
-      return readFileAsync(configFile);
+      return readFileAsync(configFile)
+            .then(data => JSON.parse(data));
     } else {
       return Promise.reject(new Error(`Config file ${configFile} does not exist`));
     }
