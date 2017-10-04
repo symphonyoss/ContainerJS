@@ -30,7 +30,7 @@ function createWindow() {
 function loadConfig() {
   if (program.config) {
     return readConfigFile()
-      .then(data => new Promise((resolve, reject) => {
+      .then(data => {
         const config = JSON.parse(data);
 
         if (program.url) {
@@ -39,21 +39,19 @@ function loadConfig() {
         }
 
         if (config.url) {
-          resolve(config);
+          return config;
         } else {
-          reject(new Error('You must specify an URL (--url) or a config file containing an url (--config)'));
+          throw new Error('You must specify an URL (--url) or a config file containing an url (--config)');
         }
-      }));
+      });
   } else {
-    return new Promise((resolve, reject) => {
-      if (program.url) {
-        resolve({
-          url: program.url
-        });
-      } else {
-        reject(new Error('You must specify an URL (--url) or a config file containing an url (--config)'));
-      }
-    });
+    if (program.url) {
+      return Promise.resolve({
+        url: program.url
+      });
+    } else {
+      return Promise.reject(new Error('You must specify an URL (--url) or a config file containing an url (--config)'));
+    }
   }
 }
 
