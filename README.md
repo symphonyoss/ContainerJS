@@ -38,6 +38,23 @@ The website can be found in the `docs` folder. It is a Jekyll site, which is hos
 npm run docs
 ```
 
+### View the Documentation locally
+
+Install [Ruby](https://www.ruby-lang.org/en/)
+
+Install Jekyll:
+
+```
+gem install jekyll
+```
+
+Run Jekyll from within the `docs` folder:
+
+```
+cd docs
+jekyll serve
+```
+
 ### Tests in Documentation
 
 The documentation also contains the results of the last test runs. To include the test output in the docs:
