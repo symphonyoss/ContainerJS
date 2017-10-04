@@ -5,26 +5,27 @@ const fs = require('fs-extra');
 const path = require('path');
 const os = require('os');
 const program = require('commander');
+const fetch = require('node-fetch');
 const packageJson = require('../package.json');
+const promisify = require('util.promisify');
+const readFileAsync = promisify(fs.readFile);
 
 program
   .version(packageJson.version)
   .option('-u, --url [url]', 'Launch url for the application (can be specified in --config instead)', null)
   .option('-c, --config [filename]', '(Optional) ContainerJS config file', null)
   .option('-s, --symphony', '(Optional) Use Symphony compatibility layer', (v, val) => true, false)
+  .option('-d, --developer', '(Optional) Show developer context menu', (v, val) => true, false)
   .option('-o, --output-config [filename]', '(Optional) Where to output the OpenFin config file', null)
   .option('-C, --config-url [url]', '(Optional) Url to read the new app.json file from to start OpenFin')
   .option('-f, --openfin-version [version]', '(Optional) Version of the OpenFin runtime to use, default is stable', 'stable')
   .option('-n, --notification [directory]', '(Optional) Generate an example notification file in the specified directory')
   .parse(process.argv);
 
-const launchUrl = program.url;
-
 const openfinConfigFile = program.outputConfig
       ? path.join(process.cwd(), program.outputConfig)
       : path.join(os.tmpdir(), 'ssf-openfin-app-config.json');
 
-const configFile = program.config ? path.join(process.cwd(), program.config) : null;
 const preloadFile = program.symphony ? 'containerjs-api-symphony.js' : 'containerjs-api.js';
 const preloadPath = path.join(__dirname, `../build/dist/${preloadFile}`);
 const notificationFile = path.join(__dirname, '../build/dist/notification.html');
@@ -38,8 +39,7 @@ const openfinConfig = {
   'shortcut': {}
 };
 
-const parsedConfig = loadConfig();
-if (parsedConfig) {
+loadConfig().then(parsedConfig => {
   openfinConfig.startup_app = prepareConfig(parsedConfig);
 
   fs.writeFileSync(openfinConfigFile, JSON.stringify(openfinConfig));
@@ -53,39 +53,56 @@ if (parsedConfig) {
   .fail(() => {
     consoleError('Failed to launch OpenFin');
   });
-}
+}).catch(err => {
+  consoleError(err.message);
+  process.exit();
+});
 
 function loadConfig() {
-  if (configFile) {
-    if (fs.existsSync(configFile)) {
-      const config = JSON.parse(fs.readFileSync(configFile));
+  if (program.config) {
+    return readConfigFile()
+      .then(config => {
+        if (program.url) {
+          // Overridden by parameter
+          config.url = program.url;
+        }
 
-      if (launchUrl) {
-        // Overridden by parameter
-        config.url = launchUrl;
-      }
-
-      if (config.url) {
-        return config;
-      }
-    } else {
-      fileError(configFile, 'Config file does not exist');
-      return null;
-    }
+        if (config.url) {
+          return config;
+        } else {
+          throw new Error('You must specify an URL (--url) or a config file containing an url (--config)');
+        }
+      });
   } else {
-    if (launchUrl) {
-      return {
-        url: launchUrl
-      };
+    if (program.url) {
+      return Promise.resolve({
+        url: program.url
+      });
+    } else {
+      return Promise.reject(new Error('You must specify an URL (--url) or a config file containing an url (--config)'));
     }
   }
+}
 
-  consoleError('You must specify an URL (--url) or a config file containing an url (--config)');
-  return null;
+function readConfigFile() {
+  const filePath = program.config;
+  if (filePath.toLowerCase().startsWith('http://') || filePath.toLowerCase().startsWith('https://')) {
+    return fetch(filePath)
+            .then(res => res.json());
+  } else {
+    const configFile = path.join(process.cwd(), program.config);
+    if (fs.existsSync(configFile)) {
+      return readFileAsync(configFile)
+            .then(data => JSON.parse(data));
+    } else {
+      return Promise.reject(new Error(`Config file ${configFile} does not exist`));
+    }
+  }
 }
 
 function prepareConfig(config) {
   config.preload = preloadPath;
+  config.contextMenu = !!program.developer;
 
   // Make it so that neither name or uuid are required properties
   const appId = getAppId(config);
@@ -122,11 +139,6 @@ function getAppId(config) {
           .replace(/(:|\/|\.)/g, '_')
   }
   return appId;
-}
-
-function fileError(filename, err) {
-  consoleError('Error with file: ' + filename);
-  consoleError(err);
 }
 
 function consoleError(err) {

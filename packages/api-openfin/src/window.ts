@@ -63,7 +63,6 @@ const getDefaultOptions = () => ({
 });
 
 const convertOptions = (options: ssf.WindowOptions): fin.WindowOptions => {
-  const frameSize = navigator.appVersion.indexOf('Win') !== -1 ? 20 : 25;
   const clonedOptions: any = Object.assign({}, getDefaultOptions(), options);
 
   const optionsMap = {
@@ -121,14 +120,6 @@ const convertOptions = (options: ssf.WindowOptions): fin.WindowOptions => {
 
   if (clonedOptions.defaultHeight == null) {
     clonedOptions.defaultHeight = DEFAULT_HEIGHT;
-  }
-
-  if (clonedOptions.maxHeight != null && clonedOptions.frame !== false) {
-    clonedOptions.maxHeight += frameSize;
-  }
-
-  if (clonedOptions.minHeight != null && clonedOptions.frame !== false) {
-    clonedOptions.minHeight += frameSize;
   }
 
   return clonedOptions;

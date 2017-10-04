@@ -662,7 +662,7 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
     });
 
     describe('New Window', function() {
-      it('Should be created with added frame size to max height #ssf.WindowOptions.maxHeight', function() {
+      it('Should be created without added frame size to max height #ssf.WindowOptions.maxHeight', function() {
         const windowTitle = 'windownamemaxheight';
         const maxWidth = 500;
         const maxHeight = 600;
@@ -672,18 +672,16 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
           maxHeight
         });
 
-        const frameSize = process.platform === 'win32' ? 20 : 25;
-
         const steps = [
           ...setupWindowSteps(windowOptions),
           () => callAsyncWindowMethod('getMaximumSize'),
-          (result) => assert.equal(result.value[1], maxHeight + frameSize)
+          (result) => assert.equal(result.value[1], maxHeight)
         ];
 
         return chainPromises(steps);
       });
 
-      it('Should be created with added frame size to min height #ssf.WindowOptions.minHeight', function() {
+      it('Should be created without added frame size to min height #ssf.WindowOptions.minHeight', function() {
         const windowTitle = 'windownamemaxheight';
         const minWidth = 500;
         const minHeight = 600;
@@ -693,12 +691,10 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
           minHeight
         });
 
-        const frameSize = process.platform === 'win32' ? 20 : 25;
-
         const steps = [
           ...setupWindowSteps(windowOptions),
           () => callAsyncWindowMethod('getMinimumSize'),
-          (result) => assert.equal(result.value[1], minHeight + frameSize)
+          (result) => assert.equal(result.value[1], minHeight)
         ];
 
         return chainPromises(steps);

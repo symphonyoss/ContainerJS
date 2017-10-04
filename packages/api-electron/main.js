@@ -1,8 +1,13 @@
 const { app } = require('electron');
 const ssfElectron = require('./index.js');
 const fs = require('fs');
+const path = require('path');
 const program = require('commander');
+const fetch = require('node-fetch');
 const packageJson = require('./package.json');
+const promisify = require('util.promisify');
+
+const readFileAsync = promisify(fs.readFile);
 
 program
   .version(packageJson.version)
@@ -17,49 +22,54 @@ program
 let win;
 
 function createWindow() {
-  const appJson = loadConfig();
-  if (appJson) {
+  loadConfig().then(appJson => {
     ssfElectron(appJson, program.symphony, program.developer);
-  } else {
+  }).catch(err => {
+    consoleError(err.message);
     process.exit();
-  }
+  });
 }
 
 function loadConfig() {
-  // the config json is passed to the ssf-electron bin script
-  const configFile = program.config ? process.cwd() + '/' + program.config : null;
-  const launchUrl = program.url;
-  if (configFile) {
-    if (fs.existsSync(configFile)) {
-      const config = JSON.parse(fs.readFileSync(configFile, 'utf8'));
+  if (program.config) {
+    return readConfigFile()
+      .then(config => {
+        if (program.url) {
+          // Overridden by parameter
+          config.url = program.url;
+        }
 
-      if (launchUrl) {
-        // Overridden by parameter
-        config.url = launchUrl;
-      }
-
-      if (config.url) {
-        return config;
-      }
-    } else {
-      fileError(configFile, 'Config file does not exist');
-      return null;
-    }
+        if (config.url) {
+          return config;
+        } else {
+          throw new Error('You must specify an URL (--url) or a config file containing an url (--config)');
+        }
+      });
   } else {
-    if (launchUrl) {
-      return {
-        url: launchUrl
-      };
+    if (program.url) {
+      return Promise.resolve({
+        url: program.url
+      });
+    } else {
+      return Promise.reject(new Error('You must specify an URL (--url) or a config file containing an url (--config)'));
     }
   }
-
-  consoleError('You must specify an URL (--url) or a config file containing an url (--config)');
-  return null;
 }
 
-function fileError(filename, err) {
-  consoleError('Error with file: ' + filename);
-  consoleError(err);
+function readConfigFile() {
+  const filePath = program.config;
+  if (filePath.toLowerCase().startsWith('http://') || filePath.toLowerCase().startsWith('https://')) {
+    return fetch(filePath)
+            .then(res => res.json());
+  } else {
+    const configFile = path.join(process.cwd(), program.config);
+    if (fs.existsSync(configFile)) {
+      return readFileAsync(configFile)
+            .then(data => JSON.parse(data));
+    } else {
+      return Promise.reject(new Error(`Config file ${configFile} does not exist`));
+    }
+  }
 }
 
 function consoleError(err) {

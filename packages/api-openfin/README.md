@@ -26,6 +26,7 @@ Usage: ssf-openfin [options]
     -u, --url [url]                  Launch url for the application (can be specified in --config instead)
     -c, --config [filename]          (Optional) ContainerJS config file
     -s, --symphony                   (Optional) Use Symphony compatibility layer
+    -d, --developer                  (Optional) Show developer context menu
     -o, --output-config [filename]   (Optional) Where to output the OpenFin config file
     -C, --config-url [url]           (Optional) Url to read the new app.json file from to start OpenFin
     -f, --openfin-version [version]  (Optional) Version of the OpenFin runtime to use, default is stable
