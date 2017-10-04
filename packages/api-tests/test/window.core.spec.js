@@ -29,7 +29,7 @@ const setupWindowSteps = (windowOptions) => [
 
 const closeWindowSteps = () => [
   () => callAsyncWindowMethod('close'),
-  () => app.client.pause(100)
+  () => app.client.pause(100) // Allow time for asynchronously closing child windows
 ];
 
 const retrieveWebUrl = () => {

@@ -4,8 +4,13 @@ const executeAsyncJavascript = (client, script, ...args) => {
   return client.executeAsync(script, ...args);
 };
 
+// In OpenFin, an extra hidden window gets created that interferes
+// with tests that counts windows or selects windows by index. This
+// initialisation gets the added window handles, so they can be
+// excluded later
 let addedHandles = [];
 const initialiseWindows = (client) => {
+  // Script to wait for app.ready()
   const script = (callback) => {
     if (window.ssf) {
       ssf.app.ready().then(() => {
@@ -20,6 +25,8 @@ const initialiseWindows = (client) => {
   return executeAsyncJavascript(client, script)
       .then(() => client.windowHandles())
       .then(handles => {
+        // The first one is the real main window, and we want
+        // to exclude the rest
         addedHandles = handles.value.splice(1);
       });
 };
