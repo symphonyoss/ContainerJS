@@ -1,6 +1,6 @@
 {
   "name": "containerjs-api-browser",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "The ContainerJS browser API",
   "main": "build/dist/containerjs-api.js",
   "scripts": {
@@ -23,9 +23,9 @@
   },
   "devDependencies": {
     "concat": "^1.0.3",
-    "containerjs-api-compatibility": "^0.0.5",
-    "containerjs-api-specification": "^0.0.6",
-    "containerjs-api-utility": "^0.0.4",
+    "containerjs-api-compatibility": "^0.0.6",
+    "containerjs-api-specification": "^0.0.7",
+    "containerjs-api-utility": "^0.0.5",
     "copyfiles": "^1.2.0",
     "rimraf": "^2.6.1",
     "rollup": "^0.41.6",

@@ -1,6 +1,6 @@
 {
   "name": "containerjs-api-utility",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Utility classes and functions for ContainerJS",
   "main": "build/es/index.js",
   "typings": "build/es/index",
@@ -32,6 +32,6 @@
     "typescript": "^2.4.1"
   },
   "dependencies": {
-    "containerjs-api-specification": "^0.0.6"
+    "containerjs-api-specification": "^0.0.7"
   }
 }
