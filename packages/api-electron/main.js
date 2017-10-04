@@ -5,6 +5,8 @@ const path = require('path');
 const program = require('commander');
 const download = require('download');
 const packageJson = require('./package.json');
+const promisify = require('util.promisify');
+const readFileAsync = promisify(fs.readFile);
 
 program
   .version(packageJson.version)
@@ -60,20 +62,12 @@ function readConfigFile() {
   if (filePath.toLowerCase().startsWith('http://') || filePath.toLowerCase().startsWith('https://')) {
     return download(filePath);
   } else {
-    return new Promise((resolve, reject) => {
-      const configFile = path.join(process.cwd(), program.config);
-      if (fs.existsSync(configFile)) {
-        fs.readFile(configFile, (err, data) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(data);
-          }
-        });
-      } else {
-        reject(new Error(`Config file ${configFile} does not exist`));
-      }
-    });
+    const configFile = path.join(process.cwd(), program.config);
+    if (fs.existsSync(configFile)) {
+      return readFileAsync(configFile);
+    } else {
+      return Promise.reject(new Error(`Config file ${configFile} does not exist`));
+    }
   }
 }
 
