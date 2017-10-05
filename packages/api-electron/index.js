@@ -88,6 +88,7 @@ const createInitialWindow = (appJson, preloadPath) => {
     minHeight: appJson.minHeight,
     maxWidth: appJson.maxWidth,
     maxHeight: appJson.maxHeight,
+    frame: appJson.frame,
     show: appJson.autoShow !== undefined ? appJson.autoShow : true,
     webPreferences: {
       sandbox: true,
