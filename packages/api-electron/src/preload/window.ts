@@ -253,11 +253,11 @@ export class Window extends Emitter implements ssf.Window {
   }
 
   innerAddEventListener(event: string, listener: (...args: any[]) => void) {
-    this.innerWindow.addListener(event, listener);
+    (this.innerWindow as NodeJS.EventEmitter).addListener(event, listener);
   }
 
   innerRemoveEventListener(event: string, listener: (...args: any[]) => void) {
-    this.innerWindow.removeListener(event, listener);
+    (this.innerWindow as NodeJS.EventEmitter).removeListener(event, listener);
   }
 
   postMessage(message: any) {
