@@ -18,10 +18,10 @@
   },
   "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "dependencies": {
-    "@types/electron": "1.4.37",
     "@types/openfin": "^17.0.2",
     "commander": "^2.9.0",
     "copyfiles": "^1.2.0",
+    "electron": "^1.7.5",
     "gray-matter": "^2.1.1",
     "html2json": "^1.0.2",
     "json-transforms": "^1.1.2",
