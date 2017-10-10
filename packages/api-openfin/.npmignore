@@ -1,2 +1,8 @@
 # Dependency directories
 node_modules/
+src/
+build/es/
+.eslintrc.json
+index.ts
+rollup.config.json
+tsconfig.json
