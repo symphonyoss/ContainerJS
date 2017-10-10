@@ -22,6 +22,7 @@
   },
   "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "devDependencies": {
+    "@types/openfin": "^17.0.2",
     "concat": "^1.0.3",
     "containerjs-api-compatibility": "^0.0.6",
     "containerjs-api-specification": "^0.0.7",
@@ -36,7 +37,6 @@
     "ssf-openfin": "./bin/ssf-openfin"
   },
   "dependencies": {
-    "@types/openfin": "^17.0.2",
     "commander": "^2.10.0",
     "fs-extra": "^4.0.0",
     "node-fetch": "^1.7.3",
