@@ -25,6 +25,7 @@
     "@types/proxyquire": "^1.3.27",
     "@types/sinon": "^2.3.2",
     "@types/tape": "^4.2.30",
+    "containerjs-api-specification": "^0.0.7",
     "proxyquire": "^1.8.0",
     "rimraf": "^2.6.1",
     "sinon": "^2.3.8",
@@ -33,6 +34,5 @@
     "typescript": "^2.4.1"
   },
   "dependencies": {
-    "containerjs-api-specification": "^0.0.7"
   }
 }

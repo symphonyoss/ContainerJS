@@ -1,2 +1,8 @@
 # Dependency directories
 node_modules/
+
+build/test/
+src/
+test/
+index.ts
+tsconfig.json
