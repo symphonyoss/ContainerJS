@@ -1,6 +1,6 @@
 # Dependency directories
 node_modules/
-src/
+src/preload/
 build/es/
 preload.ts
 rollup.config.js
