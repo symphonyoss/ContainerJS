@@ -12,7 +12,7 @@ const DEFAULT_OPTIONS = {
   height: 600
 };
 
-let currentWindow = null;
+let currentWindowPromise: Promise<Window> = null;
 
 const getWindowOffsets = (win) => {
     const xOffset = (win.outerWidth / 2);
@@ -21,7 +21,7 @@ const getWindowOffsets = (win) => {
 };
 
 export class Window extends Emitter implements ssf.WindowCore {
-  children: ssf.Window[];
+  children: Window[];
   innerWindow: any;
   id: string;
 
@@ -30,35 +30,38 @@ export class Window extends Emitter implements ssf.WindowCore {
     this.children = [];
 
     if (!options) {
+      // Wrap existing window
       this.innerWindow = window;
       this.id = window.name;
       if (callback) {
         callback(this);
       }
     } else {
+      // Open a new window
       const winOptions = Object.assign({}, DEFAULT_OPTIONS, options);
       this.innerWindow = window.open(options.url, options.name, objectToFeaturesString(winOptions));
       this.id = this.innerWindow.name;
       const [xOffset, yOffset] = getWindowOffsets(this.innerWindow);
       this.setPosition(options.x || (screen.width / 2) - xOffset, options.y || (screen.height / 2) - yOffset);
 
-      const currentWindow = Window.getCurrentWindow();
-      const childClose = () => this.innerWindow.close();
+      Window.getCurrentWindow().then(currentWindow => {
+        const childClose = () => this.innerWindow.close();
 
-      this.innerWindow.addEventListener('beforeunload', () => {
-        const index = currentWindow.children.indexOf(this);
-        if (index !== -1) {
-          currentWindow.children.splice(index, 1);
-          currentWindow.innerWindow.removeEventListener('beforeunload', childClose);
+        this.innerWindow.addEventListener('beforeunload', () => {
+          const index = currentWindow.children.indexOf(this);
+          if (index !== -1) {
+            currentWindow.children.splice(index, 1);
+            currentWindow.innerWindow.removeEventListener('beforeunload', childClose);
+          }
+          removeAccessibleWindow(this.innerWindow.name);
+        });
+
+        if (options.child) {
+          currentWindow.children.push(this);
+          currentWindow.innerWindow.addEventListener('beforeunload', childClose);
         }
-        removeAccessibleWindow(this.innerWindow.name);
+        addAccessibleWindow(options.name, this.innerWindow);
       });
-
-      if (options.child) {
-        currentWindow.children.push(this);
-        currentWindow.innerWindow.addEventListener('beforeunload', childClose);
-      }
-      addAccessibleWindow(options.name, this.innerWindow);
     }
 
     if (callback) {
@@ -165,7 +168,7 @@ export class Window extends Emitter implements ssf.WindowCore {
   }
 
   getChildWindows() {
-    return new Promise<ssf.Window[]>(resolve => resolve(this.children));
+    return new Promise<ReadonlyArray<ssf.WindowCore>>(resolve => resolve(this.children));
   }
 
   asPromise<T>(fn: (...args: any[]) => any): Promise<T> {
@@ -178,13 +181,13 @@ export class Window extends Emitter implements ssf.WindowCore {
     });
   }
 
-  static getCurrentWindow(callback?: (win: Window) => void, errorCallback?: (err?: any) => void) {
-    if (currentWindow) {
-      return currentWindow;
+  static getCurrentWindow(): Promise<Window> {
+    if (!currentWindowPromise) {
+      currentWindowPromise = new Promise<Window>((resolve, reject) => {
+        new Window(null, resolve, reject);
+      });
     }
-
-    currentWindow = new Window(null, callback, errorCallback);
-    return currentWindow;
+    return currentWindowPromise;
   }
 
   static wrap(win: BrowserWindow) {

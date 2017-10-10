@@ -8,7 +8,7 @@ import { Emitter, Display } from 'containerjs-api-utility';
 import { MessageService } from './message-service';
 import { IpcMessages } from '../common/constants';
 
-let currentWindow = null;
+let currentWindowPromise: Promise<Window> = null;
 const isUrlPattern = /^https?:\/\//i;
 
 export class Window extends Emitter implements ssf.Window {
@@ -23,6 +23,7 @@ export class Window extends Emitter implements ssf.Window {
     });
 
     if (!options) {
+      // Wrap existing window
       this.innerWindow = remote.getCurrentWindow();
       this.id = String(this.innerWindow.id);
       if (callback) {
@@ -31,6 +32,7 @@ export class Window extends Emitter implements ssf.Window {
       return this;
     }
 
+    // Open a new window
     const electronOptions = Object.assign({}, options);
 
     Display.getDisplayAlteredPosition(options.display, { x: options.x || 0, y: options.y || 0 }).then(({ x, y }) => {
@@ -277,13 +279,13 @@ export class Window extends Emitter implements ssf.Window {
     });
   }
 
-  static getCurrentWindow(callback: (win: Window) => void, errorCallback: (err?: any) => void) {
-    if (currentWindow) {
-      return currentWindow;
+  static getCurrentWindow(): Promise<Window> {
+    if (!currentWindowPromise) {
+      currentWindowPromise = new Promise<Window>((resolve, reject) => {
+        new Window(null, resolve, reject);
+      });
     }
-
-    currentWindow = new Window(null, callback, errorCallback);
-    return currentWindow;
+    return currentWindowPromise;
   }
 
   static wrap(win: Electron.BrowserWindow) {

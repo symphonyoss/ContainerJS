@@ -35,9 +35,10 @@ const initialisePositionSteps = () => [
 
 const callAsyncWindowMethod = (method, ...args) => {
   const script = (method, args, callback) => {
-    var currentWin = ssf.Window.getCurrentWindow();
-    currentWin[method](...args).then((data) => {
-      callback(data);
+    ssf.Window.getCurrentWindow().then(currentWin => {
+      currentWin[method](...args).then((data) => {
+        callback(data);
+      });
     });
   };
   return executeAsyncJavascript(app.client, script, method, args);
@@ -744,9 +745,10 @@ if (process.env.MOCHA_CONTAINER !== 'browser') {
     describe('Event Listeners', function() {
       const addListener = (event) => {
         const script = (event, callback) => {
-          const currentWindow = ssf.Window.getCurrentWindow();
-          currentWindow.addListener(event, () => { window.listenEventResult = true; });
-          callback();
+          ssf.Window.getCurrentWindow().then(currentWindow => {
+            currentWindow.addListener(event, () => { window.listenEventResult = true; });
+            callback();
+          });
         };
         return executeAsyncJavascript(app.client, script, event);
       };

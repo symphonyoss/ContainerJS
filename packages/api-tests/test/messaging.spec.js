@@ -43,7 +43,9 @@ describe('Messaging API', function(done) {
     };
     ssf.app.ready().then(() => {
       ssf.MessageService.subscribe(id, topic, window.messageServiceFunction);
-      callback(ssf.Window.getCurrentWindow().getId());
+      ssf.Window.getCurrentWindow().then(win => {
+        callback(win.getId());
+      });
     });
   };
   const unsubscribeScript = (id, topic, callback) => {

@@ -9,7 +9,9 @@ const appReady = ssf.app.ready();
 
 appReady.then(() => {
   const windowDetailsId = document.getElementById('window-uuid');
-  windowDetailsId.innerText = ssf.Window.getCurrentWindow().getId();
+  ssf.Window.getCurrentWindow().then(win => {
+    windowDetailsId.innerText = win.getId();
+  });
 
   newWindowButton.onclick = () => {
     // Create a random hex string as the window name

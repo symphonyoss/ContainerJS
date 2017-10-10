@@ -42,9 +42,10 @@ const retrieveWebUrl = () => {
 const callAsyncWindowMethod = (method, ...args) => {
   const script = (method, args, callback) => {
     ssf.app.ready().then(() => {
-      var currentWin = ssf.Window.getCurrentWindow();
-      currentWin[method](...args).then((data) => {
-        callback(data);
+      ssf.Window.getCurrentWindow().then(currentWin => {
+        currentWin[method](...args).then((data) => {
+          callback(data);
+        });
       });
     });
   };
@@ -54,8 +55,9 @@ const callAsyncWindowMethod = (method, ...args) => {
 const callWindowMethod = (method, ...args) => {
   const script = (method, args, callback) => {
     ssf.app.ready().then(() => {
-      var currentWin = ssf.Window.getCurrentWindow();
-      callback(currentWin[method](...args));
+      ssf.Window.getCurrentWindow().then(currentWin => {
+        callback(currentWin[method](...args));
+      });
     });
   };
 
@@ -64,9 +66,10 @@ const callWindowMethod = (method, ...args) => {
 
 const getChildWindowsCount = () => {
   const script = (callback) => {
-    var currentWin = ssf.Window.getCurrentWindow();
-    currentWin.getChildWindows().then((wins) => {
-      callback(wins.length);
+    ssf.Window.getCurrentWindow().then(currentWin => {
+      currentWin.getChildWindows().then((wins) => {
+        callback(wins.length);
+      });
     });
   };
   return executeAsyncJavascript(app.client, script);
@@ -113,9 +116,10 @@ describe('WindowCore API', function(done) {
 
       const addWindowListener = (event) => {
         const script = (event, callback) => {
-          var currentWin = ssf.Window.getCurrentWindow();
-          currentWin.addListener(event, () => console.log(event));
-          callback();
+          ssf.Window.getCurrentWindow().then(currentWin => {
+            currentWin.addListener(event, () => console.log(event));
+            callback();
+          });
         };
         return executeAsyncJavascript(app.client, script, event);
       };
@@ -264,10 +268,11 @@ describe('WindowCore API', function(done) {
 
       const getParentWindowTitle = () => {
         const script = (callback) => {
-          var currentWin = ssf.Window.getCurrentWindow();
-          currentWin.getParentWindow().then((parent) => {
-            parent.getTitle().then((title) => {
-              callback(title);
+          ssf.Window.getCurrentWindow().then(currentWin => {
+            currentWin.getParentWindow().then((parent) => {
+              parent.getTitle().then((title) => {
+                callback(title);
+              });
             });
           });
         };
@@ -403,11 +408,12 @@ describe('WindowCore API', function(done) {
       // We MUST run the callback before we call loadURL otherwise webdriver loses the context
       const executeLoadURL = (url) => {
         const script = (url, callback) => {
-          var currentWin = ssf.Window.getCurrentWindow();
-          setTimeout(() => {
-            currentWin.loadURL(url);
-          }, 100);
-          callback();
+          ssf.Window.getCurrentWindow().then(currentWin => {
+            setTimeout(() => {
+              currentWin.loadURL(url);
+            }, 100);
+            callback();
+          });
         };
         return executeAsyncJavascript(app.client, script, url);
       };
@@ -432,9 +438,10 @@ describe('WindowCore API', function(done) {
 
       const addWindowListener = (event) => {
         const script = (event, callback) => {
-          var currentWin = ssf.Window.getCurrentWindow();
-          currentWin.on(event, () => console.log(event));
-          callback();
+          ssf.Window.getCurrentWindow().then(currentWin => {
+            currentWin.on(event, () => console.log(event));
+            callback();
+          });
         };
         return executeAsyncJavascript(app.client, script, event);
       };
@@ -464,9 +471,10 @@ describe('WindowCore API', function(done) {
 
       const addWindowListener = (event) => {
         const script = (event, callback) => {
-          var currentWin = ssf.Window.getCurrentWindow();
-          currentWin.once(event, () => console.log(event));
-          callback();
+          ssf.Window.getCurrentWindow().then(currentWin => {
+            currentWin.once(event, () => console.log(event));
+            callback();
+          });
         };
         return executeAsyncJavascript(app.client, script, event);
       };
@@ -498,18 +506,20 @@ describe('WindowCore API', function(done) {
         const script = (event, callback) => {
           // We need to save the function, as we need to pass the same function object to removeListener
           window.customListener = () => console.log(event);
-          var currentWin = ssf.Window.getCurrentWindow();
-          currentWin.addListener(event, window.customListener);
-          callback();
+          ssf.Window.getCurrentWindow().then(currentWin => {
+            currentWin.addListener(event, window.customListener);
+            callback();
+          });
         };
         return executeAsyncJavascript(app.client, script, event);
       };
 
       const removeWindowListener = (event) => {
         const script = (event, callback) => {
-          var currentWin = ssf.Window.getCurrentWindow();
-          currentWin.removeListener(event, window.customListener);
-          callback();
+          ssf.Window.getCurrentWindow().then(currentWin => {
+            currentWin.removeListener(event, window.customListener);
+            callback();
+          });
         };
         return executeAsyncJavascript(app.client, script, event);
       };
@@ -534,18 +544,20 @@ describe('WindowCore API', function(done) {
       const addWindowListener = (event, data) => {
         const script = (event, data, callback) => {
           // We need to save the function, as we need to pass the same function object to removeListener
-          var currentWin = ssf.Window.getCurrentWindow();
-          currentWin.addListener(event, () => console.log(event + data));
-          callback();
+          ssf.Window.getCurrentWindow().then(currentWin => {
+            currentWin.addListener(event, () => console.log(event + data));
+            callback();
+          });
         };
         return executeAsyncJavascript(app.client, script, event, data);
       };
 
       const removeWindowListeners = (event) => {
         const script = (event, callback) => {
-          var currentWin = ssf.Window.getCurrentWindow();
-          currentWin.removeAllListeners(event);
-          callback();
+          ssf.Window.getCurrentWindow().then(currentWin => {
+            currentWin.removeAllListeners(event);
+            callback();
+          });
         };
         return executeAsyncJavascript(app.client, script, event);
       };
@@ -574,18 +586,20 @@ describe('WindowCore API', function(done) {
       const addWindowListener = (event, data) => {
         const script = (event, data, callback) => {
           // We need to save the function, as we need to pass the same function object to removeListener
-          var currentWin = ssf.Window.getCurrentWindow();
-          currentWin.addListener(event, () => console.log(event + data));
-          callback();
+          ssf.Window.getCurrentWindow().then(currentWin => {
+            currentWin.addListener(event, () => console.log(event + data));
+            callback();
+          });
         };
         return executeAsyncJavascript(app.client, script, event, data);
       };
 
       const removeWindowListeners = () => {
         const script = (callback) => {
-          var currentWin = ssf.Window.getCurrentWindow();
-          currentWin.removeAllListeners();
-          callback();
+          ssf.Window.getCurrentWindow().then(currentWin => {
+            currentWin.removeAllListeners();
+            callback();
+          });
         };
         return executeAsyncJavascript(app.client, script);
       };
@@ -674,9 +688,11 @@ describe('WindowCore API', function(done) {
 
       const wrapScript = (callback) => {
         ssf.app.ready().then(() => {
-          const inner = ssf.Window.getCurrentWindow().innerWindow;
-          const win = ssf.Window.wrap(inner);
-          callback(win.innerWindow != null);
+          ssf.Window.getCurrentWindow().then(currentWin => {
+            const inner = currentWin.innerWindow;
+            const win = ssf.Window.wrap(inner);
+            callback(win.innerWindow != null);
+          });
         });
       };
 
@@ -755,12 +771,12 @@ describe('WindowCore API', function(done) {
           // Track the calls to the event listener
           var eventName = `evt_${event}_count`;
           window[eventName] = [];
-          var currentWin = ssf.Window.getCurrentWindow();
-
-          currentWin.addListener(event, evt => {
-            window[eventName].push(evt.data);
+          ssf.Window.getCurrentWindow().then(currentWin => {
+            currentWin.addListener(event, evt => {
+              window[eventName].push(evt.data);
+            });
+            callback();
           });
-          callback();
         };
         return executeAsyncJavascript(app.client, script, event);
       };
@@ -842,9 +858,10 @@ describe('WindowCore API', function(done) {
 
       const addListener = (event) => {
         const script = (event, callback) => {
-          const currentWindow = ssf.Window.getCurrentWindow();
-          currentWindow.addListener(event, () => { window.listenEventResult = true; });
-          callback();
+          ssf.Window.getCurrentWindow().then(currentWindow => {
+            currentWindow.addListener(event, () => { window.listenEventResult = true; });
+            callback();
+          });
         };
         return executeAsyncJavascript(app.client, script, event);
       };

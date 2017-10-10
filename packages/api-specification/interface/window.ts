@@ -186,7 +186,7 @@ declare namespace ssf {
      * @param errorCallback A callback that is called if window creation fails
      * @returns The window.
      */
-    constructor(opts?: WindowOptions, callback?: (window: Window) => void, errorCallback?: () => void);
+    constructor(opts?: WindowOptions, callback?: (window: WindowCore) => void, errorCallback?: () => void);
 
     /**
      * Removes focus from the window.
@@ -232,7 +232,7 @@ declare namespace ssf {
      *
      * @returns A promise that resolves to an array of child windows.
      */
-    getChildWindows(): Promise<ReadonlyArray<Window>>;
+    getChildWindows(): Promise<ReadonlyArray<WindowCore>>;
 
     /**
      * Gets the id of the window.
@@ -260,7 +260,7 @@ declare namespace ssf {
      *
      * @returns The parent window.
      */
-    getParentWindow(): Promise<Window|WindowCore>;
+    getParentWindow(): Promise<WindowCore>;
 
     /**
      * Get the position of the window.
@@ -353,20 +353,20 @@ declare namespace ssf {
      *
      * <pre>
      * // Close the current window
-     * ssf.Window.getCurrentWindow().close();
+     * ssf.Window.getCurrentWindow().then(win => {
+     *   win.close();
+     * });
      * </pre>
      *
-     * @param callback - Function that is called when the window is ready to be used (if newly created).
-     * @param errorCallback - Function that is called when the window wrapper could not be created.
      * @returns The window.
      */
-    static getCurrentWindow(callback?: () => void, errorCallback?: () => void): Window;
+    static getCurrentWindow(): Promise<WindowCore>;
 
     /**
      * Wraps a native container window with a ContainerJS window.
      * @param window The native window to wrap.
      */
-    static wrap(window: Electron.BrowserWindow | fin.OpenFinWindow | BrowserWindow): Window;
+    static wrap(window: Electron.BrowserWindow | fin.OpenFinWindow | BrowserWindow): WindowCore;
 
     /**
      * Captures the current visible content for the given Window. Returns the image as a base64 encoded png string.
@@ -405,6 +405,46 @@ declare namespace ssf {
     * See <a href="#WindowEvent-event">WindowEvent</a> for a list of events.
     */
   export class Window extends WindowCore {
+    /**
+     * Create a new window.
+     * @param opts A window options object
+     * @param callback A callback that is called if the window creation succeeds
+     * @param errorCallback A callback that is called if window creation fails
+     * @returns The window.
+     */
+    constructor(opts?: WindowOptions, callback?: (window: WindowCore) => void, errorCallback?: () => void);
+
+    /**
+     * Get the child windows of the window.
+     *
+     * <pre>
+     * // Close all child windows
+     * window.getChildWindows().then(children => {
+     *   children.forEach(child => {
+     *     child.close();
+     *   });
+     * });
+     * </pre>
+     *
+     * @returns A promise that resolves to an array of child windows.
+     */
+    getChildWindows(): Promise<ReadonlyArray<Window>>;
+
+    /**
+     * Get the parent of the window. Null will be returned if the window has no parent.
+     *
+     * <pre>
+     * // Send the parent window a message
+     * window.getParentWindow().then(parent => {
+     *   const parentId = parent.getId();
+     *   ssf.MessageService.send(parentId, 'greetings', 'Hello parent window');
+     * });
+     * </pre>
+     *
+     * @returns The parent window.
+     */
+    getParentWindow(): Promise<Window>;
+
     /**
      * Flashes the window's frame and taskbar icon.
      * @param flag - Flag to start or stop the window flashing.
@@ -570,6 +610,20 @@ declare namespace ssf {
      * @returns A promise that resolves to nothing when the window has unmaximized.
      */
     unmaximize(): Promise<void>;
+
+    /**
+     * Gets the current window object.
+     *
+     * <pre>
+     * // Close the current window
+     * ssf.Window.getCurrentWindow().then(win => {
+     *   win.close();
+     * });
+     * </pre>
+     *
+     * @returns The window.
+     */
+    static getCurrentWindow(): Promise<Window>;
 
     /**
      * Get the window object with a particular id. Returns null if no window with that id exists.

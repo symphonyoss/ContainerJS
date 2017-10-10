@@ -6,9 +6,11 @@ declare namespace ssf {
    * such as <a href="#Window">Window</a>.</i>
    *
    * <pre>
-   * ssf.Window.getCurrentWindow().on('focus', () => {
-   *  console.log('Window received focus');
-   * });
+   * ssf.Window.getCurrentWindow().then(win => {
+   *   win.on('focus', () => {
+   *    console.log('Window received focus');
+   *   });
+   * })
    * </pre>
    */
   abstract class EventEmitter {
