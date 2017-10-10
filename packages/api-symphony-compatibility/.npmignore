@@ -1,0 +1,7 @@
+# Dependency directories
+node_modules/
+src/
+index.ts
+rollup.config.js
+tsconfig.json
+

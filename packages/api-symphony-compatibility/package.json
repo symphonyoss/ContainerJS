@@ -2,7 +2,7 @@
   "name": "containerjs-api-compatibility",
   "version": "0.0.6",
   "description": "A compatibility layer between symphony electron and ContainerJS",
-  "main": "build/es/index.js",
+  "main": "build/dist/containerjs-api-compatibility.js",
   "scripts": {
     "clean": "rimraf build",
     "build": "npm run clean && tsc && rollup -c"
@@ -18,10 +18,10 @@
   },
   "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "dependencies": {
-    "containerjs-api-specification": "^0.0.7"
   },
   "devDependencies": {
     "copyfiles": "^1.2.0",
+    "containerjs-api-specification": "^0.0.7",
     "rimraf": "^2.6.1",
     "rollup": "^0.43.0",
     "typescript": "^2.4.1"
