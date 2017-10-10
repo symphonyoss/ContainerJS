@@ -19,11 +19,7 @@
   },
   "homepage": "https://symphonyoss.github.io/ContainerJS/",
   "dependencies": {
-    "@types/electron-notify": "^0.1.5",
     "commander": "^2.11.0",
-    "containerjs-api-compatibility": "^0.0.6",
-    "containerjs-api-specification": "^0.0.7",
-    "containerjs-api-utility": "^0.0.5",
     "electron": "^1.7.5",
     "electron-notify": "^0.1.0",
     "node-fetch": "^1.7.3",
@@ -33,7 +29,11 @@
     "ssf-electron": "./bin/ssf-electron"
   },
   "devDependencies": {
+    "@types/electron-notify": "^0.1.5",
     "concat": "^1.0.3",
+    "containerjs-api-compatibility": "^0.0.6",
+    "containerjs-api-specification": "^0.0.7",
+    "containerjs-api-utility": "^0.0.5",
     "copyfiles": "^1.2.0",
     "rimraf": "^2.6.1",
     "rollup": "^0.41.6",

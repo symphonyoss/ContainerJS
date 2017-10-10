@@ -1,2 +1,7 @@
 # Dependency directories
 node_modules/
+src/preload/
+build/es/
+preload.ts
+rollup.config.js
+tsconfig.json
