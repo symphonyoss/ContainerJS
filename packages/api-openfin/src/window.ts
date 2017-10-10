@@ -3,7 +3,7 @@ import { MessageService } from './message-service';
 import { createMainProcess } from './main-process';
 import { Screen } from './screen';
 
-let currentWindow: Window = null;
+let currentWindowPromise: Promise<Window> = null;
 
 const eventMap = {
   'auth-requested': 'auth-requested',
@@ -136,6 +136,7 @@ export class Window extends Emitter implements ssf.Window {
     });
 
     if (!options) {
+      // Wrap existing window
       this.innerWindow = fin.desktop.Window.getCurrent();
       this.id = `${this.innerWindow.uuid}:${this.innerWindow.name}`;
       if (callback) {
@@ -144,6 +145,7 @@ export class Window extends Emitter implements ssf.Window {
       return this;
     }
 
+    // Open a new window
     const optionsCopy = Object.assign({}, options);
     const currentPosition: ssf.Position =  { x: optionsCopy.x || 0, y: optionsCopy.y || 0 };
     Display.getDisplayAlteredPosition(optionsCopy.display, currentPosition).then(({x, y}) => {
@@ -170,7 +172,9 @@ export class Window extends Emitter implements ssf.Window {
         }
       }
 
-      fin.desktop.Window.getCurrent().getOptions((windowOptions) => {
+      const currentFinWindow = fin.desktop.Window.getCurrent();
+
+      currentFinWindow.getOptions((windowOptions) => {
         openFinOptions.preload = windowOptions.preload;
           const appOptions = {
           name: openFinOptions.name,
@@ -186,7 +190,7 @@ export class Window extends Emitter implements ssf.Window {
 
           fin.desktop.InterApplicationBus.publish('ssf-new-window', {
             windowName: this.innerWindow.uuid,
-            parentName: options.child ? Window.getCurrentWindow().innerWindow.uuid : null
+            parentName: options.child ? currentFinWindow.uuid : null
           });
 
           if (callback) {
@@ -442,13 +446,13 @@ export class Window extends Emitter implements ssf.Window {
     MessageService.send(`${this.innerWindow.uuid}:${this.innerWindow.name}`, 'ssf-window-message', message);
   }
 
-  static getCurrentWindow(callback?: (win: Window) => void, errorCallback?: (err?: any) => void) {
-    if (currentWindow) {
-      return currentWindow;
+  static getCurrentWindow(): Promise<Window> {
+    if (!currentWindowPromise) {
+      currentWindowPromise = new Promise<Window>((resolve, reject) => {
+        new Window(null, resolve, reject);
+      });
     }
-
-    currentWindow = new Window(null, callback, errorCallback);
-    return currentWindow;
+    return currentWindowPromise;
   }
 
   static wrap(win: fin.OpenFinWindow) {
