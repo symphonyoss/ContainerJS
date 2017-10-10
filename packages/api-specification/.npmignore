@@ -1,0 +1,5 @@
+# Dependency directories
+node_modules/
+test-report.json
+transform-type-info.js
+type-info.json
